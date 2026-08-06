@@ -30,9 +30,10 @@ Seiten: Kontextisolation verhindert Interferenzen, aber Parallelität
 erzeugt Konfliktkosten, wenn Schreibbereiche nicht abgegrenzt sind, und
 Spezialisierung ist nicht automatisch ein Qualitätsgewinn. Die aktuelle
 Referenzimplementierung verwendet deshalb einen schreibenden Agenten je
-Run und mehrere unabhängige Reviewer; die geplante Workflow-Ebene
-ermöglicht parallele Child Runs nur bei abgegrenzten Schreibbereichen und
-erfüllten Abhängigkeiten (AP-2/AP-3, Kapitel 19.10).
+Run und mehrere unabhängige Reviewer. Die Workflow-Ebene führt parallele
+Child Runs ein — seit Release 0.21.0 für nicht-schreibende Analyse, und
+schreibend erst bei abgegrenzten Schreibbereichen und erfüllten
+Abhängigkeiten (AP-2/AP-3, Kapitel 19.10).
 
 ![SDLC-Agenten-Pipeline — von der Anforderungsanalyse bis zum Deployment](abbildungen/out/abb03.pdf){width=100%}
 
