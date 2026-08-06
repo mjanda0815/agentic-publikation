@@ -1,15 +1,11 @@
 # CI für das Whitepaper „Agentic Software Development" (übernommen aus dem
 # DeFi-Publikationsprojekt, an dieses Repo angepasst).
 #
-# NUR MANUELL (`workflow_dispatch`), Stand 06.08.2026: Das Actions-Kontingent
-# dieses privaten Repositories ist aufgebraucht. Push-getriggerte Läufe blieben
-# dadurch in der Warteschlange hängen und wurden nach rund 15 Minuten ohne
-# einen einzigen ausgeführten Schritt abgebrochen — jeder Push hätte ein rotes
-# Kreuz in der History hinterlassen, ohne etwas zu prüfen.
-#
-# Der Push-Trigger kann zurückkommen, sobald das Repository öffentlich ist:
-# Für öffentliche Repositories sind Actions-Minuten kostenlos. Dazu einfach den
-# unten auskommentierten Block wieder aktivieren.
+# Push-Trigger ist aktiv. Er war am 06.08.2026 vorübergehend abgeschaltet,
+# weil das Actions-Kontingent des damals noch privaten Repositories
+# aufgebraucht war und Läufe ohne einen einzigen ausgeführten Schritt
+# abbrachen. Seit das Repository öffentlich ist, sind Actions-Minuten
+# kostenlos.
 #
 # Bis dahin ersetzt ein lokaler Klontest die eigentliche Leistung dieser
 # Pipeline — den Nachweis, dass das Dokument aus einem frischen Checkout baut,
@@ -25,16 +21,15 @@ name: Build PDF
 
 on:
   workflow_dispatch:
-  # Reaktivieren, sobald das Repository öffentlich ist (siehe Kopfkommentar):
-  # push:
-  #   branches: [main]
-  #   paths:
-  #     - "kapitel/**"
-  #     - "abbildungen/**"
-  #     - "*.tex"
-  #     - "literatur.bib"
-  #     - "Makefile"
-  #     - ".github/workflows/build.yml"
+  push:
+    branches: [main]
+    paths:
+      - "kapitel/**"
+      - "abbildungen/**"
+      - "*.tex"
+      - "literatur.bib"
+      - "Makefile"
+      - ".github/workflows/build.yml"
 
 jobs:
   build:
