@@ -108,7 +108,7 @@ Drei Muster, die sich für die Publikation verallgemeinern lassen:
 | Punkt | Art |
 |---|---|
 | Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | bewusst zurückgestellt |
-| Seat-Level-Kostenattribution (Kosten je Nutzer statt je Mandant) | bewusst offen |
+| Seat-scharfe Budget-Obergrenze (Auswertung je Seat existiert seit v0.17) | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end verifiziert | Verifikationslücke |
 | Vollständige Sandbox für Coding-Adapter | offen |
 | Test-Isolationsdefekt: Integrationstest committet ins reale Repository | Defekt |

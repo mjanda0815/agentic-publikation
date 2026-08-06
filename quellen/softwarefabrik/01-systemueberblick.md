@@ -28,7 +28,7 @@ Projektidee  →  Wizard  →  Spezifikations-Artefakte  →  Run  →  Review/G
                                                      Korrekturschleife (max. 2)
 ```
 
-1. **Erfassen.** Ein fünfschrittiger Wizard sammelt Projektidee, Zielplattform,
+1. **Erfassen.** Ein sechsschrittiger Wizard sammelt Projektidee, Zielplattform,
    Backend- und Frontend-Stack; 18 Templates decken Web, Mobile und Desktop ab,
    inklusive Import eines bestehenden Repositories.
 2. **Spezifizieren.** Daraus generiert die Plattform versionierte
@@ -141,8 +141,9 @@ Aussagen begrenzen:
 - Der **Architektur-Ratchet** friert bestehende Modul-Zyklen und 13
   `web → JpaRepository`-Zugriffe als Altschuld ein. Neue Verstöße brechen den
   Build, die bestehenden sind dokumentierte, noch zu tilgende Schuld.
-- Eine **Seat-Level-Kostenattribution** (Kosten pro Nutzer statt pro Mandant)
-  ist bewusst offen.
+- **Budget-Caps** wirken je Mandant. Eine Kostenauswertung je Seat (auslösender
+  Nutzer) existiert seit v0.17 (`/mandanten/seat-kosten`), eine seat-scharfe
+  Obergrenze gibt es nicht.
 - Ein bekannter **Test-Isolationsdefekt** ist offen: ein Integrationstest
   committet unter bestimmten Bedingungen in das reale Repository statt in ein
   temporäres.

@@ -162,8 +162,9 @@ bewusst.
   raten.
 - Token-Erfassung: `ClaudeUsageJsonParser` liest reale Verbrauchswerte;
   `TokenEstimator` (jtokkit) schätzt, wo der Vendor keine Werte liefert.
-- Aggregation nach Projekt, Run, Provider und Mandant; CSV-Export je Sicht.
+- Aggregation nach Projekt, Run, Provider, Mandant und **Seat** (auslösender
+  Nutzer, abgeleitet aus `run.triggered_by`); CSV-Export je Sicht.
 - **Harte Budget-Caps** pro Mandant (`mandant_budget`, V28) sowie Tages-/
   Wochenlimits mit Soft-Schwelle; überschrittene Caps verhindern neue Läufe.
-- *Bewusst offen:* Kostenattribution auf Seat-Ebene (ein Run speichert keine
-  nutzerbezogene Kostenzuordnung).
+- *Grenze:* Der harte Cap wirkt je Mandant, nicht je Seat — die Seat-Sicht
+  wertet aus, sie begrenzt nicht.
