@@ -1,5 +1,4 @@
 # Build-Artefakte
-out/
 # abbildungen/out/ wird mitversioniert (reproduzierbar aus *.mmd via `make abbildungen`)
 build/
 __pycache__/
