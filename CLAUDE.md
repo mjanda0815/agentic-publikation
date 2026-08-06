@@ -1,8 +1,16 @@
 # CLAUDE.md — Whitepaper-Modernisierung „Agentic Software Development"
 
-> **STATUS: ENTWURF zur Abnahme durch Martin.** Struktur und Baukasten sind vom
-> DeFi-Publikationsprojekt übernommen; die fachlichen Regeln (insb. Quellen und
-> Lizenz) bitte prüfen und freigeben bzw. anpassen.
+> **STATUS: Version 2.1 ist inhaltlich final** (06.08.2026) — der
+> „Entwurf"-Vermerk ist vom Titelblatt entfernt. Kennzahlen und
+> Roadmap-Status stehen auf SoftwareFabrik-Release 0.20.0. Vier Artefakte
+> gehören zusammen und müssen bei jedem Versionssprung der SoftwareFabrik
+> gemeinsam nachgezogen werden: `main.tex` (Whitepaper), `main-fabrik.tex`
+> (Sonderdruck — entsteht ohne Zusatzarbeit aus derselben Kapitelquelle),
+> `carousel/carousel.tex` und `carousel/carousel-fabrik.tex`.
+> Betroffen sind dabei praktisch immer: die Kennzahlentabelle in Kapitel 19,
+> der Statuskasten und die Ausbaustufen in 19.10, der
+> Implementierungsstatus von ADR-5 und ADR-8 sowie je zwei Folien beider
+> Karussells.
 
 ## Projekt
 

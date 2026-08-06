@@ -796,9 +796,9 @@ Erhebungsstand 6. August 2026:
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (Stand 0.20.0); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert, mit Ablaufdatum hinterlegt |
+| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (Stand 0.20.0); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
 
-Dazu drei Beobachtungen aus dem Entwicklungsverlauf (27 Releases in rund
+Dazu vier Beobachtungen aus dem Entwicklungsverlauf (27 Releases in rund
 vier Monaten), die sich verallgemeinern lassen:
 
 1. **Governance kam spät, wurde aber strukturbildend** — siehe 19.8 (3).
@@ -846,9 +846,12 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 
 ## 19.10 Geplante Weiterentwicklung: vom Run zum parallelen Workflow *(Roadmap)*
 
-> **Status:** Alles in diesem Abschnitt ist **geplant**, nicht implementiert
-> (Roadmap-Stand August 2026). Grundlage ist die interne
-> Entwicklungs-Roadmap der SoftwareFabrik; Versions- und Phasenangaben sind
+> **Status:** Die Zielarchitektur und die Roadmap-Stufen 1 bis 5 sind
+> **geplant**. Stufe 0 ist in Release 0.20.0 **teilweise umgesetzt** und
+> hinter einem standardmäßig deaktivierten Feature-Flag verborgen (siehe
+> den Umsetzungsstand unten). Produktiv nutzbare parallele Workflows sind
+> noch nicht implementiert. Grundlage ist die interne Entwicklungs-Roadmap
+> der SoftwareFabrik; Versions- und Phasenangaben der weiteren Stufen sind
 > Vorschläge, keine Zusagen.
 
 ### Das Zielbild

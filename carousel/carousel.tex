@@ -83,7 +83,7 @@
 % Zwischenstände." Management Summary, Kernaussage 2.
 % ============================================================================
 \begin{folie}{Single Writer}
-  \gross{Ein Schreiber je Arbeitskopie. Beliebig viele Prüfer.}
+  \gross{Ein Schreiber je Arbeitskopie. Mehrere unabhängige Prüfer.}
   \vspace{48pt}
   \erl{Zwei Agenten, die gleichzeitig dieselbe Arbeitskopie verändern,
     erzeugen Schreibkonkurrenz, unklare Zurechnung und Zwischenstände, für
@@ -128,11 +128,11 @@
 % autoritativ in der Datenbank." Vgl. Kapitel 20, ADR-8.
 % ============================================================================
 \begin{folie}{Zustandshoheit}
-  \gross{Git trägt die Artefakte. Den Prozesszustand trägt es nicht.}
+  \gross{Git trägt die Artefakte. Die Datenbank trägt den Prozesszustand.}
   \vspace{48pt}
   \erl{Branches und Checkpoints gehören in Git. Workflow-, Policy-,
-    Freigabe- und Audit-Zustand brauchen eine autoritative Quelle
-    daneben — sonst ist der Prozess nicht rekonstruierbar.}
+    Freigabe- und Audit-Zustand liegen autoritativ in der Datenbank —
+    sonst ist der Prozess nicht rekonstruierbar.}
 \end{folie}
 
 % ============================================================================
@@ -172,7 +172,7 @@
 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Referenzimplementierung}
-  \gross{Kein Konzeptpapier: 28 fachliche Slices, 27 Releases in vier
+  \gross{Vom Konzept zum System: 28 fachliche Slices, 27 Releases in vier
     Monaten.}
   \vspace{48pt}
   \erl{Rund 33.200 Zeilen Produktivcode, Testabdeckung als buildbrechendes
@@ -191,15 +191,15 @@
 % Prinzip AP-3: Parallelität wird aus Abhängigkeiten abgeleitet, nicht aus
 % festen Agentenrollen.
 % ============================================================================
-\begin{folie}{Nächster Schritt (geplant)}
+\begin{folie}{Nächster Schritt — in Vorbereitung}
   \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
     Agentenrollen.}
   \vspace{48pt}
-  \erl{Ein Feature wird in einen Task Graph zerlegt; unabhängige Tasks
-    laufen als isolierte Child Runs, jeder mit eigenem Worktree und weiterhin
-    mit genau einem Schreiber. Merge Coordinator und Integration Gate führen
-    zusammen. Das Whitepaper trennt diesen Zielstand konsequent vom heute
-    implementierten Stand.}
+  \erl{Ein Feature wird in einen Task Graph zerlegt. Unabhängige Tasks
+    sollen als isolierte Child Runs arbeiten — jeweils mit eigenem Branch
+    oder Worktree und genau einem Schreiber. Erste Architekturvorbereitungen
+    sind in Release 0.20.0 umgesetzt; produktiv nutzbare parallele Workflows,
+    Merge Coordinator und Integration Gate sind geplant.}
 \end{folie}
 
 % ============================================================================
@@ -211,11 +211,16 @@
   \grossM{Agentic Software Development}
   \vspace{40pt}
   {\fontsize{34}{46}\selectfont\color{tintesek}Enterprise Architecture with
-    AI Agents — eine Control-Plane-Architektur für den kontrollierten Einsatz
-    von Coding-Agenten\par}
-  \vspace{64pt}
-  \erl{\textcolor{tinte}{\bfseries Vollständiges Whitepaper auf janda.io}\\
-    Überarbeitete und erweiterte Fassung 2.1, Stand: August 2026.}
+    AI Agents\par}
+  \vspace{22pt}
+  {\fontsize{27}{37}\selectfont\color{tintesek}Von kontrollierten
+    Einzel-Runs zur parallelen Agentic Software Factory. Praxisbeispiele mit
+    Java, Spring Boot und Domain-Driven Design\par}
+  \vspace{52pt}
+  \erl{\textcolor{tinte}{\bfseries Vollständiges Whitepaper:
+    Download-Link im Beitrag}\\
+    janda.io \textperiodcentered{} Überarbeitete und erweiterte Fassung 2.1,
+    Stand: August 2026.}
 \end{folie}
 
 \end{document}

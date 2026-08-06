@@ -291,9 +291,26 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       `karussell.sty` bleibt unverändert (identisch zu den DeFi-Karussells).
       Folie 7 ist ohne Zugangsdaten, Schlüssel und CVE-Nummern formuliert.
 
-- [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
-      Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
-      Repo public + Release + Zenodo-DOI).
+- [x] **Vierter Autorenreview eingearbeitet, Fassung auf final gesetzt**
+      (06.08.2026): „Entwurf"-Vermerk vom Titelblatt entfernt (jetzt
+      „Version 2.1 · Stand: …"); Statuskasten in 19.10 an den teilweise
+      umgesetzten Stufe-0-Stand angepasst; ADR-5 auf *In Umsetzung*,
+      ADR-8 um die vorbereiteten Workflow-Grundstrukturen präzisiert;
+      „drei Beobachtungen" → „vier"; die akzeptierte Schwachstelle in 19.9
+      als strukturiertes Risk Acceptance ausgewiesen (Angriffsfläche,
+      Kompensationsmaßnahmen, Ablaufdatum hinterlegt).
+      Karussell 1: „beliebig viele Prüfer" → „mehrere unabhängige Prüfer"
+      (unbegrenzte Parallelität ist ausdrückliches Nicht-Ziel der Roadmap);
+      Zustandshoheit positiv formuliert („Die Datenbank trägt den
+      Prozesszustand"); „Kein Konzeptpapier" → „Vom Konzept zum System";
+      Folie 9 auf „Branch oder Worktree" (wortgleich zu ADR-5) und auf den
+      begonnenen Stufe-0-Stand; Folie 10 mit dem wortgleichen Untertitel des
+      Titelblatts und CTA „Download-Link im Beitrag". Diagrammschrift beider
+      Karussells um rund 12 % vergrößert. CTA von Karussell 2 angeglichen.
+- [ ] (Martin) Veröffentlichungsschritte: janda.io, optional Repo public +
+      Release + Zenodo-DOI. Bei einem Repost nach dem nächsten
+      SoftwareFabrik-Release die Version auf 2.2 heben statt 2.1 still zu
+      ändern — 2.1 ist als final deklariert.
 - [ ] Optional für v3.0 (laut anpassungen/whitepaper_anpassungen.md §23):
       neue Gesamtgliederung in fünf Teile, Workflow-Fallstudie mit erster
       implementierter paralleler Analyse, Messdaten aus dem Messplan (15.6),
