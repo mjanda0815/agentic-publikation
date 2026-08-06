@@ -1,0 +1,72 @@
+% praeambel.tex — Paket- und Layout-Konfiguration
+% Diplomarbeit „Decentralized Finance und die Zukunft des Finanzwesens"
+% Überarbeitete Fassung 2026
+
+% --- Encoding, Sprache, Schrift ---
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage[style=german]{csquotes}
+\usepackage{microtype}
+
+% --- Zeilenabstand ---
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Seitenlayout ---
+\usepackage[a4paper,margin=2.5cm]{geometry}
+
+% --- Mathematik ---
+\usepackage{amsmath}
+
+% --- Tabellen ---
+\usepackage{booktabs}
+% Pandoc setzt Markdown-Pipe-Tabellen als longtable (braucht zusätzlich array/calc)
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+
+% --- Grafiken ---
+\usepackage{graphicx}
+\graphicspath{{abbildungen/out/}}
+% Pandoc emittiert width UND height; ohne keepaspectratio würden die
+% Abbildungen auf \textheight verzerrt (Pandocs eigene Preamble setzt dies auch).
+\setkeys{Gin}{keepaspectratio}
+
+% --- Bibliographie ---
+\usepackage[
+  backend=biber,
+  style=numeric,
+  sorting=nyt,
+  urldate=long,
+  dateabbrev=false
+]{biblatex}
+\addbibresource{literatur.bib}
+
+% --- Hyperlinks (dezent, keine farbigen Rahmen) ---
+\usepackage[hidelinks]{hyperref}
+% xurl erlaubt Zeilenumbrüche an beliebigen Stellen in URLs (Literaturverzeichnis)
+\usepackage{xurl}
+
+% --- Pandoc-Kompatibilität ---
+% \tightlist wird von Pandoc für kompakte Listen ohne Zusatzabstand erzeugt
+% und ist ohne den Pandoc-Standardtemplate nicht definiert.
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Einzelne Unicode-Zeichen aus wörtlich zitierten Roh-Extrakten (siehe
+% Standard-T1-Encoding kein Glyphen-Mapping haben.
+\DeclareUnicodeCharacter{03A3}{$\Sigma$}
+\DeclareUnicodeCharacter{2217}{$\ast$}
+% Zeichen aus dem Änderungsvermerk (Anhang B)
+\DeclareUnicodeCharacter{2192}{$\rightarrow$}
+\DeclareUnicodeCharacter{2194}{$\leftrightarrow$}
+\DeclareUnicodeCharacter{2265}{$\geq$}
+
+% --- Abkürzungsverzeichnis (Setup vorbereitet, Liste vorerst leer) ---
+\usepackage[printonlyused]{acronym}
+% Beispiel-Einträge (auskommentiert, bei Bedarf befüllen):
+% \begin{acronym}
+%   \acro{DeFi}{Decentralized Finance}
+%   \acro{TVL}{Total Value Locked}
+% \end{acronym}

@@ -1,0 +1,38 @@
+# CI-Gerüst (übernommen aus dem DeFi-Publikationsprojekt).
+# Bewusst nur manuell auslösbar (workflow_dispatch), solange kapitel/ und
+# main.tex noch nicht existieren — nach Einrichtung des Builds den
+# push-Trigger aktivieren und die Abbildungs-Skripte eintragen.
+name: Build PDF
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Make, Python/matplotlib und Pandoc (gepinnt auf 2.19.2)
+        run: |
+          apt-get update
+          apt-get install -y make python3 python3-matplotlib fonts-lmodern wget
+          wget -q https://github.com/jgm/pandoc/releases/download/2.19.2/pandoc-2.19.2-1-amd64.deb
+          dpkg -i pandoc-2.19.2-1-amd64.deb
+          pandoc --version | head -1
+
+      - name: Abbildungen aus eingecheckten Daten erzeugen
+        run: |
+          echo "TODO: abbildungen/<skript>.py eintragen, sobald vorhanden"
+
+      - name: Whitepaper bauen
+        run: make pdf
+
+      - name: Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: whitepaper-pdf
+          path: build/main.pdf

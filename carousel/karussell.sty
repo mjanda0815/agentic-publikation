@@ -1,0 +1,57 @@
+% karussell.sty — gemeinsame Definitionen der LinkedIn-Karussells
+% (Whitepaper-Karussell carousel.tex, Artikel-Karussell carousel-bitcoin.tex).
+% Fonts/Farben wie im Whitepaper: Latin Modern; Farbrollen aus abbildungen/stil.py.
+% Format: quadratisch 1080x1080 bp (PDF-Punkte), eine Seite = eine Folie.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{karussell}[2026/08/05 Gemeinsamer Stil der LinkedIn-Karussells]
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage[ngerman]{babel}
+\RequirePackage{microtype}
+\RequirePackage{textcomp}
+% "bp" (PDF-Punkte, 1/72 Zoll) statt "pt" (TeX-Punkte), damit die Seite exakt
+% 1080x1080 misst (siehe Karussell Nr. 1).
+\RequirePackage[paperwidth=1080bp,paperheight=1080bp,margin=80bp]{geometry}
+\RequirePackage{graphicx}
+\graphicspath{{../abbildungen/out/}}
+\RequirePackage{xcolor}
+\definecolor{blau}{HTML}{256ABF}         % Akzent (stil.BLAU)
+\definecolor{tinte}{HTML}{0B0B0B}        % Primärtext (stil.TINTE)
+\definecolor{tintesek}{HTML}{52514E}     % Sekundärtext (stil.TINTE_SEKUNDAER)
+\definecolor{gedeckt}{HTML}{898781}      % Fußzeile (stil.GEDECKT)
+\definecolor{grundlinie}{HTML}{C3C2B7}   % Haarlinien (stil.GRUNDLINIE)
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\raggedright
+\hyphenpenalty=300
+% babel-ngerman-Shorthand " deaktivieren — Folientexte nutzen „…“ (Unicode);
+% ein verbliebenes ASCII-" darf keinen Text verschlucken (Lehre aus dem Build
+% des Artikels, siehe TODO Abschnitt P).
+\AtBeginDocument{\shorthandoff{"}}
+
+% --- Folien-Bausteine --------------------------------------------------------
+\newcounter{folie}
+\newcommand{\gesamt}{10} % je Dokument per \renewcommand setzen
+
+% Kicker: kleine Themenzeile oben
+\newcommand{\kicker}[1]{{\fontsize{26}{32}\selectfont\scshape\color{blau}#1\par}}
+% Kernaussage: zwei Größen je nach Textlänge (Vorgabe 60–90 pt)
+\newcommand{\gross}[1]{{\fontsize{72}{88}\selectfont\bfseries\color{tinte}#1\par}}
+\newcommand{\grossM}[1]{{\fontsize{60}{74}\selectfont\bfseries\color{tinte}#1\par}}
+% Erläuterung: max. 2–3 Zeilen
+\newcommand{\erl}[1]{{\fontsize{32}{46}\selectfont\color{tintesek}#1\par}}
+
+% Eine Folie: Kicker oben, Inhalt leicht oberhalb der Mitte, Fußzeile unten
+\newenvironment{folie}[1]{%
+  \stepcounter{folie}%
+  \kicker{#1}%
+  \vspace*{\stretch{0.85}}%
+}{%
+  \vspace*{\stretch{1.15}}%
+  {\fontsize{22}{26}\selectfont\color{gedeckt}%
+    Martin Janda\,\textperiodcentered\,janda.io%
+    \hfill \arabic{folie}/\gesamt\par}%
+  \clearpage
+}

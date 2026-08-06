@@ -1,0 +1,21 @@
+# Build-Artefakte
+out/
+abbildungen/out/
+build/
+__pycache__/
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.run.xml
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+
+# Lokales
+.claude/settings.local.json
+.playwright-mcp/

@@ -1,0 +1,23 @@
+{
+  "model": "claude-fable-5",
+  "permissions": {
+    "allow": [
+      "Bash(latexmk:*)",
+      "Bash(biber:*)",
+      "Bash(pandoc:*)",
+      "Bash(make:*)",
+      "Bash(python:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "WebFetch(domain:defillama.com)",
+      "WebFetch(domain:api.llama.fi)",
+      "WebFetch(domain:www.bafin.de)",
+      "WebFetch(domain:www.esma.europa.eu)",
+      "WebFetch(domain:ethereum.org)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)"
+    ]
+  }
+}
