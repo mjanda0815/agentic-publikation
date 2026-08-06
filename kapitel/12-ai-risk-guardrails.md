@@ -49,7 +49,8 @@ public class ConfidenceScoreAspect {
     @Around("@annotation(cs) || @within(cs)")
     public Object enforce(ProceedingJoinPoint jp, ConfidenceScore cs) throws Throwable {
         if (cs.value() == ConfidenceScore.Level.LOW) {
-            log.warn("[CONFIDENCE LOW] {} - {}", jp.getSignature().toShortString(), cs.rationale());
+            log.warn("[CONFIDENCE LOW] {} - {}", jp.getSignature().toShortString(),
+                    cs.rationale());
             knowledgeStore.store("findings", "confidence-" + jp.getSignature().hashCode(),
                     new ReviewFinding(jp.getSignature().toShortString(), cs.value(),
                              cs.rationale(), Instant.now()));

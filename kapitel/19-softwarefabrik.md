@@ -38,8 +38,8 @@ Sprachmodell. Sie steuert, begrenzt, protokolliert und bewertet die Arbeit
 externer Coding-Agenten — und macht deren Ergebnis prüfbar.
 
 Der Unterschied zur direkten CLI-Nutzung eines Coding-Agenten ist genau der
-Unterschied zwischen *ein Entwickler mit einem mächtigen Werkzeug* und *ein
-Entwicklungsprozess*: Spezifikation, Freigabe, Isolation, Review,
+Unterschied zwischen *einem Entwickler mit einem mächtigen Werkzeug* und
+*einem Entwicklungsprozess*: Spezifikation, Freigabe, Isolation, Review,
 Nachvollziehbarkeit, Budget, Mandantentrennung. In einem Satz: Die
 SoftwareFabrik ist die produktisierte Umsetzung der in diesem Whitepaper
 beschriebenen Referenzarchitektur — vendor-neutral statt an ein einzelnes
@@ -131,7 +131,7 @@ Auditor und Administrator sind eigenständige Akteure geworden. Das ist kein
 Zufall, sondern die Konsequenz aus dem Governance-Anspruch — wer Nachweise
 verlangt, braucht eine Rolle, die sie liest.
 
-![Bausteinsicht: modularer Monolith mit Ports-and-Adapters pro Slice; externe Werkzeuge ausschließlich hinter Ports](abbildungen/out/abb22.pdf){width=70%}
+![Bausteinsicht: modularer Monolith mit Ports-and-Adapters pro Slice; externe Werkzeuge ausschließlich hinter Ports](abbildungen/out/abb22.pdf){width=100%}
 
 ### Modularer Monolith mit erzwungenen Grenzen
 
@@ -243,7 +243,7 @@ bewegt sich durch 13 Zustände. Drei davon tragen die Argumentation dieses
 Whitepapers weiter:
 
 - **`WAITING_FOR_APPROVAL`** — der Mensch ist ein *Zustand im System*, kein
-  Nebenprozess. Human-in-the-Loop (Prinzip AP-6) ist damit nicht Appell,
+  Nebenprozess. Human Authority (Prinzip AP-6) ist damit nicht Appell,
   sondern Zustandsmaschine.
 - **`NEEDS_CORRECTION`** — Fehlschlag ist ein regulärer Zustand mit
   definiertem Ausgang, nicht ein Abbruch.
@@ -370,8 +370,14 @@ Flankiert wird das von einem vollständigen Kostenmodell in der Plattform:
 eine Preistabelle je Modell mit getrennten Preisen für Input, Output und
 Cached Input, Kostenaggregation nach Projekt, Run, Provider, Mandant und
 auslösendem Nutzer (*Seat*), harte Budget-Caps je Mandant sowie Tages- und
-Wochenlimits mit Soft-Schwelle. Unbekannte Modelle werden bewusst
-konservativ mit 0 € bewertet, statt Preise zu raten.
+Wochenlimits mit Soft-Schwelle. Für Modelle ohne hinterlegte Preisdaten weist das System keine Kosten aus.
+Das ist eine bewusste Entscheidung gegen geratene Preise — aber, wie ein
+Review zu Recht angemerkt hat, keine konservative Budgetbewertung: Ein mit
+0 € bewerteter Lauf kann Budgetgrenzen unterlaufen und Kosten zu niedrig
+ausweisen. Sauberer wäre ein expliziter Kostenstatus `UNKNOWN`, der die
+Budgetprüfung nicht bestehen kann, ein konfigurierbarer
+Sicherheitsersatzwert — und im Abo-Modus ein eigener Status `FLAT_RATE`
+statt der Zahl null. Ein Punkt für die Weiterentwicklung (19.10).
 
 ### Capability-Routing statt Modellnamen
 
@@ -558,7 +564,12 @@ verkettet und signiert unter einem Monitor;
 unterscheidet drei Fehlerbilder — ein Eintrag wurde nachträglich verändert
 (`HASH_MISMATCH`), entfernt oder eingefügt (`CHAIN_BREAK`), oder stammt
 nicht vom erwarteten Schlüssel (`BAD_SIGNATURE`). Altbestand ohne Signatur
-wird transparent ausgewiesen, statt die Prüfung scheitern zu lassen.
+wird transparent ausgewiesen, statt die Prüfung scheitern zu lassen —
+nachvollziehbar für Migrationen, aber das Ergebnis darf dann nicht wie eine
+vollständig verifizierte Kette aussehen. Konsequent im Sinne von AP-7 wären
+getrennte Ergebnisse (`VERIFIED`, `VERIFIED_WITH_UNSIGNED_LEGACY_PREFIX`,
+`UNVERIFIED_LEGACY`, `BROKEN`), von denen strikte Kontrollprofile nur
+`VERIFIED` akzeptieren.
 
 Attestiert wird nicht jeder Tastendruck, sondern **jede Entscheidung, die
 den Handlungsspielraum des Agenten festgelegt hat**: Run-Lebenszyklus,
@@ -598,7 +609,10 @@ aussieht, taugt nicht als Nachweis.
 
 Der Supply-Chain-Nachweis aus Kapitel 14 ist durchgezogen: SBOM je Build
 (standardmäßig deaktiviert, pro Installation aktivierbar; fehlt das
-Scanner-Werkzeug, wird der Schritt transparent übersprungen) mit
+Scanner-Werkzeug, wird der Schritt heute transparent übersprungen —
+konsequent im Sinne von AP-7 wäre eine policyabhängige Behandlung: sichtbare
+Warnung im Baseline-Profil, `ERROR` in strikten Profilen, denn ein
+übersprungener Pflichtnachweis darf nicht als bestanden gelten) mit
 Ed25519-Signatur über den Digest, Dependency- und Lizenz-Scan als Reviewer
 im Gate, dazu CI-seitig Abhängigkeits-, Image- und Secret-Scans. Auch der Wissensbestand ist Governance-Objekt: Skills und
 Plugins liegen in einer mandantengescopten, **versionierten Bibliothek**
@@ -835,7 +849,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Parallelität findet zwischen isolierten Tasks und Runs statt. Innerhalb
 > eines Workspace existiert genau ein schreibender Agent.
 
-![Zielarchitektur der parallelen Agenten-Workflows (geplant): isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate](abbildungen/out/abb31.pdf){width=90%}
+![Zielarchitektur der parallelen Agenten-Workflows (geplant): isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate](abbildungen/out/abb31.pdf){width=100%}
 
 ### Die tragenden Prinzipien
 

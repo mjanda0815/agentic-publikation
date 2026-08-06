@@ -94,7 +94,8 @@ public class KnowledgeStoreClient {
         }
     }
 
-    public record KnowledgeEntry<T>(String key, T value, Instant storedAt, String storedBy) {}
+    public record KnowledgeEntry<T>(String key, T value, Instant storedAt,
+            String storedBy) {}
 }
 ```
 

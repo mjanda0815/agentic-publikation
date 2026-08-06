@@ -1,6 +1,6 @@
 # 4 Konfiguration mit CLAUDE.md
 
-CLAUDE.md ist die zentrale Konfigurationsdatei für das Agenten-Verhalten, Team-Standards und Projektregeln. Sie funktioniert wie eine Kombination aus .editorconfig, ESLint-Konfiguration und Architektur-Dokumentation – nur für KI-Agenten. Die Datei ist Klartext im Markdown-Format und wird von jedem Agenten beim Context Build (Lifecycle-Phase 2) automatisch geladen. Damit ist CLAUDE.md die operative Umsetzung des Prinzips AP-5 (Policy-Driven Development): Was hier steht, wird durchgesetzt.
+CLAUDE.md ist die zentrale Konfigurationsdatei für das Agenten-Verhalten, Team-Standards und Projektregeln. Sie funktioniert wie eine Kombination aus .editorconfig, ESLint-Konfiguration und Architektur-Dokumentation – nur für KI-Agenten. Die Datei ist Klartext im Markdown-Format und wird von jedem Agenten beim Context Build (Lifecycle-Phase 2) automatisch geladen. CLAUDE.md bzw. AGENTS.md stellt dem Agenten verbindlich formulierte Projektregeln als Kontext bereit — die deklarative Hälfte von AP-5 (Policy as Executable Structure). Technische Erzwingung entsteht erst durch Tool-Beschränkungen, Hooks, Sandbox und nachgelagerte Quality Gates.
 
 > **Aktualisierung (Stand August 2026):** Seit v1.3 hat sich mit `AGENTS.md`
 > ein werkzeugübergreifender De-facto-Standard für genau diese Datei
@@ -38,12 +38,12 @@ Eine vollständige CLAUDE.md besteht aus mehreren klar abgegrenzten Sektionen. J
 
 | Sektion | Inhalt | Wirkung |
 | --- | --- | --- |
-| Agentendefinitionen | Welche Custom Agents existieren, mit welchen Tools und Rollen | Steuert AP-1 (Agent Specialization) und das Berechtigungsmodell |
+| Agentendefinitionen | Welche Custom Agents existieren, mit welchen Tools und Rollen | Steuert die Rollen-/Capability-Zuordnung (vgl. Kap. 2) und das Berechtigungsmodell |
 | Projektstandards | Java-Version, Style Guide, Framework-Versionen, Package-Struktur | Agenten generieren Code konform zu diesen Standards |
-| DDD-Regeln | Bounded Contexts, Glossar-Pfad, Event-Naming, Context Map | Domain-Hooks prüfen gegen diese Regeln (AP-3) |
+| DDD-Regeln | Bounded Contexts, Glossar-Pfad, Event-Naming, Context Map | Domain-Hooks prüfen gegen diese Regeln (AP-5) |
 | Architekturregeln | Erlaubte Patterns, verbotene Anti-Patterns, Schichtentrennung | Review-Agent nutzt diese als Prüfkatalog |
 | Cost Controls | Default-Modell, Budget-Limits, Eskalationsregeln | Steuert Execution Budget (Kap. 7) und Token Budget (Kap. 15) |
-| Hooks & MCP | PreToolUse/PostToolUse Hooks, MCP-Server-Referenzen | Governance by Design (AP-3) durch automatische Validierung |
+| Hooks & MCP | PreToolUse/PostToolUse Hooks, MCP-Server-Referenzen | Automatische Validierung als Teil von AP-5/AP-7 |
 | Verbotene Aktionen | Dateien/Pfade die nie geändert werden dürfen, gesperrte Kommandos | Sicherheitsleitplanken über das Tool-Whitelisting hinaus |
 
 ## 4.2 Vollständiges Enterprise-Beispiel
@@ -58,7 +58,7 @@ Das folgende Beispiel zeigt eine produktionsnahe CLAUDE.md für ein fiktives Beh
 
 # --- Agentendefinitionen ---
 # Jeder Agent hat: Name, Rolle, erlaubte Tools, Beschränkungen
-# Dies setzt AP-1 (Agent Specialization) operativ um.
+# Dies setzt die Rollen-/Capability-Zuordnung (vgl. Kap. 2) operativ um.
 
 ## Agenten
 - architecture-agent: Analysiert Systemdesign, erstellt ADRs.
@@ -140,11 +140,11 @@ Das folgende Beispiel zeigt eine produktionsnahe CLAUDE.md für ein fiktives Beh
 - ALERT_THRESHOLD: 0.8
 
 ## Modell-Eskalation
-- opus NUR für: Architektur-ADRs, Security Reviews, Halluzinationsprüfung
+- opus NUR für: Architektur-ADRs, Security Reviews, Claim Verification
 - haiku NUR für: Code-Formatierung, einfache Umbenennung, Docs ohne Fachlogik
 
 # --- Hooks ---
-# Automatische Validierung bei jeder Tool-Nutzung (AP-3).
+# Automatische Validierung bei jeder Tool-Nutzung (AP-5/AP-7).
 
 ## PreToolUse
 - Pfad-Whitelist: Schreibzugriffe nur auf src/, test/, docs/, deploy/

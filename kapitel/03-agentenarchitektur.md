@@ -19,13 +19,26 @@ Der Orchestrator bildet dabei die zentrale Steuerungseinheit, während spezialis
 
 ## 3.2 Referenzarchitektur des Agentensystems
 
-Die Architektur folgt einem erweiterten Hub-and-Spoke-Modell. Im Zentrum steht der Orchestrator, der Arbeit an spezialisierte Subagenten verteilt, deren Ergebnisse koordiniert und einen gemeinsamen Wissensstand (Shared Knowledge Store) verwaltet. Dieses Modell bietet entscheidende Vorteile gegenüber einem monolithischen Agenten: Spezialisierung führt zu höherer Qualität, Parallelisierung beschleunigt den Gesamtprozess, und Isolation verhindert, dass ein fehlerhafter Agent die gesamte Pipeline beeinträchtigt.
+Die Architektur folgt einem erweiterten Hub-and-Spoke-Modell: Im Zentrum
+steht der Orchestrator, der Arbeit an spezialisierte Rollen verteilt, deren
+Ergebnisse koordiniert und einen gemeinsamen Wissensstand (Shared Knowledge
+Store) verwaltet. Wichtig ist die Einordnung: Hub-and-Spoke ist eine
+**logische Rollen- und Kommunikationsstruktur** — ob Rollen als separate
+Agentenprozesse materialisiert werden, ist eine
+Implementierungsentscheidung. Die Fallstudie in Kapitel 19 zeigt beide
+Seiten: Kontextisolation verhindert Interferenzen, aber Parallelität
+erzeugt Konfliktkosten, wenn Schreibbereiche nicht abgegrenzt sind, und
+Spezialisierung ist nicht automatisch ein Qualitätsgewinn. Die aktuelle
+Referenzimplementierung verwendet deshalb einen schreibenden Agenten je
+Run und mehrere unabhängige Reviewer; die geplante Workflow-Ebene
+ermöglicht parallele Child Runs nur bei abgegrenzten Schreibbereichen und
+erfüllten Abhängigkeiten (AP-2/AP-3, Kapitel 19.10).
 
 ![SDLC-Agenten-Pipeline — von der Anforderungsanalyse bis zum Deployment](abbildungen/out/abb03.pdf){width=100%}
 
 ## 3.3 Agentenübersicht
 
-![Referenzarchitektur eines agentischen Entwicklungssystems im Enterprise-Kontext](abbildungen/out/abb04.pdf){width=80%}
+![Referenzarchitektur eines agentischen Entwicklungssystems im Enterprise-Kontext](abbildungen/out/abb04.pdf){width=95%}
 
 Der Agent Layer besteht aus spezialisierten Rollen (Architektur, Planung, Requirements, Entwicklung, Testing, Review, Deployment), die jeweils klar begrenzte Verantwortlichkeiten besitzen.
 

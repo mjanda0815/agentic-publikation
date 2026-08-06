@@ -2,7 +2,7 @@
   "theme": "neutral",
   "themeVariables": {
     "fontFamily": "Georgia, 'Times New Roman', serif",
-    "fontSize": "16px",
+    "fontSize": "18px",
     "primaryColor": "#dbe9f8",
     "primaryBorderColor": "#333333",
     "primaryTextColor": "#0b0b0b",

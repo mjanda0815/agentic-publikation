@@ -4,7 +4,7 @@
 | --- | --- |
 | ADR | Architecture Decision Record – Dokumentierte Architekturentscheidung. |
 | AOP | Aspect-Oriented Programming – Querschnittsbelange (Logging, Security). |
-| AP-1 bis AP-6 | Die sechs architektonischen Prinzipien des Agentensystems (Kapitel 2). |
+| AP-1 bis AP-8 | Die acht architektonischen Prinzipien der Control-Plane-Architektur (Kapitel 2). |
 | Attestierung | Signierter, verketteter Nachweis einer Entscheidung im Agentensystem (Kap. 19). |
 | Blatt-Slice | Modul, das nur konsumiert und von keinem anderen konsumiert wird — Entwurfsmuster zur Zyklenvermeidung (Kap. 19). |
 | BPMN | Business Process Model and Notation – Geschäftsprozessmodellierung. |

@@ -1,31 +1,19 @@
 flowchart TB
     APPL["application / web<br/><i>kennt nur den Port</i>"]
-    PORT["<b>ExecutionAdapter</b> (Port)<br/>name() · execute(request, eventHandler)"]
-    REG["ExecutionAdapterRegistry<br/>Auflösung: Run &gt; Projekt &gt; User &gt; Global &gt; YAML"]
-    ROUT["ModelRoutingService<br/>Capability-Profil je Rolle (PLAN/BUILD)"]
-    SB["ExecutionSandboxFactory<br/>lokal | Container (--network=none, read-only)"]
-
-    APPL --> REG --> PORT
+    REG["ExecutionAdapterRegistry<br/>Run &gt; Projekt &gt; User &gt; Global &gt; YAML"]
+    ROUT["ModelRoutingService<br/>Capability-Profil je Rolle"]
+    PORT["<b>ExecutionAdapter</b> (Port)<br/>name() · execute(request, handler)"]
+    SB["ExecutionSandboxFactory<br/>lokal | Container (--network=none)"]
+    SEC["SecretsResolver<br/>AES-GCM · Abo-Modus strippt API-Key"]
+    CLIA["<b>CLI-Adapter</b><br/>mock · claude · codex · gemini<br/>aider · kimi · local-llm"]
+    GWA["<b>Gateway-Adapter</b><br/>bedrock · vertex · azure-openai"]
+    APPL --> REG
     ROUT --> REG
-    PORT --> SB
-
-    subgraph CLIA["CLI-Adapter"]
-        M[mock]
-        C[claude]
-        X[codex]
-        G[gemini]
-        AI[aider]
-        K[kimi]
-        L[local-llm]
-    end
-    subgraph GWA["Gateway-Adapter"]
-        BR[bedrock]
-        VE[vertex]
-        AZ[azure-openai]
-    end
-
+    REG --> PORT --> SB
+    SEC -. "Prozessumgebung" .-> SB
     SB --> CLIA
     SB --> GWA
-
-    SEC["SecretsResolver<br/>AES-GCM · Abo-Modus strippt API-Key"]
-    SEC -.Prozessumgebung.-> SB
+    classDef port fill:#ddeedd,stroke:#333333
+    classDef infra fill:#eeeeee,stroke:#333333
+    class PORT port
+    class SB,SEC infra

@@ -3,7 +3,7 @@
 > **Hinweis:** Abgrenzung: Kapitel 6 (Lifecycle) beschreibt die Phasen eines einzelnen Agenten. Dieses Kapitel beschreibt, wie der Orchestrator mehrere Agenten als Workflow plant, steuert und terminiert. Kapitel 16 (Workflows) zeigt die konkreten Aufruf-Patterns.
 
 
-Das Execution Model beschreibt, wie der Orchestrator Aufgaben plant, verteilt, überwacht und terminiert. Es ist das operative Herzstück des Agentensystems und setzt die architektonischen Prinzipien AP-2 (Deterministic Execution) und AP-3 (Governance by Design) in die Praxis um.
+Das Execution Model beschreibt, wie der Orchestrator Aufgaben plant, verteilt, überwacht und terminiert. Es ist das operative Herzstück des Agentensystems und setzt die architektonischen Prinzipien AP-1 (Controlled Non-Determinism) und AP-5 (Policy as Executable Structure) in die Praxis um.
 
 ![Execution Pipeline — vom Entwicklungsziel über den Task-Graph bis zum Pull Request](abbildungen/out/abb06.pdf){width=100%}
 

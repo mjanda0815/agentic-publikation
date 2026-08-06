@@ -14,7 +14,7 @@ Für jede Phase des Software Development Lifecycle steht ein spezialisierter Age
 
 ## 10.1 Architektur-Agent
 
-Der Architektur-Agent analysiert die bestehende Systemarchitektur, bewertet Design-Patterns, identifiziert Anti-Patterns und erstellt ADRs. Er hat ausschließlich lesenden Zugriff auf die Codebasis (AP-1, AP-4).
+Der Architektur-Agent analysiert die bestehende Systemarchitektur, bewertet Design-Patterns, identifiziert Anti-Patterns und erstellt ADRs. Er hat ausschließlich lesenden Zugriff auf die Codebasis (AP-2, AP-4).
 
 ```
 Task(subagent_type="architecture-agent", model="opus",
@@ -60,7 +60,8 @@ public class PaymentService {
         Payment payment = Payment.create(request.amount(), request.currency(),
                 request.recipientIban());
         Payment saved = paymentRepository.save(payment);
-        eventPublisher.publishEvent(new PaymentInitiatedEvent(saved.getId(), saved.getAmount()));
+        eventPublisher.publishEvent(new PaymentInitiatedEvent(saved.getId(),
+                saved.getAmount()));
         return PaymentResponse.from(saved);
     }
 }
@@ -95,7 +96,8 @@ public class GlobalExceptionHandler {
                 "Validierungsfehler");
         Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField,
-                        fe -> fe.getDefaultMessage() != null ? fe.getDefaultMessage() : "ungültig",
+                        fe -> fe.getDefaultMessage() != null
+                                ? fe.getDefaultMessage() : "ungültig",
                         (a,b)->a));
         problem.setProperty("fieldErrors", errors);
         return problem;

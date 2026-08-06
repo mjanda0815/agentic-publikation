@@ -8,7 +8,14 @@ Der Ablauf demonstriert, wie der Orchestrator spezialisierte Agenten entlang des
 
 Dabei wird sichtbar, wie die zuvor eingeführten Konzepte – insbesondere Task Graph, Workspace Isolation, Guardrails Pipeline und Shared Knowledge Store – in einem zusammenhängenden Workflow zusammenspielen.
 
-Das folgende Beispiel zeigt die agentische Orchestrierung eines solchen Entwicklungsauftrags in Form eines vereinfachten Task-Workflows.
+> **Aufbau dieses Kapitels (v2.1):** Abschnitt 22.3 zeigt den Ablauf so,
+> wie er heute in der Referenzimplementierung stattfindet — ein
+> **Single-Run-Prozess** mit einem schreibenden Agenten und parallelen
+> Reviewern (Teil A, implementiert). Abschnitt 22.4 zeigt denselben Auftrag
+> als **parallelen Workflow** der Zielarchitektur (Teil B, geplant). Die
+> ursprüngliche v1.3-Skizze mit sieben gleichzeitig arbeitenden
+> Lebenszyklus-Agenten ist damit durch zwei präzise Varianten ersetzt: die,
+> die läuft, und die, die geplant ist.
 
 ## 22.1 Ausgangssituation
 
@@ -40,39 +47,104 @@ Der Orchestrator fungiert dabei als zentrale Steuerungseinheit des agentischen E
 
 Die folgende Abbildung zeigt, wie die einzelnen Architekturkomponenten während eines End-to-End-Workflows zusammenwirken.
 
-## 22.3 Agentischer Workflow
+## 22.3 Teil A — der implementierte Single-Run-Prozess
 
-> **Versionshinweis (v2.0):** Die folgenden Aufruf-Skizzen sind Pseudocode
-> auf v1.3-Werkzeugstand; das Werkzeug heißt heute `Agent`, und
-> `isolation: worktree` wird in der Subagenten-Definition gesetzt
-> (vgl. 3.5).
+> **Status: implementiert** (Referenzimplementierung, Stand 0.19.0; vgl.
+> Kapitel 19.1–19.3).
 
+So läuft der Auftrag heute. Ein Lauf, ein schreibender Agent, mehrere
+unabhängige Prüfer:
+
+1. **Spezifizieren.** Aus dem Wizard entstehen versionierte
+   Markdown-Artefakte (Projektbeschreibung, Instruktionen, Guardrails,
+   Definition of Done). Der Mensch editiert sie, bevor der Lauf startet —
+   hier wird Absicht maschinenlesbar.
+2. **Anlegen und prüfen.** Der Orchestrator prüft Modell-Policy, erlaubte
+   Adapter, Attestierungspflicht und Budgetgrenzen; die geltende
+   Policy-Version wird attestiert. Verlangt sie eine Freigabe vor der
+   Ausführung, geht der Lauf in `WAITING_FOR_APPROVAL`.
+3. **Workspace vorbereiten.** Der projektpersistente Workspace wird auf den
+   Remote-Stand vorgespult, die Spezifikations-Artefakte, das
+   Projektgedächtnis und die Guardrails-Projektion (`AGENTS.md` plus
+   minimale `CLAUDE.md`) werden geschrieben, dann zweigt der Lauf auf einen
+   eigenen Branch ab (`sdlc/run-<id>`).
+4. **Ausführen.** Genau **ein** Agentenprozess läuft in der Sandbox auf dem
+   Workspace — Domain, Application und Infrastruktur des Payment Service
+   entstehen nacheinander im selben Lauf. Logs, Token- und Kostenzähler
+   laufen live mit.
+5. **Validieren.** Build-Gate (`mvn verify`), Commit auf dem Run-Branch —
+   auch bei Misserfolg, damit die Arbeit inspizierbar bleibt —, optional
+   SBOM, dann das Quality Gate: sechs Read-only-Reviewer parallel auf dem
+   Diff (LLM-Review, Security, Architektur, Claim Verification,
+   Dependency-Scan), aggregiert zu PASS/WARN/FAIL bzw. ERROR.
+6. **Korrigieren.** Bei Build-Fehler, blockierendem Gate, Merge-Konflikt
+   oder roter CI wird der Befund als Feedback-Text in einen erneuten
+   Agentenlauf eingespeist — maximal zwei Versuche, danach bleibt der Lauf
+   in `NEEDS_CORRECTION`.
+7. **Übergeben.** Lokaler Merge oder Push mit Pull Request; im PR-Fall
+   wartet der Lauf auf grüne CI und Merge. Erst dann gilt das
+   Backlog-Element als erledigt.
+8. **Belegen.** Jeder Schritt liegt als signiertes Glied der Audit-Kette
+   vor; der Warum-Trace beantwortet für diesen Payment Service, welche
+   Policy galt, welches Modell gearbeitet hat und wer freigegeben hat.
+
+Die Parallelität liegt hier ausschließlich in Schritt 5 — bei der
+Bewertung, nicht bei der Erzeugung (AP-2, AP-4).
+
+## 22.4 Teil B — derselbe Auftrag als paralleler Workflow
+
+> **Status: geplant** (Zielarchitektur; vgl. 19.10 und ADR-5 bis ADR-7).
+> Die folgende Skizze ist Pseudocode und beschreibt kein heute verfügbares
+> Verhalten.
+
+Der Payment Service besteht aus Teilen, die sich sauber schneiden lassen —
+genau der Fall, für den die Workflow-Ebene gedacht ist:
+
+```text
+Parent Workflow: "Payment Service"
+   │
+   ├─ Task 1  Contract Task (blockierend)
+   │          OpenAPI-Spezifikation + Domain Events + DTO-Schemas
+   │          → Contract Version v1 (Content-Hash), attestiert
+   │
+   ├─ Task 2  Domain-Implementierung      (unabhängig von Task 3, 4)
+   │          Owned Paths: domain/**      Child Run A, Branch A
+   │
+   ├─ Task 3  API-/Application-Schicht    (unabhängig von Task 2, 4)
+   │          Owned Paths: adapter/in/**  Child Run B, Branch B
+   │
+   ├─ Task 4  Infrastruktur (Kafka/Outbox) (unabhängig von Task 2, 3)
+   │          Owned Paths: adapter/out/** Child Run C, Branch C
+   │          Exklusiv-Lock: db/migration/**
+   │
+   ├─ Task 5  Tests (abhängig von 2–4)
+   │
+   └─ Task 6  Deployment-Artefakte (abhängig von 5)
 ```
-// PHASE 1: Requirements & Architektur
-Task(subagent_type="requirements-agent",
-    prompt="Stories für payment-service aus Jira Sprint 43. RTM erstellen.")
-Task(subagent_type="architecture-agent", model="opus",
-    prompt="Hexagonale Architektur, DDD, Kafka, PSD2. Output: ADR + Shared Knowledge Store")
 
-// PHASE 2: Planung
-Task(subagent_type="planning-agent",
-    prompt="Implementierungstracker: Domain -> Application -> Infra -> Test -> Deploy")
+Der Ablauf: Der Contract Task läuft zuerst und allein — ohne versionierte
+Verträge keine parallele Implementierung (AP-3). Danach starten die Tasks 2
+bis 4 als **Child Runs** mit je eigenem Branch und je genau einem
+schreibenden Agenten (AP-2); ihre Schreibbereiche überschneiden sich nicht,
+und die Datenbankmigrationen sind über ein Exklusiv-Lock serialisiert. Jeder
+Child Run durchläuft sein **lokales Task-Gate**. Der **Merge Coordinator**
+führt die erfolgreichen Ergebnisse in definierter Reihenfolge auf den
+Integrationsbranch, rebased auf den jeweils aktuellen Stand und
+klassifiziert Konflikte; ein Vertragsbruch oder ein veralteter Basisstand
+setzt den betroffenen Task auf Neuplanung statt auf blindes Retry (AP-1,
+19.10). Das **Integration Gate** prüft den zusammengeführten Stand als
+Ganzes — Gesamtbuild, Regression, End-to-End, API- und
+Event-Kompatibilität, Migrationskonsistenz, Gesamt-SBOM. Erst danach folgen
+Freigabe und Pull Request.
 
-// PHASE 3: Implementierung (sequenziell + parallel)
-Task(subagent_type="dev-agent", prompt="Domain Layer: Entities, Value Objects, Events.")
-Task(subagent_type="dev-agent", prompt="Application: Controllers, Security.", isolation="worktree")
-Task(subagent_type="dev-agent", prompt="Infra: Kafka, Outbox.", isolation="worktree")
+Der Gewinn ist Wanduhrzeit bei unveränderter Zurechenbarkeit: Jede Änderung
+bleibt einem Child Run zugeordnet, jeder Schritt bleibt attestiert, und der
+Warum-Trace umfasst zusätzlich Planversion, Vertragsversionen und
+Merge-Entscheidungen. Der Preis sind Integrationskosten — und die Tatsache,
+dass sich Parallelität nur lohnt, wenn die Dekomposition trägt (19.10,
+Risiken).
 
-// PHASE 4: Testing & Review
-Task(subagent_type="test-agent", prompt="JUnit 5 + Testcontainers. Min. 80% Coverage.")
-Task(subagent_type="review-agent", model="opus", prompt="PSD2, Confidence, Domain-Compliance.")
-
-// PHASE 5: Deployment
-Task(subagent_type="deploy-agent", prompt="K8s-Manifeste, HPA, TLS-Ingress.")
-Task(subagent_type="qa-guard", prompt="Finale Validierung: 100% Tests, Security.")
-```
-
-## 22.4 Artefakte des Workflows
+## 22.5 Artefakte des Workflows
 
 Der agentische Workflow erzeugt nicht nur Quellcode, sondern eine Reihe strukturierter Artefakte, die den gesamten Entwicklungsprozess nachvollziehbar und wiederverwendbar machen. Dazu gehören Anforderungen, Architekturentscheidungen, Implementierungspläne, Quellcode, Tests sowie Deployment-Artefakte.
 
@@ -86,7 +158,7 @@ Im vorliegenden Beispiel entstehen typischerweise folgende Ergebnisse:
 
 Diese Artefakte bilden zusammen die technische und fachliche Grundlage für den produktiven Betrieb des Payment Services. Gleichzeitig ermöglichen sie eine vollständige Nachvollziehbarkeit der Entscheidungen und Änderungen entlang des gesamten Entwicklungslebenszyklus.
 
-## 22.5 Guardrails Pipeline
+## 22.6 Guardrails Pipeline
 
 Ein wesentliches Merkmal des End-to-End-Szenarios ist die konsequente Einbettung von Guardrails in jede Phase des Entwicklungsprozesses. Agentisch erzeugte Änderungen werden nicht ungeprüft übernommen, sondern durchlaufen eine mehrstufige Validierungs- und Governance-Pipeline.
 
@@ -101,7 +173,7 @@ Im Payment-Service-Beispiel umfasst diese Pipeline insbesondere:
 
 Erst wenn alle Prüfungen erfolgreich bestanden wurden, kann der Workflow in die nächste Phase übergehen. Dadurch werden für agentisch erzeugten Code definierte Mindestmaßstäbe an Qualität, Sicherheit und Architektur erzwungen — als Risikoreduktion, nicht als Garantie.
 
-## 22.6 Deployment Ergebnis
+## 22.7 Deployment Ergebnis
 
 Das End-to-End-Szenario zeigt, dass ein agentisches Entwicklungssystem weit mehr ist als ein Werkzeug zur Codegenerierung. Der Orchestrator koordiniert spezialisierte Agenten entlang des gesamten Software Development Lifecycle und verbindet Anforderungen, Architektur, Implementierung, Tests, Review und Deployment in einem konsistenten Ablauf.
 

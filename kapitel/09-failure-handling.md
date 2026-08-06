@@ -8,7 +8,7 @@ Das Failure-Handling-Modell definiert fünf Eskalationsstufen, die je nach Schwe
 | --- | --- | --- | --- |
 | 1 | Retry | Automatische Wiederholung mit gleicher oder angepasster Konfiguration. Exponential Backoff für transiente Fehler. | Kompilierungsfehler, API-Timeouts, flaky Tests |
 | 2 | Rollback | Automatisches Zurücksetzen auf den letzten konsistenten Zustand über Git Worktree Reset. | Fehlgeschlagene Refactorings, kaputte Abhängigkeiten |
-| 3 | Escalation | Weiterleitung an einen spezialisierten Agent (z. B. review-agent mit opus für Halluzinations-Prüfung). | LOW Confidence Score, wiederkehrende Fehler |
+| 3 | Escalation | Weiterleitung an einen spezialisierten Agent (z. B. review-agent mit opus für Claim Verification). | LOW Confidence Score, wiederkehrende Fehler |
 | 4 | Human Intervention | Eskalation an einen menschlichen Entwickler mit vollständigem Kontext (Findings, Logs, Diff). | Security CRITICAL, Domain-Verletzungen, Budget-Erschöpfung |
 | 5 | Compensation | Gegenläufige Aktion zur Wiederherstellung eines konsistenten Gesamtzustands bei verteilten Workflows. | Wenn parallele Worktrees inkonsistent werden |
 
@@ -22,9 +22,11 @@ public class AgentFailureHandler {
     private final KnowledgeStoreClient knowledgeStore;
 
     public sealed interface FailureAction {
-        record Retry(int attempt, int maxAttempts, Duration delay) implements FailureAction {}
+        record Retry(int attempt, int maxAttempts,
+                Duration delay) implements FailureAction {}
         record Rollback(String worktreeId, String commitRef) implements FailureAction {}
-        record Escalate(String targetAgent, String model, String context) implements FailureAction {}
+        record Escalate(String targetAgent, String model,
+                String context) implements FailureAction {}
         record HumanIntervention(String summary, List<String> findings,
                                   String diffRef) implements FailureAction {}
         record Compensate(List<String> compensationTasks) implements FailureAction {}
@@ -40,9 +42,12 @@ public class AgentFailureHandler {
                         "Transient failure after 3 retries: " + failure.message());
             }
             case RECOVERABLE -> {
-                if (failure.type() == FailureType.COMPILATION_ERROR && failure.retryCount() < 3)
-                    yield new FailureAction.Retry(failure.retryCount() + 1, 3, Duration.ofSeconds(1));
-                yield new FailureAction.Rollback(failure.worktreeId(), failure.lastGoodCommit());
+                if (failure.type() == FailureType.COMPILATION_ERROR
+                        && failure.retryCount() < 3)
+                    yield new FailureAction.Retry(failure.retryCount() + 1, 3,
+                            Duration.ofSeconds(1));
+                yield new FailureAction.Rollback(failure.worktreeId(),
+                        failure.lastGoodCommit());
             }
             case CRITICAL -> new FailureAction.HumanIntervention(
                     failure.message(), failure.findings(), failure.diffRef());

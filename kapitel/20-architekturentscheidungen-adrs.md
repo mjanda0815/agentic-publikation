@@ -2,7 +2,23 @@
 
 Die folgenden Architecture Decision Records dokumentieren die wichtigsten Designentscheidungen des Agentensystems. Jeder ADR folgt dem Lightweight ADR-Format nach Michael Nygard: Kontext, Entscheidung, Konsequenzen.
 
+Die ADRs 1–4 stammen aus Version 1.3 (März 2026) und sind bewusst im
+Original erhalten — sie dokumentieren, was damals entschieden wurde. Der
+**Status-Block** direkt unter jeder Überschrift zeigt, was seither aus der
+Entscheidung geworden ist: Die Referenzimplementierung (Kapitel 19) hat
+mehrere davon korrigiert, die Zielarchitektur (19.10) einige
+weiterentwickelt. Ersetzte Entscheidungen stehen als eigene ADRs 5–8 am
+Ende dieses Kapitels.
+
 ## ADR-1: Multi-Agent vs. Single-Agent Architektur
+
+> **Status:** *Superseded* (ersetzt) — Entscheidung vom März 2026 (v1.3),
+> ersetzt im August 2026 (v2.1) durch **ADR-5: Hierarchische Orchestrierung
+> mit Parent Workflow und Child Runs**. Die Praxis hat gezeigt, dass
+> mehrere gleichzeitig schreibende Rollenagenten Konfliktkosten, unklare
+> Zurechnung und nicht attestierbare Zwischenstände erzeugen (19.8). Der
+> folgende Originaltext bleibt zur Dokumentation der ursprünglichen
+> Entscheidungsgrundlage erhalten.
 
 ### Motivation / Kontext
 
@@ -65,7 +81,7 @@ Ablauf einer typischen Feature-Implementierung:
 Preisstand der v1.3 (März 2026); mit dem Preisstand 08/2026 aus 15.1 lägen
 die Faktoren bei rund 0,4x (Sonnet) bzw. 0,2x (Haiku).*
 
-Diese Differenzierung senkt die Token-Kosten um 60–70 % gegenüber einer reinen Opus-Nutzung bei vergleichbarer Ergebnisqualität.
+Diese Differenzierung senkt die Token-Kosten modellhaft um 60–70 % gegenüber einer reinen Nutzung des stärksten Modells bei angenommen vergleichbarer Ergebnisqualität (Annahme auf v1.3-Preisstand, nicht gemessen).
 
 ### Begründung
 
@@ -94,8 +110,8 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 #### Positive Konsequenzen
 
 - Spezialisierung und fokussierte System-Prompts: höhere Antwortqualität pro Agent durch kleineren, relevanten Kontext
-- Kostenoptimierung durch Modellwahl pro Task: 60–70 % niedrigere Token-Kosten gegenüber reiner Opus-Nutzung
-- Parallelisierung unabhängiger Tasks: Reduktion der Wall-Clock-Time um Faktor 2–4 bei Multi-Service-Features
+- Kostenoptimierung durch Modellwahl pro Task: modellhaft 60–70 % niedrigere Token-Kosten gegenüber reiner Nutzung des stärksten Modells (Annahme auf v1.3-Preisstand, nicht gemessen)
+- Parallelisierung unabhängiger Tasks: angenommene Reduktion der Wall-Clock-Time um Faktor 2–4 bei Multi-Service-Features (nicht gemessen; Integrationskosten nicht eingerechnet)
 - Fehler-Isolation: Halluzination eines Agenten beeinträchtigt nicht die Ergebnisse anderer Agenten
 - Erweiterbarkeit: Neue Agenten können hinzugefügt werden, ohne bestehende zu ändern (Open/Closed Principle)
 - Nachvollziehbarkeit: Jeder Schritt ist einem spezifischen Agenten zuordenbar (Audit-Trail)
@@ -121,6 +137,15 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 
 ## ADR-2: Workspace Isolation via Git Worktrees
 
+> **Status:** *Amended* (teilweise ersetzt und weiterentwickelt) —
+> Entscheidung vom März 2026 (v1.3), fortgeschrieben im August 2026 (v2.1).
+> Die aktuelle Referenzimplementierung verwendet **Branch-Isolation auf
+> einem projektpersistenten Workspace** statt Worktrees je Agent, weil
+> Iteration über Läufe hinweg parallele Isolation schlägt (19.3). Worktrees
+> kehren in der Zielarchitektur als Isolationseinheit je Child Run zurück,
+> abgesichert durch Workspace Leases — siehe **ADR-6: Workspace Leases und
+> exklusive Ressourcen** sowie 19.10.
+
 ### Motivation / Kontext
 
 Die Multi-Agent-Architektur (ADR-1) ermöglicht die parallele Ausführung mehrerer Agenten – z. B. drei Development Agents, die gleichzeitig drei unabhängige Services eines Features implementieren. Diese Parallelisierung ist einer der Hauptvorteile der Architektur, setzt aber eine strikte Isolation der Arbeitsbereiche voraus.
@@ -143,7 +168,7 @@ Jeder parallellaufende Agent arbeitet in einem eigenen Git Worktree. Änderungen
 
 #### Worktree-Lebenszyklus
 
-![Worktree-Lebenszyklus: von der Task-Erstellung bis zu Merge oder Korrektur](abbildungen/out/abb-worktree.pdf){width=80%}
+![Worktree-Lebenszyklus: von der Task-Erstellung bis zu Merge oder Korrektur](abbildungen/out/abb-worktree.pdf){width=95%}
 
 #### Namenskonventionen
 
@@ -213,6 +238,12 @@ Ein Agent committet und merged entweder alles oder nichts. Partial Merges (nur m
 
 ## ADR-3: Guardrail Pipeline als Pflicht-Gate
 
+> **Status:** *Accepted, amended* — Entscheidung vom März 2026 (v1.3), in
+> der Praxis bestätigt und um den Betriebsmodus `advisory` ergänzt (19.5);
+> in der Zielarchitektur wird das Gate zweistufig (lokales Task-Gate je
+> Child Run plus Integration Gate auf dem zusammengeführten Stand) — siehe
+> **ADR-7: Zweistufiges Quality Gate** und 19.10.
+
 ### Motivation / Kontext
 
 Large Language Models generieren Code, der syntaktisch korrekt aussieht und funktional plausibel wirkt – aber in Produktionsumgebungen gefährlich sein kann. Die Risiken sind vielfältig:
@@ -232,7 +263,7 @@ Jede Codeänderung eines Agenten durchläuft eine sechsstufige Validierungs-Pipe
 
 #### Pipeline-Stufen
 
-![Die sechs Pipeline-Stufen der Guardrails-Validierung](abbildungen/out/abb17.pdf){width=75%}
+![Die sechs Pipeline-Stufen der Guardrails-Validierung](abbildungen/out/abb17.pdf){width=88%}
 
 Stufe 1: Syntax-Validierung
 
@@ -280,7 +311,7 @@ Stufe 5: Test-Validierung
 | Tools | JUnit 5 + Vitest (Execution), JaCoCo + Istanbul (Coverage) |
 | Schwellwerte | Line Coverage ≥ 80 % (für den geänderten Code, nicht das Gesamtprojekt) |
 | Typische Fehler | Agent generiert Code ohne Tests, Tests bestehen, prüfen aber nichts (leere Assertions), bestehende Tests brechen |
-| Feedback an Agent | Fehlgeschlagene Tests mit Stack-Trace, Coverage-Delta mit unkovered Lines |
+| Feedback an Agent | Fehlgeschlagene Tests mit Stack-Trace, Coverage-Delta mit nicht abgedeckten Zeilen |
 | Ausführungszeit | 10–30 Sekunden (abhängig von Testumfang) |
 
 Stufe 6: Confidence Scoring
@@ -314,7 +345,7 @@ Die ersten fünf Stufen prüfen objektive, regelbasierte Kriterien. Stufe 6 fän
 
 Warum kein menschlicher Review als Pflicht?
 
-Die Guardrails-Pipeline ersetzt den menschlichen Review nicht, sondern reduziert seinen Aufwand. In der Praxis werden 70–80 % der Agenten-Ausgaben ohne Korrekturbedarf die Pipeline bestehen. Menschliche Reviewer können sich auf die verbleibenden 20–30 % konzentrieren und auf die Confidence-Score-Begründungen als Entscheidungshilfe zugreifen.
+Die Guardrails-Pipeline ersetzt den menschlichen Review nicht, sondern reduziert seinen Aufwand. Als Planungsannahme — nicht als Messwert — kann von einer Mehrheit der Agenten-Ausgaben ausgegangen werden, die die Pipeline ohne Korrekturbedarf besteht; die tatsächliche First-Pass-Rate ist eine der Messgrößen des Messplans (15.6). Menschliche Reviewer können sich auf die verbleibenden Fälle konzentrieren und auf die Confidence-Score-Begründungen als Entscheidungshilfe zugreifen.
 
 ### Konsequenzen
 
@@ -345,6 +376,14 @@ Die Guardrails-Pipeline ersetzt den menschlichen Review nicht, sondern reduziert
 
 ## ADR-4: Git-basierte Orchestrierung
 
+> **Status:** *Amended* (präzisiert) — Entscheidung vom März 2026 (v1.3),
+> präzisiert im August 2026 (v2.1): Git ist Artefakt-, Versions- und
+> Checkpoint-System; der autoritative **Prozesszustand** liegt in der
+> Datenbank, weil ein Auditor Fragen stellt, die `git log` nicht
+> beantwortet — welche Policy galt, welches Modell arbeitete, wer hat
+> freigegeben (19.8). Siehe **ADR-8: Git als Artefaktzustand, Datenbank als
+> Prozesszustand**.
+
 ### Motivation / Kontext
 
 Die Multi-Agent-Architektur (ADR-1) benötigt einen Orchestrierungsmechanismus, der den Workflow steuert: Welcher Agent arbeitet wann an welcher Aufgabe? Wo werden Zwischenergebnisse abgelegt? Wie wird der Fortschritt nachvollziehbar?
@@ -364,11 +403,16 @@ In einem Agenten-System, das Code generiert, ist Git bereits der zentrale Artefa
 
 Git dient als primärer Orchestrierungsmechanismus.
 
+*(Präzisierung v2.1: Git ist Artefakt-, Versions- und Checkpoint-System.
+Der autoritative Prozesszustand — Status, Policy-Version, Modellauflösung,
+Freigaben, Gate-Ergebnisse, Audit-Kette — liegt in der Datenbank; siehe
+ADR-8.)*
+
 Branches repräsentieren Workflow-States, Commits sind Checkpoints, Pull Requests (bzw. Merge Requests) sind Review- und Validation-Gates, und ein dediziertes Verzeichnis im Repository (docs/knowledge/) dient als Shared Knowledge Store.
 
 #### Git als State Machine
 
-![Git als State-Machine](abbildungen/out/abb18.pdf){width=85%}
+![Git als State-Machine](abbildungen/out/abb18.pdf){width=100%}
 
 #### Shared Knowledge Store
 
@@ -400,8 +444,8 @@ docs/knowledge/
 │   ├── completed/                                         # Abgeschlossene Tasks
 │   └── blocked/                                           # Blockierte Tasks
 └── memory/
-    ├── decisions.md                                       # Entscheidungen im laufenden Feature
-    ├── lessons-learned.md                                 # Aus Fehlern gelernt (Retry-Feedback)
+    ├── decisions.md               # Entscheidungen im laufenden Feature
+    ├── lessons-learned.md         # Aus Fehlern gelernt (Retry-Feedback)
     └── context-cache.md                                   # Wiederverwendbarer Kontext
 ```
 
@@ -495,3 +539,101 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > *Status (v2.1): bestätigt und fortgeschrieben — auch Workflow-, Task-,
 > Lease- und Planungszustand liegen künftig autoritativ in der Datenbank
 > (19.10).*
+
+## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
+
+> **Status:** *Proposed* (Zielarchitektur, August 2026) — ersetzt ADR-1.
+
+### Motivation / Kontext
+
+ADR-1 entschied sich für sieben spezialisierte, gleichzeitig arbeitende
+Agenten unter einem Orchestrator. Die Referenzimplementierung hat diese
+Entscheidung korrigiert: Mehrere gleichzeitig **schreibende** Agenten auf
+einem Repository erzeugen Konfliktkosten, Zurechnungsprobleme („wer hat das
+geschrieben?") und Zwischenstände, die sich nicht attestieren lassen. Der
+Nutzen mehrerer Agenten liegt in Perspektivenvielfalt — und die ist beim
+Prüfen wertvoller als beim Erzeugen (19.8).
+
+Gleichzeitig bleibt der ursprüngliche Wunsch berechtigt: Ein Vorhaben, das
+aus unabhängigen Teilen besteht, sollte nicht künstlich sequenziell
+abgearbeitet werden.
+
+### Entscheidung
+
+Parallelität wird von der Agentenrolle auf die **Workflow-Ebene** verlagert.
+Ein Parent Workflow zerlegt ein Vorhaben in einen Task-Graph; voneinander
+unabhängige Tasks werden als isolierte **Child Runs** ausgeführt — je Child
+Run ein eigener Branch oder Worktree und genau ein schreibender Agent
+(AP-2). Ein Merge Coordinator führt die Ergebnisse kontrolliert zusammen,
+ein Integration Gate validiert den Gesamtstand.
+
+### Konsequenzen
+
+Positiv: echte Parallelität ohne Schreibkonkurrenz; jede Änderung bleibt
+einem Child Run zurechenbar und attestierbar; die Dekomposition wird
+explizit statt implizit. Negativ: höhere Control-Plane-Komplexität
+(Task-Graph, Leases, Merge-Koordination); Integrationskosten können den
+Parallelitätsgewinn aufzehren, wenn Tasks schlecht geschnitten sind.
+
+## ADR-6: Workspace Leases und exklusive Ressourcen
+
+> **Status:** *Proposed* (Zielarchitektur, August 2026) — konkretisiert
+> ADR-2 für parallele Child Runs.
+
+### Entscheidung
+
+Jeder Child Run erhält eine zeitlich begrenzte **Workspace Lease** über die
+Pfade und Module, die er beschreiben darf (Owned Paths), ergänzt um
+read-only und geschützte Bereiche. Ressourcen, die naturgemäß nur einer
+gleichzeitig ändern kann — Build-Konfiguration, Datenbankmigrationen,
+gemeinsame API-Spezifikationen, globale Security-Konfiguration —, werden
+über exklusive Locks serialisiert. Überschneidende Schreibbereiche
+blockieren die parallele Ausführung **vor** dem Start, nicht erst beim
+Merge.
+
+### Konsequenzen
+
+Positiv: AP-2 wird technisch erzwungen statt organisatorisch erhofft;
+Konflikte werden zu einer Planungsfrage statt zu einem Merge-Problem.
+Negativ: Leases brauchen TTL, Heartbeats und definierte Recovery-Zustände —
+bei unklarem Besitz gilt Fail Closed (AP-7).
+
+## ADR-7: Zweistufiges Quality Gate
+
+> **Status:** *Proposed* (Zielarchitektur, August 2026) — erweitert ADR-3.
+
+### Entscheidung
+
+Das Pflicht-Gate wird zweistufig: Ein **lokales Task-Gate** prüft jeden
+Child Run für sich (Syntax, Style, Security, Domain, Tests, Claim
+Verification, lokaler LLM-Review). Ein **Integration Gate** prüft den
+zusammengeführten Stand (Gesamtbuild, Regression, End-to-End,
+Vertragskompatibilität, Migrationskonsistenz, Gesamt-SBOM,
+Integrationsreview). Erst das Integration Gate schließt einen Workflow ab.
+
+### Konsequenzen
+
+Positiv: Fehler werden früh und lokal gefunden, ohne dass der
+Gesamtnachweis entfällt; ein grünes lokales Gate wird nie mit einem grünen
+Gesamtstand verwechselt. Negativ: doppelte Prüfkosten und längere
+Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
+
+## ADR-8: Git als Artefaktzustand, Datenbank als Prozesszustand
+
+> **Status:** *Accepted* (August 2026) — präzisiert ADR-4.
+
+### Entscheidung
+
+Git bleibt Artefakt-, Versions- und Checkpoint-System: Branches, Commits,
+Diffs, Checkpoints, Pull Requests. Der autoritative **Prozesszustand** liegt
+dagegen in der Datenbank: Workflow- und Task-Status, Planversionen,
+Policy-Version, Modellauflösung, Freigaben, Gate-Ergebnisse, Leases und die
+signierte Audit-Kette.
+
+### Konsequenzen
+
+Positiv: Auditierbare Fragen („welche Regel galt zu diesem Zeitpunkt?“,
+„wer hat freigegeben?“, „welches Modell hat gearbeitet?“) sind beantwortbar
+— `git log` allein kann das nicht. Negativ: zwei Zustandsträger, die
+konsistent gehalten werden müssen; die Zuordnung Commit ↔ Prozessereignis
+muss explizit persistiert werden.

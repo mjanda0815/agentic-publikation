@@ -73,7 +73,13 @@ v1.3-Preisstand (März 2026); vgl. die aktuelle Preistabelle in 15.1.*
 | Maximal parallel: 7 gleichzeitig | ~10 Minuten | $8–12 (gleich) |
 | Parallel mit Retry-Schleifen | ~15 Minuten | $12–20 (höher!) |
 
-Die Token-Kosten bleiben bei Parallelisierung identisch. Teurer wird es erst bei Merge-Konflikten und Retry-Schleifen. Deshalb ist Worktree-Isolation (AP-4) bei paralleler Ausführung Pflicht.
+In dieser vereinfachten Modellrechnung bleiben die reinen
+Ausführungskosten unveränderter Einzeltasks unabhängig von ihrer zeitlichen
+Anordnung gleich. **Nicht berücksichtigt sind** zusätzlicher Kontextaufbau
+je paralleler Ausführung, Planungs-, Synthese- und Integrationsschritte,
+Merge-Konflikte und Revalidierung — die Gesamtkosten eines parallelen
+Workflows sind daher nicht notwendigerweise identisch, sondern in der Regel
+höher. Besonders teuer wird es bei Merge-Konflikten und Retry-Schleifen. Deshalb ist Worktree-Isolation (AP-2) bei paralleler Ausführung Pflicht.
 
 ## 15.4 ROI-Berechnung
 
@@ -86,11 +92,11 @@ Die Token-Kosten bleiben bei Parallelisierung identisch. Teurer wird es erst bei
 | --- | --- | --- |
 | Entwickleraufwand | 40h Senior Dev × €95/h = €3.800 | 8h Review + Steering = €760 |
 | API-Kosten | – | ~2M Tokens ≈ €15–30 |
-| Testabdeckung | Oft <60% unter Zeitdruck | >80% durch iteratives Testing |
-| Time-to-Feature | 1–2 Wochen | 1–2 Tage |
+| Testabdeckung (angenommen) | Oft <60% unter Zeitdruck | >80% durch iteratives Testing |
+| Time-to-Feature (angenommen) | 1–2 Wochen | 1–2 Tage |
 | Gesamtkosten | €3.800+ | €775–€790 |
 
-Der ROI hängt stark von der Aufgabenkomplexität ab: Bei Standard-CRUD-Features ist der Hebel am größten (5–10x). Bei komplexen Architekturentscheidungen sinkt der Automatisierungsgrad, aber der Analyse-Output (ADRs, Findings) beschleunigt die menschliche Entscheidungsfindung erheblich.
+Der ROI hängt stark von der Aufgabenkomplexität ab: Bei Standard-CRUD-Features wird der Hebel am größten angenommen (modellhaft 5–10x; nicht gemessen). Bei komplexen Architekturentscheidungen sinkt der Automatisierungsgrad, aber der Analyse-Output (ADRs, Findings) beschleunigt die menschliche Entscheidungsfindung erheblich.
 
 ### Kostenoptimierungs-Strategie
 
@@ -104,7 +110,7 @@ Der ROI hängt stark von der Aufgabenkomplexität ab: Bei Standard-CRUD-Features
 - ALERT_THRESHOLD: 0.8               # Warnung bei 80%
 
 ## Modell-Eskalation (nur bei Bedarf)
-- opus NUR für: ADRs, Security Reviews, Halluzinations-Prüfung
+- opus NUR für: ADRs, Security Reviews, Claim Verification
 - haiku für: Formatierung, Linting, Docs ohne Fachlogik
 - sonnet für: alles andere (Default)
 ```

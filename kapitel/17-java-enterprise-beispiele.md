@@ -42,11 +42,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
             FilterChain chain) throws ServletException, IOException {
         String header = req.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")) { chain.doFilter(req, res); return; }
+        if (header == null || !header.startsWith("Bearer ")) { chain.doFilter(req,
+                res); return; }
         String jwt = header.substring(7);
         try {
             String username = jwtService.extractUsername(jwt);
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (username != null
+                    && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails user = userDetailsService.loadUserByUsername(username);
                 if (jwtService.isTokenValid(jwt, user)) {
                     var auth = new UsernamePasswordAuthenticationToken(user, null,

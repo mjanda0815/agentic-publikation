@@ -11,7 +11,7 @@
 | Falsche Dateien geändert | Pfade explizit angeben. isolation="worktree". |
 | Kontextverlust | Nachricht per SendMessage an die Agent-ID senden. |
 | Parallele Kollisionen | Worktree-Isolation für alle parallelen Agenten. |
-| Halluzinierte APIs | Guardrail-Hooks aktivieren. opus für kritische Tasks. |
+| Halluzinierte APIs | Guardrail-Hooks aktivieren. Für kritische Tasks eine stärkere Modellklasse bzw. höhere Fähigkeitsstufe wählen (vgl. Kap. 5). |
 | Domain-Verstöße | glossary.md aktualisieren. Domain-Hook implementieren. |
 | Budget überschritten | Token Budget Tracker einsetzen. Modell-Eskalation prüfen. |
 | MCP-Server Fehler | Umgebungsvariablen und Netzwerkzugriff prüfen. |

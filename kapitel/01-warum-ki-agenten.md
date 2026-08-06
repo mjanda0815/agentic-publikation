@@ -1,16 +1,16 @@
-# 1 Warum KI-Agenten in der Softwareentwicklung?
+# 1 Warum Coding-Agenten eine Prozessschicht brauchen
 
-Die Softwareentwicklung steht vor einem fundamentalen Paradigmenwechsel. Während bisherige Automatisierungsansätze – von CI/CD-Pipelines über Code-Generatoren bis hin zu IDE-Plugins – stets auf klar definierte, deterministisch ablaufende Aufgaben beschränkt waren, eröffnen KI-gestützte Agenten eine völlig neue Dimension: sie können kontextabhängig entscheiden, iterativ arbeiten und komplexe Aufgabenketten selbstständig orchestrieren.
+Coding-Agenten können bestehende Repositories analysieren, Änderungen vornehmen, Build- und Testwerkzeuge aufrufen und Ergebnisse iterativ korrigieren. Ihre Fähigkeit zur selbstständigen Werkzeugnutzung unterscheidet sie von klassischen Codegeneratoren, macht ihre Ausführung aber zugleich nichtdeterministisch und sicherheitsrelevant. Für den Enterprise-Einsatz genügt daher nicht die Auswahl eines leistungsfähigen Modells. Erforderlich ist eine Prozess- und Governance-Schicht, die Agentenarbeit spezifiziert, begrenzt, isoliert, prüft und nachweisbar macht.
 
-Claude Code, Anthropics agentisches CLI-Tool, geht über die reine Code-Generierung weit hinaus. Es ermöglicht ein vollständiges Multi-Agent-System, bei dem spezialisierte Subagenten autonom und koordiniert arbeiten – vergleichbar mit einem erfahrenen Entwicklungsteam, bei dem jedes Mitglied seine Expertise einbringt. Die Agenten lesen bestehenden Code, analysieren Architekturen, schreiben Tests, führen Sicherheitsreviews durch und deployen Anwendungen – alles innerhalb eines kohärenten Workflows.
+Diese Schicht ist der Gegenstand dieses Whitepapers. Es beschreibt eine Control-Plane-Architektur für agentische Softwareentwicklung — vendor-neutral: Der konkrete Coding-Agent (etwa Claude Code, die Codex-CLI oder die Gemini CLI; Stand August 2026, vgl. Kapitel 21) ist darin eine austauschbare Ausführungskomponente hinter einer Schnittstelle, nicht das Fundament der Architektur. Wo dieses Dokument Werkzeugdetails zeigt, dient Claude Code als durchgängiges Beispiel; die Prinzipien gelten werkzeugübergreifend.
 
-Dieses Dokument beschreibt im Detail, wie Enterprise-Teams Claude Code Agenten in ihren Software Development Lifecycle (SDLC) integrieren können. Der besondere Fokus liegt auf drei Kernaspekten: Erstens einem geteilten Wissensstand zwischen Agenten, damit Erkenntnisse aus der Architekturanalyse nahtlos in die Implementierung einfließen. Zweitens einer fachlichen Modellierung nach DDD-Prinzipien, die sicherstellt, dass der generierte Code nicht nur technisch korrekt, sondern auch fachlich präzise ist. Drittens einem robusten AI Risk Framework mit Guardrails, das Halluzinationen erkennt und verhindert, bevor fehlerhafter Code in die Codebasis gelangt.
+Der Fokus liegt auf drei Kernaspekten: Erstens einem geteilten, versionierten Wissensstand, damit Erkenntnisse aus der Analyse nachvollziehbar in die Implementierung einfließen. Zweitens einer fachlichen Modellierung nach DDD-Prinzipien, die den erzeugten Code an fachliche Grenzen bindet. Drittens einer unabhängigen Prüfschicht mit Gates, die strukturierte Befunde liefert — einschließlich der Prüfung der Behauptungen eines Agenten über seine eigene Arbeit (Claim Verification) —, bevor Änderungen in die Codebasis gelangen.
 
 ## Das Orchestrator-Prinzip
 
-Das Herzstück der Claude-Code-Agentenarchitektur ist das Orchestrator-Prinzip. Die Claude-Code-Hauptsitzung fungiert als zentrale Steuerungsinstanz – vergleichbar mit einem Technical Lead, der Aufgaben verteilt, Fortschritte überwacht und Ergebnisse zusammenführt.
+Das Herzstück der Architektur ist das Orchestrator-Prinzip: Eine zentrale Steuerungsinstanz — vergleichbar mit einem Technical Lead — verteilt Aufgaben, überwacht Fortschritte, besitzt den Prozesszustand und führt Ergebnisse zusammen. In Claude Code übernimmt diese Rolle beispielsweise die Hauptsitzung, die spezialisierte Subagenten mit jeweils eigenem Kontextfenster startet; in der in Kapitel 19 beschriebenen Referenzimplementierung ist es ein Orchestrierungsdienst, der als einzige Stelle Statusübergänge ausführt.
 
-Über das Task-Tool werden spezialisierte Subagenten gestartet, wobei jeder Agent sein eigenes Kontextfenster besitzt. Dies ist ein entscheidender architektureller Vorteil: Jeder Subagent arbeitet in einem isolierten Kontext, was Interferenzen zwischen parallelen Aufgaben verhindert. Gleichzeitig können Agenten über den Shared Knowledge Store Informationen austauschen, ohne ihre Isolation zu durchbrechen.
+Die Kontextisolation der Agenten ist dabei ein echter Vorteil — sie verhindert Interferenzen zwischen Aufgaben —, aber sie ist keine Workspace- oder Sicherheitsisolation: Wer schreiben darf, wo geschrieben wird und was als geprüft gilt, muss die Prozessschicht regeln (Kapitel 2, 12, 14). Agenten tauschen Informationen über einen geteilten, versionierten Wissensstand aus, ohne ihre Kontextisolation zu durchbrechen.
 
 ![Hub-and-Spoke-Multi-Agent-Architektur mit zentralem Orchestrator](abbildungen/out/abb01.pdf){width=100%}
 
@@ -19,13 +19,13 @@ Das Herzstück der Claude-Code-Agentenarchitektur ist das Orchestrator-Prinzip. 
 | Prinzip | Beschreibung |
 | --- | --- |
 | Separation of Concerns | Jeder Agent hat eine klar definierte Rolle und einen begrenzten Werkzeugzugriff. |
-| Parallele Ausführung | Unabhängige Agenten laufen gleichzeitig. Testing, Dokumentation und Review können parallel stattfinden. |
-| Autonome Operation | Subagenten arbeiten eigenständig innerhalb ihres definierten Rahmens. |
-| Ergebnis-Aggregation | Der Orchestrator sammelt und synthetisiert die Outputs aller Subagenten. |
-| Konfigurierbarkeit | Benutzerdefinierte Agenten und Regeln werden über CLAUDE.md deklarativ konfiguriert. |
-| Wiederaufnahme | Agenten können über ihre Agent-ID fortgesetzt werden. |
-| Shared State | Ein gemeinsamer Wissensstand über den Shared Knowledge Store ermöglicht Zusammenarbeit. |
-| Guardrails | Ein AI Risk Framework mit Halluzinationserkennung sichert die Codequalität. |
+| Kontrollierte Parallelität | Unabhängige Aufgaben können gleichzeitig laufen — sofern Abhängigkeiten und Schreibbereiche es erlauben (Kapitel 2). |
+| Autonome Operation | Agenten arbeiten eigenständig innerhalb ihres definierten Rahmens. |
+| Ergebnis-Aggregation | Der Orchestrator sammelt und synthetisiert die Ergebnisse. |
+| Konfigurierbarkeit | Regeln und Agentendefinitionen liegen deklarativ und versioniert im Repository (AGENTS.md/CLAUDE.md, Kapitel 4). |
+| Wiederaufnahme | Läufe sind zustandsbehaftet und können fortgesetzt werden. |
+| Shared State | Ein gemeinsamer, versionierter Wissensstand ermöglicht Zusammenarbeit. |
+| Unabhängige Prüfung | Read-only-Reviewer und Gates liefern strukturierte Befunde — einschließlich Claim Verification — und geben Änderungen frei oder blockieren sie. |
 
 > **Praxis-Check SoftwareFabrik (bestätigt):** Das Orchestrator-Prinzip
 > trägt: In der Implementierung ist ein einziger Dienst die einzige Stelle,

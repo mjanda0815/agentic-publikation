@@ -4,7 +4,7 @@ Während die vorherigen Kapitel die logische Architektur und das Ausführungsmod
 
 Agentische Entwicklungssysteme bestehen typischerweise aus einer zentralen Orchestrierungskomponente sowie einem Pool spezialisierter Agenten, die containerisiert betrieben und dynamisch skaliert werden können.
 
-![Deployment-Architektur eines agentischen Entwicklungssystems](abbildungen/out/abb14.pdf){width=80%}
+![Deployment-Architektur eines agentischen Entwicklungssystems](abbildungen/out/abb14.pdf){width=95%}
 
 Die Abbildung zeigt eine mögliche Infrastruktur für den Betrieb eines agentischen Entwicklungssystems in einer Enterprise-Umgebung.
 

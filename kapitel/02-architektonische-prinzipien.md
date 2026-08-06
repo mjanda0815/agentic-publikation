@@ -1,34 +1,43 @@
 # 2 Architektonische Prinzipien
 
-Jedes Enterprise-Architekturdokument basiert auf einem Set formaler Prinzipien, die als Leitplanken für alle Designentscheidungen dienen. Die folgenden sechs Prinzipien bilden das Fundament des Claude Code Agentensystems und werden in den nachfolgenden Kapiteln durchgehend referenziert.
+Jedes Enterprise-Architekturdokument basiert auf einem Set formaler Prinzipien, die als Leitplanken für alle Designentscheidungen dienen. Die folgenden acht Prinzipien bilden das Fundament der in diesem Whitepaper beschriebenen Control-Plane-Architektur. Sie sind gegenüber der v1.3 überarbeitet: Die Praxiserfahrung der Referenzimplementierung (Kapitel 19) und die Zielarchitektur der parallelen Agenten-Workflows (19.10) haben die ursprünglichen sechs Prinzipien geschärft und erweitert.
 
 | Prinzip | Kurzformel | Beschreibung |
 | --- | --- | --- |
-| AP-1: Agent Specialization | Ein Agent, eine Rolle | Jeder Agent hat genau eine klar definierte Verantwortlichkeit. Kein Agent vereint Entwicklung und Review. Spezialisierung führt zu höherer Qualität und ermöglicht gezielte Modellauswahl (opus für Architektur, haiku für Formatierung). |
-| AP-2: Deterministic Execution | Reproduzierbar und nachvollziehbar | Trotz nicht-deterministischer LLM-Outputs sorgen Task-Graphen, Stop-Conditions und Execution Budgets für vorhersagbare Gesamtabläufe. Jeder Lauf ist über Audit-Logs vollständig nachvollziehbar. |
-| AP-3: Governance by Design | Compliance eingebaut, nicht nachgerüstet | Sicherheit, Domain-Compliance und Qualitätssicherung sind keine optionalen Add-ons, sondern integraler Bestandteil jeder Pipeline-Stufe – durchgesetzt durch Hooks und Guardrails. |
-| AP-4: Isolation by Workspace | Kein Agent verändert unkontrolliert | Jeder Agent arbeitet in einem isolierten Workspace (Git Worktree). Änderungen werden erst nach erfolgreicher Validierung in den Haupt-Branch überführt. Parallele Agenten können sich nicht gegenseitig beeinflussen. |
-| AP-5: Policy-Driven Development | Regeln statt Hoffnung | Projektstandards, DDD-Regeln, Coding Conventions und Architekturvorgaben werden deklarativ in CLAUDE.md definiert – nicht als Prosa-Dokumentation, sondern als maschinenlesbare Policies. |
-| AP-6: Human-in-the-Loop | KI assistiert, Mensch entscheidet | Kritische Entscheidungen (Architektur-ADRs, Security-Findings, Deployment-Freigaben) erfordern immer menschliche Bestätigung. KI-Agenten sind Werkzeuge, keine autonomen Entscheider. |
+| AP-1: Controlled Non-Determinism | Begrenzen statt vorhersagen | Das LLM-Ergebnis ist nicht deterministisch — kontrollierbar sind Zustände, Übergänge, Budgets, Policies, Schreibrechte, Freigaben, Gate-Regeln und Audit-Ereignisse. Die Architektur macht Agentenarbeit begrenzt und nachvollziehbar, nicht vorhersagbar. |
+| AP-2: Single Writer per Workspace | Ein Schreiber je Arbeitskopie | Pro Branch, Worktree oder Workspace schreibt zu einem Zeitpunkt genau ein Agent. Das verhindert Schreibkonkurrenz, unklare Zurechnung und nicht attestierbare Zwischenstände. |
+| AP-3: Parallelism by Dependency | Parallel nur, was unabhängig ist | Parallelität wird aus Task-Abhängigkeiten, Schreibbereichen, versionierten Verträgen und Risikopolicies abgeleitet — nicht aus festen Agentenrollen. Voneinander abhängige Komponenten werden erst parallel implementiert, wenn gemeinsame Verträge vorliegen. |
+| AP-4: Independent Verification | Wer schreibt, gibt nicht frei | Erzeugung und Freigabe sind technisch getrennt: Read-only-Reviewer und Gates liefern strukturierte Befunde; ein Agent bewertet nie allein die eigene Arbeit. |
+| AP-5: Policy as Executable Structure | Regeln als Code | Policies sind versionierter, signierter und attestierter Teil des Ausführungsmodells — keine Prosa-Dokumentation. Deklarative Repo-Konfiguration liefert den Kontext, technische Durchsetzung erfolgt über Tool-Rechte, Hooks und Gates. |
+| AP-6: Human Authority | KI assistiert, Mensch entscheidet | Kritische Architektur-, Security-, Policy- und Deployment-Entscheidungen bleiben menschlich freigabepflichtig; die Freigabe ist ein Zustand im Prozess, kein Nebenkanal. |
+| AP-7: Fail Closed | Ausfall ist kein Erfolg | Ein ausgefallener Pflicht-Reviewer, eine nicht prüfbare Policy oder eine fehlgeschlagene Attestierung darf niemals als Erfolg gelten. Ein Gate, dessen Ausfall wie Erfolg aussieht, ist schlimmer als kein Gate. |
+| AP-8: Sovereign by Default | Läuft auch ohne Cloud | Die Architektur bleibt lokal, on-premises und ohne Cloud-Abhängigkeit betreibbar — bis hin zum Air-Gap-Betrieb. Skalierende Infrastruktur ist Option, nicht Voraussetzung. |
 
-Diese Prinzipien stehen nicht isoliert, sondern bedingen sich gegenseitig: Agent Specialization (AP-1) ermöglicht erst Isolation by Workspace (AP-4), weil spezialisierte Agenten klare Workspace-Grenzen haben. Governance by Design (AP-3) setzt Policy-Driven Development (AP-5) voraus, weil Hooks nur durchsetzen können, was als Policy definiert ist. Und Human-in-the-Loop (AP-6) ist das Sicherheitsnetz für alle Fälle, in denen Deterministic Execution (AP-2) an seine Grenzen stößt.
+Diese Prinzipien stehen nicht isoliert, sondern bedingen sich gegenseitig: Controlled Non-Determinism (AP-1) ist der Grund, warum es die übrigen sieben braucht. Single Writer (AP-2) macht Zurechnung und Attestierung erst möglich, auf denen Independent Verification (AP-4) und Policy as Executable Structure (AP-5) aufsetzen. Parallelism by Dependency (AP-3) definiert, wann AP-2 mehrfach nebeneinander existieren darf. Human Authority (AP-6) und Fail Closed (AP-7) sind die Sicherheitsnetze für alles, was AP-1 nicht einfangen kann. Und Sovereign by Default (AP-8) stellt sicher, dass das Ganze dort betreibbar bleibt, wo die Anforderungen am strengsten sind.
+
+**Was aus der Agentenspezialisierung wurde:** Die v1.3 führte „Agent Specialization“ als oberstes Prinzip. Die Praxis hat das relativiert: Spezialisierung ist kein Architekturprinzip, sondern eine mögliche Ausführungs- und Routingstrategie — Rollen und Fähigkeitsprofile werden in den Kontext eines Laufs projiziert oder über Capability-Routing auf Modelle abgebildet (Kapitel 5, 19.4), ohne dass daraus mehrere gleichzeitig schreibende Prozesse folgen müssen.
 
 ## Zuordnung zu Architekturkonzepten
 
 | Prinzip | Kapitelreferenzen | Durchsetzung |
 | --- | --- | --- |
-| AP-1: Agent Specialization | Kap. 5 (Agententypen), Kap. 14 (Berechtigungsmodell) | Agentendefinitionen + Tool-Restriktionen |
-| AP-2: Deterministic Execution | Kap. 7 (Execution Model), Kap. 20 (ADR-4) | Task-Graph, Turn-Limits, Execution Budgets |
-| AP-3: Governance by Design | Kap. 12 (Guardrails), Kap. 18 (Hooks) | PreToolUse/PostToolUse Hooks, Validierungs-Pipeline |
-| AP-4: Isolation by Workspace | Kap. 16 (Workflows), Kap. 20 (ADR-2) | Git Worktrees, isolation="worktree" |
-| AP-5: Policy-Driven Development | Kap. 4 (CLAUDE.md/AGENTS.md), Kap. 11 (DDD) | Deklarative Repo-Konfiguration als Single Source of Truth |
-| AP-6: Human-in-the-Loop | Kap. 9 (Failure Handling), Kap. 14 (Security) | Confidence Score Eskalation, Review Gates |
+| AP-1: Controlled Non-Determinism | Kap. 6 (Lifecycle), Kap. 7 (Execution Model) | Zustandsautomat, Turn-Limits, Execution Budgets, Timeouts |
+| AP-2: Single Writer per Workspace | Kap. 16 (Workflows), Kap. 20 (ADR-2/ADR-5), 19.3/19.10 | Branch-/Worktree-Isolation, Workspace Leases (geplant) |
+| AP-3: Parallelism by Dependency | Kap. 16, 19.10 | Task-Graph, Schreibbereiche, versionierte Verträge (geplant) |
+| AP-4: Independent Verification | Kap. 12 (Guardrails), 19.5 | Read-only-Reviewer, Quality Gate, Claim Verification |
+| AP-5: Policy as Executable Structure | Kap. 4 (Repo-Konfiguration), 19.6 | Signierte Policy-Dokumente, Hooks, Gate-Policies |
+| AP-6: Human Authority | Kap. 9 (Failure Handling), 19.3 | Pflichtfreigaben als Prozesszustand, Segregation of Duties |
+| AP-7: Fail Closed | Kap. 12, 19.5/19.7 | Reviewer-Ausfall führt zu ERROR, Lizenz fail closed, Attestierung ohne Schlüssel führt zu Startfehler |
+| AP-8: Sovereign by Default | Kap. 13 (Deployment), 19.7 | Ein-Prozess-Betrieb, lokale Modelle, netzlose Sandbox, Lizenz ohne Rückkanal |
 
-*Die Kapitelreferenzen wurden gegenüber v1.3 korrigiert; dort waren sie an
-mehreren Stellen inkonsistent zum Inhaltsverzeichnis.*
+*Die Prinzipien und Referenzen wurden gegenüber v1.3 überarbeitet; die
+damaligen sechs Prinzipien (u. a. „Deterministic Execution“, das die
+Ausführung präziser als begrenzt und nachvollziehbar beschreibt) gehen in
+den neuen acht auf.*
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Die Prinzipien sind dort
 > nicht beschrieben, sondern maschinell erzwungen: ArchUnit-Tests brechen
 > den Build bei Schichten- oder Vendor-Kopplungs-Verstößen, und ein
 > Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
-> lassen (19.2).
+> lassen (19.2). AP-2 bis AP-4 in ihrer vollen Ausprägung sind Gegenstand
+> der Roadmap (19.10).

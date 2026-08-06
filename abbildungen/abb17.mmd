@@ -1,13 +1,13 @@
 flowchart TB
     C["Commit auf Agent-Branch"]
-    S1["1. SYNTAX — kompiliert der Code?<br/><i>javac / tsc / Build</i>"]
-    S2["2. STYLE — Projektkonventionen?<br/><i>Checkstyle · ESLint · Prettier</i>"]
-    S3["3. SECURITY — bekannte Lücken?<br/><i>SpotBugs · OWASP DC · Semgrep · Secret Detection</i>"]
-    S4["4. DOMAIN — Architekturregeln?<br/><i>ArchUnit: Bounded Contexts · Layer · Naming</i>"]
-    S5["5. TESTS — bestehen alle, Coverage ok?<br/><i>JUnit/Vitest · JaCoCo/Istanbul</i>"]
-    S6["6. CONFIDENCE — Gesamtqualität?<br/><i>LLM-Scoring: Kohärenz · Vollständigkeit · Risiko</i>"]
+    S1["<b>1. Syntax</b> — kompiliert der Code?<br/>javac / tsc / Build"]
+    S2["<b>2. Style</b> — Projektkonventionen?<br/>Checkstyle · ESLint · Prettier"]
+    S3["<b>3. Security</b> — bekannte Lücken?<br/>SpotBugs · OWASP · Semgrep · Secret Detection"]
+    S4["<b>4. Domain</b> — Architekturregeln?<br/>ArchUnit: Bounded Contexts · Layer · Naming"]
+    S5["<b>5. Tests</b> — bestehen alle, Coverage ok?<br/>JUnit / Vitest · JaCoCo / Istanbul"]
+    S6["<b>6. Confidence</b> — Gesamtqualität?<br/>LLM-Scoring: Kohärenz · Vollständigkeit · Risiko"]
     OK["Merge erlaubt"]
-    C --> S1 -- "PASS" --> S2 -- "PASS" --> S3 -- "PASS" --> S4 -- "PASS" --> S5 -- "PASS" --> S6 -- "PASS (Score ≥ Threshold)" --> OK
+    C --> S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> OK
     classDef sec fill:#f8dddd,stroke:#333333
     classDef ok fill:#ddeedd,stroke:#333333
     class S3,S4 sec

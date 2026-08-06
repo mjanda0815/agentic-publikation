@@ -30,7 +30,10 @@ real existiert etwa der Referenzserver `@modelcontextprotocol/server-postgres`:
         },
         "jira-server": {
             "command": "npx", "args": ["-y", "firmeninternes-jira-mcp-paket"],
-            "env": { "JIRA_URL": "https://firma.example", "JIRA_TOKEN": "${JIRA_API_TOKEN}" }
+            "env": {
+                "JIRA_URL": "https://firma.example",
+                "JIRA_TOKEN": "${JIRA_API_TOKEN}"
+            }
         }
     }
 }
@@ -61,7 +64,8 @@ public class DomainComplianceHook {
 
         Files.lines(changedFile).filter(l -> l.startsWith("import ")).forEach(imp -> {
             String importedCtx = resolveContextFromImport(imp);
-            if (importedCtx != null && !importedCtx.equals(fileCtx) && !allowed.contains(importedCtx))
+            if (importedCtx != null && !importedCtx.equals(fileCtx)
+                    && !allowed.contains(importedCtx))
                 violations.add(new ComplianceResult.Violation(fileCtx, importedCtx, imp));
         });
         return new ComplianceResult(violations.isEmpty(), violations);

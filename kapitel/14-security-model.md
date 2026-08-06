@@ -6,11 +6,11 @@ Ein KI-Agentensystem mit Schreibzugriff auf die Codebasis, Bash-Zugriff und Netz
 
 | Bedrohung | Risiko | Gegenmaßnahme |
 | --- | --- | --- |
-| Prompt Injection | Manipulation des Agentenverhaltens durch eingeschleuste Anweisungen in Code-Kommentaren, Dateien oder API-Responses | Input Sanitization, System-Prompt Hardening, Ergebnis-Validierung durch separaten Review-Agent (AP-1) |
+| Prompt Injection | Manipulation des Agentenverhaltens durch eingeschleuste Anweisungen in Code-Kommentaren, Dateien oder API-Responses | Input Sanitization, System-Prompt Hardening, Ergebnis-Validierung durch separaten Review-Agent (AP-4) |
 | Tool Escalation | Agent versucht, nicht autorisierte Tools zu nutzen oder Berechtigungsgrenzen zu überschreiten | Striktes Tool-Whitelisting per Agent in CLAUDE.md, PreToolUse-Hook blockiert nicht autorisierte Aufrufe (AP-5) |
 | Secret Leakage | Credentials, API-Keys oder sensible Daten werden in generiertem Code, Logs oder Shared Knowledge Store geschrieben | Secret-Scanner im PostToolUse-Hook (Regex + Entropy-Analyse), env-basiertes Secret Management, Audit-Trail |
 | Supply Chain | Agent fügt kompromittierte Dependencies hinzu oder nutzt ungeprüfte Libraries | OWASP Dependency Check im Guardrail, Lockfile-Validierung, Allowlist für Dependencies in CLAUDE.md |
-| Sandboxing | Unkontrollierter Systemzugriff durch Bash-Tool oder Datei-Operationen | Worktree-Isolation (AP-4), readonly Mounts, Netzwerk-Restriktionen, chroot für Bash-Ausführung |
+| Sandboxing | Unkontrollierter Systemzugriff durch Bash-Tool oder Datei-Operationen | Worktree-Isolation (AP-2), readonly Mounts, Netzwerk-Restriktionen, chroot für Bash-Ausführung |
 
 ## Berechtigungsmodell (Least Privilege)
 
@@ -29,15 +29,19 @@ Ein KI-Agentensystem mit Schreibzugriff auf die Codebasis, Bash-Zugriff und Netz
 // === Secret Scanner (PostToolUse Hook) ===
 public class SecretScannerHook {
     private static final List<Pattern> SECRET_PATTERNS = List.of(
-        Pattern.compile("(?i)(password|secret|api[_-]?key|token)\\s*[=:]\\s*['\"][^\"]{8,}"),
+        Pattern.compile(
+            "(?i)(password|secret|api[_-]?key|token)"
+                + "\\s*[=:]\\s*['\"][^\"]{8,}"),
         Pattern.compile("AKIA[0-9A-Z]{16}"),                  // AWS Access Key
         Pattern.compile("ghp_[0-9a-zA-Z]{36}"),               // GitHub Token
         Pattern.compile("-----BEGIN (RSA |EC )?PRIVATE KEY"), // Private Keys
-        Pattern.compile("[0-9a-f]{40}")                        // High-entropy hex (SHA1-like)
+        // High-entropy hex (SHA1-like)
+        Pattern.compile("[0-9a-f]{40}")
     );
 
     public record ScanResult(boolean clean, List<Finding> findings) {
-        public record Finding(String file, int line, String patternName, String masked) {}
+        public record Finding(String file, int line,
+                String patternName, String masked) {}
     }
 
     public ScanResult scan(Path changedFile) {
@@ -50,7 +54,9 @@ public class SecretScannerHook {
                         findings.add(new ScanResult.Finding(
                                 changedFile.toString(), i + 1,
                                 pat.pattern().substring(0, 20) + "...",
-                                lines.get(i).substring(0, Math.min(40, lines.get(i).length())) + "..."));
+                                lines.get(i).substring(0,
+                                        Math.min(40, lines.get(i).length()))
+                                        + "..."));
                     }
                 }
             }

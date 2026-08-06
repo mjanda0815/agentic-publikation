@@ -25,7 +25,8 @@ public record Money(@Positive BigDecimal amount, @NotNull Currency currency)
     public Money add(Money other) { requireSameCurrency(other);
         return new Money(amount.add(other.amount), currency); }
     private void requireSameCurrency(Money o) {
-        if (!currency.equals(o.currency)) throw new CurrencyMismatchException(currency, o.currency);
+        if (!currency.equals(o.currency)) throw new CurrencyMismatchException(currency,
+                o.currency);
     }
 }
 
@@ -48,7 +49,8 @@ public class Order extends AbstractAggregateRoot<Order> {
     }
     public void confirm() {
         if (lines.isEmpty()) throw new EmptyOrderException(id);
-        if (status != OrderStatus.DRAFT) throw new InvalidOrderTransitionException(id, status);
+        if (status != OrderStatus.DRAFT) throw new InvalidOrderTransitionException(id,
+                status);
         status = OrderStatus.CONFIRMED;
         registerEvent(new OrderConfirmedEvent(id, totalAmount, Instant.now()));
     }
@@ -58,7 +60,8 @@ public class Order extends AbstractAggregateRoot<Order> {
 public sealed interface OrderEvent {
     OrderId orderId(); Instant occurredAt();
     record OrderCreatedEvent(OrderId orderId, Instant occurredAt) implements OrderEvent {}
-    record OrderConfirmedEvent(OrderId orderId, Money total, Instant occurredAt) implements OrderEvent {}
+    record OrderConfirmedEvent(OrderId orderId, Money total,
+            Instant occurredAt) implements OrderEvent {}
 }
 ```
 
