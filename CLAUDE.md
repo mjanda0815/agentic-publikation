@@ -69,14 +69,15 @@ Konvertierung per Pandoc ins LaTeX-Projekt (`praeambel.tex` liegt bereit,
 Das kopierte `Makefile` ist noch auf die DeFi-Kapitelnummern eingestellt —
 bei der Extraktion anpassen.
 
-## Offene Grundsatzentscheidungen (Martin)
+## Grundsatzentscheidungen (von Martin entschieden, 06.08.2026)
 
-- **Lizenz der Neuauflage:** Original ist „Alle Rechte vorbehalten"; für
-  Veröffentlichung + späteren DOI wäre CC BY 4.0 konsistent mit den
-  DeFi-Papieren — Entscheidung offen.
-- **Zielumfang der Modernisierung** (Stand-Update vs. inhaltliche Erweiterung).
-- **Projektname/Repo-Name**, falls anders als `AGENTIC_Publikation` /
-  `agentic-publikation` gewünscht.
+- **Lizenz der Neuauflage:** CC BY 4.0.
+- **Zielumfang:** inhaltliche Erweiterung gemäß abgenommenem `UMBAUPLAN.md`
+  (Version 2.0; neuer Teil VI „SoftwareFabrik" + Praxis-Check-Kästen).
+- **Titel:** Haupttitel unverändert; Untertitel neu: „Vom Konzept zum System:
+  Referenzarchitektur und ihre Realisierung als Agentic Software Factory.
+  Praxisbeispiele mit Java, Spring Boot und Domain-Driven Design".
+- **Projektname/Repo-Name:** bleibt `AGENTIC_Publikation`.
 
 ## Befehle
 

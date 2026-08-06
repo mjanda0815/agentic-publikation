@@ -28,9 +28,10 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       neuem Teil VI „SoftwareFabrik", Praxis-Check-Kästen als roter Faden,
       Modernisierungsliste P1–P3, Abbildungsplan, Version 2.0,
       Entscheidungsvorlage E1–E6).
-- [ ] **(Martin) UMBAUPLAN.md abnehmen** — insb. Entscheidungen E1–E6
-      (Lizenz, Untertitel, Gliederungsvariante, Version, Produktnennungs-
-      Grenzen, Repo-Name).
+- [x] **(Martin) UMBAUPLAN.md abgenommen** (06.08.2026): Gliederung wie
+      vorgeschlagen (Teil VI + Praxis-Checks), Lizenz CC BY 4.0, Untertitel
+      = Plan-Vorschlag, Version 2.0. E5 (Produktnennungs-Grenzen) und E6
+      (Repo-Name) mit Plan-Empfehlung übernommen.
 
 ## C. Umsetzung (nach Abnahme des Umbauplans)
 
