@@ -18,7 +18,7 @@ Projektweite MCP-Server werden bei Claude Code in einer `.mcp.json` im
 Repository-Root konfiguriert (Stand August 2026 [@claudecodedocs]; v1.3
 nannte hier noch `.claude/settings.json` — dort liegen heute Hooks und
 Berechtigungen). Servernamen und -pakete im Beispiel sind teils fiktiv;
-real existiert etwa der Referenzserver `@modelcontextprotocol/server-postgres`:
+der frühere Referenzserver `@modelcontextprotocol/server-postgres` ist seit Juli 2025 archiviert und ungepflegt (dokumentierte SQL-Injection-Schwachstelle) — für den produktiven Einsatz ist ein gepflegter Server zu wählen; das Beispiel steht hier nur für die Struktur:
 
 ```json
 // .mcp.json (Repository-Root)
@@ -45,7 +45,8 @@ real existiert etwa der Referenzserver `@modelcontextprotocol/server-postgres`:
 | PreToolUse | Vor jeder Werkzeugausführung | Zugriffe blockieren, Pfade validieren |
 | PostToolUse | Nach Werkzeugabschluss | Linting, Security-Scan, Domain-Compliance |
 | Notification | Agent benötigt Aufmerksamkeit | Slack/Teams-Alerts, Eskalation |
-| Stop | Sitzung endet | Cleanup, Report-Generierung, Metriken |
+| Stop | Hauptagent beendet seine Antwort | Abschlussprüfungen, Weiterarbeit erzwingen |
+| SessionEnd | Sitzung endet | Cleanup, Report-Generierung, Metriken |
 
 ## Domain-Compliance Hook
 

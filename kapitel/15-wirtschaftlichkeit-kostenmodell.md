@@ -19,15 +19,16 @@ Bemerkenswert ist der Vergleich mit der v1.3-Tabelle: Sie nannte für die
 Opus-Klasse noch $15/$75 — die Preise der Opus-4/4.1-Generation. Schon
 Opus 4.5 (November 2025, also vor Erscheinen der v1.3) lag bei $5/$25; die
 Tabelle war bei Drucklegung bereits überholt. Die Bewegung ist dabei nicht
-monoton nach unten: Die Haiku-Klasse wurde mit dem Generationswechsel auf
-Haiku 4.5 viermal teurer je Token ($0.25/$1.25 → $1/$5), und seit der
+monoton nach unten: Die Haiku-Klasse wurde über zwei
+Generationen hinweg viermal teurer je Token — von Haiku 3 ($0.25/$1.25)
+über Haiku 3.5 ($0.80/$4) auf Haiku 4.5 ($1/$5) —, und seit der
 Opus-4.7-Generation erzeugt ein neuer Tokenizer für denselben Text rund 30 %
 mehr Tokens [@anthropicmodels] — Token-Preise sind generationsübergreifend
 also nur mit Vorbehalt vergleichbar. Die Lehre: Preistabellen in
 Kostenmodellen für agentische Entwicklung brauchen zwingend ein Stand-Datum,
 und Wirtschaftlichkeitsrechnungen sind in beide Richtungen schnell veraltet.
 
-Ein typischer Entwicklungs-Agent verbraucht 10.000–100.000 Tokens pro Task. Ein End-to-End-Workflow mit 7 Agenten kann 500.000–2.000.000 Tokens verbrauchen.
+Als Modellannahme dieses Kapitels — Erfahrungswerte, nicht systematisch gemessen (vgl. den Messplan in 15.6): Ein typischer Entwicklungs-Agent verbraucht 10.000–100.000 Tokens pro Task. Ein End-to-End-Workflow mit 7 Agenten kann 500.000–2.000.000 Tokens verbrauchen.
 
 ```java
 // === Token Budget Tracker ===
@@ -96,7 +97,7 @@ höher. Besonders teuer wird es bei Merge-Konflikten und Retry-Schleifen. Deshal
 | Time-to-Feature (angenommen) | 1–2 Wochen | 1–2 Tage |
 | Gesamtkosten | €3.800+ | €775–€790 |
 
-Der ROI hängt stark von der Aufgabenkomplexität ab: Bei Standard-CRUD-Features wird der Hebel am größten angenommen (modellhaft 5–10x; nicht gemessen). Bei komplexen Architekturentscheidungen sinkt der Automatisierungsgrad, aber der Analyse-Output (ADRs, Findings) beschleunigt die menschliche Entscheidungsfindung erheblich.
+Der ROI hängt stark von der Aufgabenkomplexität ab: Bei Standard-CRUD-Features wird der Hebel am größten angenommen (modellhaft 5–10x; nicht gemessen). Bei komplexen Architekturentscheidungen sinkt der Automatisierungsgrad, aber der Analyse-Output (ADRs, Findings) kann die menschliche Entscheidungsfindung beschleunigen (Erfahrungswert, nicht gemessen; vgl. 15.6).
 
 ### Kostenoptimierungs-Strategie
 

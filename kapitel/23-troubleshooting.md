@@ -21,9 +21,9 @@
 | Codebasis analysieren | Explore / architecture-agent |
 | Implementierungsplan erstellen | planning-agent |
 | Anforderungen sammeln | requirements-agent |
-| Features implementieren | Development Capability (Modellwahl über Capability Routing) |
+| Features implementieren | Development Capability (Modellwahl über Capability-Routing) |
 | Tests schreiben/ausführen | test-agent |
-| Code-Qualität prüfen | Review Capability (Modellwahl über Capability Routing) |
+| Code-Qualität prüfen | Review Capability (Modellwahl über Capability-Routing) |
 | Deployment | deploy-agent |
 | CI/CD Quality Gate | qa-guard |
 

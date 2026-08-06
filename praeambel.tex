@@ -91,6 +91,11 @@
 \setcounter{bottomnumber}{2}
 \setcounter{totalnumber}{4}
 
+% --- Inhaltsverzeichnis: Platz fuer zweistellige Unterabschnittsnummern ---
+% Ohne Verbreiterung klebt "19.10" im Sonderdruck am Titel ("19.10Geplante").
+\DeclareTOCStyleEntry[numwidth=2.6em]{tocline}{section}
+\DeclareTOCStyleEntry[numwidth=2.0em]{tocline}{chapter}
+
 % --- Pandoc-Kompatibilität ---
 % \tightlist wird von Pandoc für kompakte Listen ohne Zusatzabstand erzeugt
 % und ist ohne den Pandoc-Standardtemplate nicht definiert.

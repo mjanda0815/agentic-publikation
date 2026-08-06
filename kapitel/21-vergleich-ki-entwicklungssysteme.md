@@ -47,7 +47,7 @@ Werkzeugwahl eine Konfigurationsentscheidung ist?* Drei Regeln folgen daraus:
    werkzeugspezifischen Dateien pflegen, Integrationen als MCP-Server statt
    als produktspezifische Plugins bauen. Produktspezifische Features (etwa
    Hooks) bewusst als Zusatz behandeln, nicht als Fundament.
-3. **Mehrgleisigkeit einpreisen.** In der Praxis arbeiten Teams bereits
+3. **Mehrgleisigkeit einpreisen.** Nach Erfahrung des Autors arbeiten Teams bereits
    heute mit mehreren Agenten nebeneinander — je nach Aufgabe, Preismodell
    und Verfügbarkeit. Ein Prozess, der das zulässt, verhandelt bei jedem
    Modellsprung aus einer Position der Stärke.

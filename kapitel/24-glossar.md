@@ -9,7 +9,7 @@
 | Blatt-Slice | Modul, das nur konsumiert und von keinem anderen konsumiert wird — Entwurfsmuster zur Zyklenvermeidung (Kap. 19). |
 | BPMN | Business Process Model and Notation – Geschäftsprozessmodellierung. |
 | Build-Run | Lauf, der ein Backlog-Element umsetzt: Code auf isoliertem Branch, validiert, gemergt oder als Pull Request (Kap. 19). |
-| Child Run | Ein regulärer Run, der einem Workflow Task zugeordnet ist (Zielarchitektur, Kap. 19.10). |
+| Child Run | Ein regulärer Run, der einem Workflow Task zugeordnet ist (seit 0.21.0 für nicht-schreibende Tasks implementiert, Feature-Flag; volle Ausprägung geplant — Kap. 19.10). |
 | CI/CD | Continuous Integration / Deployment – Automatisierte Pipeline. |
 | Claim Verification | Prüfung der Aussagen eines Agenten über seine eigene Arbeit, etwa „alle Tests bestehen“ (in v1.3: Halluzinationserkennung; Kap. 12, 19.5). |
 | Contract Version | Versionierter bzw. gehashter gemeinsamer Vertrag, gegen den mehrere Child Runs arbeiten (Zielarchitektur, Kap. 19.10). |
@@ -29,7 +29,7 @@
 | Mandant | Isolationseinheit für Projekte, Läufe, Budgets und Policies in einer mehrmandantenfähigen Plattform (Kap. 19). |
 | MCP | Model Context Protocol – herstellerneutraler Industriestandard zur Werkzeuganbindung (ursprünglich Anthropic, seit 12/2025 Agentic AI Foundation / Linux Foundation; Kap. 18). |
 | Merge Coordinator | Komponente zur kontrollierten Rebase-, Merge-, Konflikt- und Revalidierungssteuerung (Zielarchitektur, Kap. 19.10). |
-| OWASP | Open Web Application Security Project – Sicherheitsstandards. |
+| OWASP | Open Worldwide Application Security Project (bis 2023: Open Web Application Security Project) – Sicherheitsstandards. |
 | Plan-Run | Lauf, der nur analysiert und Arbeitsschritte vorschlägt; darf keinen Code ändern (Kap. 19). |
 | Policy-as-Code | Regeln als versioniertes, signiertes Dokument mit genau einer aktiven Version je Mandant (Kap. 19). |
 | PSD2 | Payment Services Directive 2 – EU-Zahlungsdiensterichtlinie. |
@@ -43,9 +43,10 @@
 | SDLC | Software Development Lifecycle – Entwicklungslebenszyklus. |
 | Sealed Interface | Java-Feature zur Einschränkung implementierender Klassen. |
 | Single Writer | Prinzip: Innerhalb eines Branch, Worktree oder Workspace arbeitet genau ein Agent schreibend (Kap. 19). |
+| Owned Paths | Die Pfade, die ein Workflow Task exklusiv beschreiben darf — technische Grundlage des Single-Writer-Prinzips (Kap. 22.4, 19.10). |
 | Slice | Fachlich geschnittenes Modul (Bounded Context) eines modularen Monolithen (Kap. 19). |
 | Testcontainers | Docker-basierte Integrationstests für Java. |
 | Warum-Trace | Rekonstruktion je Lauf, welche Policy, welches Modell und welche Freigaben gewirkt haben (Kap. 19). |
-| Workflow | Übergeordnete, zustandsbehaftete Ausführungseinheit für ein Feature oder Vorhaben (Zielarchitektur, Kap. 19.10). |
-| Workflow Task | Abgegrenzte Arbeitseinheit mit Abhängigkeiten, Capability, Schreibbereichen und optionalem Child Run (Zielarchitektur, Kap. 19.10). |
+| Workflow | Übergeordnete, zustandsbehaftete Ausführungseinheit für ein Feature oder Vorhaben (seit 0.21.0 implementiert, Feature-Flag; Kap. 19.10). |
+| Workflow Task | Abgegrenzte Arbeitseinheit mit Abhängigkeiten, Capability, Schreibbereichen und optionalem Child Run (seit 0.21.0 implementiert, Feature-Flag; Schreibbereiche erst mit der vollen Ausprägung — Kap. 19.10). |
 | Workspace Lease | Zeitlich begrenzte Reservierung von Pfaden, Modulen oder exklusiven Ressourcen (Zielarchitektur, Kap. 19.10). |

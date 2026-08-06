@@ -27,15 +27,19 @@ import sys
 # der Aufzaehlung wandert und nicht hinter die erste Zahl. Bereichsangaben mit
 # Halbgeviertstrich ("Kapitel 1–18", "Kapitel 12–14") bleiben unberuehrt: dort
 # steht die Zugehoerigkeit bereits im Satz.
+# Erfasst auch Unterabschnitte ("Kapitel 7.5"): ohne den Punkt in der Gruppe
+# zerriss die Umschreibung den Verweis zu "Kapitel 7 des Whitepapers.5".
 KAPITEL = re.compile(
-    r"\bKap(?:itel|\.) (\d{1,2}(?:\s*(?:,|und|sowie)\s*\d{1,2})*)(?![\d–—-])"
+    r"\bKap(?:itel|\.) "
+    r"(\d{1,2}(?:\.\d+)?(?:\s*(?:,|und|sowie)\s*\d{1,2}(?:\.\d+)?)*)"
+    r"(?![\d–—-])(?!\.\d)"
 )
 
 
 def umschreiben(text: str) -> str:
     def ersetze(m: re.Match) -> str:
         nummern = m.group(1)
-        if nummern == "19":                      # das Kapitel selbst
+        if nummern == "19" or nummern.startswith("19."):   # das Kapitel selbst
             return m.group(0)
         return f"Kapitel {nummern} des Whitepapers"
 

@@ -53,7 +53,7 @@ public class SecretScannerHook {
                     if (pat.matcher(lines.get(i)).find()) {
                         findings.add(new ScanResult.Finding(
                                 changedFile.toString(), i + 1,
-                                pat.pattern().substring(0, 20) + "...",
+                                pat.pattern().substring(0, Math.min(20, pat.pattern().length())) + "...",
                                 lines.get(i).substring(0,
                                         Math.min(40, lines.get(i).length()))
                                         + "..."));

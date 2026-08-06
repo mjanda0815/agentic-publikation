@@ -4,10 +4,13 @@ Für jede Phase des Software Development Lifecycle steht ein spezialisierter Age
 
 Die sieben Agenten sind als logische Rollen beziehungsweise Capabilities zu verstehen. Sie müssen nicht als sieben separate Prozesse materialisiert werden und arbeiten insbesondere nicht zwangsläufig gleichzeitig schreibend am selben Vorhaben. Wie die Rollen auf tatsächliche Ausführungen abgebildet werden — auf einen einzelnen Run mit Capability Routing oder auf mehrere isolierte Child Runs —, entscheidet die Prozessschicht (Kapitel 2, 19.4, 22).
 
-> **Versionshinweis (v2.0):** Die Java-Codebeispiele dieses Teils stammen
+> **Versionshinweis (v2.2):** Die Java-Codebeispiele dieses Teils stammen
 > aus v1.3 und sind gegen Java 21 LTS und Spring Boot 3.x formuliert; sie
-> wurden für v2.0 bewusst nicht auf neuere Versionen gehoben und nicht
-> erneut dagegen getestet. Für den Sprung auf Spring Boot 4 (GA seit
+> wurden bewusst nicht auf neuere Versionen gehoben und nicht erneut
+> dagegen getestet. Es sind **gekürzte Auszüge**: Imports,
+> Konstruktor-Annotationen und Exception-Handling sind teilweise
+> weggelassen, damit die Beispiele auf die jeweils gezeigte Struktur
+> fokussieren — sie sind in dieser Form nicht isoliert übersetzbar. Für den Sprung auf Spring Boot 4 (GA seit
 > November 2025) siehe die dokumentierten Fallstricke des Realsystems in
 > Kapitel 19 — das dort beschriebene System läuft auf Java 25 und Spring
 > Boot 4.0 (u. a. Wechsel auf Jackson 3 als primären Serialisierer).
@@ -21,13 +24,13 @@ Der Architektur-Agent analysiert die bestehende Systemarchitektur, bewertet Desi
 ```
 Task(subagent_type="architecture-agent", model="opus",
     description="Spring Boot Architektur analysieren",
-    prompt=""Analysiere die Spring Boot Microservice-Architektur:
+    prompt="Analysiere die Spring Boot Microservice-Architektur:
     - Controller -> Service -> Repository Trennung
     - Spring Security FilterChain-Konfiguration
     - JPA Entity-Beziehungen und Fetch-Strategien
     - Exception Handling (@ControllerAdvice)
     - Anti-Patterns: N+1 Queries, Zirkuläre Beans
-    Output: Architektur-Diagramm + Findings als ADR"")
+    Output: Architektur-Diagramm + Findings als ADR")
 ```
 
 ### Erzeugter Code: Schichtentrennung
@@ -115,10 +118,10 @@ Der Planungs-Agent erstellt detaillierte Implementierungspläne mit Meilensteine
 
 ```
 Task(subagent_type="planning-agent", description="JWT-Auth planen",
-    prompt=""Erstelle Implementierungsplan für JWT-Authentication:
+    prompt="Erstelle Implementierungsplan für JWT-Authentication:
     - Token-Generierung/-Validierung mit JJWT, Refresh Token Rotation
     - RBAC, PostgreSQL User/Role-Tabellen, Spring Security Integration
-    Output: docs/implementations/jwt-auth-tracker.md"")
+    Output: docs/implementations/jwt-auth-tracker.md")
 ```
 
 ```java
@@ -279,12 +282,12 @@ class NotificationIntegrationTest {
 
 ```
 Task(subagent_type="review-agent", model="opus",
-    prompt=""Review des Notification-Service:
+    prompt="Review des Notification-Service:
     1. Thread-Safety in Singleton-Beans
     2. Resource Leaks, JPA N+1 Queries
     3. Security: Input Validation, SQL Injection
     4. Java 21: Records, Sealed Interfaces
-    Output: [CRITICAL/WARNING/INFO] Datei:Zeile - Beschreibung"")
+    Output: [CRITICAL/WARNING/INFO] Datei:Zeile - Beschreibung")
 ```
 
 ## 10.7 Deployment-Agent

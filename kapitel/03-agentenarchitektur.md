@@ -46,7 +46,7 @@ Der Orchestrator übersetzt Ziele in einen Task-Graph, steuert Zustandsübergän
 
 Der Tool & Workspace Layer kapselt alle mutierenden Aktionen über Tool-Adapter und isolierte Workspaces, um unkontrollierte Seiteneffekte zu verhindern.
 
-Der Governance Core (Execution Contracts, Risk Scoring, Policies, Approvals, Ledger/Audit) stellt sicher, dass Änderungen nur innerhalb definierter Regeln stattfinden.
+Der Governance Core (Execution Contracts, Risk Scoring, Policies, Approvals, Ledger/Audit) erzwingt die definierten Regeln für Änderungen, soweit sie technisch prüfbar sind; die verbleibenden Risiken behandelt Kapitel 12.
 
 Delivery & Runtime umfasst PR/Merge, Signierung/SBOM, CI/CD-Gates, Kubernetes Admission Policies sowie Observability.
 
@@ -66,6 +66,8 @@ Die Runtime-Architektur beschreibt den Ablauf eines Entwicklungsauftrags währen
 | Testing-Agent | Erstellt und führt Unit-, Integrations- und E2E-Tests aus | Read, Write, Edit, Bash, Glob |
 | Review-Agent | Prüft Code auf Qualität, Sicherheit und Domain-Compliance | Read, Glob, Grep, LSP |
 | Deployment-Agent | Verwaltet IaC, führt Deployments mit K8s und Terraform aus | Read, Write, Edit, Bash |
+
+Mehrere schreibende Rollen bedeuten dabei nicht gleichzeitiges Schreiben: Wie die Rollen auf tatsächliche Läufe abgebildet werden, regeln AP-2 und AP-3 (vgl. 3.2 und Kapitel 2).
 
 ## 3.5 Parameter des Agent-Tools (in v1.3: „Task-Tool“)
 

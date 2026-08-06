@@ -63,7 +63,7 @@ Anschließend delegiert der Orchestrator Teilaufgaben an spezialisierte Agenten.
 
 Die erzeugten Artefakte werden anschließend durch Testing- und Review-Agenten validiert. Diese prüfen Funktionalität, Codequalität und Sicherheitsanforderungen. Erst nach erfolgreicher Validierung wird ein Pull Request erzeugt oder ein Deployment vorbereitet.
 
-Dieser Ablauf ermöglicht eine klare Trennung der Verantwortlichkeiten zwischen den Agenten und erlaubt sowohl sequenzielle als auch parallele Ausführung einzelner Schritte.
+Dieser Ablauf ermöglicht eine klare Trennung der Verantwortlichkeiten zwischen den Agenten und erlaubt sowohl sequenzielle als auch parallele Ausführung einzelner Schritte — parallel jedoch nur für read-only-Schritte oder bei getrennten Workspaces mit abgegrenzten Schreibbereichen (AP-2/AP-3, Kapitel 2).
 
 ## 7.3 State Machine & Stop-Conditions
 
@@ -105,6 +105,8 @@ public record ExecutionBudget(
     }
 
     public static ExecutionBudget aggressive() {
+        // maxParallelAgents gilt nur fuer read-only-Schritte oder Agenten in
+        // getrennten Workspaces — ein Schreiber je Arbeitskopie (AP-2).
         return new ExecutionBudget(25, Duration.ofMinutes(10),
                 new BigDecimal("10.00"), new BigDecimal("100.00"), 5, 7);
     }

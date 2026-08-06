@@ -8,14 +8,14 @@ Der Ablauf demonstriert, wie der Orchestrator die Phasen des Software Developmen
 
 Dabei wird sichtbar, wie die zuvor eingeführten Konzepte – insbesondere Task Graph, Workspace Isolation, Guardrails Pipeline und Shared Knowledge Store – in einem zusammenhängenden Workflow zusammenspielen.
 
-> **Aufbau dieses Kapitels (v2.1):** Abschnitt 22.3 zeigt den Ablauf so,
+> **Aufbau dieses Kapitels (v2.2):** Abschnitt 22.3 zeigt den Ablauf so,
 > wie er heute in der Referenzimplementierung stattfindet — ein
 > **Single-Run-Prozess** mit einem schreibenden Agenten und parallelen
 > Reviewern (Teil A, implementiert). Abschnitt 22.4 zeigt denselben Auftrag
 > als **parallelen Workflow** der Zielarchitektur (Teil B, geplant). Die
 > ursprüngliche v1.3-Skizze mit sieben gleichzeitig arbeitenden
 > Lebenszyklus-Agenten ist damit durch zwei präzise Varianten ersetzt: die,
-> die läuft, und die, die geplant ist.
+> die läuft, und die, die überwiegend noch geplant ist.
 
 ## 22.1 Ausgangssituation
 
@@ -70,7 +70,7 @@ unabhängige Prüfer:
 5. **Validieren.** Build-Gate (`mvn verify`), Commit auf dem Run-Branch —
    auch bei Misserfolg, damit die Arbeit inspizierbar bleibt —, optional
    SBOM, dann das Quality Gate: sechs Read-only-Reviewer parallel auf dem
-   Diff (LLM-Review, Security, Architektur, Claim Verification,
+   Diff (zwei LLM-Reviews, Security, Architektur, Claim Verification,
    Dependency-Scan), aggregiert zu PASS/WARN/FAIL bzw. ERROR.
 6. **Korrigieren.** Bei Build-Fehler, blockierendem Gate, Merge-Konflikt
    oder roter CI wird der Befund als Feedback-Text in einen erneuten
@@ -91,10 +91,13 @@ Bewertung, nicht bei der Erzeugung (AP-2, AP-4).
 > **Status: überwiegend geplant** (Zielarchitektur; vgl. 19.10 und ADR-5
 > bis ADR-7). Die Workflow-Ebene mit Task-Graph, parallelen Child Runs in
 > getrennten Worktrees, Planfreigabe und Synthese existiert seit Release
-> 0.21.0 — allerdings ausschließlich für **nicht-schreibende** Tasks. Der
-> hier skizzierte Ablauf verteilt Schreibrechte auf mehrere Child Runs und
-> beschreibt damit Roadmap-Stufe 2; die Skizze ist Pseudocode und
-> beschreibt insoweit kein heute verfügbares Verhalten.
+> 0.21.0 — allerdings ausschließlich für **nicht-schreibende** Tasks und
+> hinter einem standardmäßig deaktivierten Feature-Flag. Der hier
+> skizzierte Ablauf verteilt Schreibrechte auf mehrere Child Runs und
+> greift zusätzlich auf Content-Hashes von Verträgen und
+> Konfliktklassifikation vor; er beschreibt damit die Roadmap-Stufen 2
+> bis 4. Die Skizze ist Pseudocode und beschreibt insoweit kein heute
+> verfügbares Verhalten.
 
 Der Payment Service besteht aus Teilen, die sich sauber schneiden lassen —
 genau der Fall, für den die Workflow-Ebene gedacht ist:
@@ -114,12 +117,14 @@ Parent Workflow: "Payment Service"
    │           Owned Paths: domain/**        Child Run A, Branch A
    │
    ├─ Task 3   API-/Application-Schicht      abhängig von 1a + 1b,
-   │           Owned Paths: adapter/in/**    nicht von der fertigen
+   │           Owned Paths: adapter/in/**,   nicht von der fertigen
+   │                        application/**
    │                                         Implementierung aus Task 2
    │                                         Child Run B, Branch B
    │
-   ├─ Task 4   Infrastruktur (Kafka/Outbox)  abhängig von 1b
-   │           Owned Paths: adapter/out/**   Child Run C, Branch C
+   ├─ Task 4   Infrastruktur (Kafka/Outbox)  abhängig von 1a + 1b
+   │           Owned Paths: adapter/out/**   (Domain Events aus 1a)
+   │                                         Child Run C, Branch C
    │           Exklusiv-Lock: db/migration/**
    │
    ├─ Task 5   Tests                         abhängig von 2–4
@@ -186,7 +191,7 @@ Im Payment-Service-Beispiel umfasst diese Pipeline insbesondere:
 
 Wie die Pipeline auf Befunde reagiert, hängt vom Betriebsmodus des Gates ab. Im Blocking-Modus beziehungsweise unter einem strikten Kontrollprofil kann der Workflow erst fortgesetzt werden, wenn alle vorgeschriebenen Prüfungen bestanden wurden. Im Advisory-Modus werden die Befunde protokolliert und angezeigt, ohne den Übergang automatisch zu blockieren; im Modus `off` findet keine Prüfung statt (19.5). Nur der Blocking-Modus erzwingt für agentisch erzeugten Code definierte Mindestmaßstäbe an Qualität, Sicherheit und Architektur — und auch dann als Risikoreduktion, nicht als Garantie.
 
-## 22.7 Deployment Ergebnis
+## 22.7 Deployment-Ergebnis
 
 Das End-to-End-Szenario zeigt, wie Spezifikation, Agentenausführung, unabhängige Prüfung, Governance und Übergabe in einem konsistenten Prozess verbunden werden können. Ein agentisches Entwicklungssystem ist damit mehr als ein Werkzeug zur Codegenerierung: Es ist die Prozessschicht, die diese Schritte zusammenhält.
 

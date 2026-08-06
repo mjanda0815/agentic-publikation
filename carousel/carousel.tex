@@ -14,7 +14,8 @@
 %
 % ABGRENZUNG IMPLEMENTIERT / GEPLANT: Das Whitepaper trennt konsequent zwischen
 % implementiertem Stand und Zielarchitektur. Die Folien halten diese Trennung
-% ein — Folie 9 ist ausdrücklich als geplant gekennzeichnet.
+% ein — Folie 9 trennt den seit 0.21.0 umgesetzten Stand (parallele,
+% nicht-schreibende Analyse) vom weiterhin geplanten parallelen Schreiben.
 
 \documentclass[12pt]{article}
 
@@ -182,8 +183,9 @@
 \end{folie}
 
 % ============================================================================
-% FOLIE 9 — Roadmap (ausdrücklich als geplant gekennzeichnet)
-% QUELLE: Management Summary, Absatz 4, und Abschnitt 19.10: Ein Feature wird
+% FOLIE 9 — Stand und Roadmap (umgesetzt: parallele Analyse; geplant:
+% paralleles Schreiben)
+% QUELLE: Management Summary, Absätze 4 und 5, und Abschnitt 19.10: Ein Feature wird
 % in einen Task Graph zerlegt; unabhängige Tasks laufen als isolierte Child
 % Runs; „Jeder Child Run besitzt einen eigenen Branch oder Worktree und bleibt
 % dem Single-Writer-Prinzip unterworfen. Ein Merge Coordinator und ein
@@ -195,7 +197,8 @@
   \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
     Agentenrollen.}
   \vspace{48pt}
-  \erl{Seit Release 0.21.0 läuft die risikoärmste Stufe: Mehrere Agenten
+  \erl{Seit Release 0.21.0 ist die risikoärmste Stufe umgesetzt — hinter
+    einem standardmäßig deaktivierten Feature-Flag: Mehrere Agenten
     analysieren parallel in getrennten Arbeitsverzeichnissen, ein
     Synthese-Schritt führt sie zusammen — und keiner von ihnen darf
     schreiben. Paralleles Schreiben, Merge Coordinator und Integration Gate

@@ -13,8 +13,16 @@ Jeder Claude Code Agent durchläuft einen definierten Lebenszyklus von der Erste
 | 4 | Execution | Die Kernarbeit: Der Agent führt die geplanten Schritte aus, ruft Tools auf und generiert Artefakte. Jeder API-Roundtrip zählt als ein "Turn" gegen das maxTurns-Limit. Die Execution-Phase kann mehrere Tool-Aufrufe pro Turn umfassen. |
 | 5 | Tool Interaction | Innerhalb der Execution-Phase interagiert der Agent mit seinem definierten Werkzeugset. Jede Tool-Nutzung wird durch PreToolUse- und PostToolUse-Hooks validiert. Werkzeugzugriffe außerhalb der Konfiguration werden blockiert. |
 | 6 | Validation | Nach Abschluss der Execution durchläuft der Output die Guardrails-Pipeline: Syntax, Style, Security, Domain-Compliance, Tests und Confidence Scoring. Bei Fehlern wird der Agent in die Execution-Phase zurückgesetzt (Retry-Loop). |
-| 7 | Termination | Der Agent beendet sich durch: (a) erfolgreichen Abschluss, (b) Erreichen von maxTurns, (c) Budget-Erschöpfung, (d) explizite Stop-Condition, oder (e) Fehler-Eskalation. Das Ergebnis wird an den Orchestrator zurückgegeben. |
-| 8 | Memory Update | Erkenntnisse, Findings und Entscheidungen werden in den Shared Knowledge Store geschrieben. Dieser Schritt ist essentiell für die Wissensübergabe an nachfolgende Agenten im Workflow. |
+| 7 | Memory Update | Erkenntnisse, Findings und Entscheidungen werden in den Shared Knowledge Store geschrieben. Dieser Schritt ist essentiell für die Wissensübergabe an nachfolgende Agenten im Workflow. Er läuft vor dem endgültigen Übergang nach `TERMINATED` — der Endzustand erlaubt keine Übergänge mehr. |
+| 8 | Termination | Der Agent beendet sich durch: (a) erfolgreichen Abschluss, (b) Erreichen von maxTurns, (c) Budget-Erschöpfung, (d) explizite Stop-Condition, oder (e) Fehler-Eskalation. Das Ergebnis wird an den Orchestrator zurückgegeben. |
+
+> **Versionshinweis (v2.2, gilt für Teil II):** Die Java-Beispiele der
+> Kapitel 6 bis 9 sind Modell-Skizzen zur Illustration des jeweiligen
+> Konzepts, formuliert gegen Java 21 LTS und Spring Boot 3.x. Sie sind
+> gekürzt (Imports, Konstruktoren, Exception-Handling teilweise
+> weggelassen) und nicht als lauffähige Bibliothek getestet. Der
+> Produktivstand des in Kapitel 19 beschriebenen Systems ist Java 25 und
+> Spring Boot 4.0.
 
 ## Java-Beispiel: Agent Lifecycle Manager
 
@@ -72,7 +80,7 @@ public class AgentLifecycle {
 }
 ```
 
-> **Hinweis:** Der Agent Lifecycle ist das Fundament für das Execution Budget (Kapitel 7): Jede Phase verbraucht Tokens und Zeit. Context Build und Planning verbrauchen typischerweise 20–30 % des Token-Budgets, bevor die eigentliche Execution beginnt.
+> **Hinweis:** Der Agent Lifecycle ist das Fundament für das Execution Budget (Kapitel 7): Jede Phase verbraucht Tokens und Zeit. Context Build und Planning verbrauchen nach eigener Betriebserfahrung (SoftwareFabrik, Stand August 2026) rund 20–30 % des Token-Budgets, bevor die eigentliche Execution beginnt.
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Der Lebenszyklus ist dort als
 > *Run* modelliert: sieben Phasen, 13 Zustände, persistiert, pausier- und

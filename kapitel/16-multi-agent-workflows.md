@@ -34,10 +34,12 @@ result3 = Agent(subagent_type="dev-agent",
 
 ```
 // Diese drei Agenten laufen PARALLEL (heute der Standardfall:
-// Subagenten starten im Hintergrund):
-Agent(subagent_type="test-agent", prompt="JUnit 5 Tests...")
-Agent(subagent_type="doc-agent", prompt="OpenAPI-Dokumentation...")
-Agent(subagent_type="review-agent", prompt="Security-Review...")
+// Subagenten starten im Hintergrund). Alle drei sind LESEND — parallel
+// schreibende Agenten brauchen getrennte Workspaces (AP-2, vgl. 3.5:
+// isolation: worktree):
+Agent(subagent_type="test-gap-agent",   prompt="Analysiere Testlücken...")
+Agent(subagent_type="arch-agent",       prompt="Architektur-Review...")
+Agent(subagent_type="review-agent",     prompt="Security-Review...")
 ```
 
 ## Background & Wiederaufnahme

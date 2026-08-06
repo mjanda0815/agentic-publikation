@@ -8,7 +8,7 @@ Der aktuelle Implementierungsstand verwendet genau einen schreibenden Agenten je
 
 Die Weiterentwicklung ergänzt eine übergeordnete Workflow-Ebene. Ein Feature wird in einen Task Graph zerlegt; voneinander unabhängige Tasks können als isolierte Child Runs parallel ausgeführt werden. Jeder Child Run besitzt einen eigenen Branch oder Worktree und bleibt dem Single-Writer-Prinzip unterworfen. Ein Merge Coordinator und ein abschließendes Integration Gate führen die Ergebnisse kontrolliert zusammen.
 
-Diese Ebene existiert seit Release 0.21.0 in ihrer risikoärmsten Ausprägung: Mehrere Agenten analysieren parallel in getrennten Arbeitsverzeichnissen, ein Synthese-Schritt führt ihre Ergebnisse zusammen, und keiner von ihnen besitzt Schreibrechte. Das parallele Schreiben — und damit Merge Coordinator und Integration Gate — bleibt der nächsten Ausbaustufe vorbehalten. Die Reihenfolge ist beabsichtigt: erst die Koordination nachweisen, dann die Schreibrechte verteilen.
+Diese Ebene existiert seit Release 0.21.0 in ihrer risikoärmsten Ausprägung — hinter einem standardmäßig deaktivierten Feature-Flag: Mehrere Agenten analysieren parallel in getrennten Arbeitsverzeichnissen, ein Synthese-Schritt führt ihre Ergebnisse zusammen, und keiner von ihnen besitzt Schreibrechte. Das parallele Schreiben — und damit Merge Coordinator und Integration Gate — bleibt der nächsten Ausbaustufe vorbehalten. Die Reihenfolge ist beabsichtigt: erst die Koordination nachweisen, dann die Schreibrechte verteilen.
 
 Das Whitepaper unterscheidet konsequent zwischen implementiertem Stand, Zielarchitektur und Roadmap. Quantifizierte Produktivitäts- und ROI-Werte werden als Hypothesen beziehungsweise Modellrechnungen behandelt, solange keine kontrollierte Vergleichsmessung vorliegt.
 

@@ -41,7 +41,8 @@ den neuen acht auf.*
 > Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
 > lassen (19.2). AP-2 und AP-4 gelten bereits im Einzel-Run (ein
 > schreibender Agent je Lauf, mehrere unabhängige read-only Reviewer).
-> AP-3 gilt seit Release 0.21.0 für die *lesende* Arbeit: Analyseläufe
+> AP-3 ist seit Release 0.21.0 für die *lesende* Arbeit implementiert
+> (Feature-Flag, standardmäßig deaktiviert): Analyseläufe
 > werden aus einem Abhängigkeitsgraphen parallelisiert und laufen in
 > getrennten Arbeitsverzeichnissen. Die Workflow-weite Ausprägung von AP-2
 > — also parallel **schreibende** Child Runs — bleibt Gegenstand der

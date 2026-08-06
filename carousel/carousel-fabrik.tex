@@ -54,7 +54,8 @@
   \gross{28 fachliche Slices, 28 Releases, vier Monate.}
   \vspace{48pt}
   \erl{Rund 35.000 Zeilen Produktivcode und 264 Testklassen; die
-    Testabdeckung bricht den Build, wenn sie fällt. Java 25, Spring Boot 4,
+    Testabdeckung bricht den Build, wenn sie unter die Schwelle fällt
+    (Line 85 \%, Branch 81 \%). Java 25, Spring Boot 4,
     ein Deployment-Artefakt. Stand: 6.\,August 2026, Release 0.21.0.}
 \end{folie}
 
@@ -190,7 +191,9 @@
   \grossM{Erst die Koordination beweisen. Dann die Schreibrechte
     verteilen.}
   \vspace{48pt}
-  \erl{Seit Release 0.21.0 laufen mehrere Agenten parallel — in getrennten
+  \erl{Seit Release 0.21.0 ist die Stufe umgesetzt, hinter einem
+    standardmäßig deaktivierten Feature-Flag: Mehrere Agenten arbeiten
+    parallel — in getrennten
     Arbeitsverzeichnissen, koordiniert über einen Abhängigkeitsgraphen,
     zusammengeführt von einem Synthese-Schritt, der Widersprüche
     ausdrücklich einfordert statt sie zu glätten. Keiner von ihnen darf
