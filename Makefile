@@ -49,12 +49,12 @@ tex: $(BUILD)
 		echo "Pandoc: $$src -> $(BUILD)/$$n.tex"; \
 		if [ "$$n" = "00" ]; then \
 			$(STRIP_NUMBERING) "$$src" | $(PANDOC) -f markdown -t latex \
-				--top-level-division=chapter --biblatex --no-highlight \
+				--top-level-division=chapter --biblatex --highlight-style=tango \
 				| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k$$n-/g" \
 				| $(FIG_HEIGHT) | $(ADDCHAP) > $(BUILD)/$$n.tex; \
 		else \
 			$(STRIP_NUMBERING) "$$src" | $(PANDOC) -f markdown -t latex \
-				--top-level-division=chapter --biblatex --no-highlight \
+				--top-level-division=chapter --biblatex --highlight-style=tango \
 				| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k$$n-/g" \
 				| $(FIG_HEIGHT) > $(BUILD)/$$n.tex; \
 		fi; \

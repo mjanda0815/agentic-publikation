@@ -61,6 +61,17 @@
   fontsize=\small}
 \usepackage{xcolor}
 
+% Pandoc-Syntax-Highlighting (Stil: tango; Makros generiert via
+% `pandoc -s --highlight-style=tango`, abgelegt in praeambel-highlighting.tex)
+\input{praeambel-highlighting}
+\RecustomVerbatimEnvironment{Highlighting}{Verbatim}{%
+  commandchars=\\\{\},
+  breaklines=true,
+  breakautoindent=true,
+  breaksymbolleft={\textcolor{gray}{\tiny$\hookrightarrow$}},
+  breaksymbolindentleft=0.6em,
+  fontsize=\small}
+
 % --- Pandoc-Kompatibilität ---
 % \tightlist wird von Pandoc für kompakte Listen ohne Zusatzabstand erzeugt
 % und ist ohne den Pandoc-Standardtemplate nicht definiert.
