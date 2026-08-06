@@ -1,4 +1,4 @@
-# 23 Glossar & Abkürzungsverzeichnis
+# 24 Glossar & Abkürzungsverzeichnis
 
 | Abkürzung / Begriff | Erklärung |
 | --- | --- |

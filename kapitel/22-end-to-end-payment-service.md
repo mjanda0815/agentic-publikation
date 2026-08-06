@@ -1,4 +1,4 @@
-# 21 End-to-End: Payment Service Implementation
+# 22 End-to-End: Payment Service Implementation
 
 Während die vorherigen Kapitel die Architektur, das Ausführungsmodell und die Governance-Mechanismen eines agentischen Entwicklungssystems beschreiben, zeigt dieses Kapitel den vollständigen Ablauf einer realistischen Feature-Implementierung.
 
@@ -10,7 +10,7 @@ Dabei wird sichtbar, wie die zuvor eingeführten Konzepte – insbesondere Task 
 
 Das folgende Beispiel zeigt die agentische Orchestrierung eines solchen Entwicklungsauftrags in Form eines vereinfachten Task-Workflows.
 
-## 21.1 Ausgangssituation
+## 22.1 Ausgangssituation
 
 In diesem Szenario wird die Implementierung eines Payment Services für eine E-Commerce-Plattform betrachtet. Der Service stellt eine REST-basierte API zur Verarbeitung von Zahlungen bereit, verwaltet Zahlungszustände innerhalb eines Domain-Driven-Design-Modells und publiziert relevante Domain Events über Apache Kafka, um andere Systeme über erfolgreiche oder fehlgeschlagene Transaktionen zu informieren.
 
@@ -22,7 +22,7 @@ Während der gesamten Ausführung greifen die Agenten auf einen Shared Knowledge
 
 Das folgende Beispiel zeigt, wie ein solcher Entwicklungsauftrag durch den Orchestrator in mehrere Phasen zerlegt und durch spezialisierte Agenten umgesetzt wird.
 
-## 21.2 Gesamtworkflow
+## 22.2 Gesamtworkflow
 
 Der folgende Ablauf zeigt den vollständigen Lebenszyklus einer Feature-Implementierung innerhalb des agentischen Entwicklungssystems. Ein Feature-Request wird vom Orchestrator entgegengenommen und in mehrere Phasen des Software Development Lifecycle zerlegt. Für jede Phase wird ein spezialisierter Agent gestartet, der innerhalb eines isolierten Workspaces arbeitet und auf den gemeinsamen Wissensspeicher zugreifen kann.
 
@@ -42,7 +42,7 @@ Die folgende Abbildung zeigt, wie die einzelnen Architekturkomponenten während 
 
 <!-- TODO(abbildung): Abbildung 20: Interaktion der Systemkomponenten -->
 
-## 21.3 Agentischer Workflow
+## 22.3 Agentischer Workflow
 
 ```
 // PHASE 1: Requirements & Architektur
@@ -69,7 +69,7 @@ Task(subagent_type="deploy-agent", prompt="K8s-Manifeste, HPA, TLS-Ingress.")
 Task(subagent_type="qa-guard", prompt="Finale Validierung: 100% Tests, Security.")
 ```
 
-## 21.4 Artefakte des Workflows
+## 22.4 Artefakte des Workflows
 
 Der agentische Workflow erzeugt nicht nur Quellcode, sondern eine Reihe strukturierter Artefakte, die den gesamten Entwicklungsprozess nachvollziehbar und wiederverwendbar machen. Dazu gehören Anforderungen, Architekturentscheidungen, Implementierungspläne, Quellcode, Tests sowie Deployment-Artefakte.
 
@@ -83,7 +83,7 @@ Im vorliegenden Beispiel entstehen typischerweise folgende Ergebnisse:
 
 Diese Artefakte bilden zusammen die technische und fachliche Grundlage für den produktiven Betrieb des Payment Services. Gleichzeitig ermöglichen sie eine vollständige Nachvollziehbarkeit der Entscheidungen und Änderungen entlang des gesamten Entwicklungslebenszyklus.
 
-## 21.5 Guardrails Pipeline
+## 22.5 Guardrails Pipeline
 
 Ein wesentliches Merkmal des End-to-End-Szenarios ist die konsequente Einbettung von Guardrails in jede Phase des Entwicklungsprozesses. Agentisch erzeugte Änderungen werden nicht ungeprüft übernommen, sondern durchlaufen eine mehrstufige Validierungs- und Governance-Pipeline.
 
@@ -98,7 +98,7 @@ Im Payment-Service-Beispiel umfasst diese Pipeline insbesondere:
 
 Erst wenn alle Prüfungen erfolgreich bestanden wurden, kann der Workflow in die nächste Phase übergehen. Dadurch wird sichergestellt, dass agentisch erzeugter Code denselben Qualitäts-, Sicherheits- und Architekturmaßstäben genügt wie manuell entwickelte Software.
 
-## 21.6 Deployment Ergebnis
+## 22.6 Deployment Ergebnis
 
 Das End-to-End-Szenario zeigt, dass ein agentisches Entwicklungssystem weit mehr ist als ein Werkzeug zur Codegenerierung. Der Orchestrator koordiniert spezialisierte Agenten entlang des gesamten Software Development Lifecycle und verbindet Anforderungen, Architektur, Implementierung, Tests, Review und Deployment in einem konsistenten Ablauf.
 

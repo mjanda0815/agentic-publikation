@@ -1,4 +1,4 @@
-# 20 Vergleich: Claude Code vs. andere KI-Entwicklungssysteme
+# 21 Vergleich: Claude Code vs. andere KI-Entwicklungssysteme
 
 Der Markt für KI-gestützte Entwicklungswerkzeuge wächst rasant. Die folgende Gegenüberstellung ordnet Claude Code in das Ökosystem ein und verdeutlicht die architektonischen Unterschiede:
 

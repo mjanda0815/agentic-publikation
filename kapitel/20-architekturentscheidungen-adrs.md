@@ -1,4 +1,4 @@
-# 19 Architekturentscheidungen (ADRs)
+# 20 Architekturentscheidungen (ADRs)
 
 Die folgenden Architecture Decision Records dokumentieren die wichtigsten Designentscheidungen des Agentensystems. Jeder ADR folgt dem Lightweight ADR-Format nach Michael Nygard: Kontext, Entscheidung, Konsequenzen.
 
