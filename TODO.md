@@ -158,9 +158,33 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Embedding-Modell `deepset-mxbai-embed-de-large-v1` per Primärquelle
       belegt (Hugging Face, [@mxbaide]); Datumsfehler „2025-03-04" im
       ADR-4-Beispiel des Originals auf 2026 korrigiert.
-- [ ] (Martin) Gesamtdurchsicht des Entwurfs; danach „Entwurf"-Vermerk von
-      der Titelseite nehmen. Optional davor: kapitelübergreifender
-      Schlussdurchlauf des zweitgutachters über das Gesamtdokument.
+- [x] **Schlussdurchlauf + v2.1** (06.08.2026): Kapitelübergreifendes
+      Schlussgutachten (zweitgutachter auf Fable 5, Urteil: freigabefähig
+      nach Punktkorrekturen) und Martins Prüfung (anpassungen/) gesammelt
+      umgesetzt — im 2.1-Umfang gemäß der Versionsstrategie in
+      anpassungen/whitepaper_anpassungen.md (§23; die 3.0-Gesamtumgliederung
+      folgt erst mit implementierter paralleler Analyse und Messdaten):
+      Management Summary neu (Control-Plane-These, 7 Kernaussagen),
+      Untertitel neu, Version 2.1; Kapitel 19 in Stand (19.1–19.9) und
+      Zielbild geteilt, neues 19.10 „Roadmap zum parallelen Workflow" mit
+      Zielarchitektur-Diagramm (abb31) und Threats-to-Validity-Block in
+      19.9; ADR-Status-Vermerke (v2.1) je ADR; Kap. 15 zu
+      „Wirtschaftlichkeitshypothese, Kostenmodell und Messplan" mit neuem
+      15.6 Messplan; Formulierungen präzisiert (Guardrails-Zusage, Claim
+      Verification, Kontrollprofile, deterministisch→nachvollziehbar);
+      Glossar um 10 Zielarchitektur-Begriffe. Alle Gutachten-Befunde
+      eingearbeitet (u. a. .mcp.json statt settings.json mit realem
+      MCP-Referenzserver, Codex-CLI-Quelle korrigiert, Glossar-MCP-Eintrag,
+      ROI-Arithmetik, v1.3-Preisstand-Kennzeichnungen, 18
+      Anführungszeichen-Fixes, BAFA-Beispiel anonymisiert, RFC 9457,
+      @JobWorker-Hinweis). Tokenizer-Attribution (Opus 4.7) war korrekt —
+      durch Anthropic-Modellübersicht gedeckt, keine Änderung.
+      Abbildungen: Farbschema umgesetzt (schwarze Rahmen, blaue Pfeile,
+      semantische Pastelltöne; Sequenz-Schriftgrößen erhöht), alle 30
+      Diagramme neu gerendert.
+- [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
+      Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
+      Repo public + Release + Zenodo-DOI).
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI
       (Zenodo-GitHub-Integration besteht bereits; archiviert nur öffentliche
       Releases).

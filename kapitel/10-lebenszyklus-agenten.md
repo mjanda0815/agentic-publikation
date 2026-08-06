@@ -73,7 +73,7 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 }
 ```
 
-### Globales Exception Handling (RFC 7807)
+### Globales Exception Handling (RFC 9457, vormals RFC 7807)
 
 ```java
 @RestControllerAdvice @Slf4j

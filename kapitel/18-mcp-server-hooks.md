@@ -14,17 +14,23 @@ die `AGENTS.md` für die deklarative Konfiguration genommen hat (Kapitel 4).
 
 ## MCP-Server Konfiguration
 
+Projektweite MCP-Server werden bei Claude Code in einer `.mcp.json` im
+Repository-Root konfiguriert (Stand August 2026 [@claudecodedocs]; v1.3
+nannte hier noch `.claude/settings.json` — dort liegen heute Hooks und
+Berechtigungen). Servernamen und -pakete im Beispiel sind teils fiktiv;
+real existiert etwa der Referenzserver `@modelcontextprotocol/server-postgres`:
+
 ```json
-// .claude/settings.json
+// .mcp.json (Repository-Root)
 {
     "mcpServers": {
-        "jira-server": {
-            "command": "npx", "args": ["-y", "@anthropic/mcp-jira"],
-            "env": { "JIRA_URL": "https://firma.atlassian.net", "JIRA_TOKEN": "${JIRA_API_TOKEN}" }
-        },
         "postgres-server": {
-            "command": "npx", "args": ["-y", "@anthropic/mcp-postgres"],
+            "command": "npx", "args": ["-y", "@modelcontextprotocol/server-postgres"],
             "env": { "DATABASE_URL": "${DATABASE_URL}" }
+        },
+        "jira-server": {
+            "command": "npx", "args": ["-y", "firmeninternes-jira-mcp-paket"],
+            "env": { "JIRA_URL": "https://firma.example", "JIRA_TOKEN": "${JIRA_API_TOKEN}" }
         }
     }
 }

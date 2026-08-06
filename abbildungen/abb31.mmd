@@ -1,0 +1,25 @@
+flowchart TB
+    FEAT["Feature / Change Request"]
+    WP["Workflow Planner"]
+    TG["Task Graph (DAG)<br/>Abhängigkeiten · Verträge · Schreibbereiche"]
+    CA["Child Run A<br/>Branch/Worktree A<br/><i>Single Writer</i>"]
+    CB["Child Run B<br/>Branch/Worktree B<br/><i>Single Writer</i>"]
+    CC["Child Run C<br/>Branch/Worktree C<br/><i>Single Writer</i>"]
+    GA["Lokales Gate A"]
+    GB["Lokales Gate B"]
+    GC["Lokales Gate C"]
+    MC["Merge Coordinator<br/>Reihenfolge · Rebase · Konflikte"]
+    IB["Workflow-Integrationsbranch"]
+    IG["Integration Gate<br/>Gesamtbuild · E2E · Verträge · SBOM"]
+    OK["Approval / PR / Merge"]
+    FEAT --> WP --> TG
+    TG --> CA --> GA --> MC
+    TG --> CB --> GB --> MC
+    TG --> CC --> GC --> MC
+    MC --> IB --> IG --> OK
+    classDef gate fill:#f8dddd,stroke:#333333
+    classDef koord fill:#fdf3d8,stroke:#333333
+    classDef infra fill:#eeeeee,stroke:#333333
+    class GA,GB,GC,IG gate
+    class MC,OK koord
+    class TG,IB infra

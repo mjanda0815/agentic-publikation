@@ -1,19 +1,25 @@
 # Management Summary
 
-Die Softwareentwicklung steht vor einem Paradigmenwechsel: KI-gestützte Agenten übernehmen nicht nur die Code-Generierung, sondern orchestrieren den gesamten Entwicklungslebenszyklus – von der Anforderungsanalyse über die Implementierung bis zum Deployment. Dieses Dokument beschreibt eine produktionsreife Enterprise-Architektur für den Einsatz solcher Agentensysteme in regulierten Umgebungen.
+KI-gestützte Coding-Agenten können Anforderungen analysieren, Code verändern, Tests ausführen und Entwicklungsartefakte erzeugen. Ihr Einsatz in Enterprise- und regulierten Umgebungen erfordert jedoch mehr als ein leistungsfähiges Modell: Agentenarbeit muss spezifiziert, begrenzt, isoliert, geprüft, freigegeben und nachträglich rekonstruiert werden können.
+
+Dieses Whitepaper beschreibt eine implementierte Control-Plane-Architektur für diesen Zweck. Die Referenzimplementierung SoftwareFabrik steuert zustandsbehaftete Agentenläufe, projiziert versionierte Regeln in den Workspace, begrenzt Modelle und Budgets, isoliert Ausführungen, bewertet Änderungen durch unabhängige Reviewer und führt relevante Entscheidungen in einem attestierten Audit- und Warum-Trace zusammen.
+
+Der aktuelle Implementierungsstand verwendet genau einen schreibenden Agenten je Run. Mehrere read-only Reviewer prüfen den entstandenen Diff parallel. Diese Architektur vermeidet unkontrollierte Schreibkonkurrenz und bildet die Basis für den nächsten Entwicklungsschritt.
+
+Die geplante Weiterentwicklung ergänzt eine übergeordnete Workflow-Ebene. Ein Feature wird in einen Task Graph zerlegt; voneinander unabhängige Tasks können als isolierte Child Runs parallel ausgeführt werden. Jeder Child Run besitzt einen eigenen Branch oder Worktree und bleibt dem Single-Writer-Prinzip unterworfen. Ein Merge Coordinator und ein abschließendes Integration Gate führen die Ergebnisse kontrolliert zusammen.
+
+Das Whitepaper unterscheidet konsequent zwischen implementiertem Stand, Zielarchitektur und Roadmap. Quantifizierte Produktivitäts- und ROI-Werte werden als Hypothesen beziehungsweise Modellrechnungen behandelt, solange keine kontrollierte Vergleichsmessung vorliegt.
 
 ## Kernaussagen
 
-**Multi-Agent statt Monolith:** Sieben spezialisierte Agenten (Architektur, Planung, Requirements, Entwicklung, Testing, Review, Deployment) arbeiten koordiniert in einer Hub-and-Spoke-Architektur. Jeder Agent hat klar definierte Verantwortlichkeiten und eingeschränkte Werkzeugzugriffe – vergleichbar mit einem erfahrenen Entwicklungsteam.
-
-**Governance by Design:** Eine sechsstufige Guardrails-Pipeline (Syntax, Style, Security, Domain-Compliance, Tests, Confidence Scoring) validiert jeden generierten Code-Artefakt automatisch. Kein Code gelangt ohne bestandene Validierung in die Codebasis. Dies adressiert das Kernrisiko von KI-Systemen: Halluzinationen und unkontrollierte Seiteneffekte.
-
-**Enterprise-tauglich:** Die Architektur berücksichtigt Domain-Driven Design, rollenbasierte Zugriffskontrolle, ein fünfschichtiges Memory-Modell, formale Architekturentscheidungen (ADRs) und ein transparentes Kostenmodell mit Token- und Execution-Budgets. Sie ist damit auch für regulierte Umgebungen (Behörden, Finanzwesen) geeignet.
-
-## Wirtschaftlicher Nutzen
-
-Für ein typisches Feature (z. B. einen Payment-Service mit DDD, Event-Driven Architecture und Kubernetes-Deployment) reduziert der Agenten-Einsatz den manuellen Entwickleraufwand um 70–80 %. Die API-Kosten liegen bei €15–30 pro Feature – einem Bruchteil der eingesparten Personalkosten. Die Time-to-Feature sinkt von 1–2 Wochen auf 1–2 Tage, bei gleichzeitig höherer Testabdeckung (>80 % vs. oft <60 % unter Zeitdruck). Diese Werte sind Modellrechnungen auf Basis typischer Projektannahmen, keine gemessenen Betriebswerte; die Annahmen stehen in Kapitel 15.
+- **Control Plane statt unkontrollierter Autonomie:** Der entscheidende Schritt ist nicht die maximale Zahl gleichzeitig arbeitender Agenten, sondern eine Steuerschicht, die nichtdeterministische Agentenarbeit begrenzt, isoliert, koordiniert, prüft und nachweisbar macht.
+- **Single Writer, Multiple Reviewers:** Innerhalb eines Workspace schreibt genau ein Agent; mehrere unabhängige Reviewer prüfen read-only.
+- **Parallelität nach Abhängigkeiten:** Parallelität entsteht zwischen isolierten Tasks und Child Runs — abgeleitet aus Abhängigkeiten, Verträgen und Schreibbereichen, nicht aus festen Agentenrollen.
+- **Governance by Design:** Governance ist keine Ergänzung der Agentenarchitektur, sondern ein Teil ihrer Struktur — von der Policy-Prüfung bis zur signierten Audit-Hashkette.
+- **Git plus autoritativer Prozesszustand:** Git trägt Artefakte, Branches und Checkpoints; Workflow-, Policy-, Freigabe- und Audit-Zustand liegen autoritativ in der Datenbank.
+- **Regelkreis statt blindem Retry:** Wiederholungen sind nur zulässig, wenn neue Informationen eingehen — Build-Ausgaben, Reviewer-Findings, Merge-Konflikte, CI-Ergebnisse.
+- **Souveränität vor Infrastrukturkomplexität:** Die Architektur bleibt lokal, on-premises und ohne Cloud-Abhängigkeit betreibbar — bis hin zum Air-Gap-Betrieb.
 
 ## Zielgruppe
 
-Dieses Dokument richtet sich an IT-Architekten, technische Projektleiter und Entwicklungsteams, die KI-Agenten systematisch in ihren Software Development Lifecycle integrieren möchten. Alle Beispiele verwenden Java 21, Spring Boot und bewährte Enterprise-Patterns – die Prinzipien sind jedoch technologieunabhängig übertragbar.
+Dieses Dokument richtet sich an IT-Architekten, technische Projektleiter und Entwicklungsteams, die KI-Agenten systematisch in ihren Software Development Lifecycle integrieren möchten. Alle Beispiele verwenden Java, Spring Boot und bewährte Enterprise-Patterns – die Prinzipien sind jedoch technologieunabhängig übertragbar.

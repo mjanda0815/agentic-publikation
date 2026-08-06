@@ -8,3 +8,7 @@ flowchart TB
     S6["6. CONFIDENCE — Gesamtqualität?<br/><i>LLM-Scoring: Kohärenz · Vollständigkeit · Risiko</i>"]
     OK["Merge erlaubt"]
     C --> S1 -- "PASS" --> S2 -- "PASS" --> S3 -- "PASS" --> S4 -- "PASS" --> S5 -- "PASS" --> S6 -- "PASS (Score ≥ Threshold)" --> OK
+    classDef sec fill:#f8dddd,stroke:#333333
+    classDef ok fill:#ddeedd,stroke:#333333
+    class S3,S4 sec
+    class OK ok

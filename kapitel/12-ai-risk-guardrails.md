@@ -10,13 +10,13 @@ Jede durch Agenten erzeugte Änderung durchläuft eine Reihe automatisierter Pr�
 
 Erst wenn alle Prüfungen erfolgreich abgeschlossen sind, kann eine Änderung in die Codebasis integriert oder für ein Deployment freigegeben werden.
 
-Diese Guardrails stellen sicher, dass KI-generierter Code denselben Qualitäts- und Sicherheitsanforderungen entspricht wie manuell entwickelte Software.
+Guardrails erzwingen definierte technische Mindestkriterien, liefern strukturierte Befunde und reduzieren das Risiko ungeprüfter Änderungen. Sie ersetzen weder fachliche Abnahme noch unabhängige Sicherheitsprüfung oder Produktionsbeobachtung.
 
 ![AI-Guardrails-Pipeline zur Validierung agentisch erzeugter Codeänderungen](abbildungen/out/abb13.pdf){width=100%}
 
 | Komponente | Funktion | Umsetzung |
 | --- | --- | --- |
-| Halluzinations-Erkennung | Prüft ob Code auf existierenden Patterns basiert | Grep/AST-Analyse vor Commit |
+| Claim Verification (in v1.3: Halluzinations-Erkennung) | Prüft ob Code auf existierenden Patterns basiert | Grep/AST-Analyse vor Commit |
 | Schema-Validierung | Validiert JSON/YAML gegen definierte Schemas | JSON Schema im PostToolUse Hook |
 | Security-Scan | Statische Sicherheitsanalyse | SpotBugs, OWASP Dependency Check |
 | Domain-Prüfung | Bounded Context Einhaltung | Custom Lint gegen docs/domain/ |

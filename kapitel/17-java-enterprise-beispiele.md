@@ -3,7 +3,8 @@
 > **Versionshinweis (v2.0):** Wie in Teil III gilt: Die Beispiele sind gegen
 > Java 21 LTS und Spring Boot 3.x formuliert und wurden für v2.0 nicht auf
 > Spring Boot 4 gehoben; zu den Umstellungspunkten (u. a. Jackson 3) siehe
-> Kapitel 19.
+> Kapitel 19. In aktuellen Camunda-8-Spring-SDKs heißt die
+> Worker-Annotation `@JobWorker` statt `@ZeebeWorker`.
 
 ## 17.1 Spring Security mit JWT und RBAC
 

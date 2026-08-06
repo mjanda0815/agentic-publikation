@@ -48,12 +48,12 @@ Eine vollständige CLAUDE.md besteht aus mehreren klar abgegrenzten Sektionen. J
 
 ## 4.2 Vollständiges Enterprise-Beispiel
 
-Das folgende Beispiel zeigt eine produktionsreife CLAUDE.md für ein Banking-Projekt. Jede Sektion ist kommentiert, um die Wirkung auf das Agenten-Verhalten zu erklären:
+Das folgende Beispiel zeigt eine produktionsnahe CLAUDE.md für ein fiktives Behördenprojekt der Exportkontrolle. Jede Sektion ist kommentiert, um die Wirkung auf das Agenten-Verhalten zu erklären:
 
 ```markdown
 # ============================================================
-# Projekt: Banking-Plattform (Export Manager)
-# Team: Backend Engineering, BAFA Modernisierung
+# Projekt: Behoerdenplattform Exportkontrolle (fiktives Beispiel)
+# Team: Backend Engineering, Modernisierungsprogramm
 # ============================================================
 
 # --- Agentendefinitionen ---

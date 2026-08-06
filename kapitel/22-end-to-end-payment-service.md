@@ -32,7 +32,7 @@ Abschließend übernimmt ein Deployment-Agent die Erstellung der notwendigen Inf
 
 Die folgende Abbildung zeigt den Gesamtworkflow der agentischen Umsetzung eines Features.
 
-*(Die Workflow-Abbildungen der v1.3 an dieser Stelle — „End-to-End Workflow" und „Interaktion der Systemkomponenten" — sind in v2.0 mit den inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
+*(Die Workflow-Abbildungen der v1.3 an dieser Stelle — „End-to-End Workflow“ und „Interaktion der Systemkomponenten“ — sind in v2.0 mit den inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 Während das vorherige Diagramm den Ablauf eines Entwicklungsauftrags zeigt, ist für das Verständnis der Architektur auch relevant, welche Systemkomponenten während dieses Prozesses miteinander interagieren.
 
@@ -99,7 +99,7 @@ Im Payment-Service-Beispiel umfasst diese Pipeline insbesondere:
 - Automatisierte Tests mit vorgegebenen Mindestanforderungen an die Testabdeckung
 - Confidence-Scoring zur Bewertung unsicherer oder potenziell halluzinierter Änderungen
 
-Erst wenn alle Prüfungen erfolgreich bestanden wurden, kann der Workflow in die nächste Phase übergehen. Dadurch wird sichergestellt, dass agentisch erzeugter Code denselben Qualitäts-, Sicherheits- und Architekturmaßstäben genügt wie manuell entwickelte Software.
+Erst wenn alle Prüfungen erfolgreich bestanden wurden, kann der Workflow in die nächste Phase übergehen. Dadurch werden für agentisch erzeugten Code definierte Mindestmaßstäbe an Qualität, Sicherheit und Architektur erzwungen — als Risikoreduktion, nicht als Garantie.
 
 ## 22.6 Deployment Ergebnis
 

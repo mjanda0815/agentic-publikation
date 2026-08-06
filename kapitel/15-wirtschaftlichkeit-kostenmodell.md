@@ -1,4 +1,4 @@
-# 15 Wirtschaftlichkeit & Kostenmodell
+# 15 Wirtschaftlichkeitshypothese, Kostenmodell und Messplan
 
 > **Hinweis:** Agentensysteme können erhebliche API-Kosten verursachen. Ohne aktives Kostenmanagement skalieren die Ausgaben unkontrolliert. Ein transparentes Kostenmodell ist Voraussetzung für den Enterprise-Einsatz.
 
@@ -63,6 +63,9 @@ public record TokenBudget(
 
 ## 15.3 Parallelisierungskosten
 
+*Die Dollarwerte dieser Tabelle sind eine Modellrechnung auf
+v1.3-Preisstand (März 2026); vgl. die aktuelle Preistabelle in 15.1.*
+
 | Szenario | Wanduhrzeit | Kosten |
 | --- | --- | --- |
 | Sequenziell: 7 Agenten | ~45 Minuten | $8–12 |
@@ -85,7 +88,7 @@ Die Token-Kosten bleiben bei Parallelisierung identisch. Teurer wird es erst bei
 | API-Kosten | – | ~2M Tokens ≈ €15–30 |
 | Testabdeckung | Oft <60% unter Zeitdruck | >80% durch iteratives Testing |
 | Time-to-Feature | 1–2 Wochen | 1–2 Tage |
-| Gesamtkosten | €3.800+ | €790–€850 |
+| Gesamtkosten | €3.800+ | €775–€790 |
 
 Der ROI hängt stark von der Aufgabenkomplexität ab: Bei Standard-CRUD-Features ist der Hebel am größten (5–10x). Bei komplexen Architekturentscheidungen sinkt der Automatisierungsgrad, aber der Analyse-Output (ADRs, Findings) beschleunigt die menschliche Entscheidungsfindung erheblich.
 
@@ -147,3 +150,24 @@ aktivem Entfernen des API-Keys aus der Prozessumgebung) steht in 19.4.
 > bleibt dagegen unbelegt: Für das Realsystem existiert keine kontrollierte
 > Produktivitätsmessung, und eine Budget-Obergrenze je Nutzer ist offen
 > (19.9).
+
+## 15.6 Messplan *(neu in v2.1)*
+
+Die Modellrechnungen dieses Kapitels werden erst durch Messung zu
+Ergebnissen. Für die in 19.10 beschriebene Weiterentwicklung ist deshalb
+begleitend ein Messprogramm vorgesehen, das drei Vorgehensweisen
+vergleicht — manuelle Umsetzung, Einzel-Run und paralleler Workflow — mit
+folgenden Messgrößen:
+
+- menschliche aktive Arbeitszeit je Vorhaben
+- Time to Accepted Merge
+- First-Pass-Gate-Rate (Anteil der Läufe ohne Korrekturschleife)
+- Korrekturschleifen und Replans
+- Kosten je Child Run, je Workflow und je akzeptierter Änderung
+- Merge-Konfliktrate
+- entkommene Defekte und Rollbacks
+- Reviewzeit und Testabdeckungsänderung
+
+Bis diese Messungen vorliegen, sind alle Produktivitäts- und ROI-Aussagen
+dieses Kapitels als Hypothesen bzw. Modellrechnungen zu lesen (vgl. 15.4,
+19.9).

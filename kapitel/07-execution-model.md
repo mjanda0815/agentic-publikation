@@ -82,7 +82,7 @@ Der Orchestrator implementiert eine State Machine, die den Workflow-Zustand verw
 
 ## 7.4 Execution Budget
 
-Das Execution Budget ist ein zweilagiges Sicherheitsnetz: Es begrenzt sowohl einzelne Tasks (max_turns, timeout) als auch den Gesamtworkflow (max_cost, max_duration). Budgets werden pro Sprint, Feature oder Team definiert:
+Das Execution Budget ist ein zweilagiges Sicherheitsnetz: Es begrenzt sowohl einzelne Tasks (Turn-Limit (maxTurns), timeout) als auch den Gesamtworkflow (max_cost, max_duration). Budgets werden pro Sprint, Feature oder Team definiert:
 
 ```java
 // === Execution Budget ===

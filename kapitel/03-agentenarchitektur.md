@@ -29,7 +29,7 @@ Die Architektur folgt einem erweiterten Hub-and-Spoke-Modell. Im Zentrum steht d
 
 Der Agent Layer besteht aus spezialisierten Rollen (Architektur, Planung, Requirements, Entwicklung, Testing, Review, Deployment), die jeweils klar begrenzte Verantwortlichkeiten besitzen.
 
-Der Orchestrator übersetzt Ziele in einen Task-Graph, steuert Zustandsübergänge, Budgets und Stop-Conditions und sorgt für deterministische Abläufe.
+Der Orchestrator übersetzt Ziele in einen Task-Graph, steuert Zustandsübergänge, Budgets und Stop-Conditions und sorgt für begrenzte, nachvollziehbare Abläufe.
 
 Der Tool & Workspace Layer kapselt alle mutierenden Aktionen über Tool-Adapter und isolierte Workspaces, um unkontrollierte Seiteneffekte zu verhindern.
 
@@ -54,10 +54,10 @@ Die Runtime-Architektur beschreibt den Ablauf eines Entwicklungsauftrags währen
 | Review-Agent | Prüft Code auf Qualität, Sicherheit und Domain-Compliance | Read, Glob, Grep, LSP |
 | Deployment-Agent | Verwaltet IaC, führt Deployments mit K8s und Terraform aus | Read, Write, Edit, Bash |
 
-## 3.5 Parameter des Agent-Tools (in v1.3: „Task-Tool")
+## 3.5 Parameter des Agent-Tools (in v1.3: „Task-Tool“)
 
 Das Werkzeug, mit dem der Orchestrator Subagenten startet, heißt in Claude
-Code inzwischen `Agent` (v1.3 dokumentierte es als „Task"). Die folgende
+Code inzwischen `Agent` (v1.3 dokumentierte es als „Task“). Die folgende
 Tabelle ist auf den Stand von August 2026 aktualisiert [@claudecodedocs];
 die Parameterliste ist schnelllebig und bei Umsetzung gegen die aktuelle
 Werkzeug-Dokumentation zu prüfen:

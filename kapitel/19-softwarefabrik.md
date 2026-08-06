@@ -14,6 +14,22 @@
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
 > nicht öffentlich.
 
+> **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
+> implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
+> dort Beschriebene ist implementiert und in Betrieb, Stand 0.19.0) und
+> ihrer geplanten Weiterentwicklung (Abschnitt 19.10 — durchgängig als
+> *geplant* gekennzeichnet). Der aktuelle Stand verwendet genau einen
+> schreibenden Agenten je Run und mehrere unabhängige read-only Reviewer.
+> Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
+> gleichzeitig schreibende Agenten Konfliktkosten, unklare Zurechnung und
+> schwer attestierbare Zwischenstände erzeugen. Die nächste Ausbaustufe
+> verwirft das parallele Agentenmodell nicht, sondern ordnet es neu:
+> Parallelität wird auf eine übergeordnete Workflow-Ebene verlagert, das
+> Single-Writer-Prinzip bleibt je Workspace bestehen. Die Beschreibung des
+> Zielbilds ist damit keine Behauptung über den aktuellen Produktstand,
+> sondern eine nachvollziehbare Roadmap aus der bestehenden Architektur
+> heraus.
+
 ## 19.1 Von der Referenzarchitektur zur Implementierung
 
 Die SoftwareFabrik ist eine **Control Plane für agentische
@@ -237,7 +253,7 @@ Whitepapers weiter:
 
 ![Laufzeitablauf eines Build-Runs von der Anlage bis zum Merge, inklusive Korrekturschleife und Approval-Punkten](abbildungen/out/abb24.pdf){width=100%}
 
-![Zustandsmodell eines Runs. Alle Übergänge sind zentral hinterlegt; unerlaubte Übergänge werfen](abbildungen/out/abb25.pdf){width=70%}
+![Zustandsmodell eines Runs. Alle Übergänge sind zentral hinterlegt; unerlaubte Übergänge werfen eine Ausnahme](abbildungen/out/abb25.pdf){width=70%}
 
 ### Ablauf eines Build-Runs
 
@@ -329,13 +345,13 @@ Drei Entwurfsentscheidungen im Port selbst:
 2. **Verfügbarkeit ist Teil des Vertrags.** Adapter, deren CLI fehlt,
    verschwinden geordnet aus der Auswahl, statt zur Laufzeit zu scheitern.
 3. **Timeout ist ein eigener Ergebniszustand**, nicht ein Sonderfall von
-   Fehler. Bei nichtdeterministischen Agenten ist „hat zu lange gebraucht"
-   fachlich etwas anderes als „ist gescheitert".
+   Fehler. Bei nichtdeterministischen Agenten ist „hat zu lange gebraucht“
+   fachlich etwas anderes als „ist gescheitert“.
 
 *Einschränkung:* Die drei Cloud-Gateway-Adapter sind konfigurierbar und
 degradieren sauber, wurden aber nicht end-to-end gegen echte
-Cloud-Credentials verifiziert — sie sind als „vorbereitet", nicht als
-„erprobt" zu bezeichnen.
+Cloud-Credentials verifiziert — sie sind als „vorbereitet“, nicht als
+„erprobt“ zu bezeichnen.
 
 ### Abo-Modus statt Token-Abrechnung
 
@@ -371,7 +387,7 @@ Nachhinein ist belegbar, welches Modell wirklich gearbeitet hat.
 
 ### Sandbox
 
-Eine Factory wählt zwischen zwei Sandbox-Varianten. Der Default ist die
+Eine Sandbox-Factory wählt zwischen zwei Varianten. Der Default ist die
 **Prozessisolation**: ein eigener Prozess je Run mit sauber gesetzter
 Umgebung und einer Allowlist der Variablen, die den Agenten überhaupt
 erreichen. Alternativ, per Einstellung aktivierbar, die
@@ -419,8 +435,9 @@ Der **Halluzinations-Reviewer** verdient besondere Erwähnung: Er prüft
 nicht den Code, sondern die *Behauptungen über den Code* — „alle Tests
 laufen durch" bei unverändertem Testverzeichnis, unberührte
 Akzeptanzkriterien, Importe nicht existierender Klassen. Das ist die
-direkte Umsetzung der Halluzinationserkennung aus Kapitel 12, verschoben
-vom Code auf die Selbstauskunft des Agenten — dort sitzt der klassische
+direkte Umsetzung der Halluzinationserkennung aus Kapitel 12 — treffender
+als **Claim Verification** bezeichnet, denn geprüft werden die Behauptungen
+des Agenten —, verschoben vom Code auf die Selbstauskunft des Agenten — dort sitzt der klassische
 Selbstbetrug agentischer Systeme.
 
 ### Die Gate-Policy
@@ -504,21 +521,22 @@ Attestierungspflicht.^[`PolicyInhalt` mit kanonischer Serialisierung
 (`kanonisch()`/`parse()`); Ed25519-Signatur über den kanonischen Text.]
 Je Mandant existiert **genau eine aktive Version** — erzwungen über einen
 partiellen Unique-Index in der Datenbank plus Service-Logik. Ohne diese
-Invariante wäre die Frage „welche Regel galt zu diesem Zeitpunkt?" nicht
+Invariante wäre die Frage „welche Regel galt zu diesem Zeitpunkt?“ nicht
 beantwortbar. Durchgesetzt wird im Orchestrator, an den zwei in 19.3
 beschriebenen Zeitpunkten.
 
 ### Compliance-Profile
 
-Vier Profile übersetzen Regulatorik in erzwingbare Policy-Vorlagen — die
-Brücke von der Norm zum Code:
+Vier Compliance-Profile — präziser: technische Kontrollprofile mit Bezug
+zu ausgewählten Anforderungen — übersetzen Regulatorik in erzwingbare
+Policy-Vorlagen, die Brücke von der Norm zum Code:
 
 | Profil | Gate | Pflichtfreigaben | Attestierung | Regulatorischer Bezug |
 |---|---|---|---|---|
 | Baseline | advisory | — | nein | kein reguliertes Umfeld |
 | EU AI Act | blocking | Execution | ja | VO (EU) 2024/1689, u. a. Art. 12 (Aufzeichnungspflichten), Art. 14 (menschliche Aufsicht) [@euaiact2024] |
 | BAIT / MaRisk / DORA | blocking | Execution, Validation | ja | BaFin-Anforderungen an die IT; DORA (EU) 2022/2554 — IKT-Risiko, Nachweisführung [@dora2022] |
-| BSI-Grundschutz / VS-NfD | blocking | Execution, Validation | ja | BSI IT-Grundschutz; für Verschlusssachen („Verschlusssache — Nur für den Dienstgebrauch", VS-NfD) sind die erlaubten Adapter zusätzlich projektspezifisch auf lokale Backends zu beschränken |
+| BSI-Grundschutz / VS-NfD | blocking | Execution, Validation | ja | BSI IT-Grundschutz; für Verschlusssachen („Verschlusssache — Nur für den Dienstgebrauch“, VS-NfD) sind die erlaubten Adapter zusätzlich projektspezifisch auf lokale Backends zu beschränken |
 
 Das Anwenden eines Profils veröffentlicht eine neue signierte
 Policy-Version und erzeugt ein attestiertes Ereignis. **Ehrliche
@@ -680,7 +698,7 @@ Ausführung.
 Die Begründung: Der Nutzen mehrerer Agenten liegt in
 *Perspektivenvielfalt*, und die ist beim Prüfen wertvoller als beim
 Erzeugen. Mehrere gleichzeitig schreibende Agenten auf einem Repository
-erzeugen Konfliktkosten, Zurechnungsprobleme („wer hat das geschrieben?")
+erzeugen Konfliktkosten, Zurechnungsprobleme („wer hat das geschrieben?“)
 und einen nicht attestierbaren Zustand. Die Fabrik verschiebt die
 Parallelität deshalb von der Erzeugung auf die Bewertung. Aus demselben
 Grund wurde die Workspace-Isolation über Git-Worktrees (ADR-2) zur
@@ -751,7 +769,7 @@ Erhebungsstand 6. August 2026:
 
 | Punkt | Art |
 |---|---|
-| Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | bewusst zurückgestellt |
+| Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | bewusst zurückgestellt — Gegenstand der Roadmap (19.10) |
 | Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
@@ -779,3 +797,108 @@ kontrollierte Messung. Die Modellrechnungen aus Kapitel 15 bleiben
 Modellrechnungen; was dieses Kapitel belegt, ist etwas anderes: dass die
 Referenzarchitektur als lauffähiges, betreibbares, nachweisfähiges System
 existiert.
+
+### Threats to Validity
+
+Zur ehrlichen Bilanz gehört auch die Grenze der Aussagekraft dieser
+Fallstudie selbst: System und Whitepaper stammen vom selben Autor, die
+Architekturentscheidungen wurden nicht unabhängig evaluiert, und das
+Repository ist nicht öffentlich (interne Validität). Es existiert bisher
+eine Referenzimplementierung mit einer begrenzten Zahl realer Projekte; die
+Übertragbarkeit auf große Monorepos und verteilte Teams ist offen (externe
+Validität). Und die verwendeten Kennzahlen sind mit Bedacht zu lesen:
+Codezeilen sind kein Qualitätsmaß, Testabdeckung ist kein vollständiger
+Wirksamkeitsnachweis, Confidence Scores sind keine Wahrscheinlichkeiten,
+und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
+
+## 19.10 Geplante Weiterentwicklung: vom Run zum parallelen Workflow *(Roadmap)*
+
+> **Status:** Alles in diesem Abschnitt ist **geplant**, nicht implementiert
+> (Roadmap-Stand August 2026). Grundlage ist die interne
+> Entwicklungs-Roadmap der SoftwareFabrik; Versions- und Phasenangaben sind
+> Vorschläge, keine Zusagen.
+
+### Das Zielbild
+
+Die SoftwareFabrik wird von einer Control Plane für einzelne Agentenläufe
+zu einer Workflow-Plattform für mehrere koordinierte Läufe
+weiterentwickelt. Der bestehende Run bleibt die atomare Ausführungseinheit
+— er wird nicht ersetzt, sondern zum **Child Run** eines übergeordneten
+**Workflows**: Ein Workflow bildet ein Feature oder Vorhaben ab und zerlegt
+es in **Workflow Tasks** mit Abhängigkeiten (Task Graph). Jeder schreibende
+Task wird durch einen eigenen Child Run mit isoliertem Branch oder Worktree
+ausgeführt; Read-only-Reviewer prüfen die Child Runs parallel; ein **Merge
+Coordinator** führt erfolgreiche Ergebnisse kontrolliert auf einem
+Integrationsbranch zusammen, und ein abschließendes **Integration Gate**
+validiert den Gesamtstand. Die Leitregel:
+
+> Parallelität findet zwischen isolierten Tasks und Runs statt. Innerhalb
+> eines Workspace existiert genau ein schreibender Agent.
+
+![Zielarchitektur der parallelen Agenten-Workflows (geplant): isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate](abbildungen/out/abb31.pdf){width=90%}
+
+### Die tragenden Prinzipien
+
+1. **Single Writer per Workspace.** Pro Branch, Worktree oder Arbeitskopie
+   schreibt zu einem Zeitpunkt genau ein Agent — das Prinzip, das sich im
+   Einzel-Run bewährt hat, wird auf jede Parallelitätseinheit übertragen.
+2. **Parallelism by Dependency.** Parallelität wird aus Task-Abhängigkeiten,
+   Schreibbereichen (Owned/Read-only/Protected Paths), Verträgen und
+   Risikopolicies abgeleitet — nicht aus festen Agentenrollen.
+3. **Contracts before Parallel Implementation.** Voneinander abhängige
+   Komponenten werden erst parallel implementiert, wenn gemeinsame Verträge
+   versioniert vorliegen (OpenAPI, AsyncAPI, Interfaces, Domain Events,
+   Schemas); jeder Child Run attestiert, gegen welche Vertragsversion er
+   gearbeitet hat, und Vertragsänderungen setzen betroffene Tasks auf
+   Neuplanung.
+4. **Independent Verification, zweistufig.** Jeder Child Run durchläuft ein
+   lokales Task-Gate (Syntax, Style, Security, Domain, Tests, Claim
+   Verification); der zusammengeführte Stand durchläuft zusätzlich das
+   Integration Gate (Gesamtbuild, Regression, End-to-End, Verträge,
+   Migrationen, Gesamt-SBOM).
+5. **Workspace Leases.** Zeitlich begrenzte, technisch erzwungene
+   Reservierungen von Pfaden, Modulen und exklusiven Ressourcen (etwa
+   Build-Konfiguration, Datenbankmigrationen, gemeinsame API-Spezifikationen)
+   verhindern konkurrierende Schreibzugriffe, bevor sie entstehen.
+6. **Rule Loop statt Retry und Fail Closed** gelten unverändert — auch auf
+   Workflow-Ebene: Replanning nur bei neuen Informationen; ein ausgefallener
+   Pflicht-Reviewer, eine nicht prüfbare Policy oder eine fehlgeschlagene
+   Attestierung gilt niemals als Erfolg.
+
+### Die Ausbaustufen
+
+| Stufe | Inhalt | Risiko |
+|---|---|---|
+| 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig |
+| 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt risikofrei, weil keine Schreibrechte | niedrig |
+| 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel |
+| 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch |
+| 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch |
+| 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional |
+
+Begleitend ab der ersten Stufe ist eine **Produktivitäts- und
+Qualitätsmessung** vorgesehen (aktive menschliche Arbeitszeit, Time to
+Accepted Merge, First-Pass-Gate-Rate, Merge-Konfliktrate, Kosten je
+akzeptierter Änderung, entkommene Defekte) — im Vergleich zwischen
+manueller Umsetzung, Einzel-Run und parallelem Workflow. Erst diese Messung
+kann die Wirtschaftlichkeitshypothesen aus Kapitel 15 in belegte Aussagen
+verwandeln (vgl. 15.6).
+
+Ausdrückliche **Nicht-Ziele** der ersten Ausbaustufen: freie
+Agent-zu-Agent-Chats, unbegrenzte Parallelität, automatische
+Architekturentscheidungen ohne Freigabe, autonomes Produktionsdeployment,
+Kubernetes als Pflicht und empirisch unbelegte Produktivitätsversprechen.
+
+### Die neue Position
+
+Damit lässt sich die Entwicklungslinie dieses Whitepapers in einem Absatz
+zusammenfassen:
+
+> Die Implementierung der Version 0.19.0 hat die ursprüngliche Vorstellung
+> mehrerer gleichzeitig schreibender Rollenagenten zunächst korrigiert
+> (19.8). Die nächste Ausbaustufe verwirft diese Praxiserkenntnis nicht,
+> sondern generalisiert sie: Mehrere Agenten dürfen parallel arbeiten,
+> sofern Schreibbereiche, Verträge und Zustände isoliert und durch einen
+> übergeordneten Workflow kontrolliert werden. Von einem kontrollierten
+> Agentenlauf zu parallelen Agenten-Workflows — ohne das Single-Writer-,
+> Governance- und Nachweisprinzip aufzugeben.

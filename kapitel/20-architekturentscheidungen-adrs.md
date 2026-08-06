@@ -61,6 +61,10 @@ Ablauf einer typischen Feature-Implementierung:
 | Mittel (Standard-Implementierung, Testgenerierung, Planung) | Sonnet | Development Agent, Testing Agent, Planning Agent | ~0,2x |
 | Niedrig (Formatierung, einfache Konfiguration, Boilerplate) | Haiku | Deployment Agent (simple Configs), Dokumentations-Updates | ~0,04x |
 
+*Relativfaktoren und die folgende Ersparnisangabe beziehen sich auf den
+Preisstand der v1.3 (März 2026); mit dem Preisstand 08/2026 aus 15.1 lägen
+die Faktoren bei rund 0,4x (Sonnet) bzw. 0,2x (Haiku).*
+
 Diese Differenzierung senkt die Token-Kosten um 60–70 % gegenüber einer reinen Opus-Nutzung bei vergleichbarer Ergebnisqualität.
 
 ### Begründung
@@ -111,6 +115,9 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 > Ausführung — Perspektivenvielfalt ist beim Prüfen wertvoller als beim
 > Erzeugen, und mehrere gleichzeitig schreibende Agenten erzeugen
 > Konfliktkosten und einen nicht attestierbaren Zustand (19.8).
+> *Status (v2.1): durch die Praxis korrigiert — und in der Roadmap
+> generalisiert: Die geplante Workflow-Ebene erlaubt parallele Child Runs
+> unter Single-Writer-Isolation je Workspace (19.10).*
 
 ## ADR-2: Workspace Isolation via Git Worktrees
 
@@ -200,6 +207,9 @@ Ein Agent committet und merged entweder alles oder nichts. Partial Merges (nur m
 > schlägt parallele Isolation — der zweite Lauf soll auf dem Ergebnis des
 > ersten aufsetzen. Der Preis (Läufe desselben Projekts nicht beliebig
 > parallel) ist benannt und akzeptiert (19.3, 19.8).
+> *Status (v2.1): In der Zielarchitektur kehren Worktrees zurück — als
+> Isolationseinheit je Child Run, abgesichert durch Workspace Leases
+> (19.10).*
 
 ## ADR-3: Guardrail Pipeline als Pflicht-Gate
 
@@ -290,13 +300,13 @@ Stufe 6: Confidence Scoring
 | --- | --- | --- |
 | Max Retries | 3 | Erfahrungswert: Nach 3 Versuchen ist ein Feedback-Loop ausgeschöpft. Weitere Versuche verbrennen nur Token. |
 | Feedback-Format | Strukturierter JSON mit Stufe, Regel-ID, betroffener Datei/Zeile, Fehlerbeschreibung, Lösungshinweis | Agent kann Feedback direkt als Kontext in den nächsten Versuch einspeisen |
-| Eskalation nach Max Retries | Task wird als „blocked" markiert, menschlicher Reviewer wird benachrichtigt | Verhindert Endlosschleifen und unkontrollierten Token-Verbrauch |
+| Eskalation nach Max Retries | Task wird als „blocked“ markiert, menschlicher Reviewer wird benachrichtigt | Verhindert Endlosschleifen und unkontrollierten Token-Verbrauch |
 
 ### Begründung
 
 Warum sechs Stufen statt einer monolithischen Prüfung?
 
-Stufenweise Validierung ermöglicht Early Exit: Wenn der Code nicht kompiliert (Stufe 1), ist es sinnlos, Security-Scans oder Tests auszuführen. Jede Stufe gibt spezifisches, actionable Feedback – „Zeile 42: SQL Injection (CWE-89)" ist hilfreicher als „Pipeline failed".
+Stufenweise Validierung ermöglicht Early Exit: Wenn der Code nicht kompiliert (Stufe 1), ist es sinnlos, Security-Scans oder Tests auszuführen. Jede Stufe gibt spezifisches, actionable Feedback – „Zeile 42: SQL Injection (CWE-89)“ ist hilfreicher als „Pipeline failed“.
 
 Warum Confidence Scoring als letzte Stufe?
 
@@ -329,6 +339,9 @@ Die Guardrails-Pipeline ersetzt den menschlichen Review nicht, sondern reduziert
 > wird am zweiten Tag abgeschaltet; der Einführungspfad lautet erst messen,
 > dann durchsetzen. Regulierte Compliance-Profile erzwingen `blocking`
 > (19.5).
+> *Status (v2.1): Die Zielarchitektur macht das Gate zweistufig — lokales
+> Task-Gate je Child Run plus Integration Gate auf dem zusammengeführten
+> Stand (19.10).*
 
 ## ADR-4: Git-basierte Orchestrierung
 
@@ -479,3 +492,6 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > alleinige Wahrheit: Der autoritative Zustand liegt in der Datenbank, weil
 > ein Auditor Fragen stellt, die `git log` nicht beantwortet — welche Policy
 > galt, welches Modell arbeitete, wer hat freigegeben (19.8).
+> *Status (v2.1): bestätigt und fortgeschrieben — auch Workflow-, Task-,
+> Lease- und Planungszustand liegen künftig autoritativ in der Datenbank
+> (19.10).*

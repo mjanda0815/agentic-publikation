@@ -22,3 +22,9 @@ flowchart TB
     T --> GP
     GP -- "Retry-Loop" --> T
     GP --> PR
+    classDef gate fill:#f8dddd,stroke:#333333
+    classDef infra fill:#eeeeee,stroke:#333333
+    classDef deliv fill:#fdf3d8,stroke:#333333
+    class GP gate
+    class TG infra
+    class PR deliv

@@ -1,7 +1,7 @@
 # 21 Die Vendor-Frage ist eine Konfigurationsfrage
 
 > **Hinweis:** Dieses Kapitel ersetzt den Werkzeugvergleich der v1.3
-> („Claude Code vs. andere KI-Entwicklungssysteme"). Die damalige
+> („Claude Code vs. andere KI-Entwicklungssysteme“). Die damalige
 > Gegenüberstellung — Claude Code als orchestrierte Multi-Agent-Pipeline,
 > Devin als autonomer Single-Agent, Cursor/Copilot als IDE-Assistenten — war
 > zum Erscheinungszeitpunkt eine brauchbare Landkarte. Sie ist aus zwei

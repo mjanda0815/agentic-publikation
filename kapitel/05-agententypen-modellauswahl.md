@@ -46,7 +46,7 @@ schnelle, unkritische Aufgaben.
 Die eigentliche Lehre aus der kurzen Halbwertszeit von Modellnamen: Ein
 System sollte **Fähigkeitsklassen** konfigurieren, nicht Modellnamen. Wo ein
 konkreter Modellname in Konfiguration oder Code steht, ist er in Monaten
-veraltet; eine Zuordnung „Rolle → Fähigkeitsstufe → aktuelles Modell" bleibt
+veraltet; eine Zuordnung „Rolle → Fähigkeitsstufe → aktuelles Modell“ bleibt
 stabil.
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Genau diese Abstraktion ist

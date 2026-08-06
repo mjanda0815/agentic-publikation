@@ -9,3 +9,9 @@ flowchart LR
     POST["PostToolUse-Hook"] -.-> S4
     FB["Bei Fehler: Agent korrigiert automatisch<br/>oder eskaliert an Review-Agent"]
     S6 -. "FAIL" .-> FB
+    classDef sec fill:#f8dddd,stroke:#333333
+    classDef ok fill:#ddeedd,stroke:#333333
+    classDef hook fill:#eeeeee,stroke:#333333
+    class S3,FB sec
+    class OK ok
+    class PRE,POST hook

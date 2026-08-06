@@ -11,3 +11,7 @@ flowchart TB
     S5 -- "PASSED" --> M --> C
     S5 -- "FAILED" --> FB
     FB -- "korrigiert im selben Worktree<br/>(max. n Retries)" --> S3
+    classDef gate fill:#f8dddd,stroke:#333333
+    classDef ok fill:#ddeedd,stroke:#333333
+    class S5,FB gate
+    class M,C ok
