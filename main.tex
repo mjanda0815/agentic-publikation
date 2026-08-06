@@ -1,0 +1,96 @@
+% main.tex — Whitepaper „Agentic Software Development — Enterprise
+% Architecture with AI Agents", modernisierte Fassung — Martin Janda
+%
+% Kapitelinhalte werden per Pandoc aus kapitel/*.md nach build/*.tex
+% konvertiert (siehe Makefile, Ziel `tex`) und hier per \input eingebunden.
+% Die Kapitel-Markdown-Dateien in kapitel/ sind die alleinige Quelle für den
+% Fließtext und werden NICHT in diesem Repository-Teil verändert.
+
+\documentclass[11pt,a4paper,ngerman]{scrreprt}
+
+\input{praeambel}
+
+\title{Agentic Software Development}
+\author{Martin Janda}
+\date{\today}
+
+\begin{document}
+
+% --- Titelseite ---
+\begin{titlepage}
+  \centering
+  \vspace*{2.5cm}
+
+  {\LARGE\bfseries Agentic Software Development\par}
+  \vspace{0.4cm}
+  {\Large Enterprise Architecture with AI Agents\par}
+
+  \vspace{0.8cm}
+  {\large Vom Konzept zum System: Referenzarchitektur und ihre Realisierung
+  als Agentic Software Factory. Praxisbeispiele mit Java, Spring Boot und
+  Domain-Driven Design\par}
+
+  \vspace{1.6cm}
+  {\large\scshape Whitepaper\par}
+
+  \vspace{1.6cm}
+  {\large Martin Janda\par}
+  \vspace{0.2cm}
+  {\normalsize martin@janda.io\par}
+
+  \vfill
+  {\small Version 2.0 — Entwurf $\cdot$ \textbf{Stand: \today}\par}
+  \vspace{0.4cm}
+  {\small Lizenz: CC~BY~4.0\par}
+  \vspace*{1.2cm}
+\end{titlepage}
+
+\tableofcontents
+
+% --- Management Summary (unnummeriertes Kapitel) ---
+\input{build/00}
+
+% --- TEIL I: GRUNDLAGEN & ARCHITEKTUR ---
+\part{Grundlagen \& Architektur}
+\input{build/01}
+\input{build/02}
+\input{build/03}
+\input{build/04}
+\input{build/05}
+
+% --- TEIL II: KERNKONZEPTE & LAUFZEITMODELL ---
+\part{Kernkonzepte \& Laufzeitmodell}
+\input{build/06}
+\input{build/07}
+\input{build/08}
+\input{build/09}
+
+% --- TEIL III: AGENTEN IM ENTWICKLUNGSLEBENSZYKLUS ---
+\part{Agenten im Entwicklungslebenszyklus}
+\input{build/10}
+
+% --- TEIL IV: ENTERPRISE-ERWEITERUNGEN ---
+\part{Enterprise-Erweiterungen}
+\input{build/11}
+\input{build/12}
+\input{build/13}
+\input{build/14}
+\input{build/15}
+
+% --- TEIL V: ORCHESTRIERUNG & PRAXIS ---
+\part{Orchestrierung \& Praxis}
+\input{build/16}
+\input{build/17}
+\input{build/18}
+
+% --- TEIL VI: ARCHITEKTURENTSCHEIDUNGEN & REFERENZ ---
+\part{Architekturentscheidungen \& Referenz}
+\input{build/19}
+\input{build/20}
+\input{build/21}
+\input{build/22}
+\input{build/23}
+
+\printbibliography
+
+\end{document}

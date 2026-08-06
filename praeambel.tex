@@ -1,6 +1,6 @@
 % praeambel.tex — Paket- und Layout-Konfiguration
-% Diplomarbeit „Decentralized Finance und die Zukunft des Finanzwesens"
-% Überarbeitete Fassung 2026
+% Whitepaper „Agentic Software Development — Enterprise Architecture with
+% AI Agents", modernisierte Fassung 2026 (v1.3 -> v2.0)
 
 % --- Encoding, Sprache, Schrift ---
 \usepackage[T1]{fontenc}
@@ -54,7 +54,7 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-% Einzelne Unicode-Zeichen aus wörtlich zitierten Roh-Extrakten (siehe
+% Einzelne Unicode-Zeichen aus wörtlich zitierten Roh-Extrakten, die im
 % Standard-T1-Encoding kein Glyphen-Mapping haben.
 \DeclareUnicodeCharacter{03A3}{$\Sigma$}
 \DeclareUnicodeCharacter{2217}{$\ast$}
@@ -62,11 +62,20 @@
 \DeclareUnicodeCharacter{2192}{$\rightarrow$}
 \DeclareUnicodeCharacter{2194}{$\leftrightarrow$}
 \DeclareUnicodeCharacter{2265}{$\geq$}
+% Zeichen aus der PDF-Extraktion des Agentic-Software-Development-Whitepapers
+% (Tabellen, Formeln in ADR-1 „n×(n-1)/2", Verzeichnisbaum in ADR-4)
+\DeclareUnicodeCharacter{00D7}{$\times$}
+\DeclareUnicodeCharacter{2248}{$\approx$}
+\DeclareUnicodeCharacter{2500}{-}   % ─ Box-Drawing: horizontale Linie
+\DeclareUnicodeCharacter{2502}{|}   % │ Box-Drawing: vertikale Linie
+\DeclareUnicodeCharacter{2514}{+}   % └ Box-Drawing: Ecke unten links
+\DeclareUnicodeCharacter{251C}{+}   % ├ Box-Drawing: T-Stück links
 
 % --- Abkürzungsverzeichnis (Setup vorbereitet, Liste vorerst leer) ---
 \usepackage[printonlyused]{acronym}
-% Beispiel-Einträge (auskommentiert, bei Bedarf befüllen):
+% Beispiel-Einträge (auskommentiert, bei Bedarf befüllen — Kap. 23 „Glossar
+% & Abkürzungsverzeichnis" führt die Abkürzungen bereits als Markdown-Tabelle):
 % \begin{acronym}
-%   \acro{DeFi}{Decentralized Finance}
-%   \acro{TVL}{Total Value Locked}
+%   \acro{DDD}{Domain-Driven Design}
+%   \acro{ADR}{Architecture Decision Record}
 % \end{acronym}

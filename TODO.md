@@ -35,9 +35,71 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
 
 ## C. Umsetzung (nach Abnahme des Umbauplans)
 
-- [ ] Extraktion v1.3 → `kapitel/*.md` (extraktor; aus .docx falls verfügbar,
-      sonst PDF), Kapitelstruktur und `Makefile`/`main.tex` einrichten,
-      Build zum Laufen bringen, CI-Push-Trigger aktivieren.
+- [x] Extraktion v1.3 → `kapitel/*.md` (extraktor; aus PDF mit `pdftotext
+      -layout`, keine .docx vorhanden), Kapitelstruktur (00 Management
+      Summary + 23 Kapitel) und `Makefile`/`main.tex`/`praeambel.tex`
+      eingerichtet, `literatur.bib` als leerer Stub angelegt. `make pdf`
+      läuft fehlerfrei durch (latexmk-Exitcode 0, 90 Seiten, keine
+      LaTeX-Warnungen im finalen Lauf). CI-Push-Trigger in
+      `.github/workflows/build.yml` aktiviert (Pfad-Filter auf
+      kapitel/abbildungen/*.tex/literatur.bib/Makefile/Workflow-Datei
+      selbst) — noch nicht in echtem CI-Lauf verifiziert (lokal getestet
+      mit Pandoc 2.9.2.1, CI pinnt 2.19.2).
+      - Bekannter Nummerierungsfehler im Original (Kap. 7: „7.3" doppelt)
+        korrigiert zu 7.3/7.4/7.5, mit HTML-Kommentar an der Stelle vermerkt
+        (`kapitel/07-execution-model.md`).
+      - 21 Abbildungs-Platzhalter (`TODO(abbildung)`) und 9
+        `TODO(verify)`-Marker über die Kapitel verteilt gesetzt (siehe
+        Aufschlüsselung unten) — Abbildungen entstehen gemäß UMBAUPLAN § 4
+        neu als Skripte, `TODO(verify)`-Stellen sind bei der inhaltlichen
+        Überarbeitung gegen Primärquellen zu prüfen.
+      - **(Martin) Inhaltliche Auffälligkeiten aus der Extraktion, zur
+        Entscheidung/Prüfung** (nicht selbst korrigiert):
+        - `kapitel/02-architektonische-prinzipien.md`: Tabelle „Zuordnung zu
+          Architekturkonzepten" (Original S. 10) verweist auf Kapitelnummern,
+          die nicht zum Original-Inhaltsverzeichnis passen (z. B.
+          „Berechtigungsmodell" als Kap. 12 statt 14, „Guardrails" als
+          Kap. 13 statt 12, „Hooks" als Kap. 17 statt 18, ADR-Verweise als
+          Kap. 18 statt 19). Wörtlich übernommen.
+        - `kapitel/04-konfiguration-claude-md.md`: Tabelle „Aufbau und
+          Sektionen" (S. 15) verweist bei „Cost Controls" auf „Kap. 14" für
+          das Token Budget Management — das steht tatsächlich in Kap. 15
+          (Wirtschaftlichkeit & Kostenmodell), nicht Kap. 14 (Security
+          Model). Derselbe Verweis („Kap. 14") taucht auch im
+          CLAUDE.md-Beispiel selbst als Kommentar auf.
+        - `kapitel/06-agent-lifecycle.md` und `kapitel/07-execution-model.md`:
+          Hinweis-Kästen verweisen auf „Kapitel 15" für die
+          Multi-Agent-Workflows — im Original-Inhaltsverzeichnis tragen
+          diese jedoch Kapitelnummer 16.
+        - Abbildungsverzeichnis (Original S. 5) vs. Bildunterschriften im
+          Fließtext: Bei Abbildung 2/3 sind Nummer und Reihenfolge
+          vertauscht (Verzeichnis führt „2: SDLC-Agenten-Pipeline" / „3:
+          Systemkontext", der Fließtext zeigt in dieser Reihenfolge aber
+          „Abbildung 2: Systemkontext" vor „Abbildung 3:
+          SDLC-Agenten-Pipeline"). Für die Platzhalter wurden die im
+          Fließtext direkt an der Abbildungsposition stehenden, vollständigen
+          Bildunterschriften übernommen (nicht die Kurzfassungen aus dem
+          Verzeichnis), da sie inhaltlich zur Position passen.
+        - `kapitel/19-architekturentscheidungen-adrs.md`: Task-Datei-Beispiel
+          (ADR-4, Original S. 64) verwendet Zeitstempel
+          „2025-03-04T10:00:00Z" — das Whitepaper selbst ist auf Version 1.3,
+          März **2026** datiert. Möglicher Zahlen-/Datumsfehler im Original.
+        - LaTeX-Feintypografie (nicht Teil der mechanischen Extraktion):
+          Unnummerierte Original-Zwischenüberschriften (z. B. „Kernaussagen",
+          „Das Orchestrator-Prinzip", ADR-Unterteile „Motivation / Kontext")
+          werden von Pandoc/KOMA-Script aktuell automatisch nummeriert
+          (z. B. „0.1 Kernaussagen", „1.1 Das Orchestrator-Prinzip") und
+          verlassen damit stellenweise die Nummerierung des Originals (das
+          diese Überschriften unnummeriert führt). Fachliche Entscheidung für
+          die „Feintypografie am Ende in LaTeX" (siehe CLAUDE.md, Abschnitt
+          „Format"): entweder unnummeriert lassen (Pandoc-Attribut `{-}`,
+          erfordert Fence-bewusste Vorverarbeitung, da einfache sed-Filter
+          sonst auch `#`-Kommentare in Codeblöcken träfen) oder so belassen.
+      - Aufschlüsselung `TODO(verify)` / `TODO(abbildung)` je Kapitel:
+        01: 0/1 · 02: 1/0 · 03: 0/4 · 04: 1/0 · 06: 1/0 · 07: 1/2 · 08: 2/3 ·
+        11: 0/1 · 12: 0/2 · 13: 0/1 · 15: 1/0 · 16: 0/1 · 19: 1/4 (davon eine
+        Abbildung ohne Nummer im Original-Abbildungsverzeichnis, S. 54) ·
+        20: 1/0 · 21: 0/2 (Summe: 9 verify, 21 abbildung).
 - [ ] Teil VI „SoftwareFabrik" schreiben (Quellen-Set als Basis; Repo
       `/mnt/c/dev/SoftwareFabrik` nur zur Detail-Verifikation; Public-Ready:
       keine Secrets/Kundendetails/Konditionen).

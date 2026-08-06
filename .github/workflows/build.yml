@@ -1,11 +1,22 @@
-# CI-Gerüst (übernommen aus dem DeFi-Publikationsprojekt).
-# Bewusst nur manuell auslösbar (workflow_dispatch), solange kapitel/ und
-# main.tex noch nicht existieren — nach Einrichtung des Builds den
-# push-Trigger aktivieren und die Abbildungs-Skripte eintragen.
+# CI für das Whitepaper „Agentic Software Development" (übernommen aus dem
+# DeFi-Publikationsprojekt, an dieses Repo angepasst).
+# Der lokale Build (`make pdf`) läuft seit der Extraktion von v1.3 fehlerfrei
+# (kapitel/00–23, main.tex, Makefile) — push-Trigger daher aktiviert.
+# TODO: Abbildungs-Skripte unter abbildungen/ eintragen, sobald sie entstehen
+# (siehe TODO.md, Abschnitt C).
 name: Build PDF
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "kapitel/**"
+      - "abbildungen/**"
+      - "*.tex"
+      - "literatur.bib"
+      - "Makefile"
+      - ".github/workflows/build.yml"
 
 jobs:
   build:
