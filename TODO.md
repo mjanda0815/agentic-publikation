@@ -272,6 +272,10 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Bereichsangaben gesondert behandelt); ADR-Verweise ordnet stattdessen
       das Vorwort ein, weil eine Umschreibung im Satz den Text zerrissen
       hätte.
+      **Entschieden (Martin, 06.08.2026):** Der Sonderdruck bleibt
+      technisch-neutral und wird *kein* Produktpapier. Titelseite und
+      Vorwort sind die Stellschrauben, falls das später anders gewünscht
+      ist — der Fließtext bliebe davon unberührt.
 
 - [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
       Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
