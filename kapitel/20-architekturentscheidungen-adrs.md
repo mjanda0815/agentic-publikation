@@ -565,9 +565,11 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 ## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — ersetzt ADR-1.
-> **Implementierungsstatus:** *In Umsetzung* — Stufe 0 ist in Release
-> 0.20.0 teilweise implementiert (hinter deaktiviertem Feature-Flag); die
-> produktiv nutzbaren Funktionen der Stufen 1 und 2 sind geplant (19.10).
+> **Implementierungsstatus:** *In Umsetzung* — die Roadmap-Stufen 0 und 1
+> sind in Release 0.21.0 implementiert (Parent Workflow, Child Runs,
+> Task-Graph und Synthese für **nicht-schreibende** Tasks, hinter
+> deaktiviertem Feature-Flag); parallel schreibende Child Runs sind
+> Gegenstand von Stufe 2 (19.10).
 
 ### Motivation / Kontext
 
@@ -649,10 +651,9 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 ## ADR-8: Git als Artefaktzustand, Datenbank als Prozesszustand
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — präzisiert ADR-4.
-> **Implementierungsstatus:** *Implemented* für die Run-Ebene (19.6);
-> Workflow- und Task-Grundstrukturen sind in 0.20.0 teilweise vorbereitet.
-> Plan-, Lease- und vollständige Workflow-Zustände folgen mit den weiteren
-> Roadmap-Stufen (19.10).
+> **Implementierungsstatus:** *Implemented* für die Run-Ebene (19.6) und
+> seit 0.21.0 auch für Workflow- und Task-Zustände samt Planfreigabe und
+> Workflow-Budget. Workspace Leases folgen mit Roadmap-Stufe 2 (19.10).
 
 ### Entscheidung
 

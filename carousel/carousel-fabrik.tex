@@ -1,6 +1,6 @@
 % carousel/carousel-fabrik.tex — LinkedIn-Karussell zum Sonderdruck
 % „Die SoftwareFabrik — von der Referenzarchitektur zum System"
-% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.1, August 2026)
+% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.2, August 2026)
 %
 % Zweites Karussell des Projekts. Das erste (carousel.tex) argumentiert aus
 % den Prinzipien des Whitepapers; dieses argumentiert aus der Erfahrung des
@@ -14,7 +14,7 @@
 % INHALTLICHE HERKUNFT: Jede Folie trägt einen Kommentar „QUELLE:" mit dem
 % Abschnitt aus kapitel/19-softwarefabrik.md. Es sind ausschließlich Aussagen
 % aus dem Kapitel übernommen, nichts erfunden. Alle Kennzahlen sind auf dem
-% Erhebungsstand `main` nach Release 0.20.0 (6. August 2026).
+% Erhebungsstand `main` nach Release 0.21.0 (6. August 2026).
 % Redigierbare Reintexte: carousel/folientexte-fabrik.txt
 
 \documentclass[12pt]{article}
@@ -45,17 +45,17 @@
 % ============================================================================
 % FOLIE 2 — Kennzahlen
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", Erhebungsstand `main`
-% nach Release 0.20.0 (6. August 2026): 364 Produktivklassen, ~33.200 Zeilen
-% Produktivcode, 259 Testklassen, 28 fachliche Slices, 27 Releases
-% (0.1.0–0.20.0, April–August 2026), Coverage-Gate Line >= 85 % /
+% nach Release 0.21.0 (6. August 2026): 376 Produktivklassen, ~35.000 Zeilen
+% Produktivcode, 264 Testklassen, 28 fachliche Slices, 28 Releases
+% (0.1.0–0.21.0, April–August 2026), Coverage-Gate Line >= 85 % /
 % Branch >= 81 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Der Stand}
-  \gross{28 fachliche Slices, 27 Releases, vier Monate.}
+  \gross{28 fachliche Slices, 28 Releases, vier Monate.}
   \vspace{48pt}
-  \erl{Rund 33.200 Zeilen Produktivcode und 259 Testklassen; die
+  \erl{Rund 35.000 Zeilen Produktivcode und 264 Testklassen; die
     Testabdeckung bricht den Build, wenn sie fällt. Java 25, Spring Boot 4,
-    ein Deployment-Artefakt. Stand: 6.\,August 2026, Release 0.20.0.}
+    ein Deployment-Artefakt. Stand: 6.\,August 2026, Release 0.21.0.}
 \end{folie}
 
 % ============================================================================
@@ -177,21 +177,25 @@
 
 % ============================================================================
 % FOLIE 9 — Naechster Schritt
-% QUELLE: Abschnitt 19.10 mit dem Umsetzungsstand-Kasten (6. August 2026):
-% Stufe 0 ist begonnen — zwei Architekturentscheidungen, eigener
-% workflow-Slice, Migration der Parent-Child-Verknüpfung, Feature-Flag mit
-% Default AUS; offen bleiben Workflow-Ereignisse im Auditmodell und
-% Workflow-Daten im Warum-Trace. Alles ab Stufe 1 ist Planung.
+% QUELLE: Abschnitt 19.10 mit dem Umsetzungsstand-Kasten (Release 0.21.0,
+% 6. August 2026): Stufen 0 und 1 sind umgesetzt — Workflow-Aggregat mit
+% elf Zuständen, Tasks mit zwölf Zuständen und Abhängigkeitsgraph, höchstens
+% drei gleichzeitige Child Runs in eigenen Worktrees, Synthese-Task,
+% menschliche Planfreigabe als eigener Zustand, Workflow-Budget vor dem
+% Start der nächsten Task. Ausgeführt werden ausschliesslich
+% nicht-schreibende Capabilities; die acht schreibenden sind gesperrt.
+% Stufen 2 bis 5 — und damit jedes parallele Schreiben — sind geplant.
 % ============================================================================
-\begin{folie}{Nächster Schritt}
-  \grossM{Die Workflow-Ebene ist begonnen — und standardmäßig
-    abgeschaltet.}
+\begin{folie}{Der nächste Schritt — begonnen}
+  \grossM{Erst die Koordination beweisen. Dann die Schreibrechte
+    verteilen.}
   \vspace{48pt}
-  \erl{Stufe 0 der Roadmap steht: zwei Architekturentscheidungen, ein
-    eigener Slice, die Verknüpfung von Workflow und Lauf in der Datenbank,
-    ein Feature-Flag mit Default aus. Bewusst ohne sichtbares Feature —
-    Fundament vor Funktion. Alles Weitere ist Planung und als solche
-    gekennzeichnet.}
+  \erl{Seit Release 0.21.0 laufen mehrere Agenten parallel — in getrennten
+    Arbeitsverzeichnissen, koordiniert über einen Abhängigkeitsgraphen,
+    zusammengeführt von einem Synthese-Schritt, der Widersprüche
+    ausdrücklich einfordert statt sie zu glätten. Keiner von ihnen darf
+    schreiben: Die acht schreibenden Fähigkeiten sind technisch gesperrt.
+    Das parallele Schreiben ist die nächste Stufe.}
 \end{folie}
 
 % ============================================================================
@@ -208,7 +212,7 @@
   \vspace{64pt}
   \erl{\textcolor{tinte}{\bfseries Sonderdruck und vollständiges Whitepaper:
     Download-Link im Beitrag}\\
-    janda.io \textperiodcentered{} 32 Seiten, Stand: August 2026. Alle
+    janda.io \textperiodcentered{} 33 Seiten, Stand: August 2026. Alle
     Angaben aus dem Quellcode erhoben.}
 \end{folie}
 

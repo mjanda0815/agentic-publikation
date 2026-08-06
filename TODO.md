@@ -307,6 +307,29 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       begonnenen Stufe-0-Stand; Folie 10 mit dem wortgleichen Untertitel des
       Titelblatts und CTA „Download-Link im Beitrag". Diagrammschrift beider
       Karussells um rund 12 % vergrößert. CTA von Karussell 2 angeglichen.
+- [x] **Abgleich auf SoftwareFabrik 0.21.0 — Roadmap-Stufen 0 und 1
+      umgesetzt** (06.08.2026, Erhebungsstand `main` nach `v0.21.0`).
+      Kennzahlen: 376 Produktivklassen (364), ~35.000 Zeilen (~33.200),
+      264 Testklassen (259), 44 Tabellen (39), 41 Migrationen (38),
+      28 Releases (27). Slices bleiben 28 — der `workflow`-Slice kam
+      bereits mit Stufe 0.
+      Inhaltlich: Die Workflow-Ebene *läuft* jetzt in ihrer risikoärmsten
+      Ausprägung. Statuskasten und Ausbaustufen-Tabelle in 19.10 auf
+      „umgesetzt" für Stufe 0 und 1; Umsetzungsstand-Kasten neu geschrieben
+      (Workflow-Aggregat mit 11 Zuständen, Tasks mit 12, max. drei
+      gleichzeitige Child Runs in eigenen Worktrees, 22 Capabilities mit
+      technisch gesperrten acht schreibenden, Planfreigabe als eigener
+      Zustand, Budget vor Task-Start, acht `WORKFLOW_*`-Auditereignisse,
+      Workflow-Kontext im Warum-Trace). Der Synthese-Zuschnitt ist
+      aufgenommen: Referenzen belegt statt behauptet, Widersprüche
+      ausdrücklich gefordert statt geglättet. Ebenso die präzisierte
+      Run-Sperre (workspace- statt projektweit).
+      Nachgezogen: Management Summary, Praxis-Check in Kapitel 2 (AP-3 gilt
+      jetzt für lesende Arbeit), ADR-5 und ADR-8, 19.9 (offener Punkt auf
+      „parallel schreibende Child Runs" verengt), 22.3/22.4,
+      `quellen/softwarefabrik/12-kennzahlen-historie.md` (Phase 7).
+      Whitepaper-Version auf **2.2** gehoben, Sonderdruck und beide
+      Karussells mitgezogen. Whitepaper 155 Seiten, Sonderdruck 33 Seiten.
 - [ ] (Martin) Veröffentlichungsschritte: janda.io, optional Repo public +
       Release + Zenodo-DOI. Bei einem Repost nach dem nächsten
       SoftwareFabrik-Release die Version auf 2.2 heben statt 2.1 still zu

@@ -1,16 +1,20 @@
 # CLAUDE.md — Whitepaper-Modernisierung „Agentic Software Development"
 
-> **STATUS: Version 2.1 ist inhaltlich final** (06.08.2026) — der
-> „Entwurf"-Vermerk ist vom Titelblatt entfernt. Kennzahlen und
-> Roadmap-Status stehen auf SoftwareFabrik-Release 0.20.0. Vier Artefakte
-> gehören zusammen und müssen bei jedem Versionssprung der SoftwareFabrik
-> gemeinsam nachgezogen werden: `main.tex` (Whitepaper), `main-fabrik.tex`
-> (Sonderdruck — entsteht ohne Zusatzarbeit aus derselben Kapitelquelle),
-> `carousel/carousel.tex` und `carousel/carousel-fabrik.tex`.
-> Betroffen sind dabei praktisch immer: die Kennzahlentabelle in Kapitel 19,
-> der Statuskasten und die Ausbaustufen in 19.10, der
-> Implementierungsstatus von ADR-5 und ADR-8 sowie je zwei Folien beider
-> Karussells.
+> **STATUS: Version 2.2** (06.08.2026). Kennzahlen und Roadmap-Status
+> stehen auf SoftwareFabrik-Release **0.21.0** (Roadmap-Stufen 0 und 1
+> umgesetzt: parallele, nicht-schreibende Analyseläufe hinter
+> deaktiviertem Feature-Flag).
+> Vier Artefakte gehören zusammen und müssen bei jedem Versionssprung der
+> SoftwareFabrik gemeinsam nachgezogen werden: `main.tex` (Whitepaper),
+> `main-fabrik.tex` (Sonderdruck — entsteht ohne Zusatzarbeit aus derselben
+> Kapitelquelle), `carousel/carousel.tex` und `carousel/carousel-fabrik.tex`
+> (plus die zugehörigen `folientexte*.txt`).
+> Betroffen sind praktisch immer: die Kennzahlentabelle und der
+> Erhebungsvermerk in Kapitel 19, der Statuskasten, die Ausbaustufen-Tabelle
+> und der Umsetzungsstand-Kasten in 19.10, der Implementierungsstatus von
+> ADR-5 und ADR-8, die Statuszeilen in 22.3/22.4 sowie je zwei Folien beider
+> Karussells. Bei inhaltlichen Sprüngen die Whitepaper-Version heben
+> (2.1 → 2.2 …), nicht still ändern.
 
 ## Projekt
 

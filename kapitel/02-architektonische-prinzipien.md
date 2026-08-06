@@ -40,6 +40,9 @@ den neuen acht auf.*
 > den Build bei Schichten- oder Vendor-Kopplungs-Verstößen, und ein
 > Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
 > lassen (19.2). AP-2 und AP-4 gelten bereits im Einzel-Run (ein
-> schreibender Agent je Lauf, mehrere unabhängige read-only Reviewer);
-> AP-3 sowie die Workflow-weite Ausprägung von AP-2 und AP-4 sind Gegenstand
-> der Roadmap (19.10).
+> schreibender Agent je Lauf, mehrere unabhängige read-only Reviewer).
+> AP-3 gilt seit Release 0.21.0 für die *lesende* Arbeit: Analyseläufe
+> werden aus einem Abhängigkeitsgraphen parallelisiert und laufen in
+> getrennten Arbeitsverzeichnissen. Die Workflow-weite Ausprägung von AP-2
+> — also parallel **schreibende** Child Runs — bleibt Gegenstand der
+> Roadmap (19.10).

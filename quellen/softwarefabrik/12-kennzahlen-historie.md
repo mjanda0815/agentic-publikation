@@ -4,25 +4,27 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 364 | `find app/src/main/java -name '*.java'` |
-| Produktivcode | ~33.182 Zeilen | |
-| Testklassen | 259 | |
+| Produktivklassen | 376 | `find app/src/main/java -name '*.java'` |
+| Produktivcode | ~34.951 Zeilen | |
+| Testklassen | 264 | |
 | Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | |
 | Fachliche Slices | 28 (neu: `workflow`) | |
-| Datenbanktabellen | 39 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 38 (V1–V40) | |
+| Datenbanktabellen | 44 | `CREATE TABLE` in Migrationen |
+| Flyway-Migrationen | 41 (V1–V43) | |
 | HTTP-Routen | 156 in 34 Controllern | Mapping-Annotationen |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
 | Wizard-Templates | 18 | |
 | Run-Zustände / Phasen | 13 / 7 | |
+| Workflow-Zustände / Task-Zustände | 11 / 12 | seit 0.21.0 |
+| Workflow-Capabilities | 22 (8 schreibend, 6 analysierend, 8 prüfend) | seit 0.21.0 |
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 27 (0.1.0 – 0.20.0) | 2026-04-17 bis 2026-08-06 |
+| Releases | 28 (0.1.0 – 0.21.0) | 2026-04-17 bis 2026-08-06 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: `main` @ `35c1b9e` (zwei Commits nach `v0.20.0`), 2026-08-06.*
+*Stand: `main` @ `8066887` (zwei Fix-Commits nach `v0.21.0`), 2026-08-06.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -92,16 +94,35 @@ dem Build aber nie als Parameter übergeben) und war zugleich als nicht
 blockierend konfiguriert — die Oberfläche meldete Grün, ohne dass je ein
 vollständiger Scan stattgefunden hatte.
 
-### Danach (nach 0.20.0 auf `main`)
+### Phase 7 — Workflow-Ebene, Roadmap-Stufen 0 und 1 (0.21.0, August 2026)
 
-**Workflow-Ebene, Phase 0** (`35c1b9e`): ADR-0014 (hierarchische
-Workflow-Orchestrierung, strikte Richtung `workflow → run`) und ADR-0015
-(Single Writer per Workspace), Migration V40 (`run.workflow_id`,
-`run.workflow_task_id`, nullable, ohne FK), einmalige Zuordnung eines Runs
-zu einer Workflow-Task, neuer Slice `io.softwarefabrik.app.workflow`,
-Feature-Flag `softwarefabrik.workflow.enabled` mit Default **aus**.
-Bewusst ohne sichtbares Feature. Offen aus Phase 0: Workflow-Ereignisse im
-Auditmodell und Workflow-Daten im Warum-Trace.
+**Stufe 0:** ADR-0014 (hierarchische Workflow-Orchestrierung, strikte
+Richtung `workflow → run`) und ADR-0015 (Single Writer per Workspace),
+Migration V40 (`run.workflow_id`, `run.workflow_task_id`), einmalige
+Zuordnung eines Runs zu einer Workflow-Task, neuer Slice
+`io.softwarefabrik.app.workflow`, Feature-Flag
+`softwarefabrik.workflow.enabled` mit Default **aus**. Nachweisanbindung
+vollständig: acht `WORKFLOW_*`-Auditereignisse (CREATED, TASK_ADDED,
+SYNTHESIS_ADDED, BUDGET_SET, PLAN_SUBMITTED, PLAN_APPROVED, TASK_STARTED,
+TASK_FINISHED) und `WorkflowKontext` im Warum-Trace jedes Child Runs.
+
+**Stufe 1:** Workflow-Aggregat (11 Zustände), Workflow Tasks (12 Zustände)
+mit Abhängigkeitsgraph, parallele Analyse-Child-Runs in getrennten
+Worktrees (Obergrenze 3 gleichzeitig), Synthese-Task, menschliche
+Planfreigabe als eigener Zustand, Workflow-Budget mit Prüfung *vor* dem
+Start der nächsten Task, UI unter `/workflows`. Migrationen V41–V43.
+Ausgeführt werden ausschließlich nicht-schreibende Capabilities
+(`istInPhase1Erlaubt()`); die acht schreibenden sind technisch gesperrt.
+
+Der Synthese-Task hängt automatisch an allen Tasks, baut seinen Auftrag aus
+deren Ergebnissen und referenziert die eingeflossenen Eingaben — belegt,
+nicht behauptet. Sein Auftrag fordert Widersprüche ausdrücklich ein und
+verbietet das Glätten.
+
+**Geändert:** Die Sperre gegen gleichzeitige Läufe war projektweit
+formuliert, begründete sich aber mit dem geteilten Workspace. Sie vergleicht
+jetzt den effektiven Workspace — getrennte Worktrees dürfen parallel laufen,
+dasselbe Verzeichnis nicht. Präziser, nicht schwächer.
 
 ## 12.3 Beobachtungen zum Verlauf
 
@@ -122,18 +143,17 @@ Drei Muster, die sich für die Publikation verallgemeinern lassen:
    ArchUnit-Regeln stehen, kostet ein neuer Adapter eine Klasse und einen
    Test. Ohne sie wäre die Kopplung längst durch die Schichten diffundiert.
 
-## 12.4 Offene Punkte (Stand 2026-08-06, nach 0.20.0)
+## 12.4 Offene Punkte (Stand 2026-08-06, nach 0.21.0)
 
 | Punkt | Art |
 |---|---|
-| Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | Phase 0 begonnen, Feature-Flag aus |
+| Parallel schreibende Child Runs (Stufe 2); parallele Analyse ist seit 0.21.0 verfügbar | Roadmap |
 | Seat-scharfe Budget-Obergrenze (Auswertung je Seat existiert seit v0.17) | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end verifiziert | Verifikationslücke |
 | Vollständige Sandbox für Coding-Adapter | offen |
 | Test-Isolationsdefekt: Integrationstest committet ins reale Repository | Defekt |
 | Architektur-Altschuld: eingefrorene Modulzyklen + 13 `web → JpaRepository` | dokumentierte Schuld |
 | Playwright-E2E-Suite als Standard nach jedem Deploy | geplant |
-| Workflow-Ereignisse in Audit und Warum-Trace (Rest aus Phase 0) | offen |
 | Eine Laufzeit-CVE ohne verfügbaren Fix, akzeptiert mit Ablaufdatum | bewusst akzeptiert |
 
 Diese Liste gehört bewusst in die Publikation. Ein System, das seine offenen

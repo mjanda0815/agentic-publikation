@@ -44,7 +44,7 @@ inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 ## 22.3 Teil A — der implementierte Single-Run-Prozess
 
-> **Status: implementiert** (Referenzimplementierung, Stand 0.20.0; vgl.
+> **Status: implementiert** (Referenzimplementierung, Stand 0.21.0; vgl.
 > Kapitel 19.1–19.3).
 
 So läuft der Auftrag heute. Ein Lauf, ein schreibender Agent, mehrere
@@ -88,9 +88,13 @@ Bewertung, nicht bei der Erzeugung (AP-2, AP-4).
 
 ## 22.4 Teil B — derselbe Auftrag als paralleler Workflow
 
-> **Status: geplant** (Zielarchitektur; vgl. 19.10 und ADR-5 bis ADR-7).
-> Die folgende Skizze ist Pseudocode und beschreibt kein heute verfügbares
-> Verhalten.
+> **Status: überwiegend geplant** (Zielarchitektur; vgl. 19.10 und ADR-5
+> bis ADR-7). Die Workflow-Ebene mit Task-Graph, parallelen Child Runs in
+> getrennten Worktrees, Planfreigabe und Synthese existiert seit Release
+> 0.21.0 — allerdings ausschließlich für **nicht-schreibende** Tasks. Der
+> hier skizzierte Ablauf verteilt Schreibrechte auf mehrere Child Runs und
+> beschreibt damit Roadmap-Stufe 2; die Skizze ist Pseudocode und
+> beschreibt insoweit kein heute verfügbares Verhalten.
 
 Der Payment Service besteht aus Teilen, die sich sauber schneiden lassen —
 genau der Fall, für den die Workflow-Ebene gedacht ist:

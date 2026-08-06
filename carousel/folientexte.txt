@@ -1,6 +1,6 @@
 Reintexte des LinkedIn-Karussells zum Whitepaper
 „Agentic Software Development — Enterprise Architecture with AI Agents"
-Martin Janda, Fassung 2.1, August 2026
+Martin Janda, Fassung 2.2, August 2026
 
 Diese Datei ist die redigierbare Textfassung von carousel/carousel.tex.
 Änderungen hier sind NICHT automatisch im PDF — sie müssen in carousel.tex
@@ -90,30 +90,31 @@ Quelle:   Abschnitt 19.1, Schritt 6 („Belegen"); Grafik abgeleitet aus
 ────────────────────────────────────────────────────────────────────────
 FOLIE 8 — Referenzimplementierung
 Kicker:   Referenzimplementierung
-Kernsatz: Vom Konzept zum System: 28 fachliche Slices, 27 Releases in
+Kernsatz: Vom Konzept zum System: 28 fachliche Slices, 28 Releases in
           vier Monaten.
-Text:     Rund 33.200 Zeilen Produktivcode, Testabdeckung als
+Text:     Rund 35.000 Zeilen Produktivcode, Testabdeckung als
           buildbrechendes Gate (Line ab 85 %, Branch ab 81 %). Die
           Architektur des Whitepapers war die Grundlage — das Kapitel
           beschreibt, was daraus geworden ist. Stand: 6. August 2026,
-          Release 0.20.0.
+          Release 0.21.0.
 Quelle:   Kapitel 19, „Kennzahlen der Codebasis" (Erhebungsstand
-          06.08.2026, main nach Release 0.20.0)
+          06.08.2026, main nach Release 0.21.0)
 
 ────────────────────────────────────────────────────────────────────────
-FOLIE 9 — Nächster Schritt — in Vorbereitung
-Kicker:   Nächster Schritt — in Vorbereitung
+FOLIE 9 — Der Weg dorthin
+Kicker:   Der Weg dorthin
 Kernsatz: Parallelität entsteht aus Abhängigkeiten — nicht aus
           Agentenrollen.
-Text:     Ein Feature wird in einen Task Graph zerlegt. Unabhängige Tasks
-          sollen als isolierte Child Runs arbeiten — jeweils mit eigenem
-          Branch oder Worktree und genau einem Schreiber. Erste
-          Architekturvorbereitungen sind in Release 0.20.0 umgesetzt;
-          produktiv nutzbare parallele Workflows, Merge Coordinator und
-          Integration Gate sind geplant.
-Quelle:   Management Summary, Absatz 4; Abschnitt 19.10 inkl.
-          Umsetzungsstand-Kasten; Prinzipien AP-2/AP-3
-Hinweis:  „Branch oder Worktree" wortgleich zu ADR-5 — nicht nur Worktree.
+Text:     Seit Release 0.21.0 läuft die risikoärmste Stufe: Mehrere Agenten
+          analysieren parallel in getrennten Arbeitsverzeichnissen, ein
+          Synthese-Schritt führt sie zusammen — und keiner von ihnen darf
+          schreiben. Paralleles Schreiben, Merge Coordinator und
+          Integration Gate folgen. Erst die Koordination beweisen, dann die
+          Schreibrechte verteilen.
+Quelle:   Management Summary; Abschnitt 19.10 inkl. Umsetzungsstand-Kasten
+          (Roadmap-Stufen 0 und 1, Release 0.21.0); Prinzipien AP-2/AP-3
+Hinweis:  Bewusst kein Versprechen paralleler Schreibrechte — die sind
+          Stufe 2.
 
 ────────────────────────────────────────────────────────────────────────
 FOLIE 10 — Abschluss
@@ -124,6 +125,6 @@ Untertitel: Enterprise Architecture with AI Agents
           Factory. Praxisbeispiele mit Java, Spring Boot und
           Domain-Driven Design
 Text:     Vollständiges Whitepaper: Download-Link im Beitrag
-          janda.io · Überarbeitete und erweiterte Fassung 2.1,
+          janda.io · Überarbeitete und erweiterte Fassung 2.2,
           Stand: August 2026.
 Quelle:   Titel und Untertitel der Arbeit — wortgleich zum Titelblatt
