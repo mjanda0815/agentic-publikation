@@ -2,6 +2,24 @@
 
 CLAUDE.md ist die zentrale Konfigurationsdatei für das Agenten-Verhalten, Team-Standards und Projektregeln. Sie funktioniert wie eine Kombination aus .editorconfig, ESLint-Konfiguration und Architektur-Dokumentation – nur für KI-Agenten. Die Datei ist Klartext im Markdown-Format und wird von jedem Agenten beim Context Build (Lifecycle-Phase 2) automatisch geladen. Damit ist CLAUDE.md die operative Umsetzung des Prinzips AP-5 (Policy-Driven Development): Was hier steht, wird durchgesetzt.
 
+> **Aktualisierung (Stand August 2026):** Seit v1.3 hat sich mit `AGENTS.md`
+> ein werkzeugübergreifender De-facto-Standard für genau diese Datei
+> etabliert — ein offenes Format, das inzwischen von den großen
+> Coding-Agenten (u. a. Codex, GitHub Copilot, Cursor, Gemini CLI)
+> unterstützt und unter dem Dach der Agentic AI Foundation der Linux
+> Foundation gepflegt wird [@agentsmd]. Claude Code liest weiterhin
+> CLAUDE.md. Die Empfehlung für vendor-neutrale Projekte lautet daher: die
+> Regeln **einmal** in `AGENTS.md` pflegen und werkzeugspezifische Dateien
+> wie CLAUDE.md als minimale Verweise darauf anlegen — eine Quelle, mehrere
+> Projektionen. Alles, was dieses Kapitel über Aufbau, Vererbung und Wirkung
+> der Datei sagt, gilt unabhängig vom Dateinamen.
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Genau dieses Muster ist
+> dort implementiert: Die Engineering-Guardrails liegen als eine
+> versionierte Quelle vor und werden bei jedem Lauf als `AGENTS.md` plus
+> minimaler CLAUDE.md-Verweis ins Repository projiziert; welche Version
+> gewirkt hat, wird attestiert (19.6).
+
 ## Konfigurationsebenen
 
 CLAUDE.md folgt einem dreistufigen Vererbungsmodell. Höhere Ebenen können durch niedrigere überschrieben werden, ähnlich wie CSS-Spezifizität:
@@ -24,11 +42,9 @@ Eine vollständige CLAUDE.md besteht aus mehreren klar abgegrenzten Sektionen. J
 | Projektstandards | Java-Version, Style Guide, Framework-Versionen, Package-Struktur | Agenten generieren Code konform zu diesen Standards |
 | DDD-Regeln | Bounded Contexts, Glossar-Pfad, Event-Naming, Context Map | Domain-Hooks prüfen gegen diese Regeln (AP-3) |
 | Architekturregeln | Erlaubte Patterns, verbotene Anti-Patterns, Schichtentrennung | Review-Agent nutzt diese als Prüfkatalog |
-| Cost Controls | Default-Modell, max_turns, Budget-Limits, Eskalationsregeln | Steuert Execution Budget (Kap. 7) und Token Budget (Kap. 14) |
+| Cost Controls | Default-Modell, Budget-Limits, Eskalationsregeln | Steuert Execution Budget (Kap. 7) und Token Budget (Kap. 15) |
 | Hooks & MCP | PreToolUse/PostToolUse Hooks, MCP-Server-Referenzen | Governance by Design (AP-3) durch automatische Validierung |
 | Verbotene Aktionen | Dateien/Pfade die nie geändert werden dürfen, gesperrte Kommandos | Sicherheitsleitplanken über das Tool-Whitelisting hinaus |
-
-<!-- TODO(verify): Die Verweise "Kap. 7" (Execution Budget) und "Kap. 14" (Token Budget) in der Tabellenzeile "Cost Controls" stimmen im Original (S. 15) nicht mit der tatsächlichen Kapitelnummerierung überein (Execution Budget steht in Kap. 7 – das passt –, Token Budget Management steht jedoch in Kap. 15 "Wirtschaftlichkeit & Kostenmodell", nicht Kap. 14 "Security Model"). Wörtlich aus dem Original übernommen, nicht korrigiert – siehe TODO.md. -->
 
 ## 4.2 Vollständiges Enterprise-Beispiel
 
@@ -113,7 +129,7 @@ Das folgende Beispiel zeigt eine produktionsreife CLAUDE.md für ein Banking-Pro
 - Keine JPA-Beziehungen über Context-Grenzen hinweg
 
 # --- Cost Controls ---
-# Verhindert unkontrollierten API-Verbrauch (siehe Kap. 14).
+# Verhindert unkontrollierten API-Verbrauch (siehe Kap. 15).
 
 ## Budget-Limits
 - DEFAULT_MODEL: sonnet

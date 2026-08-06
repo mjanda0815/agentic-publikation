@@ -4,13 +4,23 @@
 
 ## 15.1 Token Budget Management
 
+Preisstand 6. August 2026, API-Listenpreise von Anthropic [@anthropicmodels]
+(je 1 Mio. Tokens; alle Modelle mit 1 Mio. Tokens Kontextfenster, Haiku 4.5
+mit 200.000):
+
 | Modell | Input (pro 1M Tokens) | Output (pro 1M Tokens) | Typischer Einsatz |
 | --- | --- | --- | --- |
-| opus | $15.00 | $75.00 | Architektur, Security Review |
-| sonnet | $3.00 | $15.00 | Entwicklung, Testing, Planung |
-| haiku | $0.25 | $1.25 | Formatierung, einfache Tasks |
+| Claude Fable 5 | $10.00 | $50.00 | schwierigste Langzeit-Agentenaufgaben |
+| Claude Opus 5 | $5.00 | $25.00 | Architektur, Security Review, komplexe agentische Entwicklung |
+| Claude Sonnet 5 | $3.00 (Einführungspreis $2.00 bis 31.08.2026) | $15.00 ($10.00) | Entwicklung, Testing, Planung |
+| Claude Haiku 4.5 | $1.00 | $5.00 | Formatierung, einfache Tasks |
 
-<!-- TODO(verify): Preistabelle für opus/sonnet/haiku (S. 43) ist eine schnelllebige Angabe ohne Stand-Datum im Original; bei der inhaltlichen Überarbeitung gegen aktuelle Anthropic-Preisliste mit Stand-Datum prüfen. -->
+Bemerkenswert ist die Preisentwicklung seit v1.3 dieses Whitepapers
+(März 2026): Das damalige Spitzenmodell der Opus-Klasse lag bei $15/$75 —
+das heutige liegt bei $5/$25, bei gleichzeitig deutlich größerem
+Kontextfenster. Preistabellen in Kostenmodellen für agentische Entwicklung
+brauchen deshalb zwingend ein Stand-Datum, und Wirtschaftlichkeitsrechnungen
+altern schnell in Richtung *zu konservativ*.
 
 Ein typischer Entwicklungs-Agent verbraucht 10.000–100.000 Tokens pro Task. Ein End-to-End-Workflow mit 7 Agenten kann 500.000–2.000.000 Tokens verbrauchen.
 
@@ -90,3 +100,43 @@ Der ROI hängt stark von der Aufgabenkomplexität ab: Bei Standard-CRUD-Features
 - haiku für: Formatierung, Linting, Docs ohne Fachlogik
 - sonnet für: alles andere (Default)
 ```
+
+## 15.5 Abo- statt Token-Abrechnung *(neu in v2.0)*
+
+Das bisherige Kapitel rechnet ausschließlich in Token-Preisen. Die Realität
+agentischer Entwicklung hat sich seit v1.3 an einer entscheidenden Stelle
+verschoben: Die großen Coding-CLIs lassen sich auf **zwei Wegen**
+authentifizieren — per API-Key (Abrechnung je Token, wie oben modelliert)
+oder per **Abo-Login** (Flatrate-Konto des Anbieters, etwa die
+Claude-Abonnements für Claude Code oder das ChatGPT-Konto für die Codex-CLI;
+Stand August 2026).
+
+Für das Kostenmodell hat das grundlegende Konsequenzen:
+
+1. **Die Grenzkosten je Lauf sind im Abo-Modus null.** Ein reines
+   Token-ROI-Modell (wie in 15.4) bildet die Wirtschaftlichkeit dann nicht
+   mehr ab; an die Stelle variabler API-Kosten tritt ein fixer
+   Abo-Preis je Entwicklerplatz und Monat, gedeckelt durch die
+   Nutzungslimits des jeweiligen Abos.
+2. **Die Betriebsform wird zur Kostenentscheidung.** Einzelplatz mit Abo,
+   Team-Pool mit API-Keys oder Mischformen unterscheiden sich in
+   Planbarkeit (fix vs. variabel), Attribution (je Platz vs. je Verbrauch)
+   und Skalierungsverhalten.
+3. **Der Abrechnungsweg muss technisch kontrolliert werden.** Eine CLI, die
+   sowohl einen Abo-Login als auch einen API-Key in der Umgebung vorfindet,
+   wählt unter Umständen stillschweigend den kostenpflichtigen Pfad — ein
+   Fehler, der erst auf der Monatsrechnung sichtbar wird. Wer beide Wege
+   betreibt, braucht eine Stelle im System, die den jeweils nicht gewollten
+   Weg aktiv unterbindet.
+
+Diese Einordnung ist ein Erfahrungswert aus dem Betrieb der in Kapitel 19
+beschriebenen Plattform; die dortige Umsetzung (Abo-Modus je Adapter mit
+aktivem Entfernen des API-Keys aus der Prozessumgebung) steht in 19.4.
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Preistabelle je Modell mit
+> Input-, Output- und Cached-Input-Preisen, Kostenaggregation nach Projekt,
+> Run, Provider, Mandant und Seat, harte Budget-Caps je Mandant — und der
+> Abo-Modus als eigener Authentifizierungsweg, der den API-Key aktiv aus der
+> Subprozess-Umgebung entfernt (19.4, 19.6). Die ROI-Modellrechnung aus 15.4
+> bleibt dagegen unbelegt: Für das Realsystem existiert keine kontrollierte
+> Produktivitätsmessung (19.9).

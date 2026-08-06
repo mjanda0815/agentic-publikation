@@ -16,7 +16,7 @@ Die Memory Architecture des Agentensystems definiert, wie Wissen gespeichert, ge
 
 | Schicht | Lebensdauer | Sichtbarkeit | Implementierung |
 | --- | --- | --- | --- |
-| Short-Term Context | Ein Turn | Nur der aktuelle Agent | LLM Context Window (200K Tokens) |
+| Short-Term Context | Ein Turn | Nur der aktuelle Agent | LLM Context Window (modellabhängig 200K–1M Tokens, Stand 08/2026) |
 | Session Memory | Ein Task | Agent während gesamter Sitzung | In-Memory HashMap per Agent-ID |
 | Shared Knowledge Store | Workflow / Sprint | Alle Agenten des Workflows | JSON in docs/knowledge/ (dateisystembasiert) |
 | Vector Memory | Projektlaufzeit | Alle Agenten | Embeddings in Vector-DB (optional, z. B. Weaviate) |
@@ -24,9 +24,15 @@ Die Memory Architecture des Agentensystems definiert, wie Wissen gespeichert, ge
 
 ## 8.1 Short-Term Context & Session Memory
 
-Der Short-Term Context ist das LLM Context Window – maximal 200K Tokens bei Claude. Alles, was der Agent in einem Turn "sieht", existiert nur hier. Session Memory erweitert dies über mehrere Turns innerhalb eines Tasks: Der Agent kann sich an seine eigenen früheren Tool-Aufrufe und deren Ergebnisse erinnern, aber nicht an Informationen anderer Agenten.
-
-<!-- TODO(verify): "maximal 200K Tokens bei Claude" ist eine schnelllebige Angabe (Kontextfenstergröße) ohne Stand-Datum/Modellbezug im Original (S. 26). Bei der inhaltlichen Überarbeitung gegen aktuelle Primärquelle (Anthropic-Modelldokumentation, mit Stand-Datum) prüfen. -->
+Der Short-Term Context ist das LLM Context Window — bei den aktuellen
+Claude-Modellen 1 Mio. Tokens, bei Haiku 4.5 200.000 Tokens (Stand
+6. August 2026 [@anthropicmodels]; v1.3 nannte hier noch 200K als Maximum —
+die Verfünffachung binnen weniger Monate ist selbst ein Argument dafür,
+Kontextgrößen nie fest in Architekturentscheidungen einzubauen). Alles, was
+der Agent in einem Turn "sieht", existiert nur hier. Session Memory
+erweitert dies über mehrere Turns innerhalb eines Tasks: Der Agent kann sich
+an seine eigenen früheren Tool-Aufrufe und deren Ergebnisse erinnern, aber
+nicht an Informationen anderer Agenten.
 
 ## 8.2 Shared Knowledge Store
 

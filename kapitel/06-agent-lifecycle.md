@@ -1,8 +1,7 @@
 # 6 Agent Lifecycle
 
-> **Hinweis:** Abgrenzung: Dieses Kapitel beschreibt den Lebenszyklus eines einzelnen Agenten. Das Execution Model (Kap. 7) beschreibt die Orchestrierung mehrerer Agenten. Die Workflow-Patterns (Kap. 15) zeigen die konkreten Aufruf-Beispiele.
+> **Hinweis:** Abgrenzung: Dieses Kapitel beschreibt den Lebenszyklus eines einzelnen Agenten. Das Execution Model (Kap. 7) beschreibt die Orchestrierung mehrerer Agenten. Die Workflow-Patterns (Kap. 16) zeigen die konkreten Aufruf-Beispiele.
 
-<!-- TODO(verify): Der Hinweis-Kasten verweist auf "Kapitel 15" für die Workflow-Patterns; im Original-Inhaltsverzeichnis tragen die Multi-Agent-Workflows jedoch die Kapitelnummer 16. Wörtlich aus dem Original übernommen, nicht korrigiert – siehe TODO.md. -->
 
 Jeder Claude Code Agent durchläuft einen definierten Lebenszyklus von der Erstellung bis zur Terminierung. Das Verständnis dieses Lifecycles ist entscheidend für die Konfiguration von Timeouts, Budget-Limits und Retry-Strategien. Der Lifecycle besteht aus acht klar abgegrenzten Phasen:
 

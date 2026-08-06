@@ -1,8 +1,7 @@
 # 7 Execution Model
 
-> **Hinweis:** Abgrenzung: Kapitel 6 (Lifecycle) beschreibt die Phasen eines einzelnen Agenten. Dieses Kapitel beschreibt, wie der Orchestrator mehrere Agenten als Workflow plant, steuert und terminiert. Kapitel 15 (Workflows) zeigt die konkreten Aufruf-Patterns.
+> **Hinweis:** Abgrenzung: Kapitel 6 (Lifecycle) beschreibt die Phasen eines einzelnen Agenten. Dieses Kapitel beschreibt, wie der Orchestrator mehrere Agenten als Workflow plant, steuert und terminiert. Kapitel 16 (Workflows) zeigt die konkreten Aufruf-Patterns.
 
-<!-- TODO(verify): Der Hinweis-Kasten verweist auf "Kapitel 15" für die Workflows; im Original-Inhaltsverzeichnis tragen die Multi-Agent-Workflows jedoch die Kapitelnummer 16. Wörtlich aus dem Original übernommen, nicht korrigiert – siehe TODO.md. -->
 
 Das Execution Model beschreibt, wie der Orchestrator Aufgaben plant, verteilt, überwacht und terminiert. Es ist das operative Herzstück des Agentensystems und setzt die architektonischen Prinzipien AP-2 (Deterministic Execution) und AP-3 (Governance by Design) in die Praxis um.
 

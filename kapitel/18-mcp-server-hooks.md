@@ -1,5 +1,15 @@
 # 18 MCP-Server & Hooks
 
+Das Model Context Protocol (MCP) war bei Erscheinen der v1.3 ein
+Anthropic-Protokoll zur Werkzeuganbindung. Diese Einordnung ist überholt:
+MCP — im November 2024 von Anthropic vorgestellt — wurde im Dezember 2025 an
+die Agentic AI Foundation unter dem Dach der Linux Foundation übergeben und
+wird dort herstellerneutral weiterentwickelt; unterstützt wird es inzwischen
+unter anderem von OpenAI, Google und Microsoft (Stand August 2026) [@mcp].
+Wer heute Werkzeuganbindung für Agenten baut, baut sie gegen einen
+Industriestandard, nicht gegen ein Vendor-Protokoll — dieselbe Entwicklung,
+die `AGENTS.md` für die deklarative Konfiguration genommen hat (Kapitel 4).
+
 ## MCP-Server Konfiguration
 
 ```json
@@ -50,3 +60,10 @@ public class DomainComplianceHook {
     }
 }
 ```
+
+> **Praxis-Check SoftwareFabrik (bewusst offen):** MCP ist dort nicht
+> umgesetzt. Das funktionale Äquivalent ist die versionierte,
+> mandantengescopte Skill-/Plugin-Bibliothek plus die Materialisierung von
+> Agenten-Definitionen und Skills je Run in den Workspace — mit dem
+> Governance-Vorteil, dass nachweisbar bleibt, welche Erweiterung in welcher
+> Version im Kontext des Agenten war (19.6).

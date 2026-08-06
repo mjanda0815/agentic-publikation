@@ -56,13 +56,24 @@ Die Runtime-Architektur beschreibt den Ablauf eines Entwicklungsauftrags währen
 
 ## 3.5 Task-Tool Parameter
 
+Aktualisiert auf den Stand von Claude Code im August 2026 [@claudecodedocs];
+die Parameterliste ist schnelllebig und bei Umsetzung gegen die aktuelle
+Werkzeug-Dokumentation zu prüfen:
+
 | Parameter | Pflicht | Typ | Beschreibung |
 | --- | --- | --- | --- |
-| subagent_type | Ja | string | Welcher Agententyp gestartet wird (z. B. "dev-agent") |
+| subagent_type | Ja | string | Welcher Agententyp gestartet wird (z. B. "code-reviewer"); eigene Typen werden als Markdown-Dateien mit Frontmatter unter `.claude/agents/` definiert |
 | prompt | Ja | string | Detaillierte Aufgabenanweisungen mit Kontext und Erwartungen |
-| description | Ja | string | Kurze 3–5 Wort Zusammenfassung für das Logging |
-| model | Nein | enum | sonnet (Standard), opus für komplexe Aufgaben, haiku für schnelle Tasks |
-| max_turns | Nein | integer | Maximale API-Roundtrips bevor der Agent automatisch stoppt |
-| run_in_background | Nein | boolean | Asynchrone Ausführung – gibt sofort die Agent-ID zurück |
-| isolation | Nein | enum | "worktree" für isolierte Git-Worktree-Kopie des Repositories |
-| resume | Nein | string | Agent-ID zum Fortsetzen einer unterbrochenen Sitzung |
+| description | Ja | string | Kurze 3–5-Wort-Zusammenfassung für das Logging |
+| model | Nein | enum | Modellklasse für diesen Agenten (sonnet, opus, haiku, …); ohne Angabe erbt der Agent das Modell der Hauptsitzung |
+| run_in_background | Nein | boolean | Subagenten laufen inzwischen standardmäßig im Hintergrund; `false` erzwingt synchrone Ausführung |
+| isolation | Nein | enum | "worktree" für eine isolierte Git-Worktree-Kopie des Repositories; zusätzlich existiert eine Remote-Ausführung in einer Cloud-Umgebung |
+
+Gegenüber v1.3 bemerkenswert: Das damals dokumentierte `max_turns` ist als
+Steuerungsparameter entfallen (Budgetsteuerung erfolgt heute über andere
+Mechanismen), und die Fortsetzung eines Agenten läuft nicht mehr über einen
+`resume`-Parameter, sondern über eine Nachrichtenschnittstelle an den
+laufenden Agenten. Auch das illustriert eine Kernaussage dieses Whitepapers:
+Werkzeugdetails haben eine Halbwertszeit von Monaten — Architekturprinzipien
+(ein Orchestrator, spezialisierte Subagenten mit eigenem Kontextfenster,
+Isolation) bleiben.

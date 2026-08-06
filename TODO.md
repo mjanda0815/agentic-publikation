@@ -117,8 +117,23 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
         Attestierung, Warum-Trace, Mandant, Guardrails-Projektion,
         Debt-Ratchet, Slice/Blatt-Slice, Control Plane) → mit der
         Glossar-Modernisierung (P3); Abbildungen 21–30 → Abbildungsphase.
-- [ ] Konzeptkapitel modernisieren in P1→P2→P3-Reihenfolge (UMBAUPLAN § 3);
-      schnelllebige Angaben gegen Primärquellen mit Stand-Datum recherchieren;
+- [x] **P1-Modernisierung** (06.08.2026): Kap. 15.1 Preistabelle aktuell
+      (Claude-5-Familie, Stand 06.08.2026, [@anthropicmodels]) + Hinweis auf
+      Preisverfall seit v1.3; neues Kap. 15.5 „Abo- statt Token-Abrechnung";
+      Kap. 5 Modellauswahl auf Fähigkeitsklassen umgestellt; Kap. 3.5
+      Task-Tool-Parameter auf Stand 08/2026; Kap. 8.1 Kontextfenster
+      200K→1M korrigiert; Kap. 4 um AGENTS.md-Standard ergänzt; Kap. 18 um
+      MCP-als-Industriestandard-Einordnung (Agentic AI Foundation/Linux
+      Foundation, Primärquelle [@mcp]); Kap. 21 komplett ersetzt („Die
+      Vendor-Frage ist eine Konfigurationsfrage"). Erste Praxis-Check-Kästen
+      in Kap. 4, 5, 15, 18, 21. Querverweis-Fehler des Originals in Kap. 4,
+      6, 7 korrigiert (Kap.-14/15/16-Verweise). Neue Primärquellen in
+      literatur.bib: anthropicmodels, claudecodedocs, mcp.
+- [ ] Konzeptkapitel-Modernisierung P2→P3 (UMBAUPLAN § 3): Task-Tool/
+      Agententypen-Feinabgleich, Multi-Agent-Patterns (Kap. 16),
+      Java-/Spring-Versionsstände (Kap. 10, 17, 21-Beispiel), Kap. 13
+      On-Prem-Relativierung; restliche Praxis-Check-Kästen (Kap. 1, 2, 6–14,
+      16, 17, 20/ADRs, 22); Glossar-Erweiterung (inkl. Teil-VI-Begriffe);
       je Kapitel zweitgutachter-Review.
 - [ ] Abbildungen als Skripte neu erzeugen (UMBAUPLAN § 4): ~16 aus v1.3
       konsolidiert + 10 neue aus den Mermaid-Systemdiagrammen.
