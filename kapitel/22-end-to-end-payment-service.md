@@ -111,3 +111,9 @@ Im Payment-Service-Beispiel wird deutlich, dass insbesondere folgende Vorteile e
 - höhere Geschwindigkeit bei gleichzeitig kontrollierter Qualitätssicherung
 
 Damit wird das agentische Entwicklungssystem zu einer belastbaren Architektur für die Umsetzung komplexer Features in Enterprise-Umgebungen. Das Beispiel des Payment Services verdeutlicht, wie die in den vorangegangenen Kapiteln beschriebenen Konzepte in der Praxis zusammenspielen und gemeinsam einen produktionsnahen Entwicklungsprozess ermöglichen.
+
+> **Praxis-Check SoftwareFabrik (bestätigt):** Der hier skizzierte
+> End-to-End-Pfad ist dort reproduzierbar produktisiert: Wizard
+> (18 Templates inklusive Repo-Import) → versionierte
+> Spezifikations-Artefakte → Run → Quality Gate → Merge bzw. Pull Request
+> (19.1).

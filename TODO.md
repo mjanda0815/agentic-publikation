@@ -129,12 +129,14 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       in Kap. 4, 5, 15, 18, 21. Querverweis-Fehler des Originals in Kap. 4,
       6, 7 korrigiert (Kap.-14/15/16-Verweise). Neue Primärquellen in
       literatur.bib: anthropicmodels, claudecodedocs, mcp.
-- [ ] Konzeptkapitel-Modernisierung P2→P3 (UMBAUPLAN § 3): Task-Tool/
-      Agententypen-Feinabgleich, Multi-Agent-Patterns (Kap. 16),
-      Java-/Spring-Versionsstände (Kap. 10, 17, 21-Beispiel), Kap. 13
-      On-Prem-Relativierung; restliche Praxis-Check-Kästen (Kap. 1, 2, 6–14,
-      16, 17, 20/ADRs, 22); Glossar-Erweiterung (inkl. Teil-VI-Begriffe);
-      je Kapitel zweitgutachter-Review.
+- [x] **P2/P3-Modernisierung** (06.08.2026): Kap. 16 Aufruf-Patterns auf
+      Agent-Tool/SendMessage-Stand 08/2026; Versionshinweise für die
+      Java-Beispiele in Kap. 10 und 17 (bewusst auf Java 21/Spring Boot 3.x
+      belassen, Verweis auf Boot-4-Fallstricke in Kap. 19); Kap. 13 um
+      Einordnung „Kubernetes ist Option, nicht Voraussetzung" ergänzt;
+      Praxis-Check-Kästen jetzt flächendeckend (Kap. 1–18, 20 je ADR,
+      21–23); Glossar um 13 Teil-VI-Begriffe erweitert (alphabetisch
+      einsortiert).
 - [ ] Abbildungen als Skripte neu erzeugen (UMBAUPLAN § 4): ~16 aus v1.3
       konsolidiert + 10 neue aus den Mermaid-Systemdiagrammen.
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI

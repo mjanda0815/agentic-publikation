@@ -73,3 +73,8 @@ public class AgentLifecycle {
 ```
 
 > **Hinweis:** Der Agent Lifecycle ist das Fundament für das Execution Budget (Kapitel 7): Jede Phase verbraucht Tokens und Zeit. Context Build und Planning verbrauchen typischerweise 20–30 % des Token-Budgets, bevor die eigentliche Execution beginnt.
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Der Lebenszyklus ist dort als
+> *Run* modelliert: sieben Phasen, 13 Zustände, persistiert, pausier- und
+> wiederaufnehmbar. Der Mensch ist als Zustand (`WAITING_FOR_APPROVAL`) Teil
+> des Automaten, nicht Nebenprozess (19.3).

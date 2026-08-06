@@ -123,3 +123,11 @@ Nicht jeder Fehlschlag erfordert menschliche Intervention. Die Retry-Strategie d
 | Domain-Verletzung | Ja (max 2x) | Glossar neu laden | Nach 2x: Architecture-Agent |
 | API/Tool Timeout | Ja (exponential) | 1s, 2s, 4s Backoff | Nach 3x: Task als FAILED |
 | Halluzinierte API | Nein | Sofortige Korrektur | Review-Agent mit opus |
+
+> **Praxis-Check SoftwareFabrik (abweichend, erweitert):** Statt eines
+> Task-Graphen je Auftrag eine lineare Phasen-Pipeline je Lauf — der
+> eigentliche Graph liegt eine Ebene höher im Backlog mit Abhängigkeiten.
+> Und aus der Retry-Strategie wurde ein Regelkreis: Build-Ausgabe,
+> Reviewer-Findings, Merge-Konfliktdateien und CI-Status werden zur Eingabe
+> des nächsten Laufs — ein Retry ohne neue Information wiederholt nur den
+> Fehler (19.3, 19.8).

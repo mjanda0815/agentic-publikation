@@ -15,3 +15,21 @@ Die Agenten interagieren mit einem Git-Repository, um bestehende Codebasen zu an
 Diese Infrastruktur ermöglicht eine reproduzierbare, skalierbare und kontrollierte Ausführung agentischer Entwicklungsprozesse, während bestehende Entwicklungswerkzeuge und Governance-Mechanismen weiterhin genutzt werden können.
 
 In größeren Organisationen wird der Agent-Worker-Pool häufig über Queue- oder Workflow-Systeme gesteuert, um Priorisierung, Parallelisierung und Ressourcenmanagement zu ermöglichen.
+
+## Einordnung *(neu in v2.0)*
+
+Die hier gezeichnete Kubernetes-Architektur ist als **Option** zu lesen,
+nicht als Voraussetzung. Die Praxis hat gezeigt: Reale Zielgruppen im
+regulierten Umfeld — Behörden, Finanzdienstleister, Mittelstand — stellen
+vor der Skalierungsfrage eine andere: *Läuft es bei uns, on-premises, ohne
+Cloud-Abhängigkeit, notfalls ohne Rückkanal?* Ein agentisches
+Entwicklungssystem kann als einzelner Prozess mit einer Datenbank betrieben
+werden; die eigentliche Komplexität liegt in der Steuerung des
+Nichtdeterminismus, nicht in der Betriebsinfrastruktur. Kubernetes bleibt
+der richtige Weg, wo elastische Skalierung vieler paralleler Agenten
+gebraucht wird — es ist aber nicht die Eintrittskarte.
+
+> **Praxis-Check SoftwareFabrik (abweichend):** Ein Anwendungscontainer,
+> eine Datenbank, Docker Compose; ephemere Agent-Container optional.
+> Air-Gap-fähig bis hin zur Lizenz ohne Online-Aktivierung — Souveränität
+> war das Entscheidungskriterium, nicht Skalierung (19.7).

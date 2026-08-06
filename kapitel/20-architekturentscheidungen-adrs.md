@@ -105,6 +105,13 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 - Latenz: Inter-Agent-Kommunikation über Orchestrator und Shared Knowledge Store addiert Latenz (Sekunden pro Hop)
 - Initialer Setup-Aufwand: System-Prompts, Tool-Konfigurationen und Guardrails für sieben Agenten statt für einen
 
+> **Praxis-Check SoftwareFabrik (abweichend):** Die Implementierung startet
+> einen Agentenprozess je Lauf und erreicht Spezialisierung über Rollen- und
+> Teamdefinitionen im Kontext sowie über mehrere unabhängige Prüfer nach der
+> Ausführung — Perspektivenvielfalt ist beim Prüfen wertvoller als beim
+> Erzeugen, und mehrere gleichzeitig schreibende Agenten erzeugen
+> Konfliktkosten und einen nicht attestierbaren Zustand (19.8).
+
 ## ADR-2: Workspace Isolation via Git Worktrees
 
 ### Motivation / Kontext
@@ -186,6 +193,13 @@ Ein Agent committet und merged entweder alles oder nichts. Partial Merges (nur m
 - Merge-Konflikte bei überlappenden Dateien: Wenn zwei Agenten dieselbe Datei ändern, entsteht ein Konflikt. Mitigation: Intelligentes Task-Routing im Orchestrator (überlappende Tasks sequenziell zuweisen) und automatische Rebase-Strategie.
 - Veralteter Basis-Stand: Ein lang laufender Agent arbeitet auf einem zunehmend veralteten main. Mitigation: TTL und periodischer Rebase für langlebige Worktrees.
 - Build-Redundanz: Jeder Worktree führt eigene Builds aus. Mitigation: Shared Build-Cache (Maven Local Repository, Gradle Build Cache, NX Cache) über alle Worktrees hinweg.
+
+> **Praxis-Check SoftwareFabrik (abweichend):** Statt Worktrees je Agent:
+> Branch-Isolation auf einem projektpersistenten Workspace, ergänzt um
+> Prozess- bzw. Container-Isolation. Grund: Iteration über Läufe hinweg
+> schlägt parallele Isolation — der zweite Lauf soll auf dem Ergebnis des
+> ersten aufsetzen. Der Preis (Läufe desselben Projekts nicht beliebig
+> parallel) ist benannt und akzeptiert (19.3, 19.8).
 
 ## ADR-3: Guardrail Pipeline als Pflicht-Gate
 
@@ -309,6 +323,12 @@ Die Guardrails-Pipeline ersetzt den menschlichen Review nicht, sondern reduziert
 - False Positives (besonders in Stufen 3 und 6) können Agenten-Workflows verlangsamen und Token verschwenden. Mitigation: Regelmäßige Kalibrierung der Regeln und Schwellwerte, Suppress-Mechanismus für bekannte False Positives.
 - Initiale Konfiguration der Pipeline erfordert Aufwand: ArchUnit-Regeln für Domain-Validierung, Semgrep-Rules für projektspezifische Security-Patterns, Confidence-Score-Kalibrierung.
 - Confidence Scoring (Stufe 6) ist selbst LLM-basiert und damit nicht deterministisch: Derselbe Code kann bei wiederholter Prüfung unterschiedliche Scores erhalten. Mitigation: Score-Schwellwert mit Puffer (70 statt 50).
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Umgesetzt — und um den
+> `advisory`-Betriebsmodus ergänzt: Ein Gate, das am ersten Tag blockiert,
+> wird am zweiten Tag abgeschaltet; der Einführungspfad lautet erst messen,
+> dann durchsetzen. Regulierte Compliance-Profile erzwingen `blocking`
+> (19.5).
 
 ## ADR-4: Git-basierte Orchestrierung
 
@@ -454,3 +474,9 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 - Skalierungsgrenzen bei >10 parallelen Agenten: Viele gleichzeitige Branches, häufige Merges, potenzielle Git-Lock-Contention. Mitigation: Concurrency-Limit (ADR-2), sequenzielle Merges für überlappende Dateien.
 - Task-Status-Management über Dateien in docs/knowledge/tasks/ ist rudimentär: Kein Dashboard, kein Alerting, keine automatische Timeout-Erkennung. Mitigation: Leichtgewichtiges CLI-Tool, das Task-Dateien auswertet und Statusübersichten generiert.
 - Keine native Unterstützung für komplexe Workflow-Patterns (Compensating Transactions, Saga Pattern). Für einfache Plan→Develop→Test→Review→Merge-Workflows ausreichend, bei komplexen Orchestrierungen revisit nötig.
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Git ist Zustandsträger —
+> Branch, Commit, Checkpoint, Merge, Pull Request —, aber nicht die
+> alleinige Wahrheit: Der autoritative Zustand liegt in der Datenbank, weil
+> ein Auditor Fragen stellt, die `git log` nicht beantwortet — welche Policy
+> galt, welches Modell arbeitete, wer hat freigegeben (19.8).

@@ -89,3 +89,10 @@ public class OutboxEventPublisher {
     }
 }
 ```
+
+> **Praxis-Check SoftwareFabrik (abweichend):** Die Fabrik wendet DDD auf
+> sich selbst an — modelliert wird der Entwicklungsprozess als Domäne
+> (27 Bounded Contexts: Run, Backlog, Freigabe, Policy, Nachweis). Bewusste
+> Pragmatik gegen die reine Lehre: Aggregat und JPA-Entität sind dieselbe
+> Klasse; statt Kafka genügen interne Events im Einzelprozess-Deployment
+> (19.2).

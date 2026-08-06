@@ -26,3 +26,9 @@ Diese Prinzipien stehen nicht isoliert, sondern bedingen sich gegenseitig: Agent
 
 *Die Kapitelreferenzen wurden gegenüber v1.3 korrigiert; dort waren sie an
 mehreren Stellen inkonsistent zum Inhaltsverzeichnis.*
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Die Prinzipien sind dort
+> nicht beschrieben, sondern maschinell erzwungen: ArchUnit-Tests brechen
+> den Build bei Schichten- oder Vendor-Kopplungs-Verstößen, und ein
+> Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
+> lassen (19.2).

@@ -105,3 +105,9 @@ Für große Codebasen mit Millionen Zeilen Code ist ein dateibasierter Shared Kn
 Die Implementierung nutzt eine lokale Vector-Datenbank (z. B. Weaviate, ChromaDB) mit einem deutschen Embedding-Modell (z. B. deepset-mxbai-embed-de-large-v1). Dies ist insbesondere für Behörden-Projekte relevant, bei denen Cloud-basierte Embedding-Services aus Datenschutzgründen nicht in Frage kommen.
 
 <!-- TODO(verify): Modellname "deepset-mxbai-embed-de-large-v1" (S. 28) konnte nicht gegen eine Primärquelle verifiziert werden (schnelllebige Tool-/Modellangabe ohne Stand-Datum im Original). Wörtlich aus dem Original übernommen. -->
+
+> **Praxis-Check SoftwareFabrik (abweichend):** Der geteilte Wissensstand
+> ist umgesetzt — als versionierte Dateien im Repository plus kuratiertes
+> Projektgedächtnis. Auf den optionalen Vektorspeicher wurde bewusst
+> verzichtet: Was der Agent liest, muss ein Mensch reviewen und ein Auditor
+> zitieren können (19.6).

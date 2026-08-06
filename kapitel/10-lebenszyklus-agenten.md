@@ -1,6 +1,16 @@
 # 10 Die sieben Lebenszyklus-Agenten
 
-Für jede Phase des Software Development Lifecycle steht ein spezialisierter Agent bereit. Im Folgenden werden alle sieben Agenten mit ihren Task-Aufrufen und Java-Enterprise-Codebeispielen vorgestellt.
+Für jede Phase des Software Development Lifecycle steht ein spezialisierter Agent bereit. Im Folgenden werden alle sieben Agenten mit ihren Agenten-Aufrufen und Java-Enterprise-Codebeispielen vorgestellt.
+
+> **Versionshinweis (v2.0):** Die Java-Codebeispiele dieses Teils stammen
+> aus v1.3 und sind gegen Java 21 LTS und Spring Boot 3.x formuliert; sie
+> wurden für v2.0 bewusst nicht auf neuere Versionen gehoben und nicht
+> erneut dagegen getestet. Für den Sprung auf Spring Boot 4 (GA seit
+> November 2025) siehe die dokumentierten Fallstricke des Realsystems in
+> Kapitel 19 — das dort beschriebene System läuft auf Java 25 und Spring
+> Boot 4.0 (u. a. Wechsel auf Jackson 3 als primären Serialisierer).
+> Aufruf-Skizzen (`Task(...)`) sind Pseudocode auf v1.3-Werkzeugstand; das
+> Werkzeug heißt heute `Agent` (vgl. 3.5).
 
 ## 10.1 Architektur-Agent
 
@@ -287,3 +297,10 @@ spec:
         livenessProbe:
           httpGet: { path: /actuator/health/liveness, port: 8080 }
 ```
+
+> **Praxis-Check SoftwareFabrik (abweichend):** Die sieben Rollen existieren
+> dort teils als Agentenrollen im Kontext (Definitionen, Teams), teils als
+> Systemfunktionen: Planung = Plan-Run, Review = Read-only-Reviewer-Schicht,
+> Testing/Deployment = Build-Gate und Meilenstein-Release. Die Parallelität
+> wurde von der Erzeugung auf die Bewertung verschoben — ein Agent je Lauf,
+> mehrere Prüfer (19.8).

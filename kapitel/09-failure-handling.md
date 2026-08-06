@@ -69,3 +69,10 @@ public class AgentFailureHandler {
     public enum FailureSeverity { TRANSIENT, RECOVERABLE, CRITICAL, FATAL }
 }
 ```
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Fehlschlag ist dort ein
+> regulärer Zustand mit definiertem Ausgang (Korrekturschleife,
+> Terminalzustände). Zentrale Regel über das Konzept hinaus: Der Ausfall
+> eines Prüfmechanismus darf nie wie Erfolg aussehen — ein abgestürzter
+> Reviewer führt zu `ERROR`, die Lizenzprüfung ist *fail closed* (19.5,
+> 19.7).

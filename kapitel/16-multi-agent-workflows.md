@@ -4,33 +4,47 @@
 
 <!-- TODO(abbildung): Abbildung 15: Sequenzieller Multi-Agent-Workflow im Software Development Lifecycle -->
 
+Die Aufruf-Skizzen sind auf den Werkzeugstand von August 2026 aktualisiert
+(Agent-Tool statt „Task", vgl. 3.5) und als Pseudocode zu lesen
+[@claudecodedocs]:
+
 ## Sequenzieller Workflow
 
 ```
 // Phase 1: Architekturanalyse (muss zuerst laufen)
-result1 = Task(subagent_type="architecture-agent",
+result1 = Agent(subagent_type="architecture-agent",
     prompt="Analysiere Auth-Architektur, schreibe in Shared Knowledge Store...")
 // Phase 2: Planung (hängt von Analyse ab)
-result2 = Task(subagent_type="planning-agent",
+result2 = Agent(subagent_type="planning-agent",
     prompt="Lies docs/knowledge/auth-analysis.json. Erstelle Plan...")
 // Phase 3: Implementierung (folgt dem Plan)
-result3 = Task(subagent_type="dev-agent",
+result3 = Agent(subagent_type="dev-agent",
     prompt="Lies docs/implementations/auth-tracker.md. Phase 1 umsetzen...")
 ```
 
 ## Paralleler Workflow
 
 ```
-// Diese drei Agenten laufen PARALLEL:
-Task(subagent_type="test-agent", prompt="JUnit 5 Tests...")
-Task(subagent_type="doc-agent", prompt="OpenAPI-Dokumentation...")
-Task(subagent_type="review-agent", prompt="Security-Review...")
+// Diese drei Agenten laufen PARALLEL (heute der Standardfall:
+// Subagenten starten im Hintergrund):
+Agent(subagent_type="test-agent", prompt="JUnit 5 Tests...")
+Agent(subagent_type="doc-agent", prompt="OpenAPI-Dokumentation...")
+Agent(subagent_type="review-agent", prompt="Security-Review...")
 ```
 
 ## Background & Wiederaufnahme
 
 ```
-Task(subagent_type="test-agent", prompt="mvn test", run_in_background=True)
-// Später fortsetzen:
-Task(subagent_type="dev-agent", prompt="Korrigiere Fehler.", resume="agent_abc123")
+Agent(subagent_type="test-agent", prompt="mvn test")   // läuft im Hintergrund
+// Später fortsetzen: Nachricht an den laufenden Agenten
+// (v1.3: eigener resume-Parameter; heute Nachrichtenschnittstelle)
+SendMessage(to="agent_abc123", message="Korrigiere die Fehler.")
 ```
+
+> **Praxis-Check SoftwareFabrik (abweichend):** Sequenzielle,
+> wiederaufnehmbare Abläufe sind umgesetzt; die parallele
+> Multi-Branch-Ausführung mehrerer Läufe je Projekt ist bewusst
+> zurückgestellt — ein Workspace je Projekt, damit Folgeläufe auf dem
+> Ergebnis der vorherigen aufbauen. Parallelität findet stattdessen in der
+> Bewertung statt: mehrere Reviewer gleichzeitig auf demselben Diff (19.3,
+> 19.8, 19.9).

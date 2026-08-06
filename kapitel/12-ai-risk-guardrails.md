@@ -67,3 +67,10 @@ public class ConfidenceScoreAspect {
 | 4. Domain | Bounded Context, Glossar | Agent gestoppt + informiert |
 | 5. Tests | JUnit 5 + Coverage min. 80% | Agent iteriert |
 | 6. Confidence | LOW-Stellen gezählt | Weiterleitung an review-agent |
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Die Guardrails-Pipeline ist
+> als eigener Schichtbegriff umgesetzt: Read-only-Review-Adapter, getrennt
+> von den schreibenden Agenten. Sechs Prüfer (LLM, statisch,
+> werkzeuggestützt), eine konfigurierbare Gate-Policy mit drei nicht
+> aufweichbaren Sonderregeln und drei Betriebsmodi (off/advisory/blocking);
+> das Confidence Scoring ist ohne AOP im Gate-Service gelöst (19.5).

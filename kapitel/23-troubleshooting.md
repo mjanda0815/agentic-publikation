@@ -21,3 +21,9 @@
 | Code-Qualität prüfen | review-agent (opus) |
 | Deployment | deploy-agent |
 | CI/CD Quality Gate | qa-guard |
+
+> **Praxis-Check SoftwareFabrik (erweitert):** Aus der Schnellreferenz
+> wurden betriebliche Runbooks (u. a. Demo-Deployment,
+> Air-Gap-Auslieferung) und dokumentierte Praxis-Fallstricke — etwa der
+> Architektur-Ratchet mit Zyklen-Kappungsgrenze oder CI-Jobs, die sich ohne
+> Secret still überspringen und grün wirken (19.2, 19.7, 19.9).

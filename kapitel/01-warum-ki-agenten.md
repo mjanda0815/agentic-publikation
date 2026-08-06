@@ -26,3 +26,8 @@ Das Herzstück der Claude-Code-Agentenarchitektur ist das Orchestrator-Prinzip. 
 | Wiederaufnahme | Agenten können über ihre Agent-ID fortgesetzt werden. |
 | Shared State | Ein gemeinsamer Wissensstand über den Shared Knowledge Store ermöglicht Zusammenarbeit. |
 | Guardrails | Ein AI Risk Framework mit Halluzinationserkennung sichert die Codequalität. |
+
+> **Praxis-Check SoftwareFabrik (bestätigt):** Das Orchestrator-Prinzip
+> trägt: In der Implementierung ist ein einziger Dienst die einzige Stelle,
+> an der Run-Statuswechsel stattfinden — und damit zugleich die Stelle, an
+> der Governance überhaupt ansetzen kann (19.3).

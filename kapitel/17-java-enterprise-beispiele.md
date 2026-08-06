@@ -1,5 +1,10 @@
 # 17 Erweiterte Java Enterprise Praxisbeispiele
 
+> **Versionshinweis (v2.0):** Wie in Teil III gilt: Die Beispiele sind gegen
+> Java 21 LTS und Spring Boot 3.x formuliert und wurden für v2.0 nicht auf
+> Spring Boot 4 gehoben; zu den Umstellungspunkten (u. a. Jackson 3) siehe
+> Kapitel 19.
+
 ## 17.1 Spring Security mit JWT und RBAC
 
 ```java
@@ -72,3 +77,9 @@ public class AmountCheckWorker {
     }
 }
 ```
+
+> **Praxis-Check SoftwareFabrik (teils bestätigt):** Spring Security mit
+> RBAC ist real umgesetzt (Ed25519-/RS256-JWTs in Lizenz- und
+> Attestierungsschicht). Eine Workflow-Engine wie Camunda wurde dagegen
+> nicht gebraucht: Die Zustandsmaschine des Prozesses ist das Run-Aggregat
+> selbst (19.3).
