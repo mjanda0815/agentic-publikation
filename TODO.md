@@ -29,10 +29,14 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       → daraus die Arbeitsliste für die Modernisierung ableiten.
 - [ ] Abbildungen des Originals sichten: welche werden als eigene Skripte
       neu erzeugt (harte Regel 5)?
-- [ ] **Neuer Hauptabschnitt „SoftwareFabrik":** Gliederung aus dem Repo
-      `/mnt/c/dev/SoftwareFabrik` ableiten (Architektur, Orchestrierung,
-      Workflows, QS, Lessons Learned) → Abnahme durch Martin → Rohtext →
-      Review. Public-Ready beachten: keine Secrets/Kundendetails.
+- [ ] **SoftwareFabrik mit v1.3 verheiraten:** Grundlage ist die von Martin
+      bereitgestellte Doku unter `quellen/softwarefabrik/` (INDEX,
+      Systemüberblick, Architektur, Systemdiagramme, Domänenmodell); das Repo
+      `/mnt/c/dev/SoftwareFabrik` nur zur Detail-Verifikation. Ablauf laut
+      INITIAL_PROMPT.md: erst komplette Sichtung, dann Umbauplan (Ziel-
+      Gliederung, Konzept↔Realisierung als roter Faden, Modernisierungsliste,
+      Abbildungsplan, Version) zur Abnahme — erst danach Extraktion und Umbau.
+      Public-Ready beachten: keine Secrets/Kundendetails.
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI
       (Zenodo-GitHub-Integration besteht bereits; archiviert nur öffentliche
       Releases).
