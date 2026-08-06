@@ -182,9 +182,27 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Abbildungen: Farbschema umgesetzt (schwarze Rahmen, blaue Pfeile,
       semantische Pastelltöne; Sequenz-Schriftgrößen erhöht), alle 30
       Diagramme neu gerendert.
+- [x] **Autorenreview v2.1 eingearbeitet** (06.08.2026): Kap. 1 neu (Start
+      bei Coding-Agenten und Prozessschicht statt Claude Code als
+      Fundament), Kap. 2 auf acht neue Prinzipien umgestellt (AP-1
+      Controlled Non-Determinism … AP-8 Sovereign by Default; alle
+      AP-Verweise dokumentweit umgezogen), Kap. 3 Hub-and-Spoke als
+      logische Rollenstruktur eingeordnet; ADR-Status-Blöcke (ADR-1
+      Superseded, ADR-2/4 Amended) plus neue ADRs 5–8; Kap. 22 zweigeteilt
+      (implementierter Single-Run-Prozess / geplanter paralleler Workflow);
+      ROI-, Prozent- und Faktorangaben als Annahmen gekennzeichnet;
+      Parallelisierungskosten-Aussage richtiggestellt; 0-€-Bewertung,
+      Audit-Altbestand und SBOM-Skip als offene Punkte im Sinne von AP-7
+      benannt; alle Codezeilen > 92 Zeichen manuell umgebrochen; Tippfehler
+      und Anführungszeichen bereinigt; Abbildungen 13/17/22/27/31
+      vergrößert bzw. neu gelayoutet.
 - [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
       Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
       Repo public + Release + Zenodo-DOI).
+- [ ] Optional für v3.0 (laut anpassungen/whitepaper_anpassungen.md §23):
+      neue Gesamtgliederung in fünf Teile, Workflow-Fallstudie mit erster
+      implementierter paralleler Analyse, Messdaten aus dem Messplan (15.6),
+      Evidenzpaket.
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI
       (Zenodo-GitHub-Integration besteht bereits; archiviert nur öffentliche
       Releases).
