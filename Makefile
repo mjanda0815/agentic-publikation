@@ -36,7 +36,7 @@ ADDCHAP := sed -E 's/^\\chapter\{/\\addchap{/'
 # sonst kollidierende \label/\hypertarget-Ziele. Fix: Anker-IDs je Kapitel
 # per sed mit dem Kapitelpräfix versehen (rein technisch, kein Sichttext).
 
-.PHONY: all tex pdf html clean abbildungen
+.PHONY: all tex pdf html clean abbildungen karussell
 
 all: pdf
 
@@ -91,3 +91,9 @@ abbildungen:
 			-c abbildungen/mermaid.json -i "$$f" \
 			-o "abbildungen/out/$$n.pdf" --pdfFit -b transparent; \
 	done
+
+# LinkedIn-Karussell: eigenstaendiges Dokument, 10 quadratische Folien
+# (1080x1080 bp). Bezieht seinen Stil aus carousel/karussell.sty und ist vom
+# Whitepaper-Build unabhaengig; Reintexte in carousel/folientexte.txt.
+karussell:
+	cd carousel && latexmk -pdf -interaction=nonstopmode carousel.tex

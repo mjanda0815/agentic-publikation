@@ -2,6 +2,14 @@
 
 > **Hinweis:** Abgrenzung: Die theoretischen Grundlagen (Lifecycle, Execution Model, Memory) wurden in Teil II beschrieben. Dieses Kapitel zeigt die konkreten Aufruf-Patterns für sequenzielle, parallele und asynchrone Workflows.
 
+> **Einordnung (v2.1):** Dieses Kapitel beschreibt ein Werkzeugmuster —
+> die Subagenten-Aufrufe eines Coding-Agenten —, nicht den heutigen Ablauf
+> der Referenzimplementierung. Die dort gezeigte Parallelität betrifft
+> Analyse und Review, also lesende Arbeit; gleichzeitig **schreibende**
+> Agenten setzen die Workspace-Isolation und Koordination der
+> Zielarchitektur voraus (19.10, 22.4). Der Praxis-Check am Kapitelende
+> ordnet das im Detail ein.
+
 ![Sequenzieller Multi-Agent-Workflow im Software Development Lifecycle](abbildungen/out/abb15.pdf){width=100%}
 
 Die Aufruf-Skizzen sind auf den Werkzeugstand von August 2026 aktualisiert

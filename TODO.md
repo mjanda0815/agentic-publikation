@@ -217,6 +217,29 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Agenten-Katalog in zwei lesbare Tabellen geteilt, Zustandsautomat ins
       Hochformat, alle Codezeilen auf die reale Satzbreite (84 Zeichen)
       umgebrochen — keine Umbruchmarker mehr im Dokument.
+- [x] **Dritter Autorenreview eingearbeitet** (06.08.2026): Kapitelanfang 22
+      von der alten Agentenerzählung befreit (Control Plane strukturiert die
+      Phasen; wie sie ausgeführt werden, hängt vom Architekturstand ab);
+      22.6 um die Gate-Betriebsmodi ergänzt (blocking / advisory / off —
+      nur blocking erzwingt) und auf „AGENTS.md beziehungsweise CLAUDE.md"
+      umgestellt; 22.7 entwerblicht (kein vorweggenommener
+      Geschwindigkeitsgewinn, Verweis auf den Messplan); Kapitel 10 und 16
+      am Kapitelanfang eingeordnet (sieben Agenten = logische Rollen bzw.
+      Capabilities, nicht sieben gleichzeitig schreibende Prozesse;
+      Kapitel 16 zeigt ein Werkzeugmuster, nicht den heutigen Ablauf).
+      Layout: die nahezu leere Seite 14 ist beseitigt — der dortige
+      Praxis-Check war eine Dublette der Aussage im Fließtext von 1.1 und
+      wurde dort aufgelöst statt durch Satzkniffe umgangen.
+      Ergebnis: 153 Seiten, keine dünnen Seiten außer den Teil-Zwischentiteln.
+- [x] **LinkedIn-Karussell erstellt** (`carousel/carousel.tex`, 10 Folien,
+      1080×1080 bp, Build `make karussell`): Stil identisch zu den
+      DeFi-Karussells (`karussell.sty` unverändert übernommen). Jede Folie
+      trägt einen Quellenkommentar auf Kapitel/Abschnitt; Reintexte in
+      `carousel/folientexte.txt`. Zwei folieneigene TikZ-Grafiken statt
+      eingebetteter Buchabbildungen — die Whitepaper-Abbildungen sind für
+      16 cm Satzspiegel gezeichnet und auf einer quadratischen Folie nicht
+      mehr lesbar. Folie 9 ist ausdrücklich als *geplant* gekennzeichnet.
+
 - [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
       Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
       Repo public + Release + Zenodo-DOI).

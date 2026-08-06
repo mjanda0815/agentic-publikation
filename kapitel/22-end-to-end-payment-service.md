@@ -4,7 +4,7 @@ Während die vorherigen Kapitel die Architektur, das Ausführungsmodell und die 
 
 Als Beispiel dient die Entwicklung eines Payment Services für eine E-Commerce-Plattform. Der Service stellt eine REST-API zur Verarbeitung von Zahlungen bereit, publiziert Domain Events über Kafka und wird containerisiert in einer Kubernetes-Umgebung betrieben.
 
-Der Ablauf demonstriert, wie der Orchestrator spezialisierte Agenten entlang des Software Development Lifecycle koordiniert. Beginnend mit der Anforderungsanalyse werden Architekturentscheidungen getroffen, Implementierungsaufgaben geplant, Code generiert, Tests erstellt und schließlich das Deployment vorbereitet.
+Der Ablauf demonstriert, wie der Orchestrator die Phasen des Software Development Lifecycle koordiniert. Beginnend mit der Anforderungsanalyse werden Architekturentscheidungen getroffen, Implementierungsaufgaben geplant, Code generiert, Tests erstellt und schließlich das Deployment vorbereitet.
 
 Dabei wird sichtbar, wie die zuvor eingeführten Konzepte – insbesondere Task Graph, Workspace Isolation, Guardrails Pipeline und Shared Knowledge Store – in einem zusammenhängenden Workflow zusammenspielen.
 
@@ -23,11 +23,9 @@ In diesem Szenario wird die Implementierung eines Payment Services für eine E-C
 
 Der Service muss dabei mehrere Anforderungen erfüllen. Dazu gehören eine klare Trennung der Domänenschichten gemäß hexagonaler Architektur, die Einhaltung regulatorischer Anforderungen wie PSD2 sowie eine sichere Integration in bestehende Plattformkomponenten. Darüber hinaus muss der Service containerisiert bereitgestellt und in einer Kubernetes-Umgebung betrieben werden können.
 
-Der Entwicklungsauftrag wird nicht manuell umgesetzt, sondern durch ein agentisches Entwicklungssystem orchestriert. Ein zentraler Orchestrator übersetzt das Entwicklungsziel in einen Task Graph, der von spezialisierten Agenten entlang des Software Development Lifecycle abgearbeitet wird. Jeder Agent übernimmt dabei eine klar abgegrenzte Verantwortung, beispielsweise für Anforderungsanalyse, Architekturentscheidungen, Implementierung, Tests oder Deployment.
+Der Entwicklungsauftrag wird durch eine zentrale Control Plane orchestriert. Der Orchestrator strukturiert das Vorhaben in Spezifikation, Planung, Umsetzung, Validierung, Integration und Übergabe. Ob diese Phasen durch einen einzelnen zustandsbehafteten Run oder durch mehrere koordinierte Child Runs ausgeführt werden, hängt vom Architekturstand und von den Abhängigkeiten des Vorhabens ab.
 
-Während der gesamten Ausführung greifen die Agenten auf einen Shared Knowledge Store zu, in dem Projektdokumentation, Architekturentscheidungen und relevante Kontextinformationen abgelegt sind. Gleichzeitig stellt eine mehrstufige Guardrails-Pipeline sicher, dass generierter Code Qualitäts-, Sicherheits- und Architekturregeln einhält.
-
-Das folgende Beispiel zeigt, wie ein solcher Entwicklungsauftrag durch den Orchestrator in mehrere Phasen zerlegt und durch spezialisierte Agenten umgesetzt wird.
+Während der gesamten Ausführung greift die Ausführung auf einen Shared Knowledge Store zu, in dem Projektdokumentation, Architekturentscheidungen und relevante Kontextinformationen abgelegt sind. Gleichzeitig stellt eine mehrstufige Guardrails-Pipeline sicher, dass generierter Code Qualitäts-, Sicherheits- und Architekturregeln einhält.
 
 ## 22.2 Gesamtworkflow
 
@@ -176,25 +174,25 @@ Ein wesentliches Merkmal des End-to-End-Szenarios ist die konsequente Einbettung
 Im Payment-Service-Beispiel umfasst diese Pipeline insbesondere:
 
 - Syntax- und Compile-Prüfungen zur Sicherstellung der technischen Korrektheit
-- Style- und Konventionsprüfungen gemäß den in CLAUDE.md definierten Projektstandards
+- Style- und Konventionsprüfungen gemäß den in AGENTS.md beziehungsweise CLAUDE.md definierten Projektstandards
 - Security-Scans zur Erkennung potenzieller Schwachstellen oder problematischer Abhängigkeiten
 - Domain-Prüfungen zur Absicherung von Bounded Contexts, Glossarregeln und DDD-Konventionen
 - Automatisierte Tests mit vorgegebenen Mindestanforderungen an die Testabdeckung
 - Confidence-Scoring zur Bewertung unsicherer oder potenziell halluzinierter Änderungen
 
-Erst wenn alle Prüfungen erfolgreich bestanden wurden, kann der Workflow in die nächste Phase übergehen. Dadurch werden für agentisch erzeugten Code definierte Mindestmaßstäbe an Qualität, Sicherheit und Architektur erzwungen — als Risikoreduktion, nicht als Garantie.
+Wie die Pipeline auf Befunde reagiert, hängt vom Betriebsmodus des Gates ab. Im Blocking-Modus beziehungsweise unter einem strikten Kontrollprofil kann der Workflow erst fortgesetzt werden, wenn alle vorgeschriebenen Prüfungen bestanden wurden. Im Advisory-Modus werden die Befunde protokolliert und angezeigt, ohne den Übergang automatisch zu blockieren; im Modus `off` findet keine Prüfung statt (19.5). Nur der Blocking-Modus erzwingt für agentisch erzeugten Code definierte Mindestmaßstäbe an Qualität, Sicherheit und Architektur — und auch dann als Risikoreduktion, nicht als Garantie.
 
 ## 22.7 Deployment Ergebnis
 
-Das End-to-End-Szenario zeigt, dass ein agentisches Entwicklungssystem weit mehr ist als ein Werkzeug zur Codegenerierung. Der Orchestrator koordiniert spezialisierte Agenten entlang des gesamten Software Development Lifecycle und verbindet Anforderungen, Architektur, Implementierung, Tests, Review und Deployment in einem konsistenten Ablauf.
+Das End-to-End-Szenario zeigt, wie Spezifikation, Agentenausführung, unabhängige Prüfung, Governance und Übergabe in einem konsistenten Prozess verbunden werden können. Ein agentisches Entwicklungssystem ist damit mehr als ein Werkzeug zur Codegenerierung: Es ist die Prozessschicht, die diese Schritte zusammenhält.
 
 Im Payment-Service-Beispiel wird deutlich, dass insbesondere folgende Vorteile erzielt werden können:
 
-- klare Trennung von Verantwortlichkeiten zwischen spezialisierten Agenten
-- reproduzierbare und nachvollziehbare Entwicklungsabläufe
+- klare Trennung zwischen erzeugender und prüfender Verantwortung
+- nachvollziehbare Entwicklungsabläufe mit reproduzierbarem Prüfprozess
 - frühzeitige Validierung von Architektur-, Sicherheits- und Qualitätsanforderungen
 - bessere Wiederverwendbarkeit von Wissen durch Shared Knowledge Store und ADRs
-- höhere Geschwindigkeit bei gleichzeitig kontrollierter Qualitätssicherung
+- potenziell kürzere Durchlaufzeit bei kontrollierter Qualitätssicherung; der tatsächliche Vorteil gegenüber einem Einzel-Run ist Gegenstand des Messplans (15.6)
 
 Damit wird das agentische Entwicklungssystem zu einer belastbaren Architektur für die Umsetzung komplexer Features in Enterprise-Umgebungen. Das Beispiel des Payment Services verdeutlicht, wie die in den vorangegangenen Kapiteln beschriebenen Konzepte in der Praxis zusammenspielen und gemeinsam einen produktionsnahen Entwicklungsprozess ermöglichen.
 

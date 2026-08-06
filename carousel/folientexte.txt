@@ -1,0 +1,123 @@
+Reintexte des LinkedIn-Karussells zum Whitepaper
+„Agentic Software Development — Enterprise Architecture with AI Agents"
+Martin Janda, Fassung 2.1, August 2026
+
+Diese Datei ist die redigierbare Textfassung von carousel/carousel.tex.
+Änderungen hier sind NICHT automatisch im PDF — sie müssen in carousel.tex
+nachgezogen werden. Die Quellenzuordnung jeder Folie steht als Kommentar
+in carousel.tex.
+
+Format: 10 Folien, quadratisch 1080 × 1080 bp.
+Fußzeile jeder Folie: „Martin Janda · janda.io" und Folienzähler.
+
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 1 — Hook
+Kicker:   Agentic Software Development
+Kernsatz: Der Engpass ist nicht das Modell. Es ist die fehlende
+          Prozessschicht.
+Text:     Coding-Agenten rufen Werkzeuge selbstständig auf. Das macht sie
+          produktiv — und ihre Ausführung nichtdeterministisch und
+          sicherheitsrelevant. Befunde der überarbeiteten Fassung,
+          Stand August 2026.
+Quelle:   Kapitel 1, Absatz 1
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 2 — Der Kernbefund  [mit Grafik: Mensch → Control Plane → Agent]
+Kicker:   Der Kernbefund
+Kernsatz: Nicht möglichst viele Agenten. Eine Steuerschicht dazwischen.
+Grafik:   Mensch (spezifiziert, gibt frei) → Control Plane (begrenzt,
+          isoliert, prüft) → Coding-Agent (schreibt); darunter
+          Repository · Audit-Kette
+Text:     Die Control Plane sitzt zwischen Mensch, Coding-Agent und
+          Zielrepository. Sie begrenzt, isoliert, koordiniert, prüft und
+          macht nachweisbar.
+Quelle:   Management Summary, Kernaussage 1; Grafik abgeleitet aus
+          Abbildung 19.1 (Systemkontext)
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 3 — Single Writer
+Kicker:   Single Writer
+Kernsatz: Ein Schreiber je Arbeitskopie. Beliebig viele Prüfer.
+Text:     Zwei Agenten, die gleichzeitig dieselbe Arbeitskopie verändern,
+          erzeugen Schreibkonkurrenz, unklare Zurechnung und
+          Zwischenstände, für die niemand mehr geradestehen kann.
+Quelle:   Prinzip AP-2 (Kapitel 2); Management Summary, Kernaussage 2
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 4 — Unabhängige Prüfung
+Kicker:   Unabhängige Prüfung
+Kernsatz: Wer schreibt, gibt nicht frei.
+Text:     Erzeugung und Freigabe sind technisch getrennt.
+          Read-only-Reviewer liefern strukturierte Befunde — und ein
+          Agent bewertet nie allein die eigene Arbeit.
+Quelle:   Prinzip AP-4 (Kapitel 2)
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 5 — Fail Closed
+Kicker:   Fail Closed
+Kernsatz: Ein Gate, dessen Ausfall wie Erfolg aussieht, ist schlimmer als
+          kein Gate.
+Text:     Ein ausgefallener Pflicht-Reviewer, eine nicht prüfbare Policy,
+          eine fehlgeschlagene Attestierung: Nichts davon darf jemals als
+          bestanden durchgehen.
+Quelle:   Prinzip AP-7 (Kapitel 2)
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 6 — Zustandshoheit
+Kicker:   Zustandshoheit
+Kernsatz: Git trägt die Artefakte. Den Prozesszustand trägt es nicht.
+Text:     Branches und Checkpoints gehören in Git. Workflow-, Policy-,
+          Freigabe- und Audit-Zustand brauchen eine autoritative Quelle
+          daneben — sonst ist der Prozess nicht rekonstruierbar.
+Quelle:   Management Summary, Kernaussage 5; Kapitel 20, ADR-8
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 7 — Nachweis  [mit Grafik: Policy → Durchsetzung → Kettenglied →
+          Audit-Export]
+Kicker:   Nachweis
+Kernsatz: Für jeden Lauf rekonstruierbar: welche Policy, welches Modell,
+          welche Freigabe.
+Grafik:   Policy (versioniert) → Durchsetzung (im Orchestrator) →
+          Kettenglied (signiert) → Audit-Export (prüfbar)
+Text:     Jede Durchsetzung erzeugt ein signiertes Kettenglied in einer
+          append-only Audit-Hashkette. Governance ist damit keine
+          Ergänzung der Architektur, sondern Teil ihrer Struktur.
+Quelle:   Abschnitt 19.1, Schritt 6 („Belegen"); Grafik abgeleitet aus
+          Abbildung 19.6
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 8 — Referenzimplementierung
+Kicker:   Referenzimplementierung
+Kernsatz: Kein Konzeptpapier: 27 fachliche Slices, 26 Releases in vier
+          Monaten.
+Text:     Rund 33.000 Zeilen Produktivcode, Testabdeckung als
+          buildbrechendes Gate (Line ab 85 %, Branch ab 81 %). Die
+          Architektur des Whitepapers war die Grundlage — das Kapitel
+          beschreibt, was daraus geworden ist. Stand: 26. Juli 2026.
+Quelle:   Kapitel 19, „Kennzahlen der Codebasis" (Erhebungsstand
+          26.07.2026)
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 9 — Nächster Schritt (geplant)
+Kicker:   Nächster Schritt (geplant)
+Kernsatz: Parallelität entsteht aus Abhängigkeiten — nicht aus
+          Agentenrollen.
+Text:     Ein Feature wird in einen Task Graph zerlegt; unabhängige Tasks
+          laufen als isolierte Child Runs, jeder mit eigenem Worktree und
+          weiterhin mit genau einem Schreiber. Merge Coordinator und
+          Integration Gate führen zusammen. Das Whitepaper trennt diesen
+          Zielstand konsequent vom heute implementierten Stand.
+Quelle:   Management Summary, Absatz 4; Abschnitt 19.10; Prinzip AP-3
+Hinweis:  Diese Folie beschreibt ausdrücklich einen geplanten Stand.
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 10 — Abschluss
+Kicker:   Whitepaper
+Titel:    Agentic Software Development
+Untertitel: Enterprise Architecture with AI Agents — eine
+          Control-Plane-Architektur für den kontrollierten Einsatz von
+          Coding-Agenten
+Text:     Vollständiges Whitepaper auf janda.io
+          Überarbeitete und erweiterte Fassung 2.1, Stand: August 2026.
+Quelle:   Titel und Untertitel der Arbeit

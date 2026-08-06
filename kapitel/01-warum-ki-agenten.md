@@ -8,7 +8,7 @@ Der Fokus liegt auf drei Kernaspekten: Erstens einem geteilten, versionierten Wi
 
 ## Das Orchestrator-Prinzip
 
-Das Herzstück der Architektur ist das Orchestrator-Prinzip: Eine zentrale Steuerungsinstanz — vergleichbar mit einem Technical Lead — verteilt Aufgaben, überwacht Fortschritte, besitzt den Prozesszustand und führt Ergebnisse zusammen. In Claude Code übernimmt diese Rolle beispielsweise die Hauptsitzung, die spezialisierte Subagenten mit jeweils eigenem Kontextfenster startet; in der in Kapitel 19 beschriebenen Referenzimplementierung ist es ein Orchestrierungsdienst, der als einzige Stelle Statusübergänge ausführt.
+Das Herzstück der Architektur ist das Orchestrator-Prinzip: Eine zentrale Steuerungsinstanz — vergleichbar mit einem Technical Lead — verteilt Aufgaben, überwacht Fortschritte, besitzt den Prozesszustand und führt Ergebnisse zusammen. In Claude Code übernimmt diese Rolle beispielsweise die Hauptsitzung, die spezialisierte Subagenten mit jeweils eigenem Kontextfenster startet; in der in Kapitel 19 beschriebenen Referenzimplementierung ist es ein Orchestrierungsdienst, der als einzige Stelle Statusübergänge ausführt — und damit zugleich die Stelle, an der Governance überhaupt ansetzen kann (19.3, 19.8).
 
 Die Kontextisolation der Agenten ist dabei ein echter Vorteil — sie verhindert Interferenzen zwischen Aufgaben —, aber sie ist keine Workspace- oder Sicherheitsisolation: Wer schreiben darf, wo geschrieben wird und was als geprüft gilt, muss die Prozessschicht regeln (Kapitel 2, 12, 14). Agenten tauschen Informationen über einen geteilten, versionierten Wissensstand aus, ohne ihre Kontextisolation zu durchbrechen.
 
@@ -26,8 +26,3 @@ Die Kontextisolation der Agenten ist dabei ein echter Vorteil — sie verhindert
 | Wiederaufnahme | Läufe sind zustandsbehaftet und können fortgesetzt werden. |
 | Shared State | Ein gemeinsamer, versionierter Wissensstand ermöglicht Zusammenarbeit. |
 | Unabhängige Prüfung | Read-only-Reviewer und Gates liefern strukturierte Befunde — einschließlich Claim Verification — und geben Änderungen frei oder blockieren sie. |
-
-> **Praxis-Check SoftwareFabrik (bestätigt):** Das Orchestrator-Prinzip
-> trägt: In der Implementierung ist ein einziger Dienst die einzige Stelle,
-> an der Run-Statuswechsel stattfinden — und damit zugleich die Stelle, an
-> der Governance überhaupt ansetzen kann (19.3, 19.8).

@@ -1,0 +1,232 @@
+% carousel/carousel.tex — LinkedIn-Karussell zum Whitepaper
+% „Agentic Software Development — Enterprise Architecture with AI Agents"
+% (Martin Janda, Fassung 2.1, August 2026)
+%
+% Separates Dokument; das Whitepaper (main.tex) bleibt unverändert.
+% Eine Seite = eine Folie, quadratisch 1080 bp × 1080 bp (1080×1080-px-Äquivalent).
+% Build:  latexmk -pdf -interaction=nonstopmode carousel.tex   (im Ordner carousel/)
+%         bzw. `make karussell` im Projektwurzelverzeichnis.
+%
+% INHALTLICHE HERKUNFT: Jede Folie trägt einen Kommentar „QUELLE:", der auf
+% Kapitel/Abschnitt der Whitepaper-Quelltexte (kapitel/*.md) verweist.
+% Es sind ausschließlich Aussagen aus dem Whitepaper übernommen, nichts erfunden.
+% Redigierbare Reintexte aller Folien: carousel/folientexte.txt
+%
+% ABGRENZUNG IMPLEMENTIERT / GEPLANT: Das Whitepaper trennt konsequent zwischen
+% implementiertem Stand und Zielarchitektur. Die Folien halten diese Trennung
+% ein — Folie 9 ist ausdrücklich als geplant gekennzeichnet.
+
+\documentclass[12pt]{article}
+
+% Gemeinsamer Stil aller Karussells (Format, Fonts, Farben, Folien-Bausteine):
+% karussell.sty ist identisch zu dem der DeFi-Publikation.
+\usepackage{karussell}
+\renewcommand{\gesamt}{10}
+
+% --- Folieneigene Grafiken -------------------------------------------------
+% Die Abbildungen des Whitepapers sind für 16 cm Satzspiegel gezeichnet und in
+% einer quadratischen Folie nicht mehr lesbar. Die beiden Grafiken hier sind
+% vereinfachte, folientaugliche Ableitungen davon (Quelle je Folie im
+% Kommentar) — gleiche Farbrollen wie die Buchabbildungen: schwarze Rahmen,
+% pastellblaue Flächen, blaue Pfeile.
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\definecolor{kasten}{HTML}{DBE9F8}
+\tikzset{
+  kn/.style   = {draw=tinte, line width=1.1pt, fill=kasten, rounded corners=6pt,
+                 align=center, inner sep=14pt, font=\fontsize{27}{33}\selectfont},
+  knw/.style  = {kn, fill=white},
+  pf/.style   = {-{Stealth[length=13pt,width=9pt]}, draw=blau, line width=2.2pt},
+}
+
+\begin{document}
+
+% ============================================================================
+% FOLIE 1 — Hook
+% QUELLE: Kapitel 1, Absatz 1: Coding-Agenten nutzen Werkzeuge selbstständig,
+% was ihre Ausführung „nichtdeterministisch und sicherheitsrelevant" macht;
+% „Für den Enterprise-Einsatz genügt daher nicht die Auswahl eines
+% leistungsfähigen Modells. Erforderlich ist eine Prozess- und
+% Governance-Schicht, die Agentenarbeit spezifiziert, begrenzt, isoliert,
+% prüft und nachweisbar macht."
+% ============================================================================
+\begin{folie}{Agentic Software Development}
+  \gross{Der Engpass ist nicht das Modell. Es ist die fehlende
+    Prozessschicht.}
+  \vspace{48pt}
+  \erl{Coding-Agenten rufen Werkzeuge selbstständig auf. Das macht sie
+    produktiv — und ihre Ausführung nichtdeterministisch und
+    sicherheitsrelevant. Befunde der überarbeiteten Fassung, Stand
+    August 2026.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 2 — Kernbefund: Control Plane
+% QUELLE: Management Summary, Kernaussage 1: „Der entscheidende Schritt ist
+% nicht die maximale Zahl gleichzeitig arbeitender Agenten, sondern eine
+% Steuerschicht, die nichtdeterministische Agentenarbeit begrenzt, isoliert,
+% koordiniert, prüft und nachweisbar macht."
+% Grafik: abb21 (Systemkontext der Control Plane), Abschnitt 19.1.
+% ============================================================================
+\begin{folie}{Der Kernbefund}
+  \grossM{Nicht möglichst viele Agenten. Eine Steuerschicht dazwischen.}
+  \vspace{58pt}
+  {\centering
+  \begin{tikzpicture}[node distance=30pt, scale=1, transform shape]
+    \node[knw] (mensch) {Mensch\\[-2pt]{\fontsize{21}{25}\selectfont\color{tintesek}spezifiziert, gibt frei}};
+    \node[kn, right=of mensch] (cp) {\textbf{Control Plane}\\[-2pt]{\fontsize{21}{25}\selectfont\color{tintesek}begrenzt, isoliert, prüft}};
+    \node[knw, right=of cp] (agent) {Coding-Agent\\[-2pt]{\fontsize{21}{25}\selectfont\color{tintesek}schreibt}};
+    \node[knw, below=42pt of cp] (repo) {Repository \textperiodcentered{} Audit-Kette};
+    \draw[pf] (mensch) -- (cp);
+    \draw[pf] (cp) -- (agent);
+    \draw[pf] (cp) -- (repo);
+  \end{tikzpicture}\par}
+  \vspace{58pt}
+  \erl{Die Control Plane sitzt zwischen Mensch, Coding-Agent und
+    Zielrepository. Sie begrenzt, isoliert, koordiniert, prüft und macht
+    nachweisbar.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 3 — Single Writer, Multiple Reviewers
+% QUELLE: Prinzip AP-2 (Kapitel 2): „Pro Branch, Worktree oder Workspace
+% schreibt zu einem Zeitpunkt genau ein Agent. Das verhindert
+% Schreibkonkurrenz, unklare Zurechnung und nicht attestierbare
+% Zwischenstände." Management Summary, Kernaussage 2.
+% ============================================================================
+\begin{folie}{Single Writer}
+  \gross{Ein Schreiber je Arbeitskopie. Beliebig viele Prüfer.}
+  \vspace{48pt}
+  \erl{Zwei Agenten, die gleichzeitig dieselbe Arbeitskopie verändern,
+    erzeugen Schreibkonkurrenz, unklare Zurechnung und Zwischenstände, für
+    die niemand mehr geradestehen kann.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 4 — Independent Verification
+% QUELLE: Prinzip AP-4 (Kapitel 2), Kurzformel „Wer schreibt, gibt nicht
+% frei": „Erzeugung und Freigabe sind technisch getrennt: Read-only-Reviewer
+% und Gates liefern strukturierte Befunde; ein Agent bewertet nie allein die
+% eigene Arbeit."
+% ============================================================================
+\begin{folie}{Unabhängige Prüfung}
+  \gross{Wer schreibt, gibt nicht frei.}
+  \vspace{48pt}
+  \erl{Erzeugung und Freigabe sind technisch getrennt. Read-only-Reviewer
+    liefern strukturierte Befunde — und ein Agent bewertet nie allein die
+    eigene Arbeit.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 5 — Fail Closed
+% QUELLE: Prinzip AP-7 (Kapitel 2): „Ein ausgefallener Pflicht-Reviewer, eine
+% nicht prüfbare Policy oder eine fehlgeschlagene Attestierung darf niemals
+% als Erfolg gelten. Ein Gate, dessen Ausfall wie Erfolg aussieht, ist
+% schlimmer als kein Gate."
+% ============================================================================
+\begin{folie}{Fail Closed}
+  \grossM{Ein Gate, dessen Ausfall wie Erfolg aussieht, ist schlimmer als
+    kein Gate.}
+  \vspace{48pt}
+  \erl{Ein ausgefallener Pflicht-Reviewer, eine nicht prüfbare Policy, eine
+    fehlgeschlagene Attestierung: Nichts davon darf jemals als bestanden
+    durchgehen.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 6 — Zustandshoheit
+% QUELLE: Management Summary, Kernaussage 5: „Git trägt Artefakte, Branches
+% und Checkpoints; Workflow-, Policy-, Freigabe- und Audit-Zustand liegen
+% autoritativ in der Datenbank." Vgl. Kapitel 20, ADR-8.
+% ============================================================================
+\begin{folie}{Zustandshoheit}
+  \gross{Git trägt die Artefakte. Den Prozesszustand trägt es nicht.}
+  \vspace{48pt}
+  \erl{Branches und Checkpoints gehören in Git. Workflow-, Policy-,
+    Freigabe- und Audit-Zustand brauchen eine autoritative Quelle
+    daneben — sonst ist der Prozess nicht rekonstruierbar.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 7 — Nachweisführung
+% QUELLE: Abschnitt 19.1, Schritt 6 („Belegen"): „Jeder relevante Schritt
+% landet in einer signierten, append-only Audit-Hashkette; ein Warum-Trace
+% rekonstruiert für jeden Run, welche Policy, welches Modell und welche
+% Freigabe gewirkt haben." Grafik: abb28 (Abschnitt 19.6).
+% ============================================================================
+\begin{folie}{Nachweis}
+  \grossM{Für jeden Lauf rekonstruierbar: welche Policy, welches Modell,
+    welche Freigabe.}
+  \vspace{58pt}
+  {\centering
+  \begin{tikzpicture}[node distance=26pt]
+    \node[knw] (pol) {Policy\\{\fontsize{21}{25}\selectfont\color{tintesek}versioniert}};
+    \node[kn, right=of pol] (enf) {Durchsetzung\\{\fontsize{21}{25}\selectfont\color{tintesek}im Orchestrator}};
+    \node[kn, right=of enf] (glied) {Kettenglied\\{\fontsize{21}{25}\selectfont\color{tintesek}signiert}};
+    \node[knw, right=of glied] (exp) {Audit-Export\\{\fontsize{21}{25}\selectfont\color{tintesek}prüfbar}};
+    \draw[pf] (pol) -- (enf);
+    \draw[pf] (enf) -- (glied);
+    \draw[pf] (glied) -- (exp);
+  \end{tikzpicture}\par}
+  \vspace{58pt}
+  \erl{Jede Durchsetzung erzeugt ein signiertes Kettenglied in einer
+    append-only Audit-Hashkette. Governance ist damit keine Ergänzung der
+    Architektur, sondern Teil ihrer Struktur.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 8 — Referenzimplementierung
+% QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", erhoben auf dem
+% Entwicklungsstand vom 26. Juli 2026: 362 Produktivklassen, ~33.000 Zeilen
+% Produktivcode, 27 fachliche Slices, 26 Releases (0.1.0 bis 0.19.0,
+% April–Juli 2026), Coverage-Gate Line >= 85 % / Branch >= 81 %
+% (JaCoCo, buildbrechend).
+% ============================================================================
+\begin{folie}{Referenzimplementierung}
+  \gross{Kein Konzeptpapier: 27 fachliche Slices, 26 Releases in vier
+    Monaten.}
+  \vspace{48pt}
+  \erl{Rund 33.000 Zeilen Produktivcode, Testabdeckung als buildbrechendes
+    Gate (Line ab 85 \%, Branch ab 81 \%). Die Architektur des Whitepapers
+    war die Grundlage — das Kapitel beschreibt, was daraus geworden ist.
+    Stand: 26.\,Juli 2026.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 9 — Roadmap (ausdrücklich als geplant gekennzeichnet)
+% QUELLE: Management Summary, Absatz 4, und Abschnitt 19.10: Ein Feature wird
+% in einen Task Graph zerlegt; unabhängige Tasks laufen als isolierte Child
+% Runs; „Jeder Child Run besitzt einen eigenen Branch oder Worktree und bleibt
+% dem Single-Writer-Prinzip unterworfen. Ein Merge Coordinator und ein
+% abschließendes Integration Gate führen die Ergebnisse kontrolliert zusammen."
+% Prinzip AP-3: Parallelität wird aus Abhängigkeiten abgeleitet, nicht aus
+% festen Agentenrollen.
+% ============================================================================
+\begin{folie}{Nächster Schritt (geplant)}
+  \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
+    Agentenrollen.}
+  \vspace{48pt}
+  \erl{Ein Feature wird in einen Task Graph zerlegt; unabhängige Tasks
+    laufen als isolierte Child Runs, jeder mit eigenem Worktree und weiterhin
+    mit genau einem Schreiber. Merge Coordinator und Integration Gate führen
+    zusammen. Das Whitepaper trennt diesen Zielstand konsequent vom heute
+    implementierten Stand.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 10 — Abschluss
+% QUELLE: Titel und Untertitel der Arbeit (main.tex); Veröffentlichung auf
+% janda.io. Kein QR-Code, keine URL-Parameter (Vorgabe wie bei Karussell 1).
+% ============================================================================
+\begin{folie}{Whitepaper}
+  \grossM{Agentic Software Development}
+  \vspace{40pt}
+  {\fontsize{34}{46}\selectfont\color{tintesek}Enterprise Architecture with
+    AI Agents — eine Control-Plane-Architektur für den kontrollierten Einsatz
+    von Coding-Agenten\par}
+  \vspace{64pt}
+  \erl{\textcolor{tinte}{\bfseries Vollständiges Whitepaper auf janda.io}\\
+    Überarbeitete und erweiterte Fassung 2.1, Stand: August 2026.}
+\end{folie}
+
+\end{document}

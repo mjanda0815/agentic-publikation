@@ -2,6 +2,8 @@
 
 Für jede Phase des Software Development Lifecycle steht ein spezialisierter Agent bereit. Im Folgenden werden alle sieben Agenten mit ihren Agenten-Aufrufen und Java-Enterprise-Codebeispielen vorgestellt.
 
+Die sieben Agenten sind als logische Rollen beziehungsweise Capabilities zu verstehen. Sie müssen nicht als sieben separate Prozesse materialisiert werden und arbeiten insbesondere nicht zwangsläufig gleichzeitig schreibend am selben Vorhaben. Wie die Rollen auf tatsächliche Ausführungen abgebildet werden — auf einen einzelnen Run mit Capability Routing oder auf mehrere isolierte Child Runs —, entscheidet die Prozessschicht (Kapitel 2, 19.4, 22).
+
 > **Versionshinweis (v2.0):** Die Java-Codebeispiele dieses Teils stammen
 > aus v1.3 und sind gegen Java 21 LTS und Spring Boot 3.x formuliert; sie
 > wurden für v2.0 bewusst nicht auf neuere Versionen gehoben und nicht
