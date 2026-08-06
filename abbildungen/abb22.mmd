@@ -1,0 +1,20 @@
+flowchart TB
+    B["Browser<br/>Thymeleaf · HTMX · SSE"]
+
+    subgraph APP["Spring-Boot-Prozess"]
+        direction TB
+        W["<b>web</b><br/>Controller · View-DTOs · SSE-Endpunkte"]
+        A["<b>application</b><br/>Use Cases · Transaktionen · Audit"]
+        D["<b>domain</b><br/>Aggregate · Invarianten · Repository-Ports"]
+        I["<b>infrastructure</b><br/>JPA · Vendor-Adapter · Scheduled Jobs"]
+        W --> A --> D
+        I -.implementiert.-> D
+        A --> I
+    end
+
+    DB[("PostgreSQL 18")]
+    EXT["Externe Prozesse<br/>Coding-CLI · git · mvn · trivy"]
+
+    B <--> W
+    I --> DB
+    I --> EXT

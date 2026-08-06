@@ -1,0 +1,16 @@
+flowchart LR
+    TEAM["Entwicklungsteam /<br/>Architekten"]
+    SYS["<b>Agentic Development System</b><br/>Orchestrator + Agent Pool"]
+    SEC["Security · Guardrails · Policies"]
+    GIT["Git-Repository"]
+    CI["CI/CD-Pipeline"]
+    SKS["Shared Knowledge Store"]
+    VDB["Vector DB<br/>(optional)"]
+    K8S["Kubernetes /<br/>Deployment Runtime"]
+    TEAM -- "arbeitet mit" --> SYS
+    SYS -- "wird abgesichert durch" --> SEC
+    SYS -- "nutzt / integriert" --> GIT
+    SYS --> CI
+    SYS --> SKS
+    SYS --> VDB
+    SYS --> K8S

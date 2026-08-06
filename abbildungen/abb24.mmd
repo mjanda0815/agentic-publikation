@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    actor U as Nutzer
+    participant O as RunOrchestrationService
+    participant P as PolicyAsCode / Modell-Policy
+    participant WS as WorkspaceService + Git
+    participant AD as ExecutionAdapter (Sandbox)
+    participant QG as QualityGate (Reviewer)
+    participant AU as Audit-Hashkette
+
+    U->>O: Run anlegen (Projekt, Team, Ziel, Adapter)
+    O->>P: Adapter/Modell gegen aktive Policy prüfen
+    P-->>O: erlaubt / RUN_POLICY_DENIED
+    O->>AU: RUN_POLICY_ANGEWENDET (Policy-Version)
+    O->>WS: Workspace, Artefakte, MEMORY.md, Guardrails schreiben
+    WS->>WS: Base mit Remote synchronisieren, Run-Branch abzweigen
+    O->>U: Freigabe vor Execution? (falls Policy es verlangt)
+    U-->>O: freigegeben
+    O->>AD: Prompt ausführen (Stream: Logs, Tokens, Phasen)
+    AD-->>O: Diff + Exitcode
+    O->>QG: Reviewer parallel auf den Diff
+    QG-->>O: PASS / WARN / FAIL + Findings
+    alt Gate FAIL oder Build FAIL
+        O->>AD: Korrekturlauf mit Feedback (max. 2 Versuche)
+    else PASS
+        O->>WS: Branch pushen bzw. lokal mergen
+        opt PR-Rückkopplung aktiv
+            WS-->>O: warten auf grüne CI + Merge
+        end
+        O->>AU: Run abgeschlossen, Backlog-Item DONE
+    end

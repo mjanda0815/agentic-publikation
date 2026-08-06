@@ -1,0 +1,20 @@
+flowchart TB
+    W1["Architektur-Agent<br/><i>(schreibt)</i>"]
+    W2["Review-Agent<br/><i>(schreibt)</i>"]
+    W3["Testing-Agent<br/><i>(schreibt)</i>"]
+    subgraph SKS["Shared Knowledge Store"]
+        direction LR
+        KG["Knowledge<br/>Graph"]
+        CC["Context<br/>Cache"]
+        DL["Decision<br/>Log"]
+        FS["Findings<br/>Store"]
+    end
+    R1["Entwicklungs-Agent<br/><i>(liest)</i>"]
+    R2["Planungs-Agent<br/><i>(liest)</i>"]
+    R3["Deployment-Agent<br/><i>(liest)</i>"]
+    W1 -- "write" --> SKS
+    W2 -- "write" --> SKS
+    W3 -- "write" --> SKS
+    SKS -- "read" --> R1
+    SKS -- "read" --> R2
+    SKS -- "read" --> R3

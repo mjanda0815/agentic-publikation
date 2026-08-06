@@ -1,0 +1,25 @@
+flowchart TB
+    REQ["User Request / Entwicklungsziel"]
+    ORCH["Orchestrator<br/>Task-Graph · Budget · Execution Control"]
+    PL["Planner-Agent<br/>Task-Dekomposition"]
+    A["Architektur-<br/>Agent"]
+    D["Entwicklungs-<br/>Agent"]
+    T["Testing-<br/>Agent"]
+    R["Review-<br/>Agent"]
+    REPO["Repository<br/>Git / Worktrees"]
+    BUILD["Build & Test<br/>Maven / JUnit"]
+    SEC["Security & QA<br/>SAST / Linter"]
+    PR["Pull Request / CI/CD-Pipeline"]
+    REQ --> ORCH --> PL
+    PL --> A
+    PL --> D
+    PL --> T
+    PL --> R
+    A --> REPO
+    D --> REPO
+    D --> BUILD
+    T --> BUILD
+    R --> SEC
+    REPO --> PR
+    BUILD --> PR
+    SEC --> PR

@@ -1,0 +1,14 @@
+flowchart TB
+    TEAM["Entwicklungsteam"]
+    ORCH["Agent-Orchestrator"]
+    POOL["Agent-Worker-Pool<br/>Architektur · Dev · Test · Review"]
+    K8S["Kubernetes /<br/>Laufzeitumgebung"]
+    GIT["Git-Repository"]
+    SKS["Shared Knowledge Store"]
+    CI["CI/CD-Pipeline"]
+    TEAM --> ORCH
+    ORCH --> GIT
+    ORCH --> POOL
+    POOL --> SKS
+    POOL --> K8S
+    CI --> K8S

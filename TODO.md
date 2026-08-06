@@ -137,8 +137,22 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Praxis-Check-Kästen jetzt flächendeckend (Kap. 1–18, 20 je ADR,
       21–23); Glossar um 13 Teil-VI-Begriffe erweitert (alphabetisch
       einsortiert).
-- [ ] Abbildungen als Skripte neu erzeugen (UMBAUPLAN § 4): ~16 aus v1.3
-      konsolidiert + 10 neue aus den Mermaid-Systemdiagrammen.
+- [x] **Abbildungen** (06.08.2026): 29 Diagramme als Mermaid-Quellen unter
+      `abbildungen/*.mmd` (19 aus v1.3 neu gezeichnet inkl.
+      Worktree-Lebenszyklus; 10 aus den SoftwareFabrik-Systemdiagrammen
+      übernommen), gerendert nach `abbildungen/out/*.pdf` via
+      `make abbildungen` (mermaid-cli/npx, Stil in `abbildungen/mermaid.json`).
+      Outputs werden mitversioniert (CI braucht kein Node). Die
+      v1.3-Abbildungen 19/20 wurden planmäßig mit Kap. 16/20 konsolidiert;
+      Bildunterschriften ohne harte Nummern (LaTeX nummeriert automatisch).
+      Pandoc-Höhenkappe (`FIG_HEIGHT`) im Makefile gegen überlaufende
+      Floats. Hinweis: `abbildungen/stil.py` (matplotlib) bleibt für
+      künftige Datendiagramme liegen, wird von den Mermaid-Diagrammen nicht
+      genutzt.
+- [ ] Feintypografie am Ende in LaTeX (u. a. unnummerierte
+      Original-Zwischenüberschriften, Abbildungsverzeichnis via
+      \listoffigures, ggf. Feinschliff einzelner Diagramme wie der
+      Slice-Landkarte abb23).
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI
       (Zenodo-GitHub-Integration besteht bereits; archiviert nur öffentliche
       Releases).

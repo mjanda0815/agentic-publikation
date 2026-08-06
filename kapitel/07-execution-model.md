@@ -5,7 +5,7 @@
 
 Das Execution Model beschreibt, wie der Orchestrator Aufgaben plant, verteilt, überwacht und terminiert. Es ist das operative Herzstück des Agentensystems und setzt die architektonischen Prinzipien AP-2 (Deterministic Execution) und AP-3 (Governance by Design) in die Praxis um.
 
-<!-- TODO(abbildung): Abbildung 6: Execution Pipeline – Vom Entwicklungsziel über den Task Graph bis zum Pull Request -->
+![Execution Pipeline — vom Entwicklungsziel über den Task-Graph bis zum Pull Request](abbildungen/out/abb06.pdf){width=100%}
 
 ## 7.1 Task Graph
 
@@ -53,7 +53,7 @@ public record TaskGraph(
 
 Nachdem der Task Graph erzeugt wurde, stellt sich die Frage, wie ein konkreter Entwicklungsauftrag während der Laufzeit durch das Agentensystem verarbeitet wird.
 
-<!-- TODO(abbildung): Abbildung 7: Laufzeitablauf eines Entwicklungsauftrags -->
+![Laufzeitablauf eines Entwicklungsauftrags](abbildungen/out/abb07.pdf){width=80%}
 
 Die Abbildung zeigt den typischen Ablauf eines Entwicklungsauftrags innerhalb eines agentischen Entwicklungssystems.
 

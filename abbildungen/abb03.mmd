@@ -1,0 +1,10 @@
+flowchart LR
+    REQ["Requirements-<br/>Agent<br/><i>Analyse</i>"] --> ARCH["Architektur-<br/>Agent<br/><i>Design</i>"]
+    ARCH --> PLAN["Planungs-<br/>Agent<br/><i>Planung</i>"]
+    PLAN --> DEV["Entwicklungs-<br/>Agent<br/><i>Coding</i>"]
+    DEV --> TEST["Testing-<br/>Agent<br/><i>Testing</i>"]
+    TEST --> REV["Review-<br/>Agent<br/><i>Review</i>"]
+    REV --> DEPL["Deployment-<br/>Agent<br/><i>Deploy</i>"]
+    BASE["Shared Knowledge Store · Guardrails-Pipeline · deklarative Repo-Konfiguration"]
+    REQ -.-> BASE
+    DEPL -.-> BASE

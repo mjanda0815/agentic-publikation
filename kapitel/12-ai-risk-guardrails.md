@@ -4,7 +4,7 @@ Beim Einsatz agentischer Entwicklungssysteme besteht eine zentrale Herausforderu
 
 Dazu wird eine mehrstufige Guardrails-Pipeline eingesetzt, die jede durch Agenten erzeugte Codeänderung automatisch validiert.
 
-<!-- TODO(abbildung): Abbildung 12: Validierungs- und Governance-Pipeline -->
+![Validierungs- und Governance-Pipeline](abbildungen/out/abb12.pdf){width=100%}
 
 Jede durch Agenten erzeugte Änderung durchläuft eine Reihe automatisierter Prüfungen. Dazu gehören statische Codeanalyse, Security-Scans, architektonische Validierung sowie automatisierte Tests.
 
@@ -12,7 +12,7 @@ Erst wenn alle Prüfungen erfolgreich abgeschlossen sind, kann eine Änderung in
 
 Diese Guardrails stellen sicher, dass KI-generierter Code denselben Qualitäts- und Sicherheitsanforderungen entspricht wie manuell entwickelte Software.
 
-<!-- TODO(abbildung): Abbildung 13: AI-Guardrails-Pipeline zur Validierung agentisch erzeugter Codeänderungen -->
+![AI-Guardrails-Pipeline zur Validierung agentisch erzeugter Codeänderungen](abbildungen/out/abb13.pdf){width=100%}
 
 | Komponente | Funktion | Umsetzung |
 | --- | --- | --- |

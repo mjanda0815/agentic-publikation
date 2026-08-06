@@ -2,7 +2,7 @@
 
 > **Hinweis:** Ohne fachliches Domänenmodell generieren Agenten technisch korrekten, aber fachlich fragwürdigen Code. DDD-Integration ist für Enterprise-Projekte unerlässlich.
 
-<!-- TODO(abbildung): Abbildung 11: Hexagonale Architektur mit DDD und Agenten-Zuordnung -->
+![Hexagonale Architektur mit DDD und Agenten-Zuordnung](abbildungen/out/abb11.pdf){width=100%}
 
 | DDD-Konzept | Agenten-Integration | Beispiel |
 | --- | --- | --- |

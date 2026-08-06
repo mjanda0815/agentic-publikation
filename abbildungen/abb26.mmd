@@ -1,0 +1,25 @@
+erDiagram
+    MANDANT ||--o{ APP_USER : "hat"
+    MANDANT ||--o{ PROJECT_DEFINITION : "besitzt"
+    MANDANT ||--o| MANDANT_BUDGET : "begrenzt durch"
+
+    PROJECT_DEFINITION ||--o{ PROMPT_ARTIFACT : "spezifiziert durch"
+    PROJECT_DEFINITION ||--o| PROJECT_MEMORY : "kuratiert"
+    PROJECT_DEFINITION ||--o{ RUN : "führt aus"
+    PROJECT_DEFINITION ||--o{ PLAN_ITEM : "Backlog"
+    PROJECT_DEFINITION ||--o{ PROJECT_MILESTONE : "Meilensteine"
+    PROJECT_DEFINITION ||--o{ ROUTINE : "geplante Läufe"
+
+    PLAN_ITEM ||--o{ PLAN_ITEM_DEPENDENCY : "hängt ab von"
+
+    RUN ||--o{ RUN_PHASE : "besteht aus"
+    RUN ||--o{ EXECUTION_LOG : "protokolliert"
+    RUN ||--o| RUN_METRICS : "misst"
+    RUN ||--o{ GIT_CHECKPOINT : "sichert"
+    RUN ||--o{ BUILD_RESULT : "validiert durch"
+    RUN ||--o{ APPROVAL_DECISION : "freigegeben durch"
+    RUN ||--o| SBOM_ARTIFACT : "belegt durch"
+
+    POLICY_DOCUMENT ||--o{ RUN : "regelt"
+    AUDIT_EVENT ||--o| AUDIT_CHAIN_CHECKPOINT : "verankert"
+    SKILL_CATALOG_ENTRY ||--o{ SKILL_VERSION : "versioniert"

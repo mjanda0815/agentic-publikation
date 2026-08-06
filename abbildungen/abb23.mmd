@@ -1,0 +1,51 @@
+flowchart LR
+    subgraph SPEC["Spezifikation"]
+        WIZ[wizard]
+        PD[projectdefinition]
+        PR[prompt]
+        AG[agent]
+        TE[team]
+    end
+
+    subgraph EXEC["Ausführung"]
+        RUN[run]
+        EX[execution]
+        CON[conductor]
+        GT[git]
+        VAL[validation]
+        SK[skills]
+        SD[sdlc]
+    end
+
+    subgraph QUAL["Bewertung"]
+        REV[review]
+        QG[qualitygate]
+    end
+
+    subgraph GOV["Governance"]
+        POL[policy]
+        AUD[audit]
+        MAN[mandant]
+        SECU[security]
+        SET[settings]
+        SECR[secrets]
+        LIC[license]
+    end
+
+    subgraph LEAF["Blatt-Slices"]
+        PROV[provenance]
+        EXP[export]
+        GR[guardrails]
+        OBS[observability]
+    end
+
+    SPEC --> RUN
+    RUN --> EX
+    RUN --> CON
+    RUN --> GT
+    RUN --> VAL
+    RUN --> QUAL
+    GOV --> RUN
+    RUN -.Ereignisse.-> AUD
+    AUD --> PROV
+    AUD --> EXP

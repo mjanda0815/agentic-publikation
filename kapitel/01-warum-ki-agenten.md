@@ -12,7 +12,7 @@ Das Herzstück der Claude-Code-Agentenarchitektur ist das Orchestrator-Prinzip. 
 
 Über das Task-Tool werden spezialisierte Subagenten gestartet, wobei jeder Agent sein eigenes Kontextfenster besitzt. Dies ist ein entscheidender architektureller Vorteil: Jeder Subagent arbeitet in einem isolierten Kontext, was Interferenzen zwischen parallelen Aufgaben verhindert. Gleichzeitig können Agenten über den Shared Knowledge Store Informationen austauschen, ohne ihre Isolation zu durchbrechen.
 
-<!-- TODO(abbildung): Abbildung 1: Hub-and-Spoke Multi-Agent-Architektur mit zentralem Orchestrator -->
+![Hub-and-Spoke-Multi-Agent-Architektur mit zentralem Orchestrator](abbildungen/out/abb01.pdf){width=100%}
 
 ### Kernprinzipien des Orchestrator-Modells
 

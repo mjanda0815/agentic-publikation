@@ -2,7 +2,7 @@
 
 > **Hinweis:** Abgrenzung: Die theoretischen Grundlagen (Lifecycle, Execution Model, Memory) wurden in Teil II beschrieben. Dieses Kapitel zeigt die konkreten Aufruf-Patterns für sequenzielle, parallele und asynchrone Workflows.
 
-<!-- TODO(abbildung): Abbildung 15: Sequenzieller Multi-Agent-Workflow im Software Development Lifecycle -->
+![Sequenzieller Multi-Agent-Workflow im Software Development Lifecycle](abbildungen/out/abb15.pdf){width=100%}
 
 Die Aufruf-Skizzen sind auf den Werkzeugstand von August 2026 aktualisiert
 (Agent-Tool statt „Task", vgl. 3.5) und als Pseudocode zu lesen

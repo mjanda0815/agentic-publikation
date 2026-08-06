@@ -1,0 +1,18 @@
+flowchart TB
+    ORCH["<b>Orchestrator (Hub)</b><br/>Task-Graph · Agent-Registry · Conflict Resolution"]
+    A["Architektur-<br/>Agent"]
+    P["Planungs-<br/>Agent"]
+    D["Dev-<br/>Agent"]
+    T["Testing-<br/>Agent"]
+    DEP["Deploy-<br/>Agent"]
+    SKS["Shared Knowledge Store (Git-basiert)<br/>docs/knowledge/ · ADRs · Domain Model · Contracts"]
+    ORCH --> A
+    ORCH --> P
+    ORCH --> D
+    ORCH --> T
+    ORCH --> DEP
+    A --> SKS
+    P --> SKS
+    D --> SKS
+    T --> SKS
+    DEP --> SKS

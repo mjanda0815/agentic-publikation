@@ -1,0 +1,11 @@
+flowchart LR
+    S1["Syntax<br/><i>mvn compile</i>"] --> S2["Style<br/><i>Checkstyle</i>"]
+    S2 --> S3["Security<br/><i>SpotBugs/OWASP</i>"]
+    S3 --> S4["Domain<br/><i>Bounded Context</i>"]
+    S4 --> S5["Tests<br/><i>JUnit + Coverage</i>"]
+    S5 --> S6["AI Risk Score<br/><i>Evaluation</i>"]
+    S6 --> OK["Commit<br/>erlaubt"]
+    PRE["PreToolUse-Hook"] -.-> S1
+    POST["PostToolUse-Hook"] -.-> S4
+    FB["Bei Fehler: Agent korrigiert automatisch<br/>oder eskaliert an Review-Agent"]
+    S6 -. "FAIL" .-> FB

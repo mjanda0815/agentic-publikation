@@ -1,0 +1,13 @@
+flowchart LR
+    CP["Compliance-Profil<br/>Baseline · EU AI Act<br/>BAIT/MaRisk/DORA · BSI/VS-NfD"]
+    PD["PolicyDocument<br/>versioniert · Ed25519-signiert<br/>genau eine aktive Version"]
+    ENF["Enforcement im Orchestrator<br/>Adapter · Modell · Attestierungspflicht<br/>Segregation of Duties"]
+    EV["AuditEvent<br/>seq · prev_hash · entry_hash<br/>signature · key_id"]
+    VER["Kettenprüfung<br/>HASH_MISMATCH · CHAIN_BREAK<br/>BAD_SIGNATURE"]
+    TR["Warum-Trace je Run<br/>Modell · Policy · Freigaben<br/>Gate-Ergebnis · Kosten"]
+    EXP["Audit-Export-Bundle<br/>JSON + HTML, inkl. Public Key"]
+
+    CP --> PD --> ENF --> EV --> VER
+    EV --> TR --> EXP
+    VER --> EXP
+    SBOM["SBOM je Build<br/>+ Ed25519-Signatur über den Digest"] --> EXP

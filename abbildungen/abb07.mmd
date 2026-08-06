@@ -1,0 +1,17 @@
+flowchart TB
+    ORCH["Orchestrator<br/>(Task-Graph + Koordination)"]
+    REQ["Requirements-Agent"]
+    ARCH["Architektur-Agent"]
+    PLAN["Planungs-Agent"]
+    DEV["Entwicklungs-Agent"]
+    TEST["Testing-Agent"]
+    REV["Review-Agent"]
+    PR["Pull Request / Deployment"]
+    ORCH --> REQ
+    ORCH --> ARCH
+    ORCH --> PLAN
+    ORCH --> DEV
+    DEV --> TEST
+    DEV --> REV
+    TEST --> PR
+    REV --> PR

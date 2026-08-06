@@ -1,0 +1,24 @@
+flowchart TB
+    subgraph HOST["Kundenhost (Docker Compose / systemd)"]
+        APP["softwarefabrik-app<br/>Spring Boot · Port 8080"]
+        PG[("softwarefabrik-postgres<br/>PostgreSQL 18<br/>gebunden an 127.0.0.1")]
+        WSV[/"Workspaces<br/>ein Git-Repo je Projekt"/]
+        APP --- PG
+        APP --- WSV
+    end
+
+    subgraph SBX["Ephemere Agent-Sandbox (optional)"]
+        CT["Container je Run<br/>--cpus 2 --memory 4g<br/>--pids-limit 512 --read-only<br/>--network=none"]
+    end
+
+    subgraph LICS["Lizenz-Stack (optional, extern)"]
+        KC["Keycloak<br/>OIDC · Device-Flow"]
+        LS["License-Service<br/>eigene PostgreSQL"]
+    end
+
+    REM["Git-Remote / GitHub<br/>nur Hosts der Allowlist"]
+
+    APP --> CT
+    APP -. "Lease-JWT, 7 Tage,<br/>offline verifiziert" .-> LS
+    LS --- KC
+    APP --> REM

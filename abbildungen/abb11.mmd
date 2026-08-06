@@ -1,0 +1,20 @@
+flowchart LR
+    subgraph BC["Bounded Context: Payment"]
+        direction LR
+        PIN1["REST API<br/>(Port)"]
+        PIN2["Kafka<br/>(Port)"]
+        subgraph APP["Application Layer"]
+            subgraph DOM["Domain Layer"]
+                direction LR
+                AGG["Aggregates<br/>& Entities"]
+                VO["Value<br/>Objects"]
+                EV["Domain<br/>Events"]
+            end
+        end
+        POUT1["DB<br/>(Port)"]
+        POUT2["External API<br/>(Port)"]
+    end
+    PIN1 --> APP
+    PIN2 --> APP
+    APP --> POUT1
+    APP --> POUT2

@@ -15,17 +15,17 @@ Typische Integrationspunkte sind:
 
 Der Orchestrator bildet dabei die zentrale Steuerungseinheit, während spezialisierte Agenten Entwicklungsaufgaben automatisiert ausführen.
 
-<!-- TODO(abbildung): Abbildung 2: Systemkontext -->
+![Systemkontext des agentischen Entwicklungssystems](abbildungen/out/abb02.pdf){width=100%}
 
 ## 3.2 Referenzarchitektur des Agentensystems
 
 Die Architektur folgt einem erweiterten Hub-and-Spoke-Modell. Im Zentrum steht der Orchestrator, der Arbeit an spezialisierte Subagenten verteilt, deren Ergebnisse koordiniert und einen gemeinsamen Wissensstand (Shared Knowledge Store) verwaltet. Dieses Modell bietet entscheidende Vorteile gegenüber einem monolithischen Agenten: Spezialisierung führt zu höherer Qualität, Parallelisierung beschleunigt den Gesamtprozess, und Isolation verhindert, dass ein fehlerhafter Agent die gesamte Pipeline beeinträchtigt.
 
-<!-- TODO(abbildung): Abbildung 3: SDLC-Agenten-Pipeline – von der Anforderungsanalyse bis zum Deployment -->
+![SDLC-Agenten-Pipeline — von der Anforderungsanalyse bis zum Deployment](abbildungen/out/abb03.pdf){width=100%}
 
 ## 3.3 Agentenübersicht
 
-<!-- TODO(abbildung): Abbildung 4: Referenzarchitektur eines agentischen Entwicklungssystems im Enterprise-Kontext -->
+![Referenzarchitektur eines agentischen Entwicklungssystems im Enterprise-Kontext](abbildungen/out/abb04.pdf){width=80%}
 
 Der Agent Layer besteht aus spezialisierten Rollen (Architektur, Planung, Requirements, Entwicklung, Testing, Review, Deployment), die jeweils klar begrenzte Verantwortlichkeiten besitzen.
 
@@ -39,7 +39,7 @@ Delivery & Runtime umfasst PR/Merge, Signierung/SBOM, CI/CD-Gates, Kubernetes Ad
 
 ## 3.4 Runtime-Architektur
 
-<!-- TODO(abbildung): Abbildung 5: Runtime-Architektur eines agentischen Entwicklungssystems -->
+![Runtime-Architektur eines agentischen Entwicklungssystems](abbildungen/out/abb05.pdf){width=100%}
 
 Die Runtime-Architektur beschreibt den Ablauf eines Entwicklungsauftrags während der tatsächlichen Ausführung. Ein Entwicklungsziel wird zunächst vom Orchestrator entgegengenommen, der Zustände verwaltet, Budgets kontrolliert und Stop-Conditions definiert. Ein Planner-Agent zerlegt dieses Ziel anschließend in konkrete Aufgaben und delegiert sie an spezialisierte Agenten im Agent Pool.
 

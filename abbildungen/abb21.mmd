@@ -1,0 +1,31 @@
+flowchart TB
+    subgraph Menschen
+        ARCH["Architekt / Lead Developer<br/>spezifiziert, gibt frei"]
+        AUD["Auditor / Compliance<br/>liest Nachweise"]
+        ADM["Administrator<br/>Mandanten, Rollen, Policies"]
+    end
+
+    FAB["<b>Agentic Software Factory</b><br/>Control Plane<br/>Spring Boot 4 · Java 25"]
+
+    subgraph "Coding-Agenten (Subprozesse)"
+        CLI["Vendor-CLIs<br/>Claude Code · Codex · Gemini<br/>Aider · Kimi · lokales LLM"]
+        GW["Cloud-Gateways<br/>Bedrock · Vertex AI · Azure OpenAI"]
+    end
+
+    subgraph "Externe Systeme"
+        GIT["Git-Remote / GitHub<br/>Push · Pull Request · CI-Status"]
+        SEC["Scanner<br/>Trivy · OWASP DC"]
+        LIC["Lizenz-Stack<br/>Keycloak + License-Service"]
+    end
+
+    DB[("PostgreSQL 18<br/>Runs · Artefakte · Audit-Kette")]
+
+    ARCH --> FAB
+    ADM --> FAB
+    AUD --> FAB
+    FAB --> CLI
+    FAB --> GW
+    FAB <--> GIT
+    FAB --> SEC
+    FAB <--> LIC
+    FAB <--> DB

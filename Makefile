@@ -22,6 +22,9 @@ BUILD := build
 KAPITEL := kapitel
 CHAPTERS := 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
 
+# Pandoc setzt bei Abbildungen height=\textheight; ohne Abzug fuer die
+# Bildunterschrift laufen ganzseitige Floats ueber ("Float too large").
+FIG_HEIGHT := sed 's/height=.textheight/height=0.86\\textheight/'
 STRIP_NUMBERING := sed -E 's/^(\#{1,4}) [0-9]+(\.[0-9]+)* /\1 /'
 # Management Summary (00) ist ein unnummertes Kapitel: \chapter -> \addchap
 ADDCHAP := sed -E 's/^\\chapter\{/\\addchap{/'
@@ -31,7 +34,7 @@ ADDCHAP := sed -E 's/^\\chapter\{/\\addchap{/'
 # sonst kollidierende \label/\hypertarget-Ziele. Fix: Anker-IDs je Kapitel
 # per sed mit dem Kapitelpräfix versehen (rein technisch, kein Sichttext).
 
-.PHONY: all tex pdf html clean
+.PHONY: all tex pdf html clean abbildungen
 
 all: pdf
 
@@ -46,12 +49,12 @@ tex: $(BUILD)
 			$(STRIP_NUMBERING) "$$src" | $(PANDOC) -f markdown -t latex \
 				--top-level-division=chapter --biblatex --no-highlight \
 				| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k$$n-/g" \
-				| $(ADDCHAP) > $(BUILD)/$$n.tex; \
+				| $(FIG_HEIGHT) | $(ADDCHAP) > $(BUILD)/$$n.tex; \
 		else \
 			$(STRIP_NUMBERING) "$$src" | $(PANDOC) -f markdown -t latex \
 				--top-level-division=chapter --biblatex --no-highlight \
 				| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k$$n-/g" \
-				> $(BUILD)/$$n.tex; \
+				| $(FIG_HEIGHT) > $(BUILD)/$$n.tex; \
 		fi; \
 	done
 
@@ -74,3 +77,15 @@ pdfa: pdf
 
 clean:
 	rm -rf $(BUILD)
+
+# Abbildungen: Mermaid-Quellen (abbildungen/*.mmd) -> PDF (abbildungen/out/)
+# Benötigt Node.js; mermaid-cli wird via npx geladen.
+abbildungen:
+	@mkdir -p abbildungen/out
+	@for f in abbildungen/*.mmd; do \
+		n=$$(basename "$$f" .mmd); \
+		echo "mmdc: $$f -> abbildungen/out/$$n.pdf"; \
+		npx -y @mermaid-js/mermaid-cli -q -p abbildungen/puppeteer.json \
+			-c abbildungen/mermaid.json -i "$$f" \
+			-o "abbildungen/out/$$n.pdf" --pdfFit -b transparent; \
+	done

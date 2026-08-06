@@ -103,7 +103,7 @@ Für die Einordnung ist die Abgrenzung so wichtig wie der Funktionsumfang:
 
 ## 19.2 Systemkontext und Bausteinsicht
 
-<!-- TODO(abbildung): Abbildung 21: Systemkontext der Agentic Software Factory: eine Control Plane zwischen Mensch, Coding-Agenten und Zielrepository. -->
+![Systemkontext der Agentic Software Factory: eine Control Plane zwischen Mensch, Coding-Agenten und Zielrepository](abbildungen/out/abb21.pdf){width=100%}
 
 Der Systemkontext unterscheidet drei menschliche Rollen — Architekt/Lead
 Developer (spezifiziert, gibt frei), Auditor/Compliance (liest Nachweise)
@@ -115,7 +115,7 @@ Auditor und Administrator sind eigenständige Akteure geworden. Das ist kein
 Zufall, sondern die Konsequenz aus dem Governance-Anspruch — wer Nachweise
 verlangt, braucht eine Rolle, die sie liest.
 
-<!-- TODO(abbildung): Abbildung 22: Bausteinsicht: modularer Monolith mit Ports-and-Adapters pro Slice; externe Werkzeuge ausschließlich hinter Ports. -->
+![Bausteinsicht: modularer Monolith mit Ports-and-Adapters pro Slice; externe Werkzeuge ausschließlich hinter Ports](abbildungen/out/abb22.pdf){width=70%}
 
 ### Modularer Monolith mit erzwungenen Grenzen
 
@@ -126,7 +126,7 @@ Bounded Context — insgesamt 27. Jeder Slice trägt seine eigenen Schichten (`d
 Coding-CLIs, Git, Maven, Scanner, GitHub-API — sitzen ausschließlich hinter
 Ports.
 
-<!-- TODO(abbildung): Abbildung 23: Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails) konsumieren nur. -->
+![Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails) konsumieren nur](abbildungen/out/abb23.pdf){width=100%}
 
 Die Größenverteilung der Slices ist selbst eine Aussage: `run` und
 `execution` machen zusammen ein Viertel der Codebasis aus — die Steuerung
@@ -189,7 +189,7 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-<!-- TODO(abbildung): Abbildung 26: Kernaggregate des Datenmodells. Vollständig: 39 Tabellen, 37 Flyway-Migrationen. -->
+![Kernaggregate des Datenmodells. Vollständig: 39 Tabellen, 37 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
@@ -235,9 +235,9 @@ Whitepapers weiter:
   fremde Reviewer, fremder Merge-Zeitpunkt) ist im Modell abgebildet, statt
   am Systemrand zu enden.
 
-<!-- TODO(abbildung): Abbildung 24: Laufzeitablauf eines Build-Runs von der Anlage bis zum Merge, inklusive Korrekturschleife und Approval-Punkten. -->
+![Laufzeitablauf eines Build-Runs von der Anlage bis zum Merge, inklusive Korrekturschleife und Approval-Punkten](abbildungen/out/abb24.pdf){width=100%}
 
-<!-- TODO(abbildung): Abbildung 25: Zustandsmodell eines Runs. Alle Übergänge sind zentral hinterlegt; unerlaubte Übergänge werfen. -->
+![Zustandsmodell eines Runs. Alle Übergänge sind zentral hinterlegt; unerlaubte Übergänge werfen](abbildungen/out/abb25.pdf){width=70%}
 
 ### Ablauf eines Build-Runs
 
@@ -288,7 +288,7 @@ zusätzlicher Kontext in einen erneuten Agentenlauf eingespeist — maximal
 zwei Versuche, danach bleibt der Run in `NEEDS_CORRECTION` und die Befunde
 bleiben nachvollziehbar.
 
-<!-- TODO(abbildung): Abbildung 30: Die Korrekturschleife als Regelkreis — Befunde werden zu Eingaben des nächsten Laufs. -->
+![Die Korrekturschleife als Regelkreis — Befunde werden zu Eingaben des nächsten Laufs](abbildungen/out/abb30.pdf){width=100%}
 
 Zwei Details aus dem Betrieb:
 
@@ -319,7 +319,7 @@ Hierarchie (Run-Override > Projekt-Default > User-Setting > globales
 Setting > Konfigurationsdatei); ein Projekt kann die erlaubten Adapter
 einschränken, und Policy-as-Code kann diese Wahl mandantenweit übersteuern.
 
-<!-- TODO(abbildung): Abbildung 27: Vendor-Neutralität durch einen Port: Application- und Web-Schicht kennen ausschließlich den ExecutionAdapter (ArchUnit-erzwungen). -->
+![Vendor-Neutralität durch einen Port: Application- und Web-Schicht kennen ausschließlich den ExecutionAdapter (ArchUnit-erzwungen)](abbildungen/out/abb27.pdf){width=100%}
 
 Drei Entwurfsentscheidungen im Port selbst:
 
@@ -474,7 +474,7 @@ streifte und der in regulierten Umgebungen über Einsatz oder Nicht-Einsatz
 entscheidet: **Wie beweist man hinterher, was ein Agent unter welchen
 Regeln getan hat?**
 
-<!-- TODO(abbildung): Abbildung 28: Von der Policy bis zum Auditbericht: jede Durchsetzung erzeugt ein signiertes Kettenglied. -->
+![Von der Policy bis zum Auditbericht: jede Durchsetzung erzeugt ein signiertes Kettenglied](abbildungen/out/abb28.pdf){width=100%}
 
 ### Mandanten und Rollen
 
@@ -621,7 +621,7 @@ ephemere Agent-Container je Run. Der Lizenz-Stack (OIDC-Provider plus
 Lizenzdienst) ist getrennt und optional; er kann außerhalb der
 Unternehmensgrenze stehen oder ganz entfallen.
 
-<!-- TODO(abbildung): Abbildung 29: Deployment-Sicht: ein Anwendungscontainer, eine Datenbank, optional getrennter Lizenz-Stack. Air-Gap-fähig. -->
+![Deployment-Sicht: ein Anwendungscontainer, eine Datenbank, optional getrennter Lizenz-Stack. Air-Gap-fähig](abbildungen/out/abb29.pdf){width=85%}
 
 Die Startzeit-Härtung folgt durchgehend dem Prinzip *fail fast*: Der
 Compose-Stack bricht ohne Konfigurationsdatei ab statt mit

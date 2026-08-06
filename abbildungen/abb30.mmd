@@ -1,0 +1,8 @@
+flowchart LR
+    EX["Execution<br/>Agent erzeugt Diff"] --> BUILD["Build-Gate<br/>mvn verify / npm run build"]
+    BUILD --> GATE["Quality Gate<br/>6 Reviewer, parallel"]
+    GATE -->|PASS| MERGE["Branch-Abschluss<br/>Merge oder Pull Request"]
+    GATE -->|"FAIL / Build rot /<br/>Merge-Konflikt / CI rot"| FB["Feedback-Text<br/>Findings, Konfliktdateien, Logs"]
+    FB --> COUNT{"Versuch &lt; 2 ?"}
+    COUNT -->|ja| EX
+    COUNT -->|nein| FAILED["Run FAILED<br/>Befunde bleiben nachvollziehbar"]

@@ -35,7 +35,7 @@ Wir verwenden eine Multi-Agent-Architektur mit Hub-and-Spoke-Topologie und zentr
 
 #### Hub-and-Spoke-Topologie
 
-<!-- TODO(abbildung): Abbildung 16: Hub and Spoke - Topologie -->
+![Hub-and-Spoke-Topologie](abbildungen/out/abb16.pdf){width=100%}
 
 #### Kommunikationsmodell
 
@@ -136,7 +136,7 @@ Jeder parallellaufende Agent arbeitet in einem eigenen Git Worktree. Änderungen
 
 #### Worktree-Lebenszyklus
 
-<!-- TODO(abbildung): Worktree-Lebenszyklus (Diagramm ohne Nummerierung im Abbildungsverzeichnis des Originals, S. 54) -->
+![Worktree-Lebenszyklus: von der Task-Erstellung bis zu Merge oder Korrektur](abbildungen/out/abb-worktree.pdf){width=80%}
 
 #### Namenskonventionen
 
@@ -222,7 +222,7 @@ Jede Codeänderung eines Agenten durchläuft eine sechsstufige Validierungs-Pipe
 
 #### Pipeline-Stufen
 
-<!-- TODO(abbildung): Abbildung 17: Pipeline Stufen -->
+![Die sechs Pipeline-Stufen der Guardrails-Validierung](abbildungen/out/abb17.pdf){width=75%}
 
 Stufe 1: Syntax-Validierung
 
@@ -355,7 +355,7 @@ Branches repräsentieren Workflow-States, Commits sind Checkpoints, Pull Request
 
 #### Git als State Machine
 
-<!-- TODO(abbildung): Abbildung 18: Git als State-Machine -->
+![Git als State-Machine](abbildungen/out/abb18.pdf){width=85%}
 
 #### Shared Knowledge Store
 

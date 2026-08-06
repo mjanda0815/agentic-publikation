@@ -1,0 +1,11 @@
+flowchart LR
+    CODE["Agent-generierter Code<br/>oder Pull Request"]
+    SA["Static Analysis<br/>Linter · Style · Dependency Check"]
+    SS["Security Scan<br/>SAST · Secrets · Vulnerabilities"]
+    AV["Architecture Validation<br/>DDD-Regeln · Layer-Grenzen"]
+    TE["Test Execution<br/>Unit · Integration · E2E"]
+    OK["Freigabe / Merge<br/>oder Deployment"]
+    CODE --> SA --> AV
+    CODE --> SS --> TE
+    AV --> OK
+    TE --> OK

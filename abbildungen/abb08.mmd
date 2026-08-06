@@ -1,0 +1,12 @@
+flowchart LR
+    A["Architektur-Agent"]
+    P["Planungs-Agent"]
+    D["Entwicklungs-Agent"]
+    T["Testing-Agent"]
+    SKS["<b>Shared Knowledge Store</b><br/>Architektur-Docs · ADRs ·<br/>Requirements · Task-Graph"]
+    VM["Vector Memory<br/>Embeddings · semantische Suche<br/>(optional)"]
+    A --> SKS
+    P --> SKS
+    D --> SKS
+    T --> SKS
+    SKS <--> VM

@@ -1,0 +1,7 @@
+flowchart TB
+    L1["<b>Short-Term Context</b> — ephemer (ein Turn, nur aktueller Agent)<br/>LLM-Kontextfenster: Prompt + aktueller Code"]
+    L2["<b>Session Memory</b> — ein Task, nur eigener Agent<br/>Tool-Ergebnisse, Zwischenstände"]
+    L3["<b>Shared Knowledge Store</b> — Workflow/Sprint, alle Agenten<br/>Knowledge Graph, Dependency Map, Findings (docs/knowledge/)"]
+    L4["<b>Vector Memory</b> — Projektlaufzeit, alle Agenten, optional<br/>Embeddings, semantische Code-Suche"]
+    L5["<b>Decision Log</b> — permanent, append-only, Team + Audit<br/>ADRs, Architekturentscheidungen, Review-Findings"]
+    L1 --> L2 --> L3 --> L4 --> L5

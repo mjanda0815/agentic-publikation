@@ -1,0 +1,8 @@
+flowchart LR
+    G["Goal<br/>Feature / Change<br/>Request"] --> P["Planning-Agent<br/>Task-Graph"]
+    P --> A["Architektur-Agent<br/>Patterns / ADR"]
+    A --> D["Dev-Agent<br/>Worktree-<br/>Implementierung"]
+    D --> T["Test-Agent<br/>Unit / Integration"]
+    T --> R["Review-Agent<br/>Qualität / Security"]
+    R --> GATE["Governance Gate<br/>Guardrails · Validation · Compliance"]
+    GATE --> PR["Pull Request / Merge<br/>CI/CD-Pipeline"]

@@ -1,0 +1,16 @@
+flowchart TB
+    MAIN1["main (stabil)"]
+    FEAT["feature/FEAT-42-payment<br/>(Feature-Koordination)<br/>Orchestrator erstellt Tasks, verteilt an Agenten"]
+    W1["agent/dev/FEAT-42-<br/>payment-domain<br/>(Worktree 1)"]
+    W2["agent/dev/FEAT-42-<br/>payment-api<br/>(Worktree 2)"]
+    W3["agent/test/FEAT-42-<br/>payment-tests<br/>(Worktree 3)"]
+    MERGE["feature/FEAT-42-payment<br/>(Merge aller Agent-Branches)"]
+    MAIN2["main (stabil)"]
+    MAIN1 -- "git checkout -b" --> FEAT
+    FEAT --> W1
+    FEAT --> W2
+    FEAT --> W3
+    W1 -- "Guardrails" --> MERGE
+    W2 -- "Guardrails" --> MERGE
+    W3 -- "Guardrails" --> MERGE
+    MERGE -- "Review-Agent + Guardrails" --> MAIN2

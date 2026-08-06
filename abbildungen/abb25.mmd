@@ -1,0 +1,24 @@
+stateDiagram-v2
+    [*] --> DRAFT
+    DRAFT --> READY
+    READY --> PREPARING
+    PREPARING --> RUNNING
+    RUNNING --> WAITING_FOR_APPROVAL: Freigabe vor Execution
+    WAITING_FOR_APPROVAL --> RUNNING: freigegeben
+    RUNNING --> PAUSED
+    PAUSED --> RUNNING
+    RUNNING --> VALIDATING
+    VALIDATING --> NEEDS_CORRECTION: Gate/Build FAIL
+    NEEDS_CORRECTION --> RUNNING: Korrekturversuch (max. 2)
+    VALIDATING --> WAITING_FOR_APPROVAL: Freigabe vor Merge
+    VALIDATING --> WAITING_FOR_PR: Push + Pull Request
+    WAITING_FOR_PR --> COMPLETED: CI grün + gemerged
+    WAITING_FOR_PR --> NEEDS_CORRECTION: CI rot
+    VALIDATING --> COMPLETED
+    RUNNING --> FAILED
+    RUNNING --> TIMEOUT
+    RUNNING --> CANCELLED
+    COMPLETED --> [*]
+    FAILED --> [*]
+    TIMEOUT --> [*]
+    CANCELLED --> [*]

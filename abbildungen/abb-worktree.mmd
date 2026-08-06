@@ -1,0 +1,13 @@
+flowchart TB
+    S1["1 — Orchestrator erstellt Task für Agent"]
+    S2["2 — Worktree wird erzeugt<br/><i>git worktree add /tmp/agent-id -b agent/task main</i>"]
+    S3["3 — Agent arbeitet isoliert im Worktree<br/>Dateien lesen/schreiben · Build · Tests"]
+    S4["4 — Agent committet<br/><i>git add . && git commit</i>"]
+    S5["5 — Guardrails-Pipeline läuft gegen den Branch"]
+    M["6a — Merge in main<br/><i>git merge --no-ff</i>"]
+    C["7a — Worktree aufräumen<br/><i>git worktree remove · git branch -d</i>"]
+    FB["6b — Agent erhält Feedback<br/>(Fehlermeldungen aus der Pipeline)"]
+    S1 --> S2 --> S3 --> S4 --> S5
+    S5 -- "PASSED" --> M --> C
+    S5 -- "FAILED" --> FB
+    FB -- "korrigiert im selben Worktree<br/>(max. n Retries)" --> S3

@@ -1,0 +1,13 @@
+flowchart TB
+    AL["<b>Agent Layer</b><br/>Architecture · Planning · Requirements · Dev · Test · Review · Deploy"]
+    ORCH["<b>Orchestrator</b><br/>Task-Graph · Budgets · Stop-Conditions"]
+    TWL["<b>Tool & Workspace Layer</b><br/>Repo · Build · Test · Scanner"]
+    KC["<b>Knowledge & Context</b><br/>Shared State · ADRs · Findings"]
+    GOV["<b>Governance Core</b><br/>Policies · Risk Scoring · Approvals · Audit"]
+    DR["<b>Delivery & Runtime</b><br/>PR/Merge · CI/CD · Observability"]
+    AL --> ORCH
+    ORCH --> TWL
+    ORCH --> KC
+    TWL --> GOV
+    KC --> GOV
+    GOV --> DR

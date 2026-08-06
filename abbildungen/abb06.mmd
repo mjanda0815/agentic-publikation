@@ -1,0 +1,24 @@
+flowchart TB
+    ZIEL["Entwicklungsziel"]
+    ORCH["Orchestrator"]
+    PLAN["Planner-Agent"]
+    TG["Task-Graph (DAG)<br/>Budget-Limits · Stop-Conditions · Retry-Regeln"]
+    A["Architektur-<br/>Agent"]
+    D1["Dev-Agent<br/>(Worktree A)"]
+    D2["Dev-Agent<br/>(Worktree B)"]
+    T["Test-Agent"]
+    GP["<b>Guardrails-Pipeline</b><br/>Syntax → Style → Security → Domain → Tests → Confidence"]
+    PR["Pull Request → CI/CD → Merge"]
+    ZIEL --> ORCH
+    ORCH <--> PLAN
+    ORCH --> TG
+    TG --> A
+    TG --> D1
+    TG --> D2
+    TG --> T
+    A --> GP
+    D1 --> GP
+    D2 --> GP
+    T --> GP
+    GP -- "Retry-Loop" --> T
+    GP --> PR

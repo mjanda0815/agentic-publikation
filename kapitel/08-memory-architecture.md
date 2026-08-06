@@ -1,6 +1,6 @@
 # 8 Memory Architecture
 
-<!-- TODO(abbildung): Abbildung 8: Wissens- und Speicherarchitektur eines Multi-Agent-Entwicklungssystems -->
+![Wissens- und Speicherarchitektur eines Multi-Agent-Entwicklungssystems](abbildungen/out/abb08.pdf){width=100%}
 
 Agentische Entwicklungssysteme benötigen eine gemeinsame Wissensbasis, damit spezialisierte Agenten Informationen austauschen können, ohne ihre Kontextisolation aufzugeben.
 
@@ -12,7 +12,7 @@ Ergänzend kann eine Vektor-basierte Memory-Komponente eingesetzt werden, um sem
 
 Die Memory Architecture des Agentensystems definiert, wie Wissen gespeichert, geteilt und über den Lebenszyklus eines Workflows hinweg erhalten bleibt. Das Modell unterscheidet fünf Speicherschichten mit unterschiedlicher Lebensdauer, Sichtbarkeit und Zugriffsgeschwindigkeit:
 
-<!-- TODO(abbildung): Abbildung 9: Memory Architecture – Fünf-Schichten-Modell von ephemer bis persistent -->
+![Memory Architecture — Fünf-Schichten-Modell von ephemer bis persistent](abbildungen/out/abb09.pdf){width=85%}
 
 | Schicht | Lebensdauer | Sichtbarkeit | Implementierung |
 | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ nicht an Informationen anderer Agenten.
 
 Der Shared Knowledge Store ist die zentrale Wissensbasis für die agentenübergreifende Zusammenarbeit. Er besteht aus fünf Komponenten:
 
-<!-- TODO(abbildung): Abbildung 10: Shared Knowledge Store – Zentrale Wissensbasis für Agenten -->
+![Shared Knowledge Store — zentrale Wissensbasis für Agenten](abbildungen/out/abb10.pdf){width=100%}
 
 | Komponente | Beschreibung | Zugriffsmuster |
 | --- | --- | --- |

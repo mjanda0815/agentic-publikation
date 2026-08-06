@@ -1,0 +1,17 @@
+flowchart TB
+    ARCH["Architektur-<br/>Agent"]
+    PLAN["Planungs-<br/>Agent"]
+    REQ["Requirements-<br/>Agent"]
+    DEV["Entwicklungs-<br/>Agent"]
+    TEST["Testing-<br/>Agent"]
+    CFG["CLAUDE.md / AGENTS.md<br/>Konfiguration"]
+    ORCH["<b>Orchestrator</b><br/>(Hauptsitzung)"]
+    SKS["Shared Knowledge Store<br/>(docs/knowledge/)"]
+    REV["Review-<br/>Agent"]
+    DEPL["Deployment-<br/>Agent"]
+    QA["QA-Guard-<br/>Agent"]
+    DOC["Doc-<br/>Agent"]
+    ARCH & PLAN & REQ & DEV & TEST --> ORCH
+    CFG -.-> ORCH
+    ORCH --> SKS
+    SKS --> REV & DEPL & QA & DOC

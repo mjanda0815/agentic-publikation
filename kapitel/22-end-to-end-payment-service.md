@@ -32,15 +32,13 @@ Abschließend übernimmt ein Deployment-Agent die Erstellung der notwendigen Inf
 
 Die folgende Abbildung zeigt den Gesamtworkflow der agentischen Umsetzung eines Features.
 
-<!-- TODO(abbildung): Abbildung 19: End-to-End Workflow -->
+*(Die Workflow-Abbildungen der v1.3 an dieser Stelle — „End-to-End Workflow" und „Interaktion der Systemkomponenten" — sind in v2.0 mit den inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 Während das vorherige Diagramm den Ablauf eines Entwicklungsauftrags zeigt, ist für das Verständnis der Architektur auch relevant, welche Systemkomponenten während dieses Prozesses miteinander interagieren.
 
 Der Orchestrator fungiert dabei als zentrale Steuerungseinheit des agentischen Entwicklungssystems. Er übersetzt Entwicklungsziele in einen Task Graph und startet spezialisierte Agenten, die jeweils klar abgegrenzte Aufgaben übernehmen. Diese Agenten arbeiten in isolierten Workspaces und greifen über definierte Tool-Schnittstellen auf Build-Systeme, Testframeworks und Deployment-Werkzeuge zu.
 
 Die folgende Abbildung zeigt, wie die einzelnen Architekturkomponenten während eines End-to-End-Workflows zusammenwirken.
-
-<!-- TODO(abbildung): Abbildung 20: Interaktion der Systemkomponenten -->
 
 ## 22.3 Agentischer Workflow
 
