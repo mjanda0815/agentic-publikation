@@ -29,6 +29,10 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       → daraus die Arbeitsliste für die Modernisierung ableiten.
 - [ ] Abbildungen des Originals sichten: welche werden als eigene Skripte
       neu erzeugt (harte Regel 5)?
+- [ ] **Neuer Hauptabschnitt „SoftwareFabrik":** Gliederung aus dem Repo
+      `/mnt/c/dev/SoftwareFabrik` ableiten (Architektur, Orchestrierung,
+      Workflows, QS, Lessons Learned) → Abnahme durch Martin → Rohtext →
+      Review. Public-Ready beachten: keine Secrets/Kundendetails.
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI
       (Zenodo-GitHub-Integration besteht bereits; archiviert nur öffentliche
       Releases).

@@ -8,11 +8,16 @@
 
 Modernisierung des Whitepapers „Agentic Software Development — Enterprise
 Architecture with AI Agents" (Version 1.3, März 2026; 75 Seiten, Word-Satz) zu
-einer aktualisierten, reproduzierbar gebauten Fassung. Die Original-PDF liegt
-unter `quellen/Agentic_Software_Development_v13.pdf`; falls die Word-Quelldatei
+einer aktualisierten, reproduzierbar gebauten Fassung — **erweitert um einen
+neuen Hauptabschnitt, der Martins SoftwareFabrik vollständig beschreibt**
+(das Whitepaper war ihre konzeptionelle Basis; Quelle der Wahrheit ist das
+Repo `/mnt/c/dev/SoftwareFabrik`, daraus ableiten, nichts erfinden; keine
+Secrets/Zugangsdaten/Kundendetails übernehmen). Die Original-PDF liegt unter
+`quellen/Agentic_Software_Development_v13.pdf`; falls die Word-Quelldatei
 (.docx) verfügbar ist, gehört sie ebenfalls nach `quellen/` (bessere
-Extraktionsbasis als das PDF). Die Arbeitsliste ist `TODO.md` — Single Source
-of Truth für offene Aufgaben.
+Extraktionsbasis als das PDF). Einstieg für die erste Session:
+`INITIAL_PROMPT.md`. Die Arbeitsliste ist `TODO.md` — Single Source of Truth
+für offene Aufgaben.
 
 ## Arbeitsweise
 
