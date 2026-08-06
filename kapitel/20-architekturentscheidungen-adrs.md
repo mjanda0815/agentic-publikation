@@ -153,9 +153,11 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 > Ausführung — Perspektivenvielfalt ist beim Prüfen wertvoller als beim
 > Erzeugen, und mehrere gleichzeitig schreibende Agenten erzeugen
 > Konfliktkosten und einen nicht attestierbaren Zustand (19.8).
-> *Status (v2.1): durch die Praxis korrigiert — und in der Roadmap
-> generalisiert: Die geplante Workflow-Ebene erlaubt parallele Child Runs
-> unter Single-Writer-Isolation je Workspace (19.10).*
+> *Status (v2.2): durch die Praxis korrigiert — und in ADR-5
+> generalisiert: Die Workflow-Ebene existiert seit Release 0.21.0 für
+> nicht-schreibende Child Runs unter Single-Writer-Isolation je Workspace
+> (Feature-Flag, Standard aus); parallel schreibende Child Runs folgen mit
+> Stufe 2 (19.10).*
 
 ## ADR-2: Workspace Isolation via Git Worktrees
 
@@ -164,8 +166,9 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 > Die aktuelle Referenzimplementierung verwendet **Branch-Isolation auf
 > einem projektpersistenten Workspace** statt Worktrees je Agent, weil
 > Iteration über Läufe hinweg parallele Isolation schlägt (19.3). Worktrees
-> kehren in der Zielarchitektur als Isolationseinheit je Child Run zurück,
-> abgesichert durch Workspace Leases — siehe **ADR-6: Workspace Leases und
+> sind seit Release 0.21.0 als Isolationseinheit nicht-schreibender Child
+> Runs zurückgekehrt; für schreibende Child Runs werden sie zusätzlich
+> durch Workspace Leases abgesichert — siehe **ADR-6: Workspace Leases und
 > exklusive Ressourcen** sowie 19.10.
 
 ### Motivation / Kontext
@@ -254,9 +257,9 @@ Ein Agent committet und merged entweder alles oder nichts. Partial Merges (nur m
 > schlägt parallele Isolation — der zweite Lauf soll auf dem Ergebnis des
 > ersten aufsetzen. Der Preis (Läufe desselben Projekts nicht beliebig
 > parallel) ist benannt und akzeptiert (19.3, 19.8).
-> *Status (v2.1): In der Zielarchitektur kehren Worktrees zurück — als
-> Isolationseinheit je Child Run, abgesichert durch Workspace Leases
-> (19.10).*
+> *Status (v2.2): Worktrees sind zurückgekehrt — seit 0.21.0 als
+> Isolationseinheit je nicht-schreibendem Child Run; für schreibende Child
+> Runs kommen Workspace Leases hinzu (ADR-6, 19.10).*
 
 ## ADR-3: Guardrail Pipeline als Pflicht-Gate
 
@@ -558,9 +561,9 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > alleinige Wahrheit: Der autoritative Zustand liegt in der Datenbank, weil
 > ein Auditor Fragen stellt, die `git log` nicht beantwortet — welche Policy
 > galt, welches Modell arbeitete, wer hat freigegeben (19.8).
-> *Status (v2.1): bestätigt und fortgeschrieben — auch Workflow-, Task-,
-> Lease- und Planungszustand liegen künftig autoritativ in der Datenbank
-> (19.10).*
+> *Status (v2.2): bestätigt und fortgeschrieben — Workflow-, Task- und
+> Planungszustand liegen seit 0.21.0 autoritativ in der Datenbank; der
+> Lease-Zustand folgt mit Stufe 2 (ADR-8, 19.10).*
 
 ## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
 

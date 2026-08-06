@@ -17,15 +17,20 @@
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
 > dort Beschriebene ist implementiert und in Betrieb, Stand 0.21.0) und
-> ihrer geplanten Weiterentwicklung (Abschnitt 19.10 — durchgängig als
-> *geplant* gekennzeichnet). Der aktuelle Stand verwendet genau einen
-> schreibenden Agenten je Run und mehrere unabhängige read-only Reviewer.
+> ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
+> je Stufe ausgewiesen: Die Stufen 0 und 1, also parallele
+> *nicht-schreibende* Analyse, sind seit Release 0.21.0 hinter einem
+> standardmäßig deaktivierten Feature-Flag umgesetzt; alles Weitere,
+> insbesondere jede Form parallelen Schreibens, ist als *geplant*
+> gekennzeichnet). Der aktuelle Stand verwendet genau einen
+> schreibenden Agenten je Run und mehrere unabhängige Read-only-Reviewer.
 > Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
 > gleichzeitig schreibende Agenten Konfliktkosten, unklare Zurechnung und
 > schwer attestierbare Zwischenstände erzeugen. Die nächste Ausbaustufe
 > verwirft das parallele Agentenmodell nicht, sondern ordnet es neu:
 > Parallelität wird auf eine übergeordnete Workflow-Ebene verlagert, das
-> Single-Writer-Prinzip bleibt je Workspace bestehen. Die Beschreibung des
+> Single-Writer-Prinzip bleibt je Workspace bestehen. Diese Verlagerung hat
+> mit 0.21.0 an der risikoärmsten Stelle begonnen. Die Beschreibung des
 > Zielbilds ist damit keine Behauptung über den aktuellen Produktstand,
 > sondern eine nachvollziehbare Roadmap aus der bestehenden Architektur
 > heraus.
@@ -89,12 +94,11 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 | Releases | 28 (0.1.0 bis 0.21.0, April–August 2026) |
 
 *Erhoben auf dem Entwicklungsstand `main` nach Release 0.21.0
-(6. August 2026). Der Zuwachs gegenüber 0.20.0 (364 Produktivklassen,
-39 Tabellen, 38 Migrationen) geht fast vollständig auf die Workflow-Ebene
+(6. August 2026). Der Zuwachs gegenüber Release 0.20.0 (27 Slices,
+39 Tabellen, 37 Migrationen) geht fast vollständig auf die Workflow-Ebene
 zurück: Release 0.21.0 hat die Roadmap-Stufen 0 und 1 umgesetzt (19.10) —
-fünf neue Tabellen, drei Migrationen und das Workflow-Aggregat mit
-Task-Graph und Synthese. Die Zahl der Slices bleibt bei 28, weil der
-`workflow`-Slice bereits mit Stufe 0 angelegt wurde.*
+ein neuer Slice (`workflow`), fünf neue Tabellen und vier Migrationen
+(V40–V43) für das Workflow-Aggregat mit Task-Graph und Synthese.*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
@@ -148,7 +152,7 @@ Bounded Context — insgesamt 28. Jeder Slice trägt seine eigenen Schichten (`d
 Coding-CLIs, Git, Maven, Scanner, GitHub-API — sitzen ausschließlich hinter
 Ports.
 
-![Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails) konsumieren nur](abbildungen/out/abb23.pdf){width=100%}
+![Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails, observability) konsumieren nur; die technischen Querschnittspakete common und web sind nicht dargestellt](abbildungen/out/abb23.pdf){width=100%}
 
 Die Größenverteilung der Slices ist selbst eine Aussage: `run` und
 `execution` machen zusammen ein Viertel der Codebasis aus — die Steuerung
@@ -169,7 +173,7 @@ Systems.]
 - **Hexagonale Regeln:** `domain` kennt `application` nicht; weder
   `application` noch `web` kennt eine konkrete
   `ExecutionAdapter`-Implementierung. Die letzten beiden Regeln sind der
-  Kern der Vendor-Neutralität: Es ist technisch unmöglich, versehentlich
+  Kern der Vendor-Neutralität: Auf Klassenebene ist es ausgeschlossen, versehentlich
   einen Service an einen konkreten Vendor zu koppeln — der Build bricht.
 - **Debt-Ratchet:** Zwei Regeln, die heute *nicht* eingehalten werden
   (Modulzyklen; 13 direkte `web → JpaRepository`-Zugriffe), werden mit
@@ -211,14 +215,15 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-![Kernaggregate des Datenmodells. Vollständig: 39 Tabellen, 38 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
+![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 44 Tabellen in 41 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
 V19–V25 Plan-/Build-Runs, Branches, Quality Gate (Lebenszyklus), V26–V33
 ausschließlich Mandanten- und Nachweisstrukturen (Mehrmandantenfähigkeit
-und Nachweisfähigkeit), V34–V39 Repository-Realität, Skills, Routinen. Auf
-diese Kurve kommt Abschnitt 19.8 zurück.
+und Nachweisfähigkeit), V34–V39 Repository-Realität, Skills, Routinen, V40–V43 die
+Workflow-Ebene und damit die Parallelität. Auf diese Kurve kommt
+Abschnitt 19.8 zurück.
 
 ## 19.3 Das Ausführungsmodell: der Run
 
@@ -227,7 +232,7 @@ Execution Model aus Kapitel 7, jedoch nicht als Task-Graph, sondern als
 **zustandsbehaftete Pipeline mit Regelkreis**. Die gesamte Orchestrierung
 hat genau eine Stelle, an der Run-Statuswechsel stattfinden; die erlaubten
 Übergänge liegen zentral, unerlaubte Übergänge werfen eine Ausnahme statt
-still zu passieren.^[`RunOrchestrationService` (~1.550 Zeilen),
+still zu passieren.^[`RunOrchestrationService` (~1.580 Zeilen),
 `RunStatusTransitions`; unerlaubte Übergänge werfen
 `InvalidRunStateTransitionException`.]
 
@@ -240,7 +245,7 @@ Backlog-Elemente (`plan_item`, mit Abhängigkeiten) in der Datenbank. Ein
 **Build-Run** setzt ein Backlog-Element tatsächlich um: Code auf einem
 isolierten Branch, validiert, gemergt oder als Pull Request übergeben. Die
 Asymmetrie ist Absicht — ein Plan-Run darf keinen Code ändern und
-durchläuft kein Build-Gate. Damit ist Planung risikofrei automatisierbar,
+durchläuft kein Build-Gate. Damit ist Planung ohne Schreibrisiko am Code automatisierbar,
 die Grundlage für zeitgesteuerte Routinen und automatische Folgevorschläge.
 
 Jeder Run durchläuft sieben Phasen (Intake, Prompt-Assembly,
@@ -448,8 +453,8 @@ nicht den Code, sondern die *Behauptungen über den Code* — „alle Tests
 laufen durch“ bei unverändertem Testverzeichnis, unberührte
 Akzeptanzkriterien, Importe nicht existierender Klassen. Das ist die
 direkte Umsetzung der Halluzinationserkennung aus Kapitel 12 — treffender
-als **Claim Verification** bezeichnet, denn geprüft werden die Behauptungen
-des Agenten —, verschoben vom Code auf die Selbstauskunft des Agenten — dort sitzt der klassische
+als **Claim Verification** bezeichnet —, verschoben vom Code auf die
+Selbstauskunft des Agenten — dort sitzt der klassische
 Selbstbetrug agentischer Systeme.
 
 ### Die Gate-Policy
@@ -724,8 +729,11 @@ Parallelität deshalb von der Erzeugung auf die Bewertung. Aus demselben
 Grund wurde die Workspace-Isolation über Git-Worktrees (ADR-2) zur
 **Branch-Isolation auf einem projektpersistenten Workspace**: Iteration
 über Läufe hinweg schlägt parallele Isolation. Der Preis ist benannt —
-Läufe desselben Projekts sind nicht beliebig parallel; die parallele
-Multi-Branch-Ausführung ist bewusst zurückgestellt.
+Läufe desselben Projekts sind nicht beliebig parallel; die parallel
+*schreibende* Multi-Branch-Ausführung ist bewusst zurückgestellt (Stufe 2).
+Die parallele Read-only-Analyse in getrennten Worktrees ist seit 0.21.0
+umgesetzt, und die Sperre gegen gleichzeitige Läufe vergleicht inzwischen
+den Workspace statt des Projekts (19.10).
 
 ### (2) Regelkreis statt Retry — Repository-Realität als Eingabe
 
@@ -789,7 +797,7 @@ Erhebungsstand 6. August 2026:
 
 | Punkt | Art |
 |---|---|
-| Parallel **schreibende** Child Runs (mehrere Branches je Projekt); parallele *Analyse* ist seit 0.21.0 verfügbar | Gegenstand der Roadmap-Stufe 2 (19.10) |
+| Parallel **schreibende** Child Runs (mehrere Branches je Projekt); parallele *Analyse* ist seit 0.21.0 verfügbar (Feature-Flag, Standard aus) | Gegenstand der Roadmap-Stufe 2 (19.10) |
 | Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
@@ -865,7 +873,7 @@ zu einer Workflow-Plattform für mehrere koordinierte Läufe
 weiterentwickelt. Der bestehende Run bleibt die atomare Ausführungseinheit
 — er wird nicht ersetzt, sondern zum **Child Run** eines übergeordneten
 **Workflows**: Ein Workflow bildet ein Feature oder Vorhaben ab und zerlegt
-es in **Workflow Tasks** mit Abhängigkeiten (Task Graph). Jeder schreibende
+es in **Workflow-Tasks** mit Abhängigkeiten (Task Graph). Jeder schreibende
 Task wird durch einen eigenen Child Run mit isoliertem Branch oder Worktree
 ausgeführt; Read-only-Reviewer prüfen die Child Runs parallel; ein **Merge
 Coordinator** führt erfolgreiche Ergebnisse kontrolliert auf einem
@@ -910,7 +918,7 @@ validiert den Gesamtstand. Die Leitregel:
 | Stufe | Inhalt | Risiko |
 |---|---|---|
 | 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig — **umgesetzt** (0.21.0) |
-| 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt risikofrei, weil keine Schreibrechte | niedrig — **umgesetzt** (0.21.0) |
+| 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt ohne Änderungsrisiko, weil keine Schreibrechte | niedrig — **umgesetzt** (0.21.0) |
 | 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel |
 | 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch |
 | 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch |
