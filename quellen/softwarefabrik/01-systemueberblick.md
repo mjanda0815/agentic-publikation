@@ -64,7 +64,7 @@ Projektidee  →  Wizard  →  Spezifikations-Artefakte  →  Run  →  Review/G
 | Review-Adapter | 6 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 27 (0.1.0 … 0.19.0, seit 2026-04-17) |
+| Releases | 26 (0.1.0 … 0.19.0, seit 2026-04-17) |
 
 *Erhoben auf `main` @ `526d718`, 2026-07-26.*
 
