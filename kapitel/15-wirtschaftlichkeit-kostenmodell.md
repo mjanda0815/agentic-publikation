@@ -4,23 +4,28 @@
 
 ## 15.1 Token Budget Management
 
-Preisstand 6. August 2026, API-Listenpreise von Anthropic [@anthropicmodels]
-(je 1 Mio. Tokens; alle Modelle mit 1 Mio. Tokens Kontextfenster, Haiku 4.5
-mit 200.000):
+Preisstand 6. August 2026, API-Listenpreise von Anthropic [@anthropicmodels;
+@anthropicpricing] (je 1 Mio. Tokens; Kontextfenster 1 Mio. Tokens, Ausnahme
+Haiku 4.5 mit 200.000):
 
 | Modell | Input (pro 1M Tokens) | Output (pro 1M Tokens) | Typischer Einsatz |
 | --- | --- | --- | --- |
 | Claude Fable 5 | $10.00 | $50.00 | schwierigste Langzeit-Agentenaufgaben |
 | Claude Opus 5 | $5.00 | $25.00 | Architektur, Security Review, komplexe agentische Entwicklung |
-| Claude Sonnet 5 | $3.00 (Einführungspreis $2.00 bis 31.08.2026) | $15.00 ($10.00) | Entwicklung, Testing, Planung |
+| Claude Sonnet 5 | $2.00 (Einführungspreis bis 31.08.2026; danach $3.00) | $10.00 (danach $15.00) | Entwicklung, Testing, Planung |
 | Claude Haiku 4.5 | $1.00 | $5.00 | Formatierung, einfache Tasks |
 
-Bemerkenswert ist die Preisentwicklung seit v1.3 dieses Whitepapers
-(März 2026): Das damalige Spitzenmodell der Opus-Klasse lag bei $15/$75 —
-das heutige liegt bei $5/$25, bei gleichzeitig deutlich größerem
-Kontextfenster. Preistabellen in Kostenmodellen für agentische Entwicklung
-brauchen deshalb zwingend ein Stand-Datum, und Wirtschaftlichkeitsrechnungen
-altern schnell in Richtung *zu konservativ*.
+Bemerkenswert ist der Vergleich mit der v1.3-Tabelle: Sie nannte für die
+Opus-Klasse noch $15/$75 — die Preise der Opus-4/4.1-Generation. Schon
+Opus 4.5 (November 2025, also vor Erscheinen der v1.3) lag bei $5/$25; die
+Tabelle war bei Drucklegung bereits überholt. Die Bewegung ist dabei nicht
+monoton nach unten: Die Haiku-Klasse wurde mit dem Generationswechsel auf
+Haiku 4.5 viermal teurer je Token ($0.25/$1.25 → $1/$5), und seit der
+Opus-4.7-Generation erzeugt ein neuer Tokenizer für denselben Text rund 30 %
+mehr Tokens [@anthropicmodels] — Token-Preise sind generationsübergreifend
+also nur mit Vorbehalt vergleichbar. Die Lehre: Preistabellen in
+Kostenmodellen für agentische Entwicklung brauchen zwingend ein Stand-Datum,
+und Wirtschaftlichkeitsrechnungen sind in beide Richtungen schnell veraltet.
 
 Ein typischer Entwicklungs-Agent verbraucht 10.000–100.000 Tokens pro Task. Ein End-to-End-Workflow mit 7 Agenten kann 500.000–2.000.000 Tokens verbrauchen.
 
@@ -50,7 +55,7 @@ public record TokenBudget(
 
 | Parameter | Steuerung | Empfehlung |
 | --- | --- | --- |
-| max_turns | Maximale API-Roundtrips pro Agent | 10–25 für Entwicklung, 5–10 für Reviews |
+| maxTurns (in der Subagenten-Definition; v1.3: max_turns als Aufrufparameter) | Maximale API-Roundtrips pro Agent | 10–25 für Entwicklung, 5–10 für Reviews |
 | timeout | Maximale Laufzeit in Sekunden | 300s Standard, 600s für komplexe Tasks |
 | max_cost_per_task | Kostenobergrenze pro Einzeltask | $2–5 für sonnet, $10–20 für opus |
 | max_cost_per_workflow | Kostenobergrenze Gesamtworkflow | $20–50 pro Feature |
@@ -77,7 +82,7 @@ Die Token-Kosten bleiben bei Parallelisierung identisch. Teurer wird es erst bei
 | Kostenfaktor | Manuell (Entwicklerteam) | KI-Agenten + Review |
 | --- | --- | --- |
 | Entwickleraufwand | 40h Senior Dev × €95/h = €3.800 | 8h Review + Steering = €760 |
-| API-Kosten | – | ~2M Tokens ≈ €14–28 |
+| API-Kosten | – | ~2M Tokens ≈ €15–30 |
 | Testabdeckung | Oft <60% unter Zeitdruck | >80% durch iteratives Testing |
 | Time-to-Feature | 1–2 Wochen | 1–2 Tage |
 | Gesamtkosten | €3.800+ | €790–€850 |
@@ -108,26 +113,27 @@ agentischer Entwicklung hat sich seit v1.3 an einer entscheidenden Stelle
 verschoben: Die großen Coding-CLIs lassen sich auf **zwei Wegen**
 authentifizieren — per API-Key (Abrechnung je Token, wie oben modelliert)
 oder per **Abo-Login** (Flatrate-Konto des Anbieters, etwa die
-Claude-Abonnements für Claude Code oder das ChatGPT-Konto für die Codex-CLI;
-Stand August 2026).
+Claude-Abonnements für Claude Code [@claudecodeauth] oder das ChatGPT-Konto
+für die Codex-CLI [@codexcli]; Stand August 2026).
 
 Für das Kostenmodell hat das grundlegende Konsequenzen:
 
-1. **Die Grenzkosten je Lauf sind im Abo-Modus null.** Ein reines
-   Token-ROI-Modell (wie in 15.4) bildet die Wirtschaftlichkeit dann nicht
-   mehr ab; an die Stelle variabler API-Kosten tritt ein fixer
-   Abo-Preis je Entwicklerplatz und Monat, gedeckelt durch die
-   Nutzungslimits des jeweiligen Abos.
+1. **Die Grenzkosten je Lauf sind im Abo-Modus bis zur Limitgrenze
+   praktisch null.** Ein reines Token-ROI-Modell (wie in 15.4) bildet die
+   Wirtschaftlichkeit dann nicht mehr ab; an die Stelle variabler API-Kosten
+   tritt ein fixer Abo-Preis je Entwicklerplatz und Monat, gedeckelt durch
+   die Nutzungslimits des jeweiligen Abos.
 2. **Die Betriebsform wird zur Kostenentscheidung.** Einzelplatz mit Abo,
    Team-Pool mit API-Keys oder Mischformen unterscheiden sich in
    Planbarkeit (fix vs. variabel), Attribution (je Platz vs. je Verbrauch)
    und Skalierungsverhalten.
 3. **Der Abrechnungsweg muss technisch kontrolliert werden.** Eine CLI, die
    sowohl einen Abo-Login als auch einen API-Key in der Umgebung vorfindet,
-   wählt unter Umständen stillschweigend den kostenpflichtigen Pfad — ein
-   Fehler, der erst auf der Monatsrechnung sichtbar wird. Wer beide Wege
-   betreibt, braucht eine Stelle im System, die den jeweils nicht gewollten
-   Weg aktiv unterbindet.
+   wählt unter Umständen stillschweigend den kostenpflichtigen Pfad — bei
+   Claude Code etwa hat ein gesetzter `ANTHROPIC_API_KEY` Vorrang vor dem
+   Abo-Login [@claudecodeauth] —, ein Fehler, der erst auf der
+   Monatsrechnung sichtbar wird. Wer beide Wege betreibt, braucht eine
+   Stelle im System, die den jeweils nicht gewollten Weg aktiv unterbindet.
 
 Diese Einordnung ist ein Erfahrungswert aus dem Betrieb der in Kapitel 19
 beschriebenen Plattform; die dortige Umsetzung (Abo-Modus je Adapter mit
@@ -137,6 +143,7 @@ aktivem Entfernen des API-Keys aus der Prozessumgebung) steht in 19.4.
 > Input-, Output- und Cached-Input-Preisen, Kostenaggregation nach Projekt,
 > Run, Provider, Mandant und Seat, harte Budget-Caps je Mandant — und der
 > Abo-Modus als eigener Authentifizierungsweg, der den API-Key aktiv aus der
-> Subprozess-Umgebung entfernt (19.4, 19.6). Die ROI-Modellrechnung aus 15.4
+> Subprozess-Umgebung entfernt (19.4). Die ROI-Modellrechnung aus 15.4
 > bleibt dagegen unbelegt: Für das Realsystem existiert keine kontrollierte
-> Produktivitätsmessung (19.9).
+> Produktivitätsmessung, und eine Budget-Obergrenze je Nutzer ist offen
+> (19.9).

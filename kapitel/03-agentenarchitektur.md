@@ -45,7 +45,7 @@ Die Runtime-Architektur beschreibt den Ablauf eines Entwicklungsauftrags währen
 
 | Agent | Rolle | Werkzeugzugriff |
 | --- | --- | --- |
-| Orchestrator | Verteilt Aufgaben, koordiniert Phasen, verwaltet Shared State | Alle Tools inkl. Task |
+| Orchestrator | Verteilt Aufgaben, koordiniert Phasen, verwaltet Shared State | Alle Tools inkl. Agent (Subagenten-Start) |
 | Architektur-Agent | Analysiert Systemdesign, erstellt ADRs, bewertet Patterns | Read, Glob, Grep, LSP |
 | Planungs-Agent | Erstellt detaillierte Implementierungspläne mit Meilensteinen | Read, Glob, Grep, Write |
 | Requirements-Agent | Sammelt, validiert und trackt Anforderungen | Read, Glob, Grep, WebFetch |
@@ -54,9 +54,11 @@ Die Runtime-Architektur beschreibt den Ablauf eines Entwicklungsauftrags währen
 | Review-Agent | Prüft Code auf Qualität, Sicherheit und Domain-Compliance | Read, Glob, Grep, LSP |
 | Deployment-Agent | Verwaltet IaC, führt Deployments mit K8s und Terraform aus | Read, Write, Edit, Bash |
 
-## 3.5 Task-Tool Parameter
+## 3.5 Parameter des Agent-Tools (in v1.3: „Task-Tool")
 
-Aktualisiert auf den Stand von Claude Code im August 2026 [@claudecodedocs];
+Das Werkzeug, mit dem der Orchestrator Subagenten startet, heißt in Claude
+Code inzwischen `Agent` (v1.3 dokumentierte es als „Task"). Die folgende
+Tabelle ist auf den Stand von August 2026 aktualisiert [@claudecodedocs];
 die Parameterliste ist schnelllebig und bei Umsetzung gegen die aktuelle
 Werkzeug-Dokumentation zu prüfen:
 
@@ -64,14 +66,15 @@ Werkzeug-Dokumentation zu prüfen:
 | --- | --- | --- | --- |
 | subagent_type | Ja | string | Welcher Agententyp gestartet wird (z. B. "code-reviewer"); eigene Typen werden als Markdown-Dateien mit Frontmatter unter `.claude/agents/` definiert |
 | prompt | Ja | string | Detaillierte Aufgabenanweisungen mit Kontext und Erwartungen |
-| description | Ja | string | Kurze 3–5-Wort-Zusammenfassung für das Logging |
+| description | Ja | string | Kurze Zusammenfassung der Aufgabe (laut Tool-Schema, für Anzeige und Logging) |
 | model | Nein | enum | Modellklasse für diesen Agenten (sonnet, opus, haiku, …); ohne Angabe erbt der Agent das Modell der Hauptsitzung |
 | run_in_background | Nein | boolean | Subagenten laufen inzwischen standardmäßig im Hintergrund; `false` erzwingt synchrone Ausführung |
-| isolation | Nein | enum | "worktree" für eine isolierte Git-Worktree-Kopie des Repositories; zusätzlich existiert eine Remote-Ausführung in einer Cloud-Umgebung |
+| isolation | Nein | enum | "worktree" für eine isolierte Git-Worktree-Kopie des Repositories |
 
-Gegenüber v1.3 bemerkenswert: Das damals dokumentierte `max_turns` ist als
-Steuerungsparameter entfallen (Budgetsteuerung erfolgt heute über andere
-Mechanismen), und die Fortsetzung eines Agenten läuft nicht mehr über einen
+Gegenüber v1.3 bemerkenswert: Das damals als Aufrufparameter dokumentierte
+`max_turns` ist kein Parameter des Agent-Tools mehr — die Turn-Obergrenze
+wird heute als `maxTurns` in der Subagenten-Definition (Frontmatter)
+gesetzt. Und die Fortsetzung eines Agenten läuft nicht mehr über einen
 `resume`-Parameter, sondern über eine Nachrichtenschnittstelle an den
 laufenden Agenten. Auch das illustriert eine Kernaussage dieses Whitepapers:
 Werkzeugdetails haben eine Halbwertszeit von Monaten — Architekturprinzipien

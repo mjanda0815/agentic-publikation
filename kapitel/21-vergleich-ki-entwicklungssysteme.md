@@ -16,10 +16,14 @@ für jede Kategorie eine Mehrzahl leistungsfähiger Produkte: Terminal-Agenten
 von Google, dazu Open-Source-Agenten wie Aider oder OpenCode),
 IDE-integrierte Assistenten mit Agentenmodus (u. a. Cursor, GitHub Copilot)
 und autonome Cloud-Agenten (u. a. Devin, dazu die Cloud-Betriebsformen der
-Terminal-Agenten selbst). Die Fähigkeitsmerkmale, an denen v1.3 die Systeme
-unterschied — Subagenten, deklarative Repo-Konfiguration, Hooks,
-Werkzeuganbindung, Hintergrund-Ausführung — finden sich inzwischen in
-mehreren Produkten. Einzelne Spitzenplätze auf Benchmarks wechseln im
+Terminal-Agenten selbst).^[Die Produktzuordnungen lassen sich sämtlich über
+die Unterstützerliste des AGENTS.md-Standards nachvollziehen [@agentsmd],
+die u. a. OpenAI (Codex), Google (Gemini CLI), Cursor, GitHub Copilot,
+Cognition (Devin), Aider und OpenCode führt; Stand August 2026.] Die
+Fähigkeitsmerkmale, an denen v1.3 die Systeme unterschied — Subagenten,
+deklarative Repo-Konfiguration, Hooks, Werkzeuganbindung,
+Hintergrund-Ausführung — finden sich inzwischen in mehreren Produkten. Nach
+Beobachtung des Autors wechseln einzelne Spitzenplätze auf Benchmarks im
 Monatsrhythmus; eine Vergleichstabelle wäre bei Drucklegung veraltet.
 
 **Die Differenzierungsmerkmale von damals sind Standards geworden.** Die
@@ -57,7 +61,7 @@ Die Adapterwahl ist dort buchstäblich ein Konfigurationsfeld je Lauf.
 > ist durch die Implementierung hinfällig geworden — die Fabrik integriert
 > zehn Execution-Adapter (CLI-Agenten und Cloud-Gateways) hinter einem Port;
 > zwei ArchUnit-Regeln machen es technisch unmöglich, Anwendungs- oder
-> Web-Schicht an einen konkreten Vendor zu koppeln (19.4).
+> Web-Schicht an einen konkreten Vendor zu koppeln (19.2, 19.4).
 
 ## 21.3 Was von der v1.3-Einordnung bleibt
 

@@ -1,8 +1,17 @@
 # 5 Eingebaute Agententypen und Modellauswahl
 
-Claude Code bietet vorkonfigurierte Agententypen, die auf die häufigsten SDLC-Aufgaben zugeschnitten sind. Zusätzlich können über CLAUDE.md eigene Agententypen definiert werden.
+Claude Code bietet vorkonfigurierte Agententypen, die auf die häufigsten
+SDLC-Aufgaben zugeschnitten sind. Eigene Agententypen werden als
+Markdown-Dateien mit Frontmatter unter `.claude/agents/` definiert (v1.3
+beschrieb hierfür noch CLAUDE.md; die zentrale Konfigurationsdatei steuert
+heute Regeln und Kontext, nicht die Agentendefinitionen) [@claudecodedocs].
 
 ## Agententypen und ihre SDLC-Phasen
+
+Stand August 2026 liefert Claude Code als eingebaute Typen im Kern
+`Explore`, `Plan` und `general-purpose` [@claudecodedocs]; die übrigen
+Einträge der folgenden v1.3-Tabelle sind als projektspezifisch definierbare
+Beispieltypen zu lesen:
 
 | Agententyp | Zweck | SDLC-Phase |
 | --- | --- | --- |
@@ -24,9 +33,12 @@ Geschwindigkeit und Kosten. Die Faustregel aus v1.3 gilt unverändert — nur
 die konkreten Modelle dahinter haben gewechselt: Die Klassenbezeichnungen
 `opus`, `sonnet` und `haiku` bleiben in Claude Code stabil, während die
 dahinterliegenden Modellversionen wechseln (Stand 6. August 2026: Claude
-Opus 5, Claude Sonnet 5, Claude Haiku 4.5; darüber Claude Fable 5 als
-höchste Leistungsklasse für die schwierigsten Langzeit-Agentenaufgaben)
-[@anthropicmodels]. Also: die Opus-Klasse für Entscheidungen, bei denen
+Opus 5, Claude Sonnet 5, Claude Haiku 4.5; dazu ist mit `fable` — Claude
+Fable 5, dem leistungsfähigsten allgemein verfügbaren Modell für die
+schwierigsten Langzeit-Agentenaufgaben — seit v1.3 eine vierte Klasse
+hinzugekommen: Klassen sind also stabiler als Versionen, aber nicht
+unveränderlich) [@anthropicmodels]. Also: die Opus-Klasse für
+Entscheidungen, bei denen
 Fehler teuer wären (Architektur, Security), die Sonnet-Klasse als
 Arbeitspferd für den Großteil der Entwicklung, und die Haiku-Klasse für
 schnelle, unkritische Aufgaben.

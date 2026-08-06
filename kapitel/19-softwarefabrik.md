@@ -344,6 +344,13 @@ Kostenmodell aus Kapitel 15 ist grundlegend: Bei Flatrate-Abos entstehen
 keine Token-Kosten je Lauf; ein reines Token-ROI-Modell bildet die
 Wirtschaftlichkeit agentischer Entwicklung nicht mehr vollständig ab.
 
+Flankiert wird das von einem vollständigen Kostenmodell in der Plattform:
+eine Preistabelle je Modell mit getrennten Preisen für Input, Output und
+Cached Input, Kostenaggregation nach Projekt, Run, Provider, Mandant und
+auslösendem Nutzer (*Seat*), harte Budget-Caps je Mandant sowie Tages- und
+Wochenlimits mit Soft-Schwelle. Unbekannte Modelle werden bewusst
+konservativ mit 0 € bewertet, statt Preise zu raten.
+
 ### Capability-Routing statt Modellnamen
 
 Die Modellwahl-Strategie aus Kapitel 5 ist umgesetzt — aber über

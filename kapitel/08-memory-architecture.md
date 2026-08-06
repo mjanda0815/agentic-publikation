@@ -27,8 +27,10 @@ Die Memory Architecture des Agentensystems definiert, wie Wissen gespeichert, ge
 Der Short-Term Context ist das LLM Context Window — bei den aktuellen
 Claude-Modellen 1 Mio. Tokens, bei Haiku 4.5 200.000 Tokens (Stand
 6. August 2026 [@anthropicmodels]; v1.3 nannte hier noch 200K als Maximum —
-die Verfünffachung binnen weniger Monate ist selbst ein Argument dafür,
-Kontextgrößen nie fest in Architekturentscheidungen einzubauen). Alles, was
+die Verfünffachung der Tokenzahl binnen weniger Monate (gemessen an der
+Textmenge wegen des neuen Tokenizers knapp das Vierfache) ist selbst ein
+Argument dafür, Kontextgrößen nie fest in Architekturentscheidungen
+einzubauen). Alles, was
 der Agent in einem Turn "sieht", existiert nur hier. Session Memory
 erweitert dies über mehrere Turns innerhalb eines Tasks: Der Agent kann sich
 an seine eigenen früheren Tool-Aufrufe und deren Ergebnisse erinnern, aber

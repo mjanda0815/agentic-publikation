@@ -17,11 +17,12 @@ Diese Prinzipien stehen nicht isoliert, sondern bedingen sich gegenseitig: Agent
 
 | Prinzip | Kapitelreferenzen | Durchsetzung |
 | --- | --- | --- |
-| AP-1: Agent Specialization | Kap. 5 (Agententypen), Kap. 12 (Berechtigungsmodell) | CLAUDE.md Agentendefinitionen + Tool-Restriktionen |
-| AP-2: Deterministic Execution | Kap. 7 (Execution Model), Kap. 18 (ADR-4) | Task-Graph, max_turns, Execution Budgets |
-| AP-3: Governance by Design | Kap. 13 (Guardrails), Kap. 17 (Hooks) | PreToolUse/PostToolUse Hooks, Validierungs-Pipeline |
-| AP-4: Isolation by Workspace | Kap. 15 (Workflows), Kap. 18 (ADR-2) | Git Worktrees, isolation="worktree" Parameter |
-| AP-5: Policy-Driven Development | Kap. 4 (CLAUDE.md), Kap. 12 (DDD) | CLAUDE.md als Single Source of Truth |
+| AP-1: Agent Specialization | Kap. 5 (Agententypen), Kap. 14 (Berechtigungsmodell) | Agentendefinitionen + Tool-Restriktionen |
+| AP-2: Deterministic Execution | Kap. 7 (Execution Model), Kap. 20 (ADR-4) | Task-Graph, Turn-Limits, Execution Budgets |
+| AP-3: Governance by Design | Kap. 12 (Guardrails), Kap. 18 (Hooks) | PreToolUse/PostToolUse Hooks, Validierungs-Pipeline |
+| AP-4: Isolation by Workspace | Kap. 16 (Workflows), Kap. 20 (ADR-2) | Git Worktrees, isolation="worktree" |
+| AP-5: Policy-Driven Development | Kap. 4 (CLAUDE.md/AGENTS.md), Kap. 11 (DDD) | Deklarative Repo-Konfiguration als Single Source of Truth |
 | AP-6: Human-in-the-Loop | Kap. 9 (Failure Handling), Kap. 14 (Security) | Confidence Score Eskalation, Review Gates |
 
-<!-- TODO(verify): Die Kapitelreferenzen in dieser Tabelle (z. B. "Kap. 12 (Berechtigungsmodell)", "Kap. 13 (Guardrails)", "Kap. 17 (Hooks)", "Kap. 18 (ADR-2/ADR-4)") stimmen im Original (S. 10) nicht mit der tatsächlichen Kapitelnummerierung des Inhaltsverzeichnisses überein (Berechtigungsmodell steht in Kap. 14 Security Model, Guardrails/AI Risk Framework in Kap. 12, Hooks in Kap. 18 MCP-Server & Hooks, ADR-2/ADR-4 in Kap. 19). Wörtlich aus dem Original übernommen, nicht korrigiert – siehe TODO.md. -->
+*Die Kapitelreferenzen wurden gegenüber v1.3 korrigiert; dort waren sie an
+mehreren Stellen inkonsistent zum Inhaltsverzeichnis.*

@@ -2,10 +2,12 @@
 
 Das Model Context Protocol (MCP) war bei Erscheinen der v1.3 ein
 Anthropic-Protokoll zur Werkzeuganbindung. Diese Einordnung ist überholt:
-MCP — im November 2024 von Anthropic vorgestellt — wurde im Dezember 2025 an
-die Agentic AI Foundation unter dem Dach der Linux Foundation übergeben und
-wird dort herstellerneutral weiterentwickelt; unterstützt wird es inzwischen
-unter anderem von OpenAI, Google und Microsoft (Stand August 2026) [@mcp].
+MCP — im November 2024 von Anthropic vorgestellt [@mcpintro] — wurde im
+Dezember 2025 an die Agentic AI Foundation unter dem Dach der Linux
+Foundation übergeben [@mcpaaif] und wird dort herstellerneutral
+weiterentwickelt [@mcp]; die Foundation wurde von Anthropic, Block und
+OpenAI mitgegründet und wird unter anderem von Google, Microsoft und AWS
+getragen (Stand August 2026) [@lfaaif].
 Wer heute Werkzeuganbindung für Agenten baut, baut sie gegen einen
 Industriestandard, nicht gegen ein Vendor-Protokoll — dieselbe Entwicklung,
 die `AGENTS.md` für die deklarative Konfiguration genommen hat (Kapitel 4).
