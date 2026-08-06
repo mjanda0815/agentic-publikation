@@ -1,22 +1,22 @@
-flowchart TB
+flowchart LR
     subgraph SPEC["Spezifikation"]
-        direction LR
+        direction TB
         WIZ["wizard"] ~~~ PD["projectdefinition"] ~~~ PR["prompt"] ~~~ AG["agent"] ~~~ TE["team"]
     end
     subgraph GOV["Governance"]
-        direction LR
+        direction TB
         POL["policy"] ~~~ AUD["audit"] ~~~ MAN["mandant"] ~~~ SECU["security"] ~~~ SET["settings"] ~~~ SECR["secrets"] ~~~ LIC["license"]
     end
     subgraph EXEC["Ausführung"]
-        direction LR
+        direction TB
         RUN["run"] ~~~ EX["execution"] ~~~ CON["conductor"] ~~~ GT["git"] ~~~ VAL["validation"] ~~~ SK["skills"] ~~~ SD["sdlc"]
     end
     subgraph QUAL["Bewertung"]
-        direction LR
+        direction TB
         REV["review"] ~~~ QG["qualitygate"]
     end
-    subgraph LEAF["Blatt-Slices (konsumieren nur)"]
-        direction LR
+    subgraph LEAF["Blatt-Slices<br/>(konsumieren nur)"]
+        direction TB
         PROV["provenance"] ~~~ EXP["export"] ~~~ GR["guardrails"] ~~~ OBS["observability"]
     end
     SPEC --> EXEC

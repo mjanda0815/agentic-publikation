@@ -253,7 +253,7 @@ Whitepapers weiter:
 
 ![Laufzeitablauf eines Build-Runs von der Anlage bis zum Merge, inklusive Korrekturschleife und Approval-Punkten](abbildungen/out/abb24.pdf){width=100%}
 
-![Zustandsmodell eines Runs. Alle Übergänge sind zentral hinterlegt; unerlaubte Übergänge werfen eine Ausnahme](abbildungen/out/abb25.pdf){width=70%}
+![Zustandsmodell eines Runs. Alle Übergänge sind zentral hinterlegt; unerlaubte Übergänge werfen eine Ausnahme](abbildungen/out/abb25.pdf){width=100%}
 
 ### Ablauf eines Build-Runs
 

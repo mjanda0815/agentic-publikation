@@ -1,11 +1,17 @@
-flowchart LR
-    G["Goal<br/>Feature / Change<br/>Request"] --> P["Planning-Agent<br/>Task-Graph"]
-    P --> A["Architektur-Agent<br/>Patterns / ADR"]
-    A --> D["Dev-Agent<br/>Worktree-<br/>Implementierung"]
-    D --> T["Test-Agent<br/>Unit / Integration"]
-    T --> R["Review-Agent<br/>Qualität / Security"]
-    R --> GATE["Governance Gate<br/>Guardrails · Validation · Compliance"]
-    GATE --> PR["Pull Request / Merge<br/>CI/CD-Pipeline"]
+flowchart TB
+    subgraph R1["Planung & Umsetzung"]
+        direction LR
+        G["Goal<br/>Feature / Change Request"] --> P["Planning-Agent<br/>Task-Graph"]
+        P --> A["Architektur-Agent<br/>Patterns / ADR"]
+        A --> D["Dev-Agent<br/>Worktree-Implementierung"]
+    end
+    subgraph R2["Prüfung & Auslieferung"]
+        direction LR
+        T["Test-Agent<br/>Unit / Integration"] --> R["Review-Agent<br/>Qualität / Security"]
+        R --> GATE["Governance Gate<br/>Guardrails · Compliance"]
+        GATE --> PR["Pull Request / Merge<br/>CI/CD-Pipeline"]
+    end
+    R1 --> R2
     classDef gate fill:#f8dddd,stroke:#333333
     classDef deliv fill:#fdf3d8,stroke:#333333
     class GATE gate

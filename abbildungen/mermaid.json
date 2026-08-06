@@ -26,8 +26,13 @@
     "curve": "linear"
   },
   "sequence": {
-    "actorFontSize": 17,
-    "messageFontSize": 16,
-    "noteFontSize": 15
+    "actorFontSize": 19,
+    "messageFontSize": 17,
+    "noteFontSize": 15,
+    "actorMargin": 28,
+    "width": 130
+  },
+  "er": {
+    "fontSize": 16
   }
 }
