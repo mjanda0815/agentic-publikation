@@ -48,6 +48,19 @@
 % xurl erlaubt Zeilenumbrüche an beliebigen Stellen in URLs (Literaturverzeichnis)
 \usepackage{xurl}
 
+% --- Codeblöcke: lange Zeilen umbrechen statt in den Rand zu laufen ---
+% Pandoc setzt Code als verbatim; fvextra rüstet Zeilenumbruch nach.
+% breakautoindent: die Fortsetzungszeile beginnt in der Einrückspalte der
+% umbrochenen Zeile; ein dezenter grauer Pfeil markiert den Umbruch.
+\usepackage{fvextra}
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{%
+  breaklines=true,
+  breakautoindent=true,
+  breaksymbolleft={\textcolor{gray}{\tiny$\hookrightarrow$}},
+  breaksymbolindentleft=0.6em,
+  fontsize=\small}
+\usepackage{xcolor}
+
 % --- Pandoc-Kompatibilität ---
 % \tightlist wird von Pandoc für kompakte Listen ohne Zusatzabstand erzeugt
 % und ist ohne den Pandoc-Standardtemplate nicht definiert.
