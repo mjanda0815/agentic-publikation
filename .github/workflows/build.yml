@@ -1,22 +1,40 @@
 # CI für das Whitepaper „Agentic Software Development" (übernommen aus dem
 # DeFi-Publikationsprojekt, an dieses Repo angepasst).
-# Der lokale Build (`make pdf`) läuft seit der Extraktion von v1.3 fehlerfrei
-# (kapitel/00–23, main.tex, Makefile) — push-Trigger daher aktiviert.
-# TODO: Abbildungs-Skripte unter abbildungen/ eintragen, sobald sie entstehen
-# (siehe TODO.md, Abschnitt C).
+#
+# NUR MANUELL (`workflow_dispatch`), Stand 06.08.2026: Das Actions-Kontingent
+# dieses privaten Repositories ist aufgebraucht. Push-getriggerte Läufe blieben
+# dadurch in der Warteschlange hängen und wurden nach rund 15 Minuten ohne
+# einen einzigen ausgeführten Schritt abgebrochen — jeder Push hätte ein rotes
+# Kreuz in der History hinterlassen, ohne etwas zu prüfen.
+#
+# Der Push-Trigger kann zurückkommen, sobald das Repository öffentlich ist:
+# Für öffentliche Repositories sind Actions-Minuten kostenlos. Dazu einfach den
+# unten auskommentierten Block wieder aktivieren.
+#
+# Bis dahin ersetzt ein lokaler Klontest die eigentliche Leistung dieser
+# Pipeline — den Nachweis, dass das Dokument aus einem frischen Checkout baut,
+# also ohne nicht eingecheckte lokale Dateien:
+#
+#   git clone --depth 1 file:///pfad/zum/repo /tmp/klontest
+#   make -C /tmp/klontest pdf fabrik karussell
+#
+# Zuletzt so verifiziert am 06.08.2026: Whitepaper 157 Seiten, Sonderdruck
+# 33 Seiten, zwei Karussells zu je 10 Folien, keine LaTeX-Fehler, keine
+# ungelösten Zitate, alle 30 Abbildungen eingecheckt.
 name: Build PDF
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "kapitel/**"
-      - "abbildungen/**"
-      - "*.tex"
-      - "literatur.bib"
-      - "Makefile"
-      - ".github/workflows/build.yml"
+  # Reaktivieren, sobald das Repository öffentlich ist (siehe Kopfkommentar):
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - "kapitel/**"
+  #     - "abbildungen/**"
+  #     - "*.tex"
+  #     - "literatur.bib"
+  #     - "Makefile"
+  #     - ".github/workflows/build.yml"
 
 jobs:
   build:

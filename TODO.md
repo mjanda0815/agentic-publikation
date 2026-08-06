@@ -348,6 +348,15 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Software Factory…"). Die abweichende Setup-Entscheidung ist in
       `CLAUDE.md` als Historie festgehalten, damit die Abweichung nicht
       erneut als Fehler gemeldet wird.
+- [x] **CI auf `workflow_dispatch` umgestellt** (06.08.2026): Das
+      Actions-Kontingent des privaten Repos ist aufgebraucht; push-getriggerte
+      Läufe hingen in der Warteschlange und brachen nach ~15 Minuten ohne
+      ausgeführten Schritt ab. Der Push-Trigger steht auskommentiert im
+      Workflow und kann zurück, sobald das Repo öffentlich ist (dann sind
+      Actions-Minuten kostenlos). Ersatz bis dahin: Klontest —
+      `git clone --depth 1 file://<repo> /tmp/klontest && make -C /tmp/klontest pdf fabrik karussell`.
+      Am 06.08.2026 so verifiziert: 157 / 33 Seiten, 2 × 10 Folien, keine
+      LaTeX-Fehler, keine offenen Zitate, alle 30 Abbildungen eingecheckt.
 - [ ] (Martin) Veröffentlichungsschritte: janda.io, optional Repo public +
       Release + Zenodo-DOI. Bei einem Repost nach dem nächsten
       SoftwareFabrik-Release die Version auf 2.2 heben statt 2.1 still zu
