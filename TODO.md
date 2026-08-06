@@ -149,10 +149,18 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Floats. Hinweis: `abbildungen/stil.py` (matplotlib) bleibt für
       künftige Datendiagramme liegen, wird von den Mermaid-Diagrammen nicht
       genutzt.
-- [ ] Feintypografie am Ende in LaTeX (u. a. unnummerierte
-      Original-Zwischenüberschriften, Abbildungsverzeichnis via
-      \listoffigures, ggf. Feinschliff einzelner Diagramme wie der
-      Slice-Landkarte abb23).
+- [x] **Feintypografie** (06.08.2026): Unnummerierte Original-
+      Zwischenüberschriften werden jetzt korrekt ohne Nummer gesetzt
+      (zaunbewusster Präprozessor `skripte/kapitel-filter.py` ersetzt den
+      sed-Filter; Pandoc-`{-}`, Überschriften bleiben im Inhaltsverzeichnis);
+      Abbildungsverzeichnis via `\listoffigures`; Slice-Landkarte (abb23)
+      kompakt neu gelayoutet. Beide letzten `TODO(verify)`-Marker aufgelöst:
+      Embedding-Modell `deepset-mxbai-embed-de-large-v1` per Primärquelle
+      belegt (Hugging Face, [@mxbaide]); Datumsfehler „2025-03-04" im
+      ADR-4-Beispiel des Originals auf 2026 korrigiert.
+- [ ] (Martin) Gesamtdurchsicht des Entwurfs; danach „Entwurf"-Vermerk von
+      der Titelseite nehmen. Optional davor: kapitelübergreifender
+      Schlussdurchlauf des zweitgutachters über das Gesamtdokument.
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI
       (Zenodo-GitHub-Integration besteht bereits; archiviert nur öffentliche
       Releases).

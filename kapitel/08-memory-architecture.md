@@ -102,9 +102,8 @@ public class KnowledgeStoreClient {
 
 Für große Codebasen mit Millionen Zeilen Code ist ein dateibasierter Shared Knowledge Store zu langsam für semantische Suchen. Vector Memory ergänzt den Store um eine Embedding-basierte Suche, die ähnliche Code-Patterns, ähnliche Architekturentscheidungen oder relevante Findings finden kann, ohne den exakten Schlüssel zu kennen.
 
-Die Implementierung nutzt eine lokale Vector-Datenbank (z. B. Weaviate, ChromaDB) mit einem deutschen Embedding-Modell (z. B. deepset-mxbai-embed-de-large-v1). Dies ist insbesondere für Behörden-Projekte relevant, bei denen Cloud-basierte Embedding-Services aus Datenschutzgründen nicht in Frage kommen.
+Die Implementierung nutzt eine lokale Vector-Datenbank (z. B. Weaviate, ChromaDB) mit einem deutschen Embedding-Modell (z. B. `deepset-mxbai-embed-de-large-v1`, ein offenes deutsch-englisches Modell von deepset und Mixedbread [@mxbaide]). Dies ist insbesondere für Behörden-Projekte relevant, bei denen Cloud-basierte Embedding-Services aus Datenschutzgründen nicht in Frage kommen.
 
-<!-- TODO(verify): Modellname "deepset-mxbai-embed-de-large-v1" (S. 28) konnte nicht gegen eine Primärquelle verifiziert werden (schnelllebige Tool-/Modellangabe ohne Stand-Datum im Original). Wörtlich aus dem Original übernommen. -->
 
 > **Praxis-Check SoftwareFabrik (abweichend):** Der geteilte Wissensstand
 > ist umgesetzt — als versionierte Dateien im Repository plus kuratiertes

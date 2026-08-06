@@ -405,8 +405,8 @@ Task-Datei-Format
     "worktree": "/tmp/agent-dev-FEAT-42-payment-domain",
     "branch": "agent/dev/FEAT-42-payment-domain",
     "dependencies": [],
-    "created_at": "2025-03-04T10:00:00Z",
-    "started_at": "2025-03-04T10:00:05Z",
+    "created_at": "2026-03-04T10:00:00Z",
+    "started_at": "2026-03-04T10:00:05Z",
     "guardrails_attempts": 0,
     "max_retries": 3,
     "context_files": [
@@ -417,7 +417,6 @@ Task-Datei-Format
 }
 ```
 
-<!-- TODO(verify): Die Zeitstempel im Task-Datei-Beispiel (S. 64) lauten "2025-03-04T...", während das Whitepaper selbst auf Version 1.3, März 2026 datiert ist. Möglicher Zahlen-/Datumsfehler im Original – wörtlich übernommen, nicht korrigiert. Siehe TODO.md. -->
 
 Workflow-Events als Git-Operationen
 

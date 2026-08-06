@@ -25,7 +25,9 @@ CHAPTERS := 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22
 # Pandoc setzt bei Abbildungen height=\textheight; ohne Abzug fuer die
 # Bildunterschrift laufen ganzseitige Floats ueber ("Float too large").
 FIG_HEIGHT := sed 's/height=.textheight/height=0.86\\textheight/'
-STRIP_NUMBERING := sed -E 's/^(\#{1,4}) [0-9]+(\.[0-9]+)* /\1 /'
+# Nummern strippen + unnummerierte Zwischenueberschriften als {-} markieren
+# (zaunbewusst; ersetzt den frueheren reinen sed-Filter)
+STRIP_NUMBERING := python3 skripte/kapitel-filter.py <
 # Management Summary (00) ist ein unnummertes Kapitel: \chapter -> \addchap
 ADDCHAP := sed -E 's/^\\chapter\{/\\addchap{/'
 # Pandoc 2.9 wendet --id-prefix nicht auf automatische Überschriften-Anker an
