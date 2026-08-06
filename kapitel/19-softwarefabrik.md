@@ -439,7 +439,7 @@ nichtdeterministisch.
 
 Der **Halluzinations-Reviewer** verdient besondere Erwähnung: Er prüft
 nicht den Code, sondern die *Behauptungen über den Code* — „alle Tests
-laufen durch" bei unverändertem Testverzeichnis, unberührte
+laufen durch“ bei unverändertem Testverzeichnis, unberührte
 Akzeptanzkriterien, Importe nicht existierender Klassen. Das ist die
 direkte Umsetzung der Halluzinationserkennung aus Kapitel 12 — treffender
 als **Claim Verification** bezeichnet, denn geprüft werden die Behauptungen
@@ -583,14 +583,14 @@ auf Millisekunden trunkiert (gekürzt), weil die Signatur sonst nach dem
 Datenbank-Roundtrip nicht byte-stabil wäre — ein typischer, teuer gelernter
 Fallstrick beim Signieren persistenter Daten. Und der Schlüsselbetrieb ist
 konfigurationsgegatet: In Produktionsprofilen ist „Attestierung aktiviert,
-aber kein Schlüssel vorhanden" ein *Startfehler*; wer ohne Signatur
+aber kein Schlüssel vorhanden“ — ein *Startfehler*; wer ohne Signatur
 betreiben will, muss das explizit deklarieren. Sicherheit durch bewusste
 Entscheidung statt durch Vergessen.
 
 ### Warum-Trace und Audit-Export
 
 Für jeden einzelnen Run beantwortet ein **Warum-Trace** die Frage „warum
-ist dieser Code so entstanden?", indem er Run und Metriken (Modell, Kosten,
+ist dieser Code so entstanden?“, indem er Run und Metriken (Modell, Kosten,
 Dauer), Plan-Herkunft, Freigabeentscheidungen samt Akteuren, verwendete
 Artefakte und die attestierten Ereignisse korreliert.^[`WarumTraceService`
 (`provenance`-Slice, Blatt-Slice).] Zwei Attestierungslücken
@@ -764,7 +764,7 @@ Daneben bestätigt die Implementierung zentrale Thesen des Konzepts
 ausdrücklich: Das Orchestrator-Prinzip trägt (eine Instanz, die Zustand
 besitzt und Übergänge kontrolliert, ist der Unterschied zwischen Werkzeug
 und Prozess — und die einzige Stelle, an der Governance ansetzen kann);
-Guardrails brauchen einen eigenen Schichtbegriff; Halluzinationserkennung
+Guardrails brauchen einen eigenen Schichtbegriff; Claim Verification
 braucht einen eigenen Prüfer; deklarative Konfiguration im Repository
 funktioniert — nur eben werkzeugneutral; ein geteilter Wissensstand ist
 notwendig und mit versionierten Dateien herstellbar. Und ADR-4 (Git als
@@ -789,6 +789,9 @@ Erhebungsstand 6. August 2026:
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
 | Test-Isolationsdefekt: ein Integrationstest committet unter bestimmten Bedingungen in das reale Repository | Defekt |
 | Architektur-Altschuld: eingefrorene Modulzyklen und 13 direkte Repository-Zugriffe der Web-Schicht | dokumentierte, gezählte Schuld |
+| Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
+| Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
+| Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
 
 Dazu drei Beobachtungen aus dem Entwicklungsverlauf (26 Releases in rund
 drei Monaten), die sich verallgemeinern lassen:

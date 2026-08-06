@@ -24,12 +24,14 @@ public class AgentFailureHandler {
     public sealed interface FailureAction {
         record Retry(int attempt, int maxAttempts,
                 Duration delay) implements FailureAction {}
-        record Rollback(String worktreeId, String commitRef) implements FailureAction {}
+        record Rollback(String worktreeId,
+                String commitRef) implements FailureAction {}
         record Escalate(String targetAgent, String model,
                 String context) implements FailureAction {}
         record HumanIntervention(String summary, List<String> findings,
                                   String diffRef) implements FailureAction {}
-        record Compensate(List<String> compensationTasks) implements FailureAction {}
+        record Compensate(List<String> compensationTasks)
+                implements FailureAction {}
     }
 
     public FailureAction determineAction(AgentFailure failure) {
@@ -37,7 +39,8 @@ public class AgentFailureHandler {
             case TRANSIENT -> {
                 if (failure.retryCount() < 3)
                     yield new FailureAction.Retry(failure.retryCount() + 1, 3,
-                            Duration.ofSeconds((long) Math.pow(2, failure.retryCount())));
+                            Duration.ofSeconds((long) Math.pow(2,
+                                    failure.retryCount())));
                 yield new FailureAction.Escalate("review-agent", "opus",
                         "Transient failure after 3 retries: " + failure.message());
             }
@@ -52,7 +55,8 @@ public class AgentFailureHandler {
             case CRITICAL -> new FailureAction.HumanIntervention(
                     failure.message(), failure.findings(), failure.diffRef());
             case FATAL -> {
-                log.error("[FATAL] Agent {} failed irrecoverably: {}", failure.agentId(),
+                log.error("[FATAL] Agent {} failed irrecoverably: {}",
+                        failure.agentId(),
                         failure.message());
                 yield new FailureAction.Compensate(
                         List.of("revert-worktree:" + failure.worktreeId(),

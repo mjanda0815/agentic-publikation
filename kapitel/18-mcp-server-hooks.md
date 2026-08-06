@@ -25,7 +25,8 @@ real existiert etwa der Referenzserver `@modelcontextprotocol/server-postgres`:
 {
     "mcpServers": {
         "postgres-server": {
-            "command": "npx", "args": ["-y", "@modelcontextprotocol/server-postgres"],
+            "command": "npx", "args": ["-y",
+                    "@modelcontextprotocol/server-postgres"],
             "env": { "DATABASE_URL": "${DATABASE_URL}" }
         },
         "jira-server": {
@@ -54,7 +55,8 @@ public class DomainComplianceHook {
     private final Map<String, Set<String>> contextBoundaries;
 
     public record ComplianceResult(boolean compliant, List<Violation> violations) {
-        public record Violation(String sourceCtx, String targetCtx, String importLine) {}
+        public record Violation(String sourceCtx, String targetCtx,
+                String importLine) {}
     }
 
     public ComplianceResult check(Path changedFile) {
@@ -62,11 +64,13 @@ public class DomainComplianceHook {
         String fileCtx = resolveContext(changedFile);
         Set<String> allowed = contextBoundaries.getOrDefault(fileCtx, Set.of());
 
-        Files.lines(changedFile).filter(l -> l.startsWith("import ")).forEach(imp -> {
+        Files.lines(changedFile).filter(l -> l.startsWith("import "))
+                .forEach(imp -> {
             String importedCtx = resolveContextFromImport(imp);
             if (importedCtx != null && !importedCtx.equals(fileCtx)
                     && !allowed.contains(importedCtx))
-                violations.add(new ComplianceResult.Violation(fileCtx, importedCtx, imp));
+                violations.add(new ComplianceResult.Violation(fileCtx, importedCtx,
+                        imp));
         });
         return new ComplianceResult(violations.isEmpty(), violations);
     }

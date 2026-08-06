@@ -196,6 +196,27 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       benannt; alle Codezeilen > 92 Zeichen manuell umgebrochen; Tippfehler
       und Anführungszeichen bereinigt; Abbildungen 13/17/22/27/31
       vergrößert bzw. neu gelayoutet.
+- [x] **Zweiter Autorenreview eingearbeitet** (06.08.2026, vor
+      Veröffentlichung): Kap. 22.2 neu gefasst (keine Sieben-Agenten-
+      Erzählung mehr, sondern Phasen + Gegenüberstellung Teil A/B);
+      ADR-Status auf Entscheidungs- vs. Implementierungsstatus getrennt
+      (ADR-5–8 jetzt *Accepted* / *Planned* statt *Proposed*), historische
+      Wirkannahmen der ADRs 1–4 im Statuskasten als ungemessen
+      gekennzeichnet; versteckte Abhängigkeit im geplanten Payment-Workflow
+      aufgelöst (Contract Tasks 1a extern / 1b intern, Task 3 hängt an 1a+1b
+      statt an Task 2), Parallelitätsgewinn als angestrebtes Ergebnis mit
+      Verweis auf den Messplan formuliert; absolute Aussagen in Kap. 12 und
+      ADR-3 abgeschwächt (Defense in Depth ohne Vollständigkeitsanspruch,
+      Prüfprozess reproduzierbar vs. Prüfergebnisse nichtdeterministisch);
+      drei Produktlücken (Preisstatus, Legacy-Auditdaten, SBOM-Scanner) in
+      die Tabelle 19.9 aufgenommen; AP-Hinweis in Kap. 2 präzisiert;
+      Textfehler bereinigt (Anführungszeichen, Claim Verification,
+      maxTurns- und Capability-Zeilen in Kap. 23).
+      Layout: Praxis-Check-Kästen brechen nicht mehr über Seitengrenzen
+      (`needspace`), Float-Parameter halten Abbildungen beim Bezugstext,
+      Agenten-Katalog in zwei lesbare Tabellen geteilt, Zustandsautomat ins
+      Hochformat, alle Codezeilen auf die reale Satzbreite (84 Zeichen)
+      umgebrochen — keine Umbruchmarker mehr im Dokument.
 - [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
       Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
       Repo public + Release + Zenodo-DOI).

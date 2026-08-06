@@ -10,6 +10,16 @@ Jede durch Agenten erzeugte Änderung durchläuft eine Reihe automatisierter Pr�
 
 Erst wenn alle Prüfungen erfolgreich abgeschlossen sind, kann eine Änderung in die Codebasis integriert oder für ein Deployment freigegeben werden.
 
+Die Pipeline ist als Defense-in-Depth-Modell angelegt: Mehrere
+unterschiedlich arbeitende Prüfungen reduzieren das Risiko, dass ein
+einzelner Fehler unbemerkt bleibt. Die ersten fünf Stufen prüfen überwiegend
+deterministische Kriterien; die LLM-basierte letzte Stufe kann zusätzliche
+kontextuelle Auffälligkeiten identifizieren, die vom konfigurierten
+Regelwerk nicht erfasst werden — sie ist damit selbst nichtdeterministisch.
+Der Prüf**prozess** ist reproduzierbar, die Prüf**ergebnisse** sind es auf
+dieser Stufe nur eingeschränkt. Eine vollständige Fehlererkennung wird
+nicht behauptet.
+
 Guardrails erzwingen definierte technische Mindestkriterien, liefern strukturierte Befunde und reduzieren das Risiko ungeprüfter Änderungen. Sie ersetzen weder fachliche Abnahme noch unabhängige Sicherheitsprüfung oder Produktionsbeobachtung.
 
 ![AI-Guardrails-Pipeline zur Validierung agentisch erzeugter Codeänderungen](abbildungen/out/abb13.pdf){width=100%}
@@ -47,11 +57,13 @@ public class ConfidenceScoreAspect {
     private final KnowledgeStoreClient knowledgeStore;
 
     @Around("@annotation(cs) || @within(cs)")
-    public Object enforce(ProceedingJoinPoint jp, ConfidenceScore cs) throws Throwable {
+    public Object enforce(ProceedingJoinPoint jp,
+            ConfidenceScore cs) throws Throwable {
         if (cs.value() == ConfidenceScore.Level.LOW) {
             log.warn("[CONFIDENCE LOW] {} - {}", jp.getSignature().toShortString(),
                     cs.rationale());
-            knowledgeStore.store("findings", "confidence-" + jp.getSignature().hashCode(),
+            knowledgeStore.store("findings",
+                    "confidence-" + jp.getSignature().hashCode(),
                     new ReviewFinding(jp.getSignature().toShortString(), cs.value(),
                              cs.rationale(), Instant.now()));
         }

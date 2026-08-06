@@ -31,21 +31,18 @@ Das folgende Beispiel zeigt, wie ein solcher Entwicklungsauftrag durch den Orche
 
 ## 22.2 Gesamtworkflow
 
-Der folgende Ablauf zeigt den vollständigen Lebenszyklus einer Feature-Implementierung innerhalb des agentischen Entwicklungssystems. Ein Feature-Request wird vom Orchestrator entgegengenommen und in mehrere Phasen des Software Development Lifecycle zerlegt. Für jede Phase wird ein spezialisierter Agent gestartet, der innerhalb eines isolierten Workspaces arbeitet und auf den gemeinsamen Wissensspeicher zugreifen kann.
+Der Gesamtworkflow lässt sich in Spezifikation, Planung, Umsetzung,
+Validierung, Integration und Übergabe gliedern. Wie diese Phasen technisch
+ausgeführt werden, hängt vom Architekturstand ab: Die aktuelle
+Referenzimplementierung verarbeitet den Auftrag als **einen**
+zustandsbehafteten Run mit einem schreibenden Agenten und mehreren
+unabhängigen Reviewern. Die Zielarchitektur zerlegt denselben Auftrag in
+einen Parent Workflow mit mehreren isolierten Child Runs. Die folgenden
+beiden Abschnitte stellen beide Varianten gegenüber.
 
-Der Workflow beginnt mit der Analyse der Anforderungen und der Ableitung einer geeigneten Architektur. Anschließend erstellt der Planungsagent einen Implementierungsplan, der von mehreren Entwicklungsagenten umgesetzt wird. Nach der Implementierung werden automatisch Tests generiert und ausgeführt, bevor ein Review-Agent die Einhaltung von Architektur- und Sicherheitsregeln prüft.
-
-Abschließend übernimmt ein Deployment-Agent die Erstellung der notwendigen Infrastrukturartefakte und bereitet das Deployment in der Zielumgebung vor.
-
-Die folgende Abbildung zeigt den Gesamtworkflow der agentischen Umsetzung eines Features.
-
-*(Die Workflow-Abbildungen der v1.3 an dieser Stelle — „End-to-End Workflow“ und „Interaktion der Systemkomponenten“ — sind in v2.0 mit den inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
-
-Während das vorherige Diagramm den Ablauf eines Entwicklungsauftrags zeigt, ist für das Verständnis der Architektur auch relevant, welche Systemkomponenten während dieses Prozesses miteinander interagieren.
-
-Der Orchestrator fungiert dabei als zentrale Steuerungseinheit des agentischen Entwicklungssystems. Er übersetzt Entwicklungsziele in einen Task Graph und startet spezialisierte Agenten, die jeweils klar abgegrenzte Aufgaben übernehmen. Diese Agenten arbeiten in isolierten Workspaces und greifen über definierte Tool-Schnittstellen auf Build-Systeme, Testframeworks und Deployment-Werkzeuge zu.
-
-Die folgende Abbildung zeigt, wie die einzelnen Architekturkomponenten während eines End-to-End-Workflows zusammenwirken.
+*(Die beiden Workflow-Abbildungen der v1.3 an dieser Stelle — „End-to-End
+Workflow“ und „Interaktion der Systemkomponenten“ — sind in v2.0 mit den
+inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 ## 22.3 Teil A — der implementierte Single-Run-Prozess
 
@@ -103,28 +100,41 @@ genau der Fall, für den die Workflow-Ebene gedacht ist:
 ```text
 Parent Workflow: "Payment Service"
    │
-   ├─ Task 1  Contract Task (blockierend)
-   │          OpenAPI-Spezifikation + Domain Events + DTO-Schemas
-   │          → Contract Version v1 (Content-Hash), attestiert
+   ├─ Task 1a  Externe Verträge (blockierend)
+   │           OpenAPI-Spezifikation · Domain Events · DTO-Schemas
    │
-   ├─ Task 2  Domain-Implementierung      (unabhängig von Task 3, 4)
-   │          Owned Paths: domain/**      Child Run A, Branch A
+   ├─ Task 1b  Interne Verträge (blockierend)
+   │           Use-Case-Ports · Domain-IDs · gemeinsame Value-Object-
+   │           Schnittstellen, als eigenes Contract-Modul
+   │           → beide als Contract Version v1 (Content-Hash), attestiert
    │
-   ├─ Task 3  API-/Application-Schicht    (unabhängig von Task 2, 4)
-   │          Owned Paths: adapter/in/**  Child Run B, Branch B
+   ├─ Task 2   Domain-Implementierung        abhängig von 1b
+   │           Owned Paths: domain/**        Child Run A, Branch A
    │
-   ├─ Task 4  Infrastruktur (Kafka/Outbox) (unabhängig von Task 2, 3)
-   │          Owned Paths: adapter/out/** Child Run C, Branch C
-   │          Exklusiv-Lock: db/migration/**
+   ├─ Task 3   API-/Application-Schicht      abhängig von 1a + 1b,
+   │           Owned Paths: adapter/in/**    nicht von der fertigen
+   │                                         Implementierung aus Task 2
+   │                                         Child Run B, Branch B
    │
-   ├─ Task 5  Tests (abhängig von 2–4)
+   ├─ Task 4   Infrastruktur (Kafka/Outbox)  abhängig von 1b
+   │           Owned Paths: adapter/out/**   Child Run C, Branch C
+   │           Exklusiv-Lock: db/migration/**
    │
-   └─ Task 6  Deployment-Artefakte (abhängig von 5)
+   ├─ Task 5   Tests                         abhängig von 2–4
+   │
+   └─ Task 6   Deployment-Artefakte          abhängig von 5
 ```
 
-Der Ablauf: Der Contract Task läuft zuerst und allein — ohne versionierte
-Verträge keine parallele Implementierung (AP-3). Danach starten die Tasks 2
-bis 4 als **Child Runs** mit je eigenem Branch und je genau einem
+Der Ablauf: Die beiden Contract Tasks laufen zuerst und allein — ohne
+versionierte Verträge keine parallele Implementierung (AP-3). Die Trennung
+in **externe** und **interne** Verträge ist dabei entscheidend und in der
+v1.3-Fassung dieses Beispiels noch untergegangen: Eine OpenAPI-Datei und
+DTO-Schemas allein genügen nicht, damit die Application-Schicht ohne die
+fertige Domänenimplementierung übersetzt. Erst wenn auch die internen
+Verträge — Use-Case-Ports, Domain-IDs, gemeinsame Value-Object-
+Schnittstellen — als eigenes, stabiles Contract-Modul versioniert
+vorliegen, sind Task 2 und Task 3 wirklich unabhängig. Danach starten die
+Tasks 2 bis 4 als **Child Runs** mit je eigenem Branch und je genau einem
 schreibenden Agenten (AP-2); ihre Schreibbereiche überschneiden sich nicht,
 und die Datenbankmigrationen sind über ein Exklusiv-Lock serialisiert. Jeder
 Child Run durchläuft sein **lokales Task-Gate**. Der **Merge Coordinator**
@@ -137,12 +147,13 @@ Ganzes — Gesamtbuild, Regression, End-to-End, API- und
 Event-Kompatibilität, Migrationskonsistenz, Gesamt-SBOM. Erst danach folgen
 Freigabe und Pull Request.
 
-Der Gewinn ist Wanduhrzeit bei unveränderter Zurechenbarkeit: Jede Änderung
-bleibt einem Child Run zugeordnet, jeder Schritt bleibt attestiert, und der
-Warum-Trace umfasst zusätzlich Planversion, Vertragsversionen und
-Merge-Entscheidungen. Der Preis sind Integrationskosten — und die Tatsache,
-dass sich Parallelität nur lohnt, wenn die Dekomposition trägt (19.10,
-Risiken).
+Das angestrebte Ergebnis ist eine kürzere Wanduhrzeit bei unveränderter
+Zurechenbarkeit: Jede Änderung bleibt einem Child Run zugeordnet, jeder
+Schritt bleibt attestiert, und der Warum-Trace umfasst zusätzlich
+Planversion, Vertragsversionen und Merge-Entscheidungen. Ob der
+Parallelitätsgewinn die zusätzlichen Integrationskosten übersteigt, muss der
+Messplan zeigen (15.6) — Parallelität lohnt sich nur, wenn die Dekomposition
+trägt (19.10, Risiken).
 
 ## 22.5 Artefakte des Workflows
 

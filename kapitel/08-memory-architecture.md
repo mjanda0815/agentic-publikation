@@ -76,7 +76,8 @@ public class KnowledgeStoreClient {
                     .writeValue(filePath.toFile(), entry);
             log.info("Knowledge stored: {}/{}", domain, key);
         } catch (IOException e) {
-            throw new KnowledgeStoreException("Failed to store: " + domain + "/" + key, e);
+            throw new KnowledgeStoreException("Failed to store: " + domain + "/"
+                    + key, e);
         }
     }
 
@@ -87,7 +88,8 @@ public class KnowledgeStoreClient {
         try {
             JavaType entryType = objectMapper.getTypeFactory()
                     .constructParametricType(KnowledgeEntry.class, type);
-            return Optional.of(objectMapper.readValue(filePath.toFile(), entryType));
+            return Optional.of(objectMapper.readValue(filePath.toFile(),
+                    entryType));
         } catch (IOException e) {
             log.warn("Failed to read: {}/{}", domain, key, e);
             return Optional.empty();

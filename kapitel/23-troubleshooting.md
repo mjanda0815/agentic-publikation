@@ -7,7 +7,7 @@
 
 | Problem | Lösung |
 | --- | --- |
-| Unvollständige Ergebnisse | Prompts aufteilen. max_turns erhöhen. |
+| Unvollständige Ergebnisse | Prompts aufteilen. `maxTurns` in der Subagenten-Definition erhöhen. |
 | Falsche Dateien geändert | Pfade explizit angeben. isolation="worktree". |
 | Kontextverlust | Nachricht per SendMessage an die Agent-ID senden. |
 | Parallele Kollisionen | Worktree-Isolation für alle parallelen Agenten. |
@@ -21,9 +21,9 @@
 | Codebasis analysieren | Explore / architecture-agent |
 | Implementierungsplan erstellen | planning-agent |
 | Anforderungen sammeln | requirements-agent |
-| Features implementieren | dev-agent (sonnet) |
+| Features implementieren | Development Capability (Modellwahl über Capability Routing) |
 | Tests schreiben/ausführen | test-agent |
-| Code-Qualität prüfen | review-agent (opus) |
+| Code-Qualität prüfen | Review Capability (Modellwahl über Capability Routing) |
 | Deployment | deploy-agent |
 | CI/CD Quality Gate | qa-guard |
 

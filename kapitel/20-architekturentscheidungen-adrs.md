@@ -8,17 +8,26 @@ Original erhalten — sie dokumentieren, was damals entschieden wurde. Der
 Entscheidung geworden ist: Die Referenzimplementierung (Kapitel 19) hat
 mehrere davon korrigiert, die Zielarchitektur (19.10) einige
 weiterentwickelt. Ersetzte Entscheidungen stehen als eigene ADRs 5–8 am
-Ende dieses Kapitels.
+Ende dieses Kapitels. Die Statusangaben trennen dabei zwei Dinge, die
+oft vermischt werden: der **Entscheidungsstatus** sagt, ob eine
+Architekturentscheidung gilt; der **Implementierungsstatus** sagt, ob sie
+im Produkt bereits umgesetzt ist. Eine angenommene Entscheidung kann
+also durchaus noch der Umsetzung harren.
 
 ## ADR-1: Multi-Agent vs. Single-Agent Architektur
 
-> **Status:** *Superseded* (ersetzt) — Entscheidung vom März 2026 (v1.3),
+> **Entscheidungsstatus:** *Superseded* (ersetzt) — Entscheidung vom März 2026 (v1.3),
 > ersetzt im August 2026 (v2.1) durch **ADR-5: Hierarchische Orchestrierung
 > mit Parent Workflow und Child Runs**. Die Praxis hat gezeigt, dass
 > mehrere gleichzeitig schreibende Rollenagenten Konfliktkosten, unklare
 > Zurechnung und nicht attestierbare Zwischenstände erzeugen (19.8). Der
 > folgende Originaltext bleibt zur Dokumentation der ursprünglichen
-> Entscheidungsgrundlage erhalten.
+> Entscheidungsgrundlage erhalten. Die darin enthaltenen quantitativen und
+> qualitativen Wirkannahmen (Token-Ersparnisse, Qualitäts- und
+> Latenzeffekte, Kontext-Overhead) dokumentieren den damaligen
+> Entscheidungsstand; sie wurden nicht kontrolliert gemessen und gelten
+> nicht als Ergebnisse dieser Arbeit. Das gilt sinngemäß auch für die
+> historischen ADRs 2 bis 4.
 
 ### Motivation / Kontext
 
@@ -38,16 +47,29 @@ Wir verwenden eine Multi-Agent-Architektur mit Hub-and-Spoke-Topologie und zentr
 
 #### Agenten-Katalog
 
-| Agent | Verantwortung | Modell (Empfehlung) | Tool-Zugriffe | Kontext-Fokus |
-| --- | --- | --- | --- | --- |
-| Orchestrator | Task-Dekomposition, Agent-Zuweisung, Ergebnis-Aggregation, Conflict Resolution | Opus | Alle Agenten, Shared Knowledge Store, Git | Gesamtarchitektur, Task-Graph, Agent-Status |
-| Architecture Agent | ADR-Erstellung, Architektur-Validierung, Bounded-Context-Prüfung | Opus | Dateisystem (read), Shared Knowledge Store | ADRs, Architekturregeln, DDD-Modell |
-| Planning Agent | Task-Dekomposition, Abhängigkeitsanalyse, Schätzung | Sonnet | Shared Knowledge Store, Issue Tracker | Anforderungen, Task-Graph, Velocity-Daten |
-| Requirements Agent | Anforderungsanalyse, Akzeptanzkriterien, User-Story-Verfeinerung | Sonnet | Shared Knowledge Store, Dokumentation | Fachdomäne, bestehende Requirements |
-| Development Agent | Code-Generierung, Refactoring, Implementierung | Sonnet / Opus (je nach Komplexität) | Dateisystem (read/write), Build-Tools, Terminal | Service-Code, Dependencies, API-Contracts |
-| Testing Agent | Testgenerierung, Coverage-Analyse, Mutation Testing | Sonnet | Dateisystem, Test-Runner, Coverage-Tools | Test-Code, Fixtures, Coverage-Reports |
-| Review Agent | Code-Review, Architektur-Compliance, Security-Check | Opus | Dateisystem (read), Guardrails-Pipeline | Diff, ADRs, Security-Policies, Style-Guides |
-| Deployment Agent | CI/CD-Konfiguration, Infrastructure as Code, Rollout-Strategien | Sonnet / Haiku | Dateisystem, Docker, K8s-Config | Deployment-Manifeste, Helm Charts, Pipelines |
+| Agent | Verantwortung | Modell (Empfehlung) |
+| --- | --- | --- |
+| Orchestrator | Task-Dekomposition, Agent-Zuweisung, Ergebnis-Aggregation, Conflict Resolution | Opus |
+| Architecture Agent | ADR-Erstellung, Architektur-Validierung, Bounded-Context-Prüfung | Opus |
+| Planning Agent | Task-Dekomposition, Abhängigkeitsanalyse, Schätzung | Sonnet |
+| Requirements Agent | Anforderungsanalyse, Akzeptanzkriterien, User-Story-Verfeinerung | Sonnet |
+| Development Agent | Code-Generierung, Refactoring, Implementierung | Sonnet / Opus (je nach Komplexität) |
+| Testing Agent | Testgenerierung, Coverage-Analyse, Mutation Testing | Sonnet |
+| Review Agent | Code-Review, Architektur-Compliance, Security-Check | Opus |
+| Deployment Agent | CI/CD-Konfiguration, Infrastructure as Code, Rollout-Strategien | Sonnet / Haiku |
+
+Die Werkzeug- und Kontextzuordnung derselben Rollen:
+
+| Agent | Tool-Zugriffe | Kontext-Fokus |
+| --- | --- | --- |
+| Orchestrator | Alle Agenten, Shared Knowledge Store, Git | Gesamtarchitektur, Task-Graph, Agent-Status |
+| Architecture Agent | Dateisystem (read), Shared Knowledge Store | ADRs, Architekturregeln, DDD-Modell |
+| Planning Agent | Shared Knowledge Store, Issue Tracker | Anforderungen, Task-Graph, Velocity-Daten |
+| Requirements Agent | Shared Knowledge Store, Dokumentation | Fachdomäne, bestehende Requirements |
+| Development Agent | Dateisystem (read/write), Build-Tools, Terminal | Service-Code, Dependencies, API-Contracts |
+| Testing Agent | Dateisystem, Test-Runner, Coverage-Tools | Test-Code, Fixtures, Coverage-Reports |
+| Review Agent | Dateisystem (read), Guardrails-Pipeline | Diff, ADRs, Security-Policies, Style-Guides |
+| Deployment Agent | Dateisystem, Docker, K8s-Config | Deployment-Manifeste, Helm Charts, Pipelines |
 
 #### Hub-and-Spoke-Topologie
 
@@ -137,7 +159,7 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 
 ## ADR-2: Workspace Isolation via Git Worktrees
 
-> **Status:** *Amended* (teilweise ersetzt und weiterentwickelt) —
+> **Entscheidungsstatus:** *Amended* (teilweise ersetzt und weiterentwickelt) —
 > Entscheidung vom März 2026 (v1.3), fortgeschrieben im August 2026 (v2.1).
 > Die aktuelle Referenzimplementierung verwendet **Branch-Isolation auf
 > einem projektpersistenten Workspace** statt Worktrees je Agent, weil
@@ -238,7 +260,7 @@ Ein Agent committet und merged entweder alles oder nichts. Partial Merges (nur m
 
 ## ADR-3: Guardrail Pipeline als Pflicht-Gate
 
-> **Status:** *Accepted, amended* — Entscheidung vom März 2026 (v1.3), in
+> **Entscheidungsstatus:** *Accepted, amended* — Entscheidung vom März 2026 (v1.3), in
 > der Praxis bestätigt und um den Betriebsmodus `advisory` ergänzt (19.5);
 > in der Zielarchitektur wird das Gate zweistufig (lokales Task-Gate je
 > Child Run plus Integration Gate auf dem zusammengeführten Stand) — siehe
@@ -351,12 +373,12 @@ Die Guardrails-Pipeline ersetzt den menschlichen Review nicht, sondern reduziert
 
 #### Positive Konsequenzen
 
-- Systematische, reproduzierbare Qualitätssicherung für jeden generierten Code-Artefakt – unabhängig davon, welcher Agent oder welches Modell den Code generiert hat
+- Systematischer, reproduzierbarer Prüfprozess für jedes generierte Code-Artefakt – unabhängig davon, welcher Agent oder welches Modell den Code erzeugt hat; die Prüfergebnisse selbst sind wegen der LLM-Stufe teilweise nichtdeterministisch
 - Früherkennung von LLM-Halluzinationen (nicht-existierende APIs, falsche Signaturen) in Stufe 1 (Syntax), bevor aufwendigere Prüfungen starten
 - Compliance-Nachweis für Audit-Anforderungen: Jede Pipeline-Ausführung ist protokolliert und nachvollziehbar
 - Strukturiertes Feedback ermöglicht Agenten, gezielt zu korrigieren – kein blindes Raten
-- Defense in Depth: Sechs unabhängige Prüfebenen – ein Fehler, der Stufe 3 passiert, wird mit hoher Wahrscheinlichkeit in Stufe 4, 5 oder 6 erkannt
-- Confidence Scoring fängt subtile, kontextabhängige Probleme ab, die regelbasierte Tools prinzipiell nicht erkennen können
+- Defense in Depth: Mehrere unterschiedlich arbeitende Prüfungen reduzieren das Risiko, dass ein einzelner Fehler unbemerkt bleibt – eine vollständige Fehlererkennung wird nicht behauptet
+- Die ersten fünf Stufen prüfen überwiegend deterministische Kriterien; die LLM-basierte letzte Stufe kann zusätzliche kontextuelle Auffälligkeiten identifizieren, die vom konfigurierten Regelwerk nicht erfasst werden
 
 #### Negative Konsequenzen
 
@@ -376,7 +398,7 @@ Die Guardrails-Pipeline ersetzt den menschlichen Review nicht, sondern reduziert
 
 ## ADR-4: Git-basierte Orchestrierung
 
-> **Status:** *Amended* (präzisiert) — Entscheidung vom März 2026 (v1.3),
+> **Entscheidungsstatus:** *Amended* (präzisiert) — Entscheidung vom März 2026 (v1.3),
 > präzisiert im August 2026 (v2.1): Git ist Artefakt-, Versions- und
 > Checkpoint-System; der autoritative **Prozesszustand** liegt in der
 > Datenbank, weil ein Auditor Fragen stellt, die `git log` nicht
@@ -423,16 +445,16 @@ Verzeichnisstruktur
 ```
 docs/knowledge/
 ├── architecture/
-│   ├── adrs/                                              # Architecture Decision Records
+│   ├── adrs/                                       # Architecture Decision Records
 │   │   ├── ADR-001-*.md
 │   │   └── ...
 │   ├── bounded-contexts.md                                # DDD Bounded Context Map
 │   ├── api-contracts/                                     # OpenAPI-Specs, AsyncAPI
-│   └── patterns.md                                        # Erlaubte/verbotene Patterns
+│   └── patterns.md                                 # Erlaubte/verbotene Patterns
 ├── domain/
 │   ├── glossary.md                                        # Ubiquitous Language
 │   ├── event-catalog.md                                   # Domain Events
-│   └── aggregates.md                                      # Aggregate-Beschreibungen
+│   └── aggregates.md                               # Aggregate-Beschreibungen
 ├── conventions/
 │   ├── coding-standards.md                                # Code-Konventionen
 │   ├── testing-standards.md                               # Test-Konventionen
@@ -446,7 +468,7 @@ docs/knowledge/
 └── memory/
     ├── decisions.md               # Entscheidungen im laufenden Feature
     ├── lessons-learned.md         # Aus Fehlern gelernt (Retry-Feedback)
-    └── context-cache.md                                   # Wiederverwendbarer Kontext
+    └── context-cache.md                            # Wiederverwendbarer Kontext
 ```
 
 Task-Datei-Format
@@ -542,7 +564,8 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 
 ## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
 
-> **Status:** *Proposed* (Zielarchitektur, August 2026) — ersetzt ADR-1.
+> **Entscheidungsstatus:** *Accepted* (August 2026) — ersetzt ADR-1.
+> **Implementierungsstatus:** *Planned* (Roadmap-Stufen 0–2, siehe 19.10).
 
 ### Motivation / Kontext
 
@@ -577,8 +600,9 @@ Parallelitätsgewinn aufzehren, wenn Tasks schlecht geschnitten sind.
 
 ## ADR-6: Workspace Leases und exklusive Ressourcen
 
-> **Status:** *Proposed* (Zielarchitektur, August 2026) — konkretisiert
-> ADR-2 für parallele Child Runs.
+> **Entscheidungsstatus:** *Accepted* (August 2026) — konkretisiert ADR-2
+> für parallele Child Runs.
+> **Implementierungsstatus:** *Planned* (Roadmap-Stufe 2, siehe 19.10).
 
 ### Entscheidung
 
@@ -600,7 +624,9 @@ bei unklarem Besitz gilt Fail Closed (AP-7).
 
 ## ADR-7: Zweistufiges Quality Gate
 
-> **Status:** *Proposed* (Zielarchitektur, August 2026) — erweitert ADR-3.
+> **Entscheidungsstatus:** *Accepted* (August 2026) — erweitert ADR-3.
+> **Implementierungsstatus:** *Planned* (Roadmap-Stufe 2, siehe 19.10);
+> das einstufige Gate je Lauf ist implementiert (19.5).
 
 ### Entscheidung
 
@@ -620,7 +646,9 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 
 ## ADR-8: Git als Artefaktzustand, Datenbank als Prozesszustand
 
-> **Status:** *Accepted* (August 2026) — präzisiert ADR-4.
+> **Entscheidungsstatus:** *Accepted* (August 2026) — präzisiert ADR-4.
+> **Implementierungsstatus:** *Implemented* für die Run-Ebene (19.6);
+> Workflow-, Task- und Lease-Zustand folgen mit der Roadmap (19.10).
 
 ### Entscheidung
 

@@ -39,5 +39,7 @@ den neuen acht auf.*
 > nicht beschrieben, sondern maschinell erzwungen: ArchUnit-Tests brechen
 > den Build bei Schichten- oder Vendor-Kopplungs-Verstößen, und ein
 > Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
-> lassen (19.2). AP-2 bis AP-4 in ihrer vollen Ausprägung sind Gegenstand
+> lassen (19.2). AP-2 und AP-4 gelten bereits im Einzel-Run (ein
+> schreibender Agent je Lauf, mehrere unabhängige read-only Reviewer);
+> AP-3 sowie die Workflow-weite Ausprägung von AP-2 und AP-4 sind Gegenstand
 > der Roadmap (19.10).

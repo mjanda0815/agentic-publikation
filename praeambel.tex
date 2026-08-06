@@ -72,6 +72,25 @@
   breaksymbolindentleft=0.6em,
   fontsize=\small}
 
+% --- Praxis-Check-Kaesten und Hinweis-Bloecke zusammenhalten ---
+% Pandoc setzt Blockquotes als quote-Umgebung. Ohne Mindestplatz-Anforderung
+% reisst ein kurzer Kasten am Seitenende auf (eine Zeile auf der Folgeseite).
+\usepackage{needspace}
+\usepackage{etoolbox}
+\AtBeginEnvironment{quote}{\Needspace*{4\baselineskip}}
+
+% --- Float-Platzierung: Abbildungen naeher am Text halten ---
+% Voreinstellung von LaTeX schiebt grosse Abbildungen leicht mehrere Seiten
+% weit; in einem abbildungsreichen Dokument reisst das Bild und Bezugstext
+% auseinander.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.7}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
 % --- Pandoc-Kompatibilität ---
 % \tightlist wird von Pandoc für kompakte Listen ohne Zusatzabstand erzeugt
 % und ist ohne den Pandoc-Standardtemplate nicht definiert.

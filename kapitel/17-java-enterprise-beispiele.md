@@ -27,7 +27,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/payments/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated())
             .authenticationProvider(authProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthFilter,
+                    UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 }
@@ -48,7 +49,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             String username = jwtService.extractUsername(jwt);
             if (username != null
-                    && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    && SecurityContextHolder.getContext()
+                            .getAuthentication() == null) {
                 UserDetails user = userDetailsService.loadUserByUsername(username);
                 if (jwtService.isTokenValid(jwt, user)) {
                     var auth = new UsernamePasswordAuthenticationToken(user, null,
@@ -75,7 +77,9 @@ public class AmountCheckWorker {
         boolean needsApproval = amount.compareTo(THRESHOLD) > 0;
         client.newCompleteCommand(job.getKey())
                 .variables(Map.of("requiresApproval", needsApproval,
-                        "checkResult", needsApproval ? "MANUAL_APPROVAL" : "AUTO_APPROVED"))
+                        "checkResult",
+                                needsApproval ? "MANUAL_APPROVAL"
+                                        : "AUTO_APPROVED"))
                 .send().join();
     }
 }

@@ -82,7 +82,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PaymentNotFoundException.class)
     public ProblemDetail handleNotFound(PaymentNotFoundException ex) {
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus
+                .NOT_FOUND,
                 ex.getMessage());
         problem.setTitle("Zahlung nicht gefunden");
         problem.setType(URI.create("https://api.company.com/errors/not-found"));
@@ -92,7 +93,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex) {
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus
+                .BAD_REQUEST,
                 "Validierungsfehler");
         Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField,
@@ -123,7 +125,8 @@ public record ImplementationPlan(
         String featureId, String title, List<Phase> phases, Instant createdAt) {
 
     public record Phase(int order, String name, Duration estimatedEffort,
-                        Set<String> dependencies, List<Task> tasks, PhaseStatus status) {
+                        Set<String> dependencies, List<Task> tasks,
+                                PhaseStatus status) {
         public boolean isBlocked() {
             return !dependencies.isEmpty() && status == PhaseStatus.PENDING;
         }
@@ -149,7 +152,8 @@ Der Requirements-Agent erstellt eine Requirements Traceability Matrix (RTM), die
 
 ```java
 // === Requirements Traceability Matrix ===
-public record TraceabilityMatrix(String sprintId, List<TracedRequirement> requirements) {
+public record TraceabilityMatrix(String sprintId,
+        List<TracedRequirement> requirements) {
     public record TracedRequirement(
             String jiraKey, String title, RequirementStatus status,
             List<AcceptanceCriterion> criteria, List<CodeReference> implementations,
@@ -158,8 +162,10 @@ public record TraceabilityMatrix(String sprintId, List<TracedRequirement> requir
             return gaps.isEmpty() && !implementations.isEmpty() && !tests.isEmpty();
         }
     }
-    public record AcceptanceCriterion(String id, String description, boolean isCovered) {}
-    public record CodeReference(String filePath, String className, int lineNumber) {}
+    public record AcceptanceCriterion(String id, String description,
+            boolean isCovered) {}
+    public record CodeReference(String filePath, String className,
+            int lineNumber) {}
 
     public List<TracedRequirement> untracedRequirements() {
         return requirements.stream().filter(r -> !r.isFullyTraced()).toList();
@@ -219,7 +225,8 @@ public class NotificationService {
                 applicable.stream().map(ch -> ch.send(request)).toList();
         List<NotificationResult> results = futures.stream()
                 .map(CompletableFuture::join).toList();
-        results.forEach(r -> historyRepo.save(NotificationHistory.from(request, r)));
+        results.forEach(r -> historyRepo.save(NotificationHistory.from(request,
+                r)));
         return results;
     }
 }
@@ -242,7 +249,8 @@ class NotificationServiceTest {
         var request = new NotificationRequest(null, "test@example.com", "User",
                 "Betreff", "Inhalt", Set.of(NotificationType.EMAIL), Map.of());
         when(emailChannel.supports(request)).thenReturn(true);
-        when(emailChannel.send(request)).thenReturn(CompletableFuture.completedFuture(
+        when(emailChannel.send(request)).thenReturn(CompletableFuture
+                .completedFuture(
                 NotificationResult.success(NotificationType.EMAIL, request.id())));
         var results = service.sendNotification(request);
         assertThat(results).hasSize(1);

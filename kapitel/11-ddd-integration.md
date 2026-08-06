@@ -25,7 +25,8 @@ public record Money(@Positive BigDecimal amount, @NotNull Currency currency)
     public Money add(Money other) { requireSameCurrency(other);
         return new Money(amount.add(other.amount), currency); }
     private void requireSameCurrency(Money o) {
-        if (!currency.equals(o.currency)) throw new CurrencyMismatchException(currency,
+        if (!currency.equals(o
+                .currency)) throw new CurrencyMismatchException(currency,
                 o.currency);
     }
 }
@@ -49,7 +50,8 @@ public class Order extends AbstractAggregateRoot<Order> {
     }
     public void confirm() {
         if (lines.isEmpty()) throw new EmptyOrderException(id);
-        if (status != OrderStatus.DRAFT) throw new InvalidOrderTransitionException(id,
+        if (status != OrderStatus
+                .DRAFT) throw new InvalidOrderTransitionException(id,
                 status);
         status = OrderStatus.CONFIRMED;
         registerEvent(new OrderConfirmedEvent(id, totalAmount, Instant.now()));
@@ -59,7 +61,8 @@ public class Order extends AbstractAggregateRoot<Order> {
 // === Domain Events (Sealed Interface) ===
 public sealed interface OrderEvent {
     OrderId orderId(); Instant occurredAt();
-    record OrderCreatedEvent(OrderId orderId, Instant occurredAt) implements OrderEvent {}
+    record OrderCreatedEvent(OrderId orderId,
+            Instant occurredAt) implements OrderEvent {}
     record OrderConfirmedEvent(OrderId orderId, Money total,
             Instant occurredAt) implements OrderEvent {}
 }
@@ -77,14 +80,18 @@ public class OutboxEventPublisher {
     @TransactionalEventListener(phase = BEFORE_COMMIT)
     public void handleDomainEvent(OrderEvent event) {
         outboxRepo.save(new OutboxEntry(UUID.randomUUID(),
-                event.getClass().getSimpleName(), event.orderId().value().toString(),
-                mapper.writeValueAsString(event), Instant.now(), OutboxStatus.PENDING));
+                event.getClass().getSimpleName(),
+                        event.orderId().value().toString(),
+                mapper.writeValueAsString(event), Instant.now(),
+                        OutboxStatus.PENDING));
     }
 
     @Scheduled(fixedDelay = 1000) @Transactional
     public void publishPendingEvents() {
-        outboxRepo.findByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING).forEach(entry -> {
-            try { kafka.send("order-events", entry.getAggregateId(), entry.getPayload())
+        outboxRepo.findByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING)
+                .forEach(entry -> {
+            try { kafka.send("order-events", entry.getAggregateId(),
+                    entry.getPayload())
                     .get(5, TimeUnit.SECONDS);
                 entry.markAsPublished();
             } catch (Exception e) { entry.markAsFailed(e.getMessage()); }
