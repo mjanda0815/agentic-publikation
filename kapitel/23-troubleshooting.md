@@ -1,5 +1,10 @@
 # 23 Troubleshooting & Schnellreferenz
 
+> **Versionshinweis (v2.0):** Die Schnellreferenz nennt v1.3-Werkzeugbegriffe.
+> Heute gilt: `maxTurns` in der Subagenten-Definition statt `max_turns` im
+> Aufruf, Fortsetzung über `SendMessage` statt `resume`, Agent-Tool statt
+> Task-Tool (vgl. 3.5).
+
 | Problem | Lösung |
 | --- | --- |
 | Unvollständige Ergebnisse | Prompts aufteilen. max_turns erhöhen. |
@@ -23,7 +28,7 @@
 | CI/CD Quality Gate | qa-guard |
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Aus der Schnellreferenz
-> wurden betriebliche Runbooks (u. a. Demo-Deployment,
-> Air-Gap-Auslieferung) und dokumentierte Praxis-Fallstricke — etwa der
-> Architektur-Ratchet mit Zyklen-Kappungsgrenze oder CI-Jobs, die sich ohne
-> Secret still überspringen und grün wirken (19.2, 19.7, 19.9).
+> wurden betriebliche Abläufe (Demo-Betrieb, Air-Gap-Auslieferung) und
+> dokumentierte Praxis-Fallstricke — etwa der Architektur-Ratchet mit
+> Zyklen-Kappungsgrenze oder CI-Jobs, die sich ohne Secret still
+> überspringen und grün wirken (19.2, 19.5, 19.7).

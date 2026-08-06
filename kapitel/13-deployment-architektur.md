@@ -19,7 +19,8 @@ In größeren Organisationen wird der Agent-Worker-Pool häufig über Queue- ode
 ## Einordnung *(neu in v2.0)*
 
 Die hier gezeichnete Kubernetes-Architektur ist als **Option** zu lesen,
-nicht als Voraussetzung. Die Praxis hat gezeigt: Reale Zielgruppen im
+nicht als Voraussetzung. Als Erfahrungswert aus der Arbeit an der in
+Kapitel 19 beschriebenen Plattform: Reale Zielgruppen im
 regulierten Umfeld — Behörden, Finanzdienstleister, Mittelstand — stellen
 vor der Skalierungsfrage eine andere: *Läuft es bei uns, on-premises, ohne
 Cloud-Abhängigkeit, notfalls ohne Rückkanal?* Ein agentisches

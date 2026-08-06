@@ -36,7 +36,7 @@ Agent(subagent_type="review-agent", prompt="Security-Review...")
 
 ```
 Agent(subagent_type="test-agent", prompt="mvn test")   // läuft im Hintergrund
-// Später fortsetzen: Nachricht an den laufenden Agenten
+// Später fortsetzen: Nachricht an den (auch bereits beendeten) Agenten
 // (v1.3: eigener resume-Parameter; heute Nachrichtenschnittstelle)
 SendMessage(to="agent_abc123", message="Korrigiere die Fehler.")
 ```
@@ -47,4 +47,4 @@ SendMessage(to="agent_abc123", message="Korrigiere die Fehler.")
 > zurückgestellt — ein Workspace je Projekt, damit Folgeläufe auf dem
 > Ergebnis der vorherigen aufbauen. Parallelität findet stattdessen in der
 > Bewertung statt: mehrere Reviewer gleichzeitig auf demselben Diff (19.3,
-> 19.8, 19.9).
+> 19.5, 19.9).

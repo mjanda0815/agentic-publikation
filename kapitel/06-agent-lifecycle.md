@@ -7,7 +7,7 @@ Jeder Claude Code Agent durchläuft einen definierten Lebenszyklus von der Erste
 
 | # | Phase | Beschreibung |
 | --- | --- | --- |
-| 1 | Spawn | Der Orchestrator erzeugt den Subagenten über das Task-Tool mit Typ, Prompt, Modell und optionalen Parametern (max_turns, isolation, run_in_background). Der Agent erhält eine eindeutige Agent-ID. |
+| 1 | Spawn | Der Orchestrator erzeugt den Subagenten über das Agent-Tool (in v1.3: „Task“, vgl. 3.5) mit Typ, Prompt, Modell und optionalen Parametern (`run_in_background`); die Turn-Obergrenze `maxTurns` und die Worktree-Isolation stehen in der Subagenten-Definition. Der Agent erhält eine eindeutige Agent-ID. |
 | 2 | Context Build | Der Agent lädt seinen Arbeitskontext: CLAUDE.md-Konfiguration, relevante Dateien aus dem Repository, Einträge aus dem Shared Knowledge Store und den Prompt des Orchestrators. Diese Phase bestimmt maßgeblich den Token-Verbrauch. |
 | 3 | Planning | Der Agent analysiert die Aufgabe und erstellt einen internen Ausführungsplan. Bei komplexen Tasks wird dieser Plan explizit als Implementierungs-Tracker persistiert. Der Planungsschritt ist bei implementation-planner Agenten die Hauptausgabe. |
 | 4 | Execution | Die Kernarbeit: Der Agent führt die geplanten Schritte aus, ruft Tools auf und generiert Artefakte. Jeder API-Roundtrip zählt als ein "Turn" gegen das max_turns-Limit. Die Execution-Phase kann mehrere Tool-Aufrufe pro Turn umfassen. |

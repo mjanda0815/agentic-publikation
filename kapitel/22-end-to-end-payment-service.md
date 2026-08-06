@@ -44,6 +44,11 @@ Die folgende Abbildung zeigt, wie die einzelnen Architekturkomponenten während 
 
 ## 22.3 Agentischer Workflow
 
+> **Versionshinweis (v2.0):** Die folgenden Aufruf-Skizzen sind Pseudocode
+> auf v1.3-Werkzeugstand; das Werkzeug heißt heute `Agent`, und
+> `isolation: worktree` wird in der Subagenten-Definition gesetzt
+> (vgl. 3.5).
+
 ```
 // PHASE 1: Requirements & Architektur
 Task(subagent_type="requirements-agent",

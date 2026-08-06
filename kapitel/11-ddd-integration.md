@@ -95,4 +95,4 @@ public class OutboxEventPublisher {
 > (27 Bounded Contexts: Run, Backlog, Freigabe, Policy, Nachweis). Bewusste
 > Pragmatik gegen die reine Lehre: Aggregat und JPA-Entität sind dieselbe
 > Klasse; statt Kafka genügen interne Events im Einzelprozess-Deployment
-> (19.2).
+> (19.1, 19.2).

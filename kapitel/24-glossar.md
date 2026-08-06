@@ -28,7 +28,7 @@
 | Plan-Run | Lauf, der nur analysiert und Arbeitsschritte vorschlägt; darf keinen Code ändern (Kap. 19). |
 | Policy-as-Code | Regeln als versioniertes, signiertes Dokument mit genau einer aktiven Version je Mandant (Kap. 19). |
 | PSD2 | Payment Services Directive 2 – EU-Zahlungsdiensterichtlinie. |
-| Quality Gate | Aggregation der Reviewer-Befunde zu einer Entscheidung (PASS/WARN/FAIL); Ausfall eines Prüfers ist nie ein stiller Pass (Kap. 12, 19). |
+| Quality Gate | Aggregation der Reviewer-Befunde zu einer Entscheidung (PASS/WARN/FAIL, bei Prüferausfall ERROR — nie ein stiller Pass) (Kap. 12, 19). |
 | RBAC | Role-Based Access Control – Rollenbasierte Zugriffskontrolle. |
 | RFC 7807 | Problem Details for HTTP APIs – Strukturierte Fehlerantworten. |
 | RTM | Requirements Traceability Matrix – Anforderungsverfolgung. |

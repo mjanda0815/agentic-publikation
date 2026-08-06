@@ -46,7 +46,7 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
    in einer Sandbox auf einem projektpersistenten Workspace mit eigenem
    Git-Repository, auf einem eigenen Branch.
 4. **Prüfen.** Read-only-Review-Adapter analysieren den Diff; ein Quality
-   Gate aggregiert die Befunde zu PASS/WARN/FAIL. Bei Fehlschlag speist die
+   Gate aggregiert die Befunde zu PASS/WARN/FAIL (bzw. ERROR bei Prüferausfall). Bei Fehlschlag speist die
    Plattform das Feedback zurück in den Agenten — bis zu zwei automatische
    Korrekturversuche.
 5. **Übergeben.** Erfolgreiche Runs werden lokal gemergt oder als Pull
@@ -80,7 +80,12 @@ kein SPA), PostgreSQL 18 mit Flyway, Docker Compose. Ein Maven-Modul, ein
 Prozess, eine Datenbank — kein Cluster, kein Message-Broker, kein
 Service-Mesh. Die Komplexität des Systems liegt in der *Steuerung von
 Nichtdeterminismus*, nicht in der Infrastruktur, und genau dort soll sie
-auch bleiben.
+auch bleiben. Zwei Umstellungspunkte des Sprungs auf Spring Boot 4 sind
+für Nachbauer erwähnenswert: Jackson 3 (`tools.jackson`) ist dort der
+primäre `ObjectMapper` — `com.fasterxml` ist nur noch transitiv verfügbar,
+neuer Serialisierungscode muss den Jackson-3-Bean injizieren oder einen
+eigenen Mapper mitbringen —, und Signaturen über persistierte Daten
+brauchen auf Millisekunden trunkierte Zeitstempel (19.6).
 
 ### Bewusste Nicht-Ziele
 
@@ -266,7 +271,8 @@ Stand; sonst wäre die signierte Zusage Fassade.
 **Abschluss an der Repository-Realität.** Entweder lokaler Merge oder Push
 mit Pull Request; im PR-Fall wartet der Run auf grüne CI und den Merge. Das
 zugehörige Backlog-Element wird erst mit dem Merge auf `DONE` gesetzt —
-nicht mit dem Codeschreiben. Ein abgeschlossener Build-Run kann über ein
+nicht mit dem Codeschreiben; mehrere abgeschlossene Runs lassen sich als
+**Meilenstein-Release** mit Changelog, Tag und Release bündeln. Ein abgeschlossener Build-Run kann über ein
 Ereignis einen Folge-Plan-Run anstoßen; zusammen mit zeitgesteuerten
 Routinen entsteht der geschlossene Kreis *planen → bauen → prüfen → mergen
 → neu planen*, mit definierten Stellen, an denen ein Mensch eingreifen muss.

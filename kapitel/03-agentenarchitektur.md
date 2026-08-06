@@ -69,14 +69,24 @@ Werkzeug-Dokumentation zu prüfen:
 | description | Ja | string | Kurze Zusammenfassung der Aufgabe (laut Tool-Schema, für Anzeige und Logging) |
 | model | Nein | enum | Modellklasse für diesen Agenten (sonnet, opus, haiku, …); ohne Angabe erbt der Agent das Modell der Hauptsitzung |
 | run_in_background | Nein | boolean | Subagenten laufen inzwischen standardmäßig im Hintergrund; `false` erzwingt synchrone Ausführung |
-| isolation | Nein | enum | "worktree" für eine isolierte Git-Worktree-Kopie des Repositories |
+
+Die Worktree-Isolation (`isolation: worktree` — eine isolierte
+Git-Worktree-Kopie des Repositories je Agent) wird heute in der
+Subagenten-Definition gesetzt, nicht je Aufruf.
 
 Gegenüber v1.3 bemerkenswert: Das damals als Aufrufparameter dokumentierte
 `max_turns` ist kein Parameter des Agent-Tools mehr — die Turn-Obergrenze
 wird heute als `maxTurns` in der Subagenten-Definition (Frontmatter)
 gesetzt. Und die Fortsetzung eines Agenten läuft nicht mehr über einen
-`resume`-Parameter, sondern über eine Nachrichtenschnittstelle an den
-laufenden Agenten. Auch das illustriert eine Kernaussage dieses Whitepapers:
+`resume`-Parameter, sondern über eine Nachrichtenschnittstelle an den —
+auch bereits beendeten — Agenten. Auch das illustriert eine Kernaussage
+dieses Whitepapers:
 Werkzeugdetails haben eine Halbwertszeit von Monaten — Architekturprinzipien
 (ein Orchestrator, spezialisierte Subagenten mit eigenem Kontextfenster,
 Isolation) bleiben.
+
+> **Praxis-Check SoftwareFabrik (abweichend):** Die Fabrik nutzt dieses
+> Werkzeugmuster bewusst nicht: Sie startet keine Subagenten, sondern genau
+> einen Agentenprozess je Lauf in einer Sandbox. Spezialisierung entsteht
+> über Rollen- und Teamdefinitionen im Kontext und über mehrere unabhängige
+> Prüfer nach der Ausführung (19.3, 19.8).

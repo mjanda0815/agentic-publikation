@@ -70,7 +70,9 @@ public class ConfidenceScoreAspect {
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Die Guardrails-Pipeline ist
 > als eigener Schichtbegriff umgesetzt: Read-only-Review-Adapter, getrennt
-> von den schreibenden Agenten. Sechs Prüfer (LLM, statisch,
-> werkzeuggestützt), eine konfigurierbare Gate-Policy mit drei nicht
+> von den schreibenden Agenten. Sechs Review-Adapter — nicht deckungsgleich
+> mit den sechs Pipeline-Stufen oben: zwei LLM-Reviewer, drei statische
+> Prüfer, ein werkzeuggestützter Dependency-Scan —, eine konfigurierbare
+> Gate-Policy mit drei nicht
 > aufweichbaren Sonderregeln und drei Betriebsmodi (off/advisory/blocking);
 > das Confidence Scoring ist ohne AOP im Gate-Service gelöst (19.5).

@@ -303,4 +303,4 @@ spec:
 > Systemfunktionen: Planung = Plan-Run, Review = Read-only-Reviewer-Schicht,
 > Testing/Deployment = Build-Gate und Meilenstein-Release. Die Parallelität
 > wurde von der Erzeugung auf die Bewertung verschoben — ein Agent je Lauf,
-> mehrere Prüfer (19.8).
+> mehrere Prüfer (19.3, 19.5, 19.8).

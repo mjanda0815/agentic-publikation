@@ -65,4 +65,4 @@ public class SecretScannerHook {
 > Container-Sandbox mit `--network=none`, Host-Allowlist gegen
 > Token-Exfiltration. Die härtesten realen Befunde kamen aus adversarialen
 > Re-Reviews und lagen an den Übergängen zwischen Automatismen — nicht in
-> den Funktionen selbst (19.4, 19.9).
+> den Funktionen selbst (19.4, 19.6, 19.9).

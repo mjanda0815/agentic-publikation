@@ -78,8 +78,8 @@ public class AmountCheckWorker {
 }
 ```
 
-> **Praxis-Check SoftwareFabrik (teils bestätigt):** Spring Security mit
-> RBAC ist real umgesetzt (Ed25519-/RS256-JWTs in Lizenz- und
-> Attestierungsschicht). Eine Workflow-Engine wie Camunda wurde dagegen
-> nicht gebraucht: Die Zustandsmaschine des Prozesses ist das Run-Aggregat
-> selbst (19.3).
+> **Praxis-Check SoftwareFabrik (abweichend):** Spring Security mit RBAC
+> ist real umgesetzt; Lizenz-Leases sind signierte JWTs, die
+> Attestierungsschicht signiert mit Ed25519 (19.6, 19.7). Eine
+> Workflow-Engine wie Camunda wurde dagegen nicht gebraucht: Die
+> Zustandsmaschine des Prozesses ist das Run-Aggregat selbst (19.3).

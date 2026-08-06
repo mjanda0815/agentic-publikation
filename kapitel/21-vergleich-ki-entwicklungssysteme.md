@@ -59,7 +59,8 @@ Die Adapterwahl ist dort buchstäblich ein Konfigurationsfeld je Lauf.
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Der v1.3-Werkzeugvergleich
 > ist durch die Implementierung hinfällig geworden — die Fabrik integriert
-> zehn Execution-Adapter (CLI-Agenten und Cloud-Gateways) hinter einem Port;
+> zehn Execution-Adapter (ein deterministischer Mock, sechs CLI-Agenten,
+> drei Cloud-Gateways) hinter einem Port;
 > zwei ArchUnit-Regeln machen es technisch unmöglich, Anwendungs- oder
 > Web-Schicht an einen konkreten Vendor zu koppeln (19.2, 19.4).
 
