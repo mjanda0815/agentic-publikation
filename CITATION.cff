@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+message: "Wenn Sie dieses Whitepaper zitieren, verwenden Sie bitte die folgenden Angaben."
+title: "Agentic Software Development — Enterprise Architecture with AI Agents"
+subtitle: "Von kontrollierten Einzel-Runs zur parallelen Agentic Software Factory. Praxisbeispiele mit Java, Spring Boot und Domain-Driven Design"
+version: "2.2"
+date-released: "2026-08-06"
+license: CC-BY-4.0
+type: dataset
+authors:
+  - family-names: Janda
+    given-names: Martin
+    email: martin@janda.io
+keywords:
+  - agentic software development
+  - coding agents
+  - control plane
+  - software architecture
+  - domain-driven design
+  - governance
+  - enterprise architecture
+  - Java
+  - Spring Boot
+abstract: >-
+  Coding-Agenten können Repositories analysieren, Code verändern, Build- und
+  Testwerkzeuge aufrufen und Ergebnisse iterativ korrigieren. Für den Einsatz
+  in Enterprise- und regulierten Umgebungen genügt dafür kein leistungsfähiges
+  Modell: Agentenarbeit muss spezifiziert, begrenzt, isoliert, geprüft,
+  freigegeben und nachträglich rekonstruiert werden können.
+
+  Dieses Whitepaper beschreibt eine Control-Plane-Architektur für diesen Zweck
+  und dokumentiert mit der SoftwareFabrik eine Referenzimplementierung, die sie
+  produktisiert. Tragende Prinzipien sind Single Writer per Workspace,
+  technisch getrennte Erzeugung und Freigabe, Fail-Closed-Verhalten,
+  Policy-as-Code mit signierter Audit-Hashkette sowie Betreibbarkeit ohne
+  Cloud-Abhängigkeit bis zum Air-Gap.
+
+  Das Dokument unterscheidet konsequent zwischen implementiertem Stand,
+  Zielarchitektur und Roadmap. Quantifizierte Produktivitäts- und ROI-Werte
+  werden als Hypothesen beziehungsweise Modellrechnungen behandelt, solange
+  keine kontrollierte Vergleichsmessung vorliegt; ein eigener Abschnitt
+  benennt offene Punkte, Architekturschuld und die Grenzen der Aussagekraft
+  der Fallstudie.
+
+  Version 2.2 ist die überarbeitete und erweiterte Fassung der Version 1.3
+  (März 2026); der neue Teil VI beschreibt die Referenzimplementierung auf dem
+  Stand ihres Releases 0.21.0.
