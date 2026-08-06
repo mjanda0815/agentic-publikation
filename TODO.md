@@ -330,6 +330,24 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       `quellen/softwarefabrik/12-kennzahlen-historie.md` (Phase 7).
       Whitepaper-Version auf **2.2** gehoben, Sonderdruck und beide
       Karussells mitgezogen. Whitepaper 155 Seiten, Sonderdruck 33 Seiten.
+- [x] **Fable-5-Zweitgutachten über alle vier Artefakte** (06.08.2026):
+      fünf `zweitgutachter`-Instanzen parallel (Kap. 0–9, 10–18, 19–20,
+      21–24 + `literatur.bib`, Begleitartefakte). Alle Muss-Befunde
+      eingearbeitet — u. a. drei Zahlenfehler der 0.21.0-Einarbeitung
+      (Release 0.20.0 hatte 27 Slices / 39 Tabellen / 37 Migrationen; mein
+      Messstand enthielt bereits den Phase-0-Commit), der
+      `sonderdruck-filter.py`-Bug bei Unterabschnittsverweisen, der
+      AP-2-Verstoß im Parallelbeispiel von Kap. 16, der Phasen-Widerspruch
+      in Kap. 6, der Haiku-Preisvergleich in 15.1, das Hook-Event `Stop`
+      und der archivierte MCP-Referenzserver in Kap. 18, die
+      OWASP-Langform, ein `substring`-Fehler in Kap. 14 sowie sämtliche
+      „geplant"-Stellen, die seit 0.21.0 überholt sind.
+      Durchgängig ergänzt: der Feature-Flag-Vorbehalt (umgesetzt ≠ aktiv).
+- [x] **Untertitel entschieden** (06.08.2026): Es gilt die Fassung des
+      Titelblatts („Von kontrollierten Einzel-Runs zur parallelen Agentic
+      Software Factory…"). Die abweichende Setup-Entscheidung ist in
+      `CLAUDE.md` als Historie festgehalten, damit die Abweichung nicht
+      erneut als Fehler gemeldet wird.
 - [ ] (Martin) Veröffentlichungsschritte: janda.io, optional Repo public +
       Release + Zenodo-DOI. Bei einem Repost nach dem nächsten
       SoftwareFabrik-Release die Version auf 2.2 heben statt 2.1 still zu

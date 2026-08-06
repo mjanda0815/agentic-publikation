@@ -86,9 +86,17 @@ bei der Extraktion anpassen.
 - **Lizenz der Neuauflage:** CC BY 4.0.
 - **Zielumfang:** inhaltliche Erweiterung gemäß abgenommenem `UMBAUPLAN.md`
   (Version 2.0; neuer Teil VI „SoftwareFabrik" + Praxis-Check-Kästen).
-- **Titel:** Haupttitel unverändert; Untertitel neu: „Vom Konzept zum System:
-  Referenzarchitektur und ihre Realisierung als Agentic Software Factory.
-  Praxisbeispiele mit Java, Spring Boot und Domain-Driven Design".
+- **Titel:** Haupttitel unverändert. Untertitel **aktuell gültig** (Stand
+  v2.2, bestätigt 06.08.2026): „Von kontrollierten Einzel-Runs zur
+  parallelen Agentic Software Factory. Praxisbeispiele mit Java, Spring
+  Boot und Domain-Driven Design" — so gesetzt in `main.tex` und wortgleich
+  auf Folie 10 von `carousel/carousel.tex`.
+  *Historie:* Beim Projekt-Setup lautete die Entscheidung „Vom Konzept zum
+  System: Referenzarchitektur und ihre Realisierung als Agentic Software
+  Factory…". Sie wurde ersetzt, weil das Dokument seit der Aufnahme von
+  Teil VI und dem Abgleich auf SoftwareFabrik 0.21.0 eine
+  Entwicklungslinie beschreibt (Einzel-Run → parallele Workflows) und
+  nicht mehr nur die Realisierung einer Referenzarchitektur.
 - **Projektname/Repo-Name:** bleibt `AGENTIC_Publikation`.
 
 ## Befehle
