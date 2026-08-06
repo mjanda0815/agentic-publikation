@@ -1,0 +1,28 @@
+% folienschema.sty — Bausteine fuer folieneigene Diagramme
+%
+% Warum eine eigene Datei und nicht die Buchabbildungen: Die Abbildungen des
+% Whitepapers sind fuer 16 cm Satzspiegel gezeichnet. Auf einer quadratischen
+% Folie schrumpfen sie zu einem unlesbaren Band. Die Folien zeichnen deshalb
+% vereinfachte Ableitungen mit Folienschrift — gleiche Farbrollen wie im Buch:
+% schwarze Rahmen, pastellblaue Flaechen, blaue Pfeile.
+%
+% Setzt karussell.sty voraus (Farben tinte, blau, tintesek).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{folienschema}[2026/08/06 Diagrammbausteine der Karussells]
+
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+\definecolor{kasten}{HTML}{DBE9F8}       % Flaeche wie in den Buchabbildungen
+
+\tikzset{
+  kn/.style   = {draw=tinte, line width=1.1pt, fill=kasten, rounded corners=6pt,
+                 align=center, inner sep=14pt, font=\fontsize{27}{33}\selectfont},
+  knw/.style  = {kn, fill=white},
+  knk/.style  = {kn, fill=white, inner sep=9pt,
+                 font=\fontsize{22}{27}\selectfont},
+  pf/.style   = {-{Stealth[length=13pt,width=9pt]}, draw=blau, line width=2.2pt},
+}
+
+% Zweitzeile in einem Knoten: kleiner, sekundaerfarben
+\newcommand{\knsub}[1]{\\[-2pt]{\fontsize{21}{25}\selectfont\color{tintesek}#1}}

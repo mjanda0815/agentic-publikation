@@ -1,0 +1,214 @@
+% carousel/carousel-fabrik.tex — LinkedIn-Karussell zum Sonderdruck
+% „Die SoftwareFabrik — von der Referenzarchitektur zum System"
+% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.1, August 2026)
+%
+% Zweites Karussell des Projekts. Das erste (carousel.tex) argumentiert aus
+% den Prinzipien des Whitepapers; dieses argumentiert aus der Erfahrung des
+% gebauten Systems — es zeigt vor allem, was die Praxis am Konzept
+% KORRIGIERT hat. Beide Karussells teilen Stil (karussell.sty) und
+% Diagrammbausteine (folienschema.sty).
+%
+% Build:  latexmk -pdf -interaction=nonstopmode carousel-fabrik.tex
+%         bzw. `make karussell` im Projektwurzelverzeichnis (baut beide).
+%
+% INHALTLICHE HERKUNFT: Jede Folie trägt einen Kommentar „QUELLE:" mit dem
+% Abschnitt aus kapitel/19-softwarefabrik.md. Es sind ausschließlich Aussagen
+% aus dem Kapitel übernommen, nichts erfunden. Alle Kennzahlen sind auf dem
+% Erhebungsstand `main` nach Release 0.20.0 (6. August 2026).
+% Redigierbare Reintexte: carousel/folientexte-fabrik.txt
+
+\documentclass[12pt]{article}
+
+\usepackage{karussell}
+\usepackage{folienschema}
+\renewcommand{\gesamt}{10}
+
+\begin{document}
+
+% ============================================================================
+% FOLIE 1 — Hook
+% QUELLE: Kapiteleinstieg 19: Das Whitepaper beschreibt die
+% Referenzarchitektur, „dieses Kapitel beschreibt, was daraus wurde" — ein
+% vom Autor gebautes und betriebenes System, das die Referenzarchitektur
+% produktisiert. Erfahrungsbericht aus erster Hand, alle Angaben aus dem
+% Quellcode erhoben.
+% ============================================================================
+\begin{folie}{Die SoftwareFabrik}
+  \grossM{Eine Architektur aufschreiben ist das eine. Sie zu bauen
+    korrigiert sie.}
+  \vspace{48pt}
+  \erl{Aus einem Whitepaper über den kontrollierten Einsatz von
+    Coding-Agenten wurde ein laufendes System. Was dabei anders kam als
+    geplant — vier Positionsverschiebungen aus der Praxis.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 2 — Kennzahlen
+% QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", Erhebungsstand `main`
+% nach Release 0.20.0 (6. August 2026): 364 Produktivklassen, ~33.200 Zeilen
+% Produktivcode, 259 Testklassen, 28 fachliche Slices, 27 Releases
+% (0.1.0–0.20.0, April–August 2026), Coverage-Gate Line >= 85 % /
+% Branch >= 81 % (JaCoCo, buildbrechend).
+% ============================================================================
+\begin{folie}{Der Stand}
+  \gross{28 fachliche Slices, 27 Releases, vier Monate.}
+  \vspace{48pt}
+  \erl{Rund 33.200 Zeilen Produktivcode und 259 Testklassen; die
+    Testabdeckung bricht den Build, wenn sie fällt. Java 25, Spring Boot 4,
+    ein Deployment-Artefakt. Stand: 6.\,August 2026, Release 0.20.0.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 3 — Korrektur (1)  [mit Grafik]
+% QUELLE: Abschnitt 19.8 (1): Das Konzept setzte auf sieben parallele
+% Spezialagenten; die Implementierung startet EINEN Agentenprozess je Run.
+% „Der Nutzen mehrerer Agenten liegt in Perspektivenvielfalt, und die ist
+% beim Prüfen wertvoller als beim Erzeugen." Mehrere gleichzeitig
+% schreibende Agenten erzeugen Konfliktkosten, Zurechnungsprobleme und einen
+% nicht attestierbaren Zustand.
+% ============================================================================
+\begin{folie}{Korrektur 1}
+  \grossM{Perspektivenvielfalt ist beim Prüfen wertvoller als beim
+    Erzeugen.}
+  \vspace{58pt}
+  {\centering
+  \begin{tikzpicture}
+    \node[kn] (w) {1 schreibender Agent\knsub{je Lauf}};
+    % Pruefer als gleich breite Spalte rechts: sonst laufen unterschiedlich
+    % lange Beschriftungen unter den Pfeil des Nachbarn.
+    \node[knk, text width=200pt, right=90pt of w] (r1) {Security};
+    \node[knk, text width=200pt, above=16pt of r1] (r0) {Architektur};
+    \node[knk, text width=200pt, below=16pt of r1] (r2) {Claim Verification};
+    \draw[pf] (w.east) -- (r0.west);
+    \draw[pf] (w.east) -- (r1.west);
+    \draw[pf] (w.east) -- (r2.west);
+  \end{tikzpicture}\par}
+  \vspace{58pt}
+  \erl{Geplant waren sieben parallele Spezialagenten. Gebaut wurde ein
+    schreibender Agent je Lauf — und mehrere unabhängige Prüfer danach. Die
+    Parallelität wanderte von der Erzeugung auf die Bewertung.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 4 — Korrektur (2)
+% QUELLE: Abschnitt 19.8 (2): „Ein Retry ohne neue Information wiederholt
+% nur den Fehler." Wertvoll wird die Wiederholung erst, wenn die Ursache zur
+% Eingabe wird — Build-Ausgabe, Reviewer-Findings, Merge-Konfliktdateien,
+% roter CI-Status. „Der Agent scheitert seltener am Programmieren als an der
+% Realität des Repositories."
+% ============================================================================
+\begin{folie}{Korrektur 2}
+  \gross{Ein Retry ohne neue Information wiederholt nur den Fehler.}
+  \vspace{48pt}
+  \erl{Der Agent scheitert seltener am Programmieren als an der Realität
+    des Repositories: veralteter Base-Branch, fremde parallele Änderungen,
+    fremde CI. Wer das nicht als Aufgabe modelliert, hört dort auf, wo die
+    interessante Arbeit anfängt.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 5 — Korrektur (3)
+% QUELLE: Abschnitt 19.8 (3): „Die Nachweisstruktur lässt sich nicht sauber
+% nachrüsten." Die Migrationen V26–V33 sind ausschließlich Mandanten- und
+% Nachweisstrukturen und bestimmten rückwirkend, an welchen Stellen im
+% Ablauf überhaupt Ereignisse entstehen müssen; Attestierungslücken mussten
+% nachträglich geschlossen werden, damit der Warum-Trace vollständig ist.
+% ============================================================================
+\begin{folie}{Korrektur 3}
+  \gross{Die Nachweisstruktur lässt sich nicht sauber nachrüsten.}
+  \vspace{48pt}
+  \erl{Acht aufeinanderfolgende Datenbankmigrationen enthielten nichts als
+    Mandanten- und Nachweisstrukturen — und bestimmten rückwirkend, an
+    welchen Stellen im Ablauf überhaupt Ereignisse entstehen müssen. Wer
+    sie früher entwirft, spart die Nacharbeit.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 6 — Korrektur (4)
+% QUELLE: Abschnitt 19.8 (4) „Kubernetes ist keine Voraussetzung —
+% Souveränität schon": Die reale Zielgruppe fragt zuerst nach Betreibbarkeit
+% im eigenen Haus. Vgl. Prinzip AP-8 und Abschnitt 19.7 (Ein-Prozess-
+% Betrieb, lokale Modelle, netzlose Sandbox, Lizenz ohne Rückkanal).
+% ============================================================================
+\begin{folie}{Korrektur 4}
+  \gross{Kubernetes ist keine Voraussetzung. Souveränität schon.}
+  \vspace{48pt}
+  \erl{Geplant war eine Kubernetes-Deployment-Architektur. Gefragt wurde
+    zuerst nach Betreibbarkeit im eigenen Haus: ein Anwendungscontainer,
+    eine Datenbank, lokale Modelle, bis hin zum Air-Gap-Betrieb.
+    Skalierende Infrastruktur ist Option, nicht Voraussetzung.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 7 — Das Gate, das sich selbst uebersprang
+% QUELLE: Abschnitt 19.9, vierte Beobachtung: Der Abhängigkeits-Scan der
+% eigenen CI lief über Monate ohne gültigen Zugang zur
+% Schwachstellendatenbank — das Geheimnis war hinterlegt, wurde aber nur zur
+% Vorprüfung gelesen und dem Build nie als Parameter übergeben; zusätzlich
+% war der Job als nicht blockierend konfiguriert. „Ein Prüfschritt muss
+% nicht nur existieren, er muss beweisen, dass er gelaufen ist."
+% ============================================================================
+\begin{folie}{Ein Befund am eigenen System}
+  \grossM{Ein Gate, das sich selbst überspringt, sieht aus wie ein
+    bestandenes Gate.}
+  \vspace{48pt}
+  \erl{Der Abhängigkeits-Scan der eigenen CI lief monatelang ohne gültigen
+    Zugang zur Schwachstellendatenbank — und meldete durchgehend Grün, weil
+    er zusätzlich als nicht blockierend konfiguriert war. Ein Prüfschritt
+    muss nicht nur existieren; er muss beweisen, dass er gelaufen ist.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 8 — Grenzen benennen
+% QUELLE: Abschnitt 19.9: „Ein System, das seine offenen Punkte benennt und
+% seine Architekturschuld zählt, ist der glaubwürdigere Beleg … als eines,
+% das angeblich keine hat." Ausdrücklich nicht behauptet werden
+% quantifizierte Produktivitäts- oder ROI-Zahlen — dafür existiert keine
+% kontrollierte Messung. Vgl. „Threats to Validity" ebenda.
+% ============================================================================
+\begin{folie}{Grenzen}
+  \grossM{Ein System, das seine Architekturschuld zählt, ist der bessere
+    Beleg als eines, das angeblich keine hat.}
+  \vspace{48pt}
+  \erl{Das Kapitel benennt zehn offene Punkte, eingefrorene Modulzyklen und
+    einen Testdefekt. Und es behauptet ausdrücklich keine Produktivitäts-
+    oder ROI-Zahlen: Dafür fehlt die kontrollierte Messung.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 9 — Naechster Schritt
+% QUELLE: Abschnitt 19.10 mit dem Umsetzungsstand-Kasten (6. August 2026):
+% Stufe 0 ist begonnen — zwei Architekturentscheidungen, eigener
+% workflow-Slice, Migration der Parent-Child-Verknüpfung, Feature-Flag mit
+% Default AUS; offen bleiben Workflow-Ereignisse im Auditmodell und
+% Workflow-Daten im Warum-Trace. Alles ab Stufe 1 ist Planung.
+% ============================================================================
+\begin{folie}{Nächster Schritt}
+  \grossM{Die Workflow-Ebene ist begonnen — und standardmäßig
+    abgeschaltet.}
+  \vspace{48pt}
+  \erl{Stufe 0 der Roadmap steht: zwei Architekturentscheidungen, ein
+    eigener Slice, die Verknüpfung von Workflow und Lauf in der Datenbank,
+    ein Feature-Flag mit Default aus. Bewusst ohne sichtbares Feature —
+    Fundament vor Funktion. Alles Weitere ist Planung und als solche
+    gekennzeichnet.}
+\end{folie}
+
+% ============================================================================
+% FOLIE 10 — Abschluss
+% QUELLE: Titel und Vorwort des Sonderdrucks (main-fabrik.tex);
+% Veröffentlichung auf janda.io. Kein QR-Code, keine URL-Parameter.
+% ============================================================================
+\begin{folie}{Sonderdruck}
+  \grossM{Die SoftwareFabrik}
+  \vspace{40pt}
+  {\fontsize{34}{46}\selectfont\color{tintesek}Von der Referenzarchitektur
+    zum System — Aufbau, Governance und Grenzen einer
+    Referenzimplementierung\par}
+  \vspace{64pt}
+  \erl{\textcolor{tinte}{\bfseries Sonderdruck und vollständiges Whitepaper
+    auf janda.io}\\
+    32 Seiten, Stand: August 2026. Alle Angaben aus dem Quellcode erhoben.}
+\end{folie}
+
+\end{document}

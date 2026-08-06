@@ -277,6 +277,20 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Vorwort sind die Stellschrauben, falls das später anders gewünscht
       ist — der Fließtext bliebe davon unberührt.
 
+- [x] **Zweites Karussell: „Die SoftwareFabrik"** (`carousel/carousel-fabrik.tex`,
+      10 Folien, `make karussell` baut beide). Bewusst anderer Zugriff als
+      das erste: Karussell 1 argumentiert aus den Prinzipien des
+      Whitepapers, Karussell 2 aus der Praxis — Kern sind die vier
+      Positionsverschiebungen aus 19.8 (Prüfen statt Erzeugen
+      parallelisieren; Regelkreis statt Retry; Nachweisstruktur nicht
+      nachrüstbar; Souveränität statt Kubernetes), dazu der Fail-Closed-
+      Befund am eigenen CI-Gate, die benannten Grenzen und der begonnene
+      Stufe-0-Stand. Alle Kennzahlen auf Erhebungsstand 0.20.0.
+      Der TikZ-Block wurde nach `carousel/folienschema.sty` ausgelagert,
+      damit beide Karussells dieselben Diagrammbausteine nutzen;
+      `karussell.sty` bleibt unverändert (identisch zu den DeFi-Karussells).
+      Folie 7 ist ohne Zugangsdaten, Schlüssel und CVE-Nummern formuliert.
+
 - [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
       Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
       Repo public + Release + Zenodo-DOI).

@@ -87,7 +87,9 @@ bei der Extraktion anpassen.
   `skripte/sonderdruck-filter.py` kennzeichnet die Verweise auf die übrigen
   Kapitel. Bewusst kein zweiter Text über dasselbe System — zwei Fassungen
   liefen bei jedem Release auseinander.)
-- LinkedIn-Karussell: `make karussell` → `carousel/carousel.pdf`
+- LinkedIn-Karussells: `make karussell` → `carousel/carousel.pdf`
+  (Whitepaper, prinzipiengetrieben) und `carousel/carousel-fabrik.pdf`
+  (Sonderdruck, praxisgetrieben)
 - Abbildungen: `make abbildungen` (Mermaid → `abbildungen/out/`)
 
 ## Projektstruktur
@@ -96,7 +98,8 @@ bei der Extraktion anpassen.
 quellen/        Original-PDF (v1.3), später ggf. .docx, recherchierte Belege
 kapitel/        modernisierte Kapitel als Markdown (entsteht mit der Extraktion)
 abbildungen/    Skripte + daten/ für eigene Grafiken (stil.py liegt bereit)
-carousel/       LinkedIn-Karussell (carousel.tex, folientexte.txt, karussell.sty)
+carousel/       LinkedIn-Karussells (carousel.tex, carousel-fabrik.tex,
+                folientexte*.txt, karussell.sty, folienschema.sty)
 skripte/        Build-Filter (kapitel-filter.py, sonderdruck-filter.py)
 main.tex        Whitepaper; main-fabrik.tex: Sonderdruck aus Kapitel 19
 literatur.bib   Bibliographie (entsteht mit der Überarbeitung)

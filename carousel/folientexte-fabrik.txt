@@ -1,0 +1,127 @@
+Reintexte des LinkedIn-Karussells zum Sonderdruck
+„Die SoftwareFabrik — von der Referenzarchitektur zum System"
+Martin Janda, August 2026
+
+Redigierbare Textfassung von carousel/carousel-fabrik.tex. Änderungen hier
+sind NICHT automatisch im PDF — sie müssen in carousel-fabrik.tex nachgezogen
+werden. Die Quellenzuordnung jeder Folie steht als Kommentar dort.
+
+Abgrenzung zum ersten Karussell (carousel.tex): Jenes argumentiert aus den
+Prinzipien des Whitepapers, dieses aus der Erfahrung des gebauten Systems —
+im Kern die vier Punkte, an denen die Praxis das Konzept korrigiert hat.
+
+Alle Kennzahlen: Erhebungsstand `main` nach Release 0.20.0 (6. August 2026).
+Format: 10 Folien, quadratisch 1080 × 1080 bp.
+
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 1 — Hook
+Kicker:   Die SoftwareFabrik
+Kernsatz: Eine Architektur aufschreiben ist das eine. Sie zu bauen
+          korrigiert sie.
+Text:     Aus einem Whitepaper über den kontrollierten Einsatz von
+          Coding-Agenten wurde ein laufendes System. Was dabei anders kam
+          als geplant — vier Positionsverschiebungen aus der Praxis.
+Quelle:   Kapiteleinstieg 19
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 2 — Der Stand
+Kicker:   Der Stand
+Kernsatz: 28 fachliche Slices, 27 Releases, vier Monate.
+Text:     Rund 33.200 Zeilen Produktivcode und 259 Testklassen; die
+          Testabdeckung bricht den Build, wenn sie fällt. Java 25,
+          Spring Boot 4, ein Deployment-Artefakt. Stand: 6. August 2026,
+          Release 0.20.0.
+Quelle:   19, „Kennzahlen der Codebasis"
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 3 — Korrektur 1  [mit Grafik: 1 Schreiber → 3 Prüfer]
+Kicker:   Korrektur 1
+Kernsatz: Perspektivenvielfalt ist beim Prüfen wertvoller als beim
+          Erzeugen.
+Grafik:   1 schreibender Agent (je Lauf) → Architektur / Security /
+          Claim Verification
+Text:     Geplant waren sieben parallele Spezialagenten. Gebaut wurde ein
+          schreibender Agent je Lauf — und mehrere unabhängige Prüfer
+          danach. Die Parallelität wanderte von der Erzeugung auf die
+          Bewertung.
+Quelle:   19.8 (1)
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 4 — Korrektur 2
+Kicker:   Korrektur 2
+Kernsatz: Ein Retry ohne neue Information wiederholt nur den Fehler.
+Text:     Der Agent scheitert seltener am Programmieren als an der Realität
+          des Repositories: veralteter Base-Branch, fremde parallele
+          Änderungen, fremde CI. Wer das nicht als Aufgabe modelliert, hört
+          dort auf, wo die interessante Arbeit anfängt.
+Quelle:   19.8 (2)
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 5 — Korrektur 3
+Kicker:   Korrektur 3
+Kernsatz: Die Nachweisstruktur lässt sich nicht sauber nachrüsten.
+Text:     Acht aufeinanderfolgende Datenbankmigrationen enthielten nichts
+          als Mandanten- und Nachweisstrukturen — und bestimmten
+          rückwirkend, an welchen Stellen im Ablauf überhaupt Ereignisse
+          entstehen müssen. Wer sie früher entwirft, spart die Nacharbeit.
+Quelle:   19.8 (3); die acht Migrationen sind V26–V33
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 6 — Korrektur 4
+Kicker:   Korrektur 4
+Kernsatz: Kubernetes ist keine Voraussetzung. Souveränität schon.
+Text:     Geplant war eine Kubernetes-Deployment-Architektur. Gefragt wurde
+          zuerst nach Betreibbarkeit im eigenen Haus: ein
+          Anwendungscontainer, eine Datenbank, lokale Modelle, bis hin zum
+          Air-Gap-Betrieb. Skalierende Infrastruktur ist Option, nicht
+          Voraussetzung.
+Quelle:   19.8 (4), 19.7
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 7 — Ein Befund am eigenen System
+Kicker:   Ein Befund am eigenen System
+Kernsatz: Ein Gate, das sich selbst überspringt, sieht aus wie ein
+          bestandenes Gate.
+Text:     Der Abhängigkeits-Scan der eigenen CI lief monatelang ohne
+          gültigen Zugang zur Schwachstellendatenbank — und meldete
+          durchgehend Grün, weil er zusätzlich als nicht blockierend
+          konfiguriert war. Ein Prüfschritt muss nicht nur existieren; er
+          muss beweisen, dass er gelaufen ist.
+Quelle:   19.9, vierte Beobachtung
+Hinweis:  Bewusst ohne Zugangsdaten, Schlüssel oder CVE-Nummern —
+          Public-Ready-Regel.
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 8 — Grenzen
+Kicker:   Grenzen
+Kernsatz: Ein System, das seine Architekturschuld zählt, ist der bessere
+          Beleg als eines, das angeblich keine hat.
+Text:     Das Kapitel benennt zehn offene Punkte, eingefrorene Modulzyklen
+          und einen Testdefekt. Und es behauptet ausdrücklich keine
+          Produktivitäts- oder ROI-Zahlen: Dafür fehlt die kontrollierte
+          Messung.
+Quelle:   19.9 inkl. „Threats to Validity"; die Tabelle führt zehn Zeilen
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 9 — Nächster Schritt
+Kicker:   Nächster Schritt
+Kernsatz: Die Workflow-Ebene ist begonnen — und standardmäßig
+          abgeschaltet.
+Text:     Stufe 0 der Roadmap steht: zwei Architekturentscheidungen, ein
+          eigener Slice, die Verknüpfung von Workflow und Lauf in der
+          Datenbank, ein Feature-Flag mit Default aus. Bewusst ohne
+          sichtbares Feature — Fundament vor Funktion. Alles Weitere ist
+          Planung und als solche gekennzeichnet.
+Quelle:   19.10, Umsetzungsstand-Kasten (6. August 2026)
+
+────────────────────────────────────────────────────────────────────────
+FOLIE 10 — Abschluss
+Kicker:   Sonderdruck
+Titel:    Die SoftwareFabrik
+Untertitel: Von der Referenzarchitektur zum System — Aufbau, Governance
+          und Grenzen einer Referenzimplementierung
+Text:     Sonderdruck und vollständiges Whitepaper auf janda.io
+          32 Seiten, Stand: August 2026. Alle Angaben aus dem Quellcode
+          erhoben.
+Quelle:   Titel und Vorwort des Sonderdrucks (main-fabrik.tex)

@@ -92,11 +92,15 @@ abbildungen:
 			-o "abbildungen/out/$$n.pdf" --pdfFit -b transparent; \
 	done
 
-# LinkedIn-Karussell: eigenstaendiges Dokument, 10 quadratische Folien
-# (1080x1080 bp). Bezieht seinen Stil aus carousel/karussell.sty und ist vom
-# Whitepaper-Build unabhaengig; Reintexte in carousel/folientexte.txt.
+# LinkedIn-Karussells: eigenstaendige Dokumente, je 10 quadratische Folien
+# (1080x1080 bp), unabhaengig vom Whitepaper-Build.
+#   carousel.tex        — zum Whitepaper, argumentiert aus den Prinzipien
+#   carousel-fabrik.tex — zum Sonderdruck, argumentiert aus der Praxis
+# Gemeinsamer Stil: karussell.sty (identisch zu den DeFi-Karussells),
+# Diagrammbausteine: folienschema.sty. Reintexte: folientexte*.txt.
 karussell:
 	cd carousel && latexmk -pdf -interaction=nonstopmode carousel.tex
+	cd carousel && latexmk -pdf -interaction=nonstopmode carousel-fabrik.tex
 
 # Sonderdruck „Die SoftwareFabrik": eigenstaendiges PDF aus demselben
 # Markdown wie Kapitel 19 des Whitepapers — eine Quelle, zwei Ausgaben.

@@ -23,21 +23,9 @@
 \usepackage{karussell}
 \renewcommand{\gesamt}{10}
 
-% --- Folieneigene Grafiken -------------------------------------------------
-% Die Abbildungen des Whitepapers sind für 16 cm Satzspiegel gezeichnet und in
-% einer quadratischen Folie nicht mehr lesbar. Die beiden Grafiken hier sind
-% vereinfachte, folientaugliche Ableitungen davon (Quelle je Folie im
-% Kommentar) — gleiche Farbrollen wie die Buchabbildungen: schwarze Rahmen,
-% pastellblaue Flächen, blaue Pfeile.
-\usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning}
-\definecolor{kasten}{HTML}{DBE9F8}
-\tikzset{
-  kn/.style   = {draw=tinte, line width=1.1pt, fill=kasten, rounded corners=6pt,
-                 align=center, inner sep=14pt, font=\fontsize{27}{33}\selectfont},
-  knw/.style  = {kn, fill=white},
-  pf/.style   = {-{Stealth[length=13pt,width=9pt]}, draw=blau, line width=2.2pt},
-}
+% Folieneigene Diagramme (siehe Kopfkommentar von folienschema.sty):
+% die Buchabbildungen sind auf einer quadratischen Folie nicht mehr lesbar.
+\usepackage{folienschema}
 
 \begin{document}
 
@@ -73,9 +61,9 @@
   \vspace{58pt}
   {\centering
   \begin{tikzpicture}[node distance=30pt, scale=1, transform shape]
-    \node[knw] (mensch) {Mensch\\[-2pt]{\fontsize{21}{25}\selectfont\color{tintesek}spezifiziert, gibt frei}};
-    \node[kn, right=of mensch] (cp) {\textbf{Control Plane}\\[-2pt]{\fontsize{21}{25}\selectfont\color{tintesek}begrenzt, isoliert, prüft}};
-    \node[knw, right=of cp] (agent) {Coding-Agent\\[-2pt]{\fontsize{21}{25}\selectfont\color{tintesek}schreibt}};
+    \node[knw] (mensch) {Mensch\knsub{spezifiziert, gibt frei}};
+    \node[kn, right=of mensch] (cp) {\textbf{Control Plane}\knsub{begrenzt, isoliert, prüft}};
+    \node[knw, right=of cp] (agent) {Coding-Agent\knsub{schreibt}};
     \node[knw, below=42pt of cp] (repo) {Repository \textperiodcentered{} Audit-Kette};
     \draw[pf] (mensch) -- (cp);
     \draw[pf] (cp) -- (agent);
