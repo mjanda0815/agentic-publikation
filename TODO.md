@@ -100,9 +100,23 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
         11: 0/1 · 12: 0/2 · 13: 0/1 · 15: 1/0 · 16: 0/1 · 19: 1/4 (davon eine
         Abbildung ohne Nummer im Original-Abbildungsverzeichnis, S. 54) ·
         20: 1/0 · 21: 0/2 (Summe: 9 verify, 21 abbildung).
-- [ ] Teil VI „SoftwareFabrik" schreiben (Quellen-Set als Basis; Repo
-      `/mnt/c/dev/SoftwareFabrik` nur zur Detail-Verifikation; Public-Ready:
-      keine Secrets/Kundendetails/Konditionen).
+- [x] Teil VI „SoftwareFabrik" geschrieben: `kapitel/19-softwarefabrik.md`
+      (neun Abschnitte, ~18 Druckseiten); bisherige Kapitel 19–23 auf 20–24
+      aufgerückt (Kopfzeilen-Nummern angepasst, Querverweise im Bestand noch
+      v1.3-nummeriert → wird mit der Modernisierung je Kapitel bereinigt).
+      zweitgutachter-Review durchgeführt; alle WICHTIG-Befunde und fast alle
+      KLEIN-Befunde eingearbeitet (u. a. Sandbox-Default klargestellt,
+      SBOM-Default, Mandanten-Isolations-Einschränkung, Hochrisiko-Hinweis
+      EU AI Act, Kennzeichnung der ROI-Modellrechnung in Kap. 00/15.4,
+      AGENTS.md-Beleg). Faktenkorrektur aus Code-Verifikation: Run hat
+      **13** Zustände, nicht 14 (Quellen-Set an 5 Stellen korrigiert;
+      `RunStatus.java` gezählt); Tippfehler „getrunken"→„trunkiert" in
+      Quellen-Set und Kapitel behoben.
+      - Offen aus dem Review (verschoben): Glossar-Erweiterung um die
+        Teil-VI-Begriffe (Run, Plan-Run, Quality Gate, Policy-as-Code,
+        Attestierung, Warum-Trace, Mandant, Guardrails-Projektion,
+        Debt-Ratchet, Slice/Blatt-Slice, Control Plane) → mit der
+        Glossar-Modernisierung (P3); Abbildungen 21–30 → Abbildungsphase.
 - [ ] Konzeptkapitel modernisieren in P1→P2→P3-Reihenfolge (UMBAUPLAN § 3);
       schnelllebige Angaben gegen Primärquellen mit Stand-Datum recherchieren;
       je Kapitel zweitgutachter-Review.

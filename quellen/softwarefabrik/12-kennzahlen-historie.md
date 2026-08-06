@@ -15,7 +15,7 @@
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
 | Wizard-Templates | 18 | |
-| Run-Zustände / Phasen | 14 / 7 | |
+| Run-Zustände / Phasen | 13 / 7 | |
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |

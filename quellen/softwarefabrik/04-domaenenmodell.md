@@ -38,7 +38,7 @@ String branchName, baseBranch; // Branch-Isolation
 String prUrl;                  // Pull Request, falls Remote-Projekt
 int correctionAttempts;        // Regelkreis-Zähler, hart begrenzt
 String qualityGateDecision;    // PASS | WARN | FAIL | ERROR
-RunStatus status;              // 14 Zustände
+RunStatus status;              // 13 Zustände
 PhaseName currentPhase;        // 7 Phasen
 OffsetDateTime startedAt, finishedAt, createdAt, updatedAt;
 String triggeredBy;            // Mensch, Routine oder Folge-Run
@@ -135,7 +135,7 @@ als Beleg dafür, dass Governance nachgezogen werden *musste*:
 4. **Genau eine aktive Policy-Version.** Erzwungen über partiellen
    Unique-Index in PostgreSQL plus Service-Logik. Ohne diese Invariante wäre
    die Frage „welche Regel galt zu diesem Zeitpunkt?" nicht beantwortbar.
-5. **Zeitstempel auf Millisekunden getrunken.** Klingt nach Detail, ist aber
+5. **Zeitstempel auf Millisekunden trunkiert.** Klingt nach Detail, ist aber
    Voraussetzung für byte-stabile Signaturen über den Datenbank-Roundtrip —
    ein typischer, teuer gelernter Fallstrick beim Signieren persistenter
    Daten.

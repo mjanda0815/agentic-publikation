@@ -59,6 +59,11 @@ Die Token-Kosten bleiben bei Parallelisierung identisch. Teurer wird es erst bei
 
 ## 15.4 ROI-Berechnung
 
+> **Hinweis:** Die folgende Gegenüberstellung ist eine Modellrechnung auf
+> Basis der genannten Annahmen (Stundensätze, Aufwände, Token-Verbrauch) —
+> keine gemessene Betriebsauswertung. Eine kontrollierte Messung liegt auch
+> für das in Kapitel 19 beschriebene Realsystem nicht vor (siehe 19.9).
+
 | Kostenfaktor | Manuell (Entwicklerteam) | KI-Agenten + Review |
 | --- | --- | --- |
 | Entwickleraufwand | 40h Senior Dev × €95/h = €3.800 | 8h Review + Steering = €760 |

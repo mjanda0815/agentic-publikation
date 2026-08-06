@@ -12,7 +12,7 @@ Die Softwareentwicklung steht vor einem Paradigmenwechsel: KI-gestützte Agenten
 
 ## Wirtschaftlicher Nutzen
 
-Für ein typisches Feature (z. B. einen Payment-Service mit DDD, Event-Driven Architecture und Kubernetes-Deployment) reduziert der Agenten-Einsatz den manuellen Entwickleraufwand um 70–80 %. Die API-Kosten liegen bei €15–30 pro Feature – einem Bruchteil der eingesparten Personalkosten. Die Time-to-Feature sinkt von 1–2 Wochen auf 1–2 Tage, bei gleichzeitig höherer Testabdeckung (>80 % vs. oft <60 % unter Zeitdruck).
+Für ein typisches Feature (z. B. einen Payment-Service mit DDD, Event-Driven Architecture und Kubernetes-Deployment) reduziert der Agenten-Einsatz den manuellen Entwickleraufwand um 70–80 %. Die API-Kosten liegen bei €15–30 pro Feature – einem Bruchteil der eingesparten Personalkosten. Die Time-to-Feature sinkt von 1–2 Wochen auf 1–2 Tage, bei gleichzeitig höherer Testabdeckung (>80 % vs. oft <60 % unter Zeitdruck). Diese Werte sind Modellrechnungen auf Basis typischer Projektannahmen, keine gemessenen Betriebswerte; die Annahmen stehen in Kapitel 15.
 
 ## Zielgruppe
 

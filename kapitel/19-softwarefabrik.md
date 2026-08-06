@@ -1,14 +1,18 @@
 # 19 Die SoftwareFabrik — von der Referenzarchitektur zum System
 
-> **Hinweis:** Die Kapitel 1–18 beschreiben die Referenzarchitektur, wie sie
-> in Version 1.3 dieses Whitepapers (März 2026) entworfen wurde. Dieses
-> Kapitel beschreibt, was daraus wurde: die *Agentic Software Factory*
-> (Produktname: SoftwareFabrik), ein vom Autor gebautes und betriebenes
-> System, das die Referenzarchitektur produktisiert. Es ist ein
-> Erfahrungsbericht aus erster Hand — alle Angaben sind aus dem Quellcode
-> des Systems erhoben (Stand: Version 0.19.0, Juli 2026), nicht aus
-> Projektdokumentation oder Erinnerung. Wo eine Aussage im Code verankert
-> ist, nennt eine Fußnote die konkrete Klasse.
+> **Hinweis:** Die Konzeptkapitel dieses Whitepapers — Kapitel 1–18 sowie
+> die Architekturentscheidungen (Kapitel 20) und der Werkzeugvergleich
+> (Kapitel 21) — beschreiben die Referenzarchitektur, wie sie in Version 1.3
+> (März 2026) entworfen wurde. Dieses Kapitel beschreibt, was daraus wurde:
+> die *Agentic Software Factory* (Produktname: SoftwareFabrik), ein vom
+> Autor gebautes und betriebenes System, das die Referenzarchitektur
+> produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
+> sind aus dem Quellcode des Systems erhoben (Erhebungsstand 6. August 2026
+> auf dem Entwicklungsstand vom 26. Juli 2026; Produktversion 0.19.0), nicht
+> aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
+> verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
+> dienen der präzisen Verortung — das Repository des Systems ist derzeit
+> nicht öffentlich.
 
 ## 19.1 Von der Referenzarchitektur zur Implementierung
 
@@ -23,8 +27,8 @@ Entwicklungsprozess*: Spezifikation, Freigabe, Isolation, Review,
 Nachvollziehbarkeit, Budget, Mandantentrennung. In einem Satz: Die
 SoftwareFabrik ist die produktisierte Umsetzung der in diesem Whitepaper
 beschriebenen Referenzarchitektur — vendor-neutral statt an ein einzelnes
-Werkzeug gebunden, und um die Governance-Schicht erweitert, die ein
-reguliertes Umfeld tatsächlich verlangt.
+Werkzeug gebunden, und um die Governance-Schicht erweitert, die in
+regulierten Umfeldern verlangt wird (19.6).
 
 ### Der Kernablauf
 
@@ -68,7 +72,9 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
 | Releases | 26 (0.1.0 bis 0.19.0, April–Juli 2026) |
 
-Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4,
+*Erhoben auf dem Entwicklungsstand vom 26. Juli 2026.*
+
+Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
 kein SPA), PostgreSQL 18 mit Flyway, Docker Compose. Ein Maven-Modul, ein
 Prozess, eine Datenbank — kein Cluster, kein Message-Broker, kein
@@ -109,8 +115,8 @@ verlangt, braucht eine Rolle, die sie liest.
 ### Modularer Monolith mit erzwungenen Grenzen
 
 Die Fabrik ist ein **modularer Monolith**: ein Maven-Modul, ein
-Deployment-Artefakt, 27 sauber geschnittene Pakete (*Slices*) pro Bounded
-Context. Jeder Slice trägt seine eigenen Schichten (`domain`,
+Deployment-Artefakt, je ein sauber geschnittenes Paket (*Slice*) pro
+Bounded Context — insgesamt 27. Jeder Slice trägt seine eigenen Schichten (`domain`,
 `application`, `web`, teils `infrastructure`); externe Systeme —
 Coding-CLIs, Git, Maven, Scanner, GitHub-API — sitzen ausschließlich hinter
 Ports.
@@ -175,8 +181,8 @@ einer bewussten Pragmatik: Domänenaggregat und JPA-Entität sind dieselbe
 Klasse. Kein separates Persistenzmodell, kein Mapping-Code; die Entscheidung
 ist im Code dokumentiert und in den ArchUnit-Regeln bewusst ausgespart,
 statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
-Verstoß; für ein System, dessen Komplexität woanders liegt, ist es
-Time-to-Value.
+Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
+bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
 <!-- TODO(abbildung): Abbildung 26: Kernaggregate des Datenmodells. Vollständig: 39 Tabellen, 37 Flyway-Migrationen. -->
 
@@ -198,7 +204,7 @@ still zu passieren.^[`RunOrchestrationService` (~1.550 Zeilen),
 `RunStatusTransitions`; unerlaubte Übergänge werfen
 `InvalidRunStateTransitionException`.]
 
-### Zwei Run-Arten, sieben Phasen, 14 Zustände
+### Zwei Run-Arten, sieben Phasen, 13 Zustände
 
 Es gibt zwei Run-Arten: Ein **Plan-Run** analysiert den Ist-Stand und
 schlägt die nächsten Arbeitsschritte vor; nur Dateien unter `plans/` werden
@@ -212,7 +218,7 @@ die Grundlage für zeitgesteuerte Routinen und automatische Folgevorschläge.
 
 Jeder Run durchläuft sieben Phasen (Intake, Prompt-Assembly,
 Workspace-Preparation, Execution, Validation, Correction, Completion) und
-bewegt sich durch 14 Zustände. Drei davon tragen die Argumentation dieses
+bewegt sich durch 13 Zustände. Drei davon tragen die Argumentation dieses
 Whitepapers weiter:
 
 - **`WAITING_FOR_APPROVAL`** — der Mensch ist ein *Zustand im System*, kein
@@ -295,8 +301,8 @@ Zwei Details aus dem Betrieb:
 
 ## 19.4 Vendor-Neutralität als Architektureigenschaft
 
-Kapitel 20 der Vorversion verglich Werkzeuge. Die Fabrik hat die Frage
-architektonisch aufgelöst: Die gesamte Vendor-Neutralität hängt an einer
+Kapitel 21 (in Version 1.3: Kapitel 20) vergleicht Werkzeuge gegeneinander.
+Die Fabrik hat die Frage architektonisch aufgelöst: Die gesamte Vendor-Neutralität hängt an einer
 Schnittstelle,^[`ExecutionAdapter` im `execution`-Slice.] hinter der zehn
 Adapter stehen — ein deterministischer `mock`-Adapter (Default; macht das
 System ohne Vendor demonstrierbar und testbar), sechs CLI-Adapter (Claude
@@ -327,14 +333,14 @@ Cloud-Credentials verifiziert — sie sind als „vorbereitet", nicht als
 
 ### Abo-Modus statt Token-Abrechnung
 
-Ein in der Literatur selten behandelter, praktisch sehr relevanter Punkt:
+Ein praktisch sehr relevanter Punkt:
 Coding-CLIs lassen sich meist auf zwei Wegen authentifizieren — per API-Key
 (Abrechnung je Token) oder per Abo-Login (Flatrate). Die Fabrik unterstützt
 für Claude Code, Codex und Kimi beides explizit. Der kritische Teil ist das
 **aktive Entfernen des API-Keys aus der Subprozess-Umgebung im Abo-Modus**:
 Sonst würde die CLI stillschweigend den kostenpflichtigen Pfad wählen — ein
 Fehler, der erst auf der Rechnung sichtbar wird. Die Konsequenz für das
-Kostenmodell aus Kapitel 15 ist grundsätzlich: Bei Flatrate-Abos entstehen
+Kostenmodell aus Kapitel 15 ist grundlegend: Bei Flatrate-Abos entstehen
 keine Token-Kosten je Lauf; ein reines Token-ROI-Modell bildet die
 Wirtschaftlichkeit agentischer Entwicklung nicht mehr vollständig ab.
 
@@ -352,12 +358,14 @@ Nachhinein ist belegbar, welches Modell wirklich gearbeitet hat.
 
 ### Sandbox
 
-Eine Factory wählt zwischen zwei Sandbox-Varianten: ein eigener Prozess je
-Run mit sauber gesetzter Umgebung und einer Allowlist der Variablen, die
-den Agenten überhaupt erreichen — oder ein ephemerer Container je
-Agentenlauf mit CPU-, Speicher- und Prozesslimits, read-only-Dateisystem,
-Bindmount ausschließlich auf den Workspace und **`--network=none` als
-Default**. Die Netzwerksperre als Voreinstellung ist eine starke Aussage:
+Eine Factory wählt zwischen zwei Sandbox-Varianten. Der Default ist die
+**Prozessisolation**: ein eigener Prozess je Run mit sauber gesetzter
+Umgebung und einer Allowlist der Variablen, die den Agenten überhaupt
+erreichen. Alternativ, per Einstellung aktivierbar, die
+**Container-Sandbox**: ein ephemerer Container je Agentenlauf mit CPU-,
+Speicher- und Prozesslimits, read-only-Dateisystem, Bindmount
+ausschließlich auf den Workspace und `--network=none` als Voreinstellung
+dieser Variante. Die Netzwerksperre ist eine starke Aussage:
 Ein Coding-Agent braucht im Normalfall keinen ausgehenden Netzzugriff —
 Abhängigkeiten kommen aus dem vorbereiteten Workspace beziehungsweise dem
 Cache. Wer das Netz öffnet, tut es bewusst.
@@ -386,7 +394,8 @@ Sechs Review-Adapter laufen parallel auf dem Diff: zwei LLM-Reviewer
 statische Prüfer (Security-Muster wie API-Key-Präfixe, Path-Traversal,
 SQL-Konkatenation; Architektur-Verstöße inklusive Änderungen an
 bestehenden Datenbankmigrationen; Halluzinationsindikatoren) und ein
-werkzeuggestützter Dependency-Scan (CVEs und Lizenzverstöße, blockierend).
+werkzeuggestützter Dependency-Scan (CVEs und Lizenzverstöße; CVE-Befunde
+der Kategorie Security blockieren).
 Die Mischung ist Absicht: LLM-Reviewer finden Kontextfehler, die keine
 Regel beschreibt; statische Reviewer finden deterministisch, kostenlos und
 auditierbar genau das, was ein nichtdeterministisches Modell nicht
@@ -414,12 +423,12 @@ Drei Sonderregeln kann **keine** Policy aufweichen:
 - Ein abgestürzter Reviewer wird zu `ERROR` materialisiert und führt zur
   Gesamtentscheidung `ERROR` — niemals zu einem stillen Pass.
 
-Der letzte Punkt ist der wichtigste Satz dieses Abschnitts: **Ein Gate,
+Der letzte Punkt trägt eine Grundregel des ganzen Systems: **Ein Gate,
 dessen Ausfall wie Erfolg aussieht, ist schlimmer als kein Gate**, weil es
-Vertrauen erzeugt, das es nicht deckt. Dieselbe Logik findet sich an drei
-weiteren Stellen des Systems (Lizenzprüfung *fail closed*, Attestierung
-ohne Schlüssel ist ein Startfehler, ein CI-Job ohne Secret gilt als nicht
-bestanden).
+Vertrauen erzeugt, das es nicht deckt. Dieselbe Logik findet sich an
+weiteren Stellen wieder (das Lizenz-Lease ist *fail closed*, Attestierung
+ohne Schlüssel ist ein Startfehler — und als Projektregel: ein CI-Job, der
+sich ohne Secret selbst überspringt, gilt nicht als bestanden).
 
 Das Confidence Scoring aus Kapitel 12 ist umgesetzt — allerdings ohne den
 dort skizzierten AOP-Aspekt: Die Vertrauenswerte der Reviewer werden im
@@ -433,8 +442,9 @@ Das Gate läuft in einem von drei Modi, mandantenweit steuerbar: `off`,
 `advisory` (Befunde werden erhoben und angezeigt, blockieren aber nicht),
 `blocking` (ein FAIL startet die Korrekturschleife). ADR-3 forderte das
 Gate als Pflicht; die Praxis hat den `advisory`-Modus ergänzt, denn der
-Einführungspfad in Organisationen ist: erst messen, dann durchsetzen. **Ein
-Gate, das am ersten Tag blockiert, wird am zweiten Tag abgeschaltet.**
+Einführungspfad in Organisationen verläuft erfahrungsgemäß so: erst messen,
+dann durchsetzen. **Ein Gate, das am ersten Tag blockiert, wird am zweiten
+Tag abgeschaltet.**
 Regulierte Compliance-Profile erzwingen `blocking` (19.6).
 
 Im Blocking-Modus ist ein Gate-FAIL funktional gleichwertig mit einem
@@ -461,7 +471,9 @@ Test festgeschrieben. Bemerkenswert ist eine Entscheidung gegen die
 Konvention: `ADMIN` ist *kein* Super-Admin. Auch ein Administrator bleibt
 für Daten mandantengescopt; isolationsfrei sind nur Kontenverwaltung und
 Projektzuweisung. Eine Administrationsrolle kann Betrieb führen, ohne
-Einblick in fremde Projektinhalte zu haben.
+Einblick in fremde Projektinhalte zu haben. *Einschränkung:* Die Isolation
+ist an den interaktiven Pfaden verankert; die asynchrone Ausführungsschicht
+löst den Mandanten über einen eigenen Resolver auf.
 
 Das fünfstufige Rollenmodell (Viewer < Developer < Maintainer < Owner <
 Admin) entspricht dem Least-Privilege-Modell aus Kapitel 14; freigeben darf
@@ -493,14 +505,17 @@ Brücke von der Norm zum Code:
 | Baseline | advisory | — | nein | kein reguliertes Umfeld |
 | EU AI Act | blocking | Execution | ja | VO (EU) 2024/1689, u. a. Art. 12 (Aufzeichnungspflichten), Art. 14 (menschliche Aufsicht) [@euaiact2024] |
 | BAIT / MaRisk / DORA | blocking | Execution, Validation | ja | BaFin-Anforderungen an die IT; DORA (EU) 2022/2554 — IKT-Risiko, Nachweisführung [@dora2022] |
-| BSI-Grundschutz / VS-NfD | blocking | Execution, Validation | ja | BSI IT-Grundschutz; für Verschlusssachen zusätzlich ausschließlich lokale Backends |
+| BSI-Grundschutz / VS-NfD | blocking | Execution, Validation | ja | BSI IT-Grundschutz; für Verschlusssachen („Verschlusssache — Nur für den Dienstgebrauch", VS-NfD) sind die erlaubten Adapter zusätzlich projektspezifisch auf lokale Backends zu beschränken |
 
 Das Anwenden eines Profils veröffentlicht eine neue signierte
 Policy-Version und erzeugt ein attestiertes Ereignis. **Ehrliche
 Einordnung:** Die Profile setzen die *technisch erzwingbaren* Anteile der
 jeweiligen Regelwerke durch — Aufzeichnung, menschliche Aufsicht,
 Nachweisführung, Vendor-Beschränkung. Sie ersetzen keine Rechtsberatung
-und decken keine organisatorischen Pflichten ab.
+und decken keine organisatorischen Pflichten ab; ob ein konkreter Einsatz
+überhaupt in den Anwendungsbereich der zitierten Pflichten fällt — beim
+EU AI Act etwa die Hochrisiko-Einstufung —, entscheidet der
+Anwendungsfall, nicht die Plattform.
 
 ### Die signierte Audit-Hashkette
 
@@ -522,7 +537,7 @@ Artefakte. Diese Liste ist die praktische Antwort auf die Frage, was in
 einem agentischen System nachweispflichtig ist.
 
 Zwei Implementierungsdetails mit Verallgemeinerungswert: Zeitstempel werden
-auf Millisekunden getrunkt, weil die Signatur sonst nach dem
+auf Millisekunden trunkiert (gekürzt), weil die Signatur sonst nach dem
 Datenbank-Roundtrip nicht byte-stabil wäre — ein typischer, teuer gelernter
 Fallstrick beim Signieren persistenter Daten. Und der Schlüsselbetrieb ist
 konfigurationsgegatet: In Produktionsprofilen ist „Attestierung aktiviert,
@@ -551,9 +566,10 @@ aussieht, taugt nicht als Nachweis.
 ### Lieferkette und Wissensbestand
 
 Der Supply-Chain-Nachweis aus Kapitel 14 ist durchgezogen: SBOM je Build
-mit Ed25519-Signatur über den Digest, Dependency- und Lizenz-Scan als
-blockierender Reviewer im Gate, dazu CI-seitig Abhängigkeits-, Image- und
-Secret-Scans. Auch der Wissensbestand ist Governance-Objekt: Skills und
+(standardmäßig deaktiviert, pro Installation aktivierbar; fehlt das
+Scanner-Werkzeug, wird der Schritt transparent übersprungen) mit
+Ed25519-Signatur über den Digest, Dependency- und Lizenz-Scan als Reviewer
+im Gate, dazu CI-seitig Abhängigkeits-, Image- und Secret-Scans. Auch der Wissensbestand ist Governance-Objekt: Skills und
 Plugins liegen in einer mandantengescopten, **versionierten Bibliothek**
 mit typisierter Herkunft (kuratiert, übernommen, angepasst). Damit ist
 beantwortbar, welche Erweiterung in welcher Version zum Zeitpunkt eines
@@ -563,8 +579,9 @@ Reproduzierbarkeitsdiskussion scheitert.
 Die Verhaltensregeln für Agenten (`guardrails`-Slice) sind eine
 versionierte Ressource, deren Versions-ID ein Hash des normalisierten
 Inhalts ist. Bei jedem Run wird sie ins Repository projiziert: als
-`AGENTS.md` — dem werkzeugübergreifenden De-facto-Standard — plus eine
-minimale `CLAUDE.md`, die darauf verweist. **Eine Quelle, mehrere
+`AGENTS.md` — dem werkzeugübergreifenden De-facto-Standard für
+Agenten-Anweisungen im Repository (Stand August 2026) [@agentsmd] — plus
+eine minimale `CLAUDE.md`, die darauf verweist. **Eine Quelle, mehrere
 Projektionen** statt einer gepflegten Kopie je Werkzeug; welche
 Guardrails-Version gewirkt hat, wird attestiert.
 
@@ -634,14 +651,13 @@ wäre kein glaubwürdiger Beleg.
 ## 19.8 Was die Praxis am Konzept korrigiert hat
 
 Der Abgleich zwischen Konzept (v1.3) und Implementierung ergibt über die 23
-Kapitel hinweg überwiegend Bestätigung, an vielen Stellen Erweiterung — und
+Kapitel der Vorversion hinweg überwiegend Bestätigung, an vielen Stellen Erweiterung — und
 vier bewusste **Positionsverschiebungen**, die aus dem Bau eines realen
-Systems folgen. Sie sind der eigentliche inhaltliche Gewinn dieses
-Kapitels.
+Systems folgen.
 
 ### (1) Ein Agent je Lauf, mehrere Prüfer — statt Hub-and-Spoke-Multi-Agent
 
-Das Konzept (Kapitel 1, 3, 10, ADR-1) setzt auf sieben parallele
+Das Konzept (Kapitel 1, 3, 10 sowie ADR-1 in Kapitel 20) setzt auf sieben parallele
 Spezialagenten unter einem Orchestrator. Die Implementierung startet
 **einen** Agentenprozess je Run und erreicht Spezialisierung anders: über
 Rollen- und Teamdefinitionen im Kontext, über getrennte Plan- und
@@ -666,10 +682,10 @@ Das Konzept beschreibt eine Retry-Strategie (Kapitel 7.5, 9). Die
 Implementierung zeigt: **Ein Retry ohne neue Information wiederholt nur den
 Fehler.** Wertvoll wird die Wiederholung erst, wenn die Ursache zur Eingabe
 wird — Build-Ausgabe, Reviewer-Findings, Merge-Konfliktdateien, roter
-CI-Status. Besonders die letzten beiden sind die eigentliche Erkenntnis:
-Der Agent scheitert in der Praxis seltener am Programmieren als an der
-*Realität des Repositories* — veralteter Base-Branch, fremde parallele
-Änderungen, fremde CI. Ein agentisches System, das diese Realität nicht als
+CI-Status. Besonders die letzten beiden sind die eigentliche Erkenntnis —
+die Beobachtung aus dem Betrieb der Fabrik: Der Agent scheitert seltener am
+Programmieren als an der *Realität des Repositories* — veralteter
+Base-Branch, fremde parallele Änderungen, fremde CI. Ein agentisches System, das diese Realität nicht als
 Aufgabe modelliert, endet dort, wo die interessante Arbeit anfängt.
 
 ### (3) Governance ist keine Ergänzung, sondern Struktur
@@ -717,12 +733,13 @@ welches Modell, wessen Freigabe.
 
 Ein System, das seine offenen Punkte benennt und seine Architekturschuld
 zählt, ist der glaubwürdigere Beleg für die Thesen dieses Whitepapers als
-eines, das angeblich keine hat. Stand 0.19.0 (August 2026):
+eines, das angeblich keine hat. Die wesentlichen offenen Punkte,
+Erhebungsstand 6. August 2026:
 
 | Punkt | Art |
 |---|---|
 | Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | bewusst zurückgestellt |
-| Seat-scharfe Budget-Obergrenze (Kostenauswertung je auslösendem Nutzer existiert; der harte Cap wirkt je Mandant) | offen |
+| Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
 | Test-Isolationsdefekt: ein Integrationstest committet unter bestimmten Bedingungen in das reale Repository | Defekt |

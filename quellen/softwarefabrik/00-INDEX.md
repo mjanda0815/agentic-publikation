@@ -27,7 +27,7 @@ ist). Erhebungsbasis:
 | `02-architektur.md` | Leitprinzipien, modularer Monolith, 27 Slices, Schichtenmodell, maschinelle Architektur-Durchsetzung (ArchUnit + Debt-Ratchet) | Architekturkapitel |
 | `03-systemdiagramme.md` | 9 Diagramme als Mermaid-Quelle (Kontext, Container, Komponenten, Run-Sequenz, Zustandsautomat, ER, Deployment, Governance, Adapter) | Abbildungen |
 | `04-domaenenmodell.md` | Aggregate, 39 Tabellen, 37 Flyway-Migrationen, Aggregatgrenzen | DDD-Kapitel |
-| `05-run-pipeline.md` | Der Run als Ausführungsmodell: 7 Phasen, 14 Zustände, Korrekturschleife, Branch/PR-Kopplung, Approval-Punkte | Execution-Model-Kapitel |
+| `05-run-pipeline.md` | Der Run als Ausführungsmodell: 7 Phasen, 13 Zustände, Korrekturschleife, Branch/PR-Kopplung, Approval-Punkte | Execution-Model-Kapitel |
 | `06-adapter-und-modellschicht.md` | Port `ExecutionAdapter`, 10 Adapter, Abo-vs-API-Key-Auth, Capability-Routing, Sandbox-Modell, Secrets, Kostenmodell | Vendor-Neutralität, Kostenkapitel |
 | `07-review-qualitygate.md` | Read-only-Review-Schicht, 6 Reviewer, Gate-Policies, Halluzinationserkennung | Guardrails-Kapitel |
 | `08-governance-compliance.md` | Mandantenisolation, RBAC, Policy-as-Code, Compliance-Profile, signierte Audit-Hashkette, Warum-Trace, Audit-Export, SBOM | Regulatorik-Kapitel |

@@ -108,7 +108,7 @@ Jedes `AuditEvent` trägt:
 | `key_id` | verwendeter Schlüssel |
 
 `AuditService.erfasse` verkettet und signiert unter einem Monitor
-(`synchronized`), mit auf Millisekunden getrunkenem Zeitstempel — sonst wäre
+(`synchronized`), mit auf Millisekunden trunkiertem Zeitstempel — sonst wäre
 die Signatur nach dem Datenbank-Roundtrip nicht byte-stabil.
 
 `AttestierungService.verifiziereKette` unterscheidet drei Fehlerbilder:
