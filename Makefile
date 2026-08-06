@@ -36,7 +36,7 @@ ADDCHAP := sed -E 's/^\\chapter\{/\\addchap{/'
 # sonst kollidierende \label/\hypertarget-Ziele. Fix: Anker-IDs je Kapitel
 # per sed mit dem Kapitelpräfix versehen (rein technisch, kein Sichttext).
 
-.PHONY: all tex pdf html clean abbildungen karussell
+.PHONY: all tex pdf html clean abbildungen karussell fabrik
 
 all: pdf
 
@@ -97,3 +97,16 @@ abbildungen:
 # Whitepaper-Build unabhaengig; Reintexte in carousel/folientexte.txt.
 karussell:
 	cd carousel && latexmk -pdf -interaction=nonstopmode carousel.tex
+
+# Sonderdruck „Die SoftwareFabrik": eigenstaendiges PDF aus demselben
+# Markdown wie Kapitel 19 des Whitepapers — eine Quelle, zwei Ausgaben.
+# sonderdruck-filter.py macht die Verweise auf die uebrigen Kapitel
+# kenntlich, kapitel-filter.py strippt wie beim Whitepaper die Nummern.
+fabrik: $(BUILD)
+	python3 skripte/sonderdruck-filter.py $(KAPITEL)/19-softwarefabrik.md \
+		| $(STRIP_NUMBERING) /dev/stdin \
+		| $(PANDOC) -f markdown -t latex --top-level-division=chapter \
+			--biblatex --highlight-style=tango \
+		| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k19-/g" \
+		| $(FIG_HEIGHT) > $(BUILD)/19-fabrik.tex
+	$(LATEXMK) -pdf -interaction=nonstopmode -outdir=$(BUILD) main-fabrik.tex

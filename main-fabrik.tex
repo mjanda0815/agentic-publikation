@@ -1,0 +1,102 @@
+% main-fabrik.tex — Sonderdruck „Die SoftwareFabrik"
+%
+% Eigenstaendige Fassung des Kapitels 19 des Whitepapers „Agentic Software
+% Development — Enterprise Architecture with AI Agents" (Martin Janda).
+%
+% EINE QUELLE, ZWEI AUSGABEN: Der Fliesstext kommt unveraendert aus
+% kapitel/19-softwarefabrik.md — dieselbe Datei, die auch das Whitepaper
+% speist. Es gibt bewusst keinen zweiten Text ueber dasselbe System, weil
+% zwei Fassungen bei jedem Release auseinanderlaufen wuerden.
+%
+% Beim Bau (Ziel `fabrik` im Makefile) laeuft die Quelle zusaetzlich durch
+% skripte/sonderdruck-filter.py, der die Verweise auf die uebrigen Kapitel
+% des Whitepapers als solche kenntlich macht.
+%
+% Die Kapitelnummer 19 bleibt absichtlich erhalten: Der Text verweist
+% durchgaengig auf seine eigenen Abschnitte (19.1 bis 19.10). Eine
+% Umnummerierung auf „1" wuerde jeden dieser Verweise brechen.
+
+\documentclass[11pt,a4paper,ngerman]{scrreprt}
+
+\input{praeambel}
+
+\title{Die SoftwareFabrik}
+\author{Martin Janda}
+\date{\today}
+
+\begin{document}
+
+% --- Titelseite ---
+\begin{titlepage}
+  \centering
+  \vspace*{2.5cm}
+
+  {\LARGE\bfseries Die SoftwareFabrik\par}
+  \vspace{0.4cm}
+  {\Large Von der Referenzarchitektur zum System\par}
+
+  \vspace{0.8cm}
+  {\large Eine Control Plane für den kontrollierten Einsatz von
+  Coding-Agenten --- Aufbau, Governance und Grenzen einer
+  Referenzimplementierung\par}
+
+  \vspace{1.6cm}
+  {\large\scshape Sonderdruck\par}
+  \vspace{0.3cm}
+  {\normalsize Kapitel 19 des Whitepapers\\
+  \emph{Agentic Software Development --- Enterprise Architecture with AI
+  Agents}\par}
+
+  \vspace{1.4cm}
+  {\large Martin Janda\par}
+  \vspace{0.2cm}
+  {\normalsize martin@janda.io\par}
+
+  \vfill
+  {\small Sonderdruck zur Whitepaper-Version 2.1 $\cdot$
+  \textbf{Stand: \today}\par}
+  \vspace{0.4cm}
+  {\small Lizenz: CC~BY~4.0\par}
+  \vspace*{1.2cm}
+\end{titlepage}
+
+\tableofcontents
+
+% --- Vorwort zum Sonderdruck (nur in dieser Ausgabe) ---
+\addchap{Zu diesem Sonderdruck}
+
+Dieser Sonderdruck enthält Kapitel 19 des Whitepapers \emph{Agentic
+Software Development --- Enterprise Architecture with AI Agents} in
+unverändertem Wortlaut. Das Whitepaper beschreibt eine Referenzarchitektur
+für den kontrollierten Einsatz von Coding-Agenten; dieses Kapitel
+beschreibt das System, das daraus entstanden ist. Wer nur wissen will, wie
+die Architektur in der Praxis aussieht, findet hier alles Nötige --- wer
+wissen will, warum sie so aussieht, findet die Begründung im vollständigen
+Dokument.
+
+Drei Hinweise zum Lesen:
+
+\begin{itemize}
+  \item Die \textbf{Kapitel- und Abschnittsnummerierung} folgt dem
+    Whitepaper. Deshalb beginnt dieser Sonderdruck mit Kapitel~19 und nicht
+    mit Kapitel~1: Der Text verweist durchgängig auf seine eigenen
+    Abschnitte (19.1 bis 19.10), und diese Verweise sollen gültig bleiben.
+  \item \textbf{Verweise auf andere Kapitel} sind als solche gekennzeichnet
+    (\enquote{Kapitel~12 des Whitepapers}). Sie führen in das vollständige
+    Dokument und sind für das Verständnis dieses Kapitels nicht
+    erforderlich.
+  \item \textbf{Verweise auf ADR-1 bis ADR-8} meinen die
+    Architekturentscheidungen in Kapitel~20 des Whitepapers. Sie halten
+    fest, welche Entscheidung der Referenzarchitektur die Praxis bestätigt,
+    präzisiert oder ersetzt hat.
+\end{itemize}
+
+Das vollständige Whitepaper steht auf \texttt{janda.io} zur Verfügung.
+
+% --- Kapitel 19 (Nummer beibehalten, siehe Kopfkommentar) ---
+\setcounter{chapter}{18}
+\input{build/19-fabrik}
+
+\printbibliography[heading=bibintoc,title={Literatur}]
+
+\end{document}

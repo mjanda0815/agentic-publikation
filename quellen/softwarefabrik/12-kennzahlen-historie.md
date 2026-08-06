@@ -4,14 +4,14 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 362 | `find app/src/main/java -name '*.java'` |
-| Produktivcode | ~32.997 Zeilen | |
-| Testklassen | 257 | |
+| Produktivklassen | 364 | `find app/src/main/java -name '*.java'` |
+| Produktivcode | ~33.182 Zeilen | |
+| Testklassen | 259 | |
 | Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | |
-| Fachliche Slices | 27 | |
+| Fachliche Slices | 28 (neu: `workflow`) | |
 | Datenbanktabellen | 39 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 37 (V1–V39) | |
-| HTTP-Routen | 130 in 25 Controllern | Mapping-Annotationen |
+| Flyway-Migrationen | 38 (V1–V40) | |
+| HTTP-Routen | 156 in 34 Controllern | Mapping-Annotationen |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
 | Wizard-Templates | 18 | |
@@ -19,10 +19,10 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 26 (0.1.0 – 0.19.0) | 2026-04-17 bis 2026-07-06 |
+| Releases | 27 (0.1.0 – 0.20.0) | 2026-04-17 bis 2026-08-06 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: `main` @ `526d718`, 2026-07-26.*
+*Stand: `main` @ `35c1b9e` (zwei Commits nach `v0.20.0`), 2026-08-06.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -78,11 +78,30 @@ Token-Exfiltration/SSRF über manipulierte Remote-URLs und RCE über
 zeitgesteuerte Routinen, Segregation of Duties, vendor-neutrale
 Engineering-Guardrails.
 
-### Danach (nicht in 0.19.0 enthalten)
+### Phase 6 — Konsolidierung und Sicherheitsrunde (0.20.0, August 2026)
 
-Kimi-Adapter (Moonshot AI) mit API-Key- und Abo-Modus sowie
-Buildnummer-Anzeige in der UI sind auf `main` gemergt und deployt, ein
-formales 0.20.0-Release steht aus.
+Kimi-Adapter (Moonshot AI) mit API-Key- und Abo-Modus, Buildnummer-Anzeige
+in der UI, Doku-Sweep. Sicherheitsseitig: zwei CVEs per Patch-Bump innerhalb
+der Minor-Linie geschlossen, eine dritte ohne verfügbaren Fix begründet
+akzeptiert — als Suppression **mit Ablaufdatum**, danach schlägt der Scan
+bewusst wieder fehl; die Suppression-Datei verlangt seither für jeden
+Eintrag Begründung und Ablaufdatum. Ursache der bis dahin unbemerkten Lage:
+der Abhängigkeits-Scan lief in der CI ohne gültigen Zugang zur
+Schwachstellendatenbank (das Geheimnis wurde nur zur Vorprüfung gelesen,
+dem Build aber nie als Parameter übergeben) und war zugleich als nicht
+blockierend konfiguriert — die Oberfläche meldete Grün, ohne dass je ein
+vollständiger Scan stattgefunden hatte.
+
+### Danach (nach 0.20.0 auf `main`)
+
+**Workflow-Ebene, Phase 0** (`35c1b9e`): ADR-0014 (hierarchische
+Workflow-Orchestrierung, strikte Richtung `workflow → run`) und ADR-0015
+(Single Writer per Workspace), Migration V40 (`run.workflow_id`,
+`run.workflow_task_id`, nullable, ohne FK), einmalige Zuordnung eines Runs
+zu einer Workflow-Task, neuer Slice `io.softwarefabrik.app.workflow`,
+Feature-Flag `softwarefabrik.workflow.enabled` mit Default **aus**.
+Bewusst ohne sichtbares Feature. Offen aus Phase 0: Workflow-Ereignisse im
+Auditmodell und Workflow-Daten im Warum-Trace.
 
 ## 12.3 Beobachtungen zum Verlauf
 
@@ -103,18 +122,19 @@ Drei Muster, die sich für die Publikation verallgemeinern lassen:
    ArchUnit-Regeln stehen, kostet ein neuer Adapter eine Klasse und einen
    Test. Ohne sie wäre die Kopplung längst durch die Schichten diffundiert.
 
-## 12.4 Offene Punkte (Stand 2026-08-06)
+## 12.4 Offene Punkte (Stand 2026-08-06, nach 0.20.0)
 
 | Punkt | Art |
 |---|---|
-| Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | bewusst zurückgestellt |
+| Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | Phase 0 begonnen, Feature-Flag aus |
 | Seat-scharfe Budget-Obergrenze (Auswertung je Seat existiert seit v0.17) | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end verifiziert | Verifikationslücke |
 | Vollständige Sandbox für Coding-Adapter | offen |
 | Test-Isolationsdefekt: Integrationstest committet ins reale Repository | Defekt |
 | Architektur-Altschuld: eingefrorene Modulzyklen + 13 `web → JpaRepository` | dokumentierte Schuld |
 | Playwright-E2E-Suite als Standard nach jedem Deploy | geplant |
-| Formales 0.20.0-Release | ausstehend |
+| Workflow-Ereignisse in Audit und Warum-Trace (Rest aus Phase 0) | offen |
+| Eine Laufzeit-CVE ohne verfügbaren Fix, akzeptiert mit Ablaufdatum | bewusst akzeptiert |
 
 Diese Liste gehört bewusst in die Publikation. Ein System, das seine offenen
 Punkte benennt und seine Architekturschuld *zählt*, ist der glaubwürdigere

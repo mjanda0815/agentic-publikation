@@ -8,7 +8,7 @@
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
 > sind aus dem Quellcode des Systems erhoben (Erhebungsstand 6. August 2026
-> auf dem Entwicklungsstand vom 26. Juli 2026; Produktversion 0.19.0), nicht
+> auf dem Entwicklungsstand `main` nach Release 0.20.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,7 +16,7 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert und in Betrieb, Stand 0.19.0) und
+> dort Beschriebene ist implementiert und in Betrieb, Stand 0.20.0) und
 > ihrer geplanten Weiterentwicklung (Abschnitt 19.10 — durchgängig als
 > *geplant* gekennzeichnet). Der aktuelle Stand verwendet genau einen
 > schreibenden Agenten je Run und mehrere unabhängige read-only Reviewer.
@@ -76,19 +76,23 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 362 |
-| Produktivcode | ~33.000 Zeilen |
-| Testklassen | 257 |
-| Fachliche Slices (Module) | 27 |
+| Produktivklassen (Java) | 364 |
+| Produktivcode | ~33.200 Zeilen |
+| Testklassen | 259 |
+| Fachliche Slices (Module) | 28 |
 | Datenbanktabellen | 39 |
-| Flyway-Migrationen | 37 |
+| Flyway-Migrationen | 38 |
 | Execution-Adapter | 10 |
 | Review-Adapter | 6 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 26 (0.1.0 bis 0.19.0, April–Juli 2026) |
+| Releases | 27 (0.1.0 bis 0.20.0, April–August 2026) |
 
-*Erhoben auf dem Entwicklungsstand vom 26. Juli 2026.*
+*Erhoben auf dem Entwicklungsstand `main` nach Release 0.20.0
+(6. August 2026). Der Zuwachs gegenüber dem Stand 0.19.0 (26. Juli 2026:
+362 Produktivklassen, 27 Slices, 37 Migrationen) fällt bewusst klein aus:
+Release 0.20.0 bestand überwiegend aus Sicherheits- und Korrekturarbeit,
+der 28. Slice ist die erst begonnene Workflow-Ebene (19.10).*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
@@ -137,7 +141,7 @@ verlangt, braucht eine Rolle, die sie liest.
 
 Die Fabrik ist ein **modularer Monolith**: ein Maven-Modul, ein
 Deployment-Artefakt, je ein sauber geschnittenes Paket (*Slice*) pro
-Bounded Context — insgesamt 27. Jeder Slice trägt seine eigenen Schichten (`domain`,
+Bounded Context — insgesamt 28. Jeder Slice trägt seine eigenen Schichten (`domain`,
 `application`, `web`, teils `infrastructure`); externe Systeme —
 Coding-CLIs, Git, Maven, Scanner, GitHub-API — sitzen ausschließlich hinter
 Ports.
@@ -205,7 +209,7 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-![Kernaggregate des Datenmodells. Vollständig: 39 Tabellen, 37 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
+![Kernaggregate des Datenmodells. Vollständig: 39 Tabellen, 38 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
@@ -783,7 +787,7 @@ Erhebungsstand 6. August 2026:
 
 | Punkt | Art |
 |---|---|
-| Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | bewusst zurückgestellt — Gegenstand der Roadmap (19.10) |
+| Parallele Multi-Branch-Ausführung mehrerer Runs je Projekt | Gegenstand der Roadmap; Stufe 0 begonnen, hinter deaktiviertem Feature-Flag (19.10) |
 | Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
@@ -792,9 +796,10 @@ Erhebungsstand 6. August 2026:
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
+| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (Stand 0.20.0); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert, mit Ablaufdatum hinterlegt |
 
-Dazu drei Beobachtungen aus dem Entwicklungsverlauf (26 Releases in rund
-drei Monaten), die sich verallgemeinern lassen:
+Dazu drei Beobachtungen aus dem Entwicklungsverlauf (27 Releases in rund
+vier Monaten), die sich verallgemeinern lassen:
 
 1. **Governance kam spät, wurde aber strukturbildend** — siehe 19.8 (3).
 2. **Die härtesten Befunde lagen an den Übergängen**, nicht in den
@@ -807,6 +812,17 @@ drei Monaten), die sich verallgemeinern lassen:
 3. **Vendor-Neutralität wurde durch einen Test billig.** Solange die
    ArchUnit-Regeln stehen, kostet ein neuer Adapter eine Klasse und einen
    Test. Ohne sie wäre die Kopplung längst durch die Schichten diffundiert.
+4. **Ein Gate, das sich selbst überspringt, sieht aus wie ein bestandenes
+   Gate.** Der Abhängigkeits-Scan der eigenen CI lief über Monate ohne
+   gültigen Zugang zur Schwachstellendatenbank: Das Zugangsgeheimnis war
+   hinterlegt, wurde aber nur zur Vorprüfung gelesen und dem Build nie als
+   Parameter übergeben. Weil der Job zusätzlich als nicht blockierend
+   konfiguriert war, meldete die Oberfläche durchgehend Grün — ohne dass je
+   ein vollständiger Scan stattgefunden hätte. Der Befund kostete keine
+   Codezeile, sondern eine Annahme: Ein Prüfschritt muss nicht nur
+   existieren, er muss beweisen, dass er gelaufen ist. Genau das ist der
+   Grund für das Fail-Closed-Prinzip (AP-7, Kapitel 2) — und ein Beleg
+   dafür, dass die Lücke im eigenen System auftrat, nicht nur im Modell.
 
 Ausdrücklich **nicht** behauptet werden quantifizierte Produktivitäts- oder
 ROI-Zahlen aus dem Betrieb der Fabrik selbst — dafür existiert keine
@@ -886,12 +902,26 @@ validiert den Gesamtstand. Die Leitregel:
 
 | Stufe | Inhalt | Risiko |
 |---|---|---|
-| 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig |
+| 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig — *begonnen*, siehe unten |
 | 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt risikofrei, weil keine Schreibrechte | niedrig |
 | 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel |
 | 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch |
 | 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch |
 | 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional |
+
+> **Umsetzungsstand Stufe 0 (6. August 2026):** Als einziger Teil dieser
+> Roadmap ist Stufe 0 begonnen — bewusst ohne sichtbares Feature. Umgesetzt
+> sind die beiden tragenden Architekturentscheidungen (hierarchische
+> Workflow-Orchestrierung mit der strikten Richtung Workflow führt zu Run,
+> niemals umgekehrt; Single Writer per Workspace), ein eigener
+> `workflow`-Slice, die Migration, die einen Run optional einem Workflow und
+> einer Workflow-Task zuordnet, sowie ein Feature-Flag, das die Ebene
+> standardmäßig **abschaltet**. Die Zuordnung ist einmalig — ein zweiter
+> Aufruf wird abgewiesen, damit die historische Zurechenbarkeit erhalten
+> bleibt; der Run selbst kennt den Workflow fachlich nicht und ändert sein
+> Verhalten nicht. Noch **offen** aus Stufe 0 sind die Workflow-Ereignisse
+> im Auditmodell und die Workflow-Daten im Warum-Trace. Alles ab Stufe 1
+> ist unverändert Planung.
 
 Begleitend ab der ersten Stufe ist eine **Produktivitäts- und
 Qualitätsmessung** vorgesehen (aktive menschliche Arbeitszeit, Time to
@@ -911,7 +941,7 @@ Kubernetes als Pflicht und empirisch unbelegte Produktivitätsversprechen.
 Damit lässt sich die Entwicklungslinie dieses Whitepapers in einem Absatz
 zusammenfassen:
 
-> Die Implementierung der Version 0.19.0 hat die ursprüngliche Vorstellung
+> Die Implementierung bis Version 0.20.0 hat die ursprüngliche Vorstellung
 > mehrerer gleichzeitig schreibender Rollenagenten zunächst korrigiert
 > (19.8). Die nächste Ausbaustufe verwirft diese Praxiserkenntnis nicht,
 > sondern generalisiert sie: Mehrere Agenten dürfen parallel arbeiten,

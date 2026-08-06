@@ -81,8 +81,14 @@ bei der Extraktion anpassen.
 
 ## Befehle
 
-- Build (nach Einrichtung): `make pdf` (Pandoc → latexmk/biber)
-- Abbildungen: `python3 abbildungen/<name>.py` → `abbildungen/out/`
+- Build: `make pdf` (Pandoc → latexmk/biber) → `build/main.pdf`
+- Sonderdruck SoftwareFabrik: `make fabrik` → `build/main-fabrik.pdf`
+  (eigenständiges PDF aus **derselben** `kapitel/19-softwarefabrik.md`;
+  `skripte/sonderdruck-filter.py` kennzeichnet die Verweise auf die übrigen
+  Kapitel. Bewusst kein zweiter Text über dasselbe System — zwei Fassungen
+  liefen bei jedem Release auseinander.)
+- LinkedIn-Karussell: `make karussell` → `carousel/carousel.pdf`
+- Abbildungen: `make abbildungen` (Mermaid → `abbildungen/out/`)
 
 ## Projektstruktur
 
@@ -90,7 +96,9 @@ bei der Extraktion anpassen.
 quellen/        Original-PDF (v1.3), später ggf. .docx, recherchierte Belege
 kapitel/        modernisierte Kapitel als Markdown (entsteht mit der Extraktion)
 abbildungen/    Skripte + daten/ für eigene Grafiken (stil.py liegt bereit)
-carousel/       LinkedIn-Karussells (karussell.sty liegt bereit)
+carousel/       LinkedIn-Karussell (carousel.tex, folientexte.txt, karussell.sty)
+skripte/        Build-Filter (kapitel-filter.py, sonderdruck-filter.py)
+main.tex        Whitepaper; main-fabrik.tex: Sonderdruck aus Kapitel 19
 literatur.bib   Bibliographie (entsteht mit der Überarbeitung)
 TODO.md         Aufgabenliste (Single Source of Truth, public-ready formuliert)
 ```

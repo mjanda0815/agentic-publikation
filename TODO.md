@@ -240,6 +240,39 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       16 cm Satzspiegel gezeichnet und auf einer quadratischen Folie nicht
       mehr lesbar. Folie 9 ist ausdrücklich als *geplant* gekennzeichnet.
 
+- [x] **Abgleich auf SoftwareFabrik 0.20.0** (06.08.2026, Erhebungsstand
+      `main` nach `v0.20.0`): Kennzahlen neu erhoben mit den in
+      `quellen/softwarefabrik/12-kennzahlen-historie.md` dokumentierten
+      Methoden — 364 Produktivklassen (vorher 362), ~33.200 Zeilen, 259
+      Testklassen, **28** Slices (neu: `workflow`), 38 Flyway-Migrationen,
+      27 Releases (0.1.0–0.20.0, April–August 2026). Adapterzahlen, Tabellen,
+      Wizard-Templates und Coverage-Gate unverändert. Der kleine Zuwachs ist
+      im Erhebungsvermerk erklärt (0.20.0 war überwiegend Sicherheits- und
+      Korrekturarbeit).
+      Inhaltlich neu: **Stufe 0 der Roadmap ist begonnen** — Umsetzungsstand
+      als Kasten in 19.10 (zwei ADRs, eigener `workflow`-Slice, Migration
+      der Parent-Child-Verknüpfung, Feature-Flag *aus*; offen bleiben die
+      Workflow-Ereignisse in Audit und Warum-Trace). Abbildung der Slices
+      um die Workflow-Ebene ergänzt. In 19.9 zwei Ergänzungen: die
+      akzeptierte Laufzeit-Schwachstelle ohne Fix (mit Ablaufdatum) und eine
+      vierte verallgemeinerbare Beobachtung — der eigene Abhängigkeits-Scan
+      lief monatelang ohne gültigen Datenbankzugang und meldete trotzdem
+      Grün (Beleg für AP-7 aus dem eigenen System).
+      `quellen/softwarefabrik/12-kennzahlen-historie.md` und die
+      Karussell-Folie 8 mitgezogen.
+- [x] **Sonderdruck „Die SoftwareFabrik"** (`make fabrik` →
+      `build/main-fabrik.pdf`, 32 Seiten): eigenständiges PDF aus
+      **derselben** `kapitel/19-softwarefabrik.md` wie das Whitepaper —
+      eine Quelle, zwei Ausgaben, damit bei künftigen Releases nichts
+      auseinanderläuft. Eigene Titelseite und Vorwort „Zu diesem
+      Sonderdruck"; Kapitelnummer 19 bewusst beibehalten, weil der Text
+      durchgängig auf 19.1–19.10 verweist.
+      `skripte/sonderdruck-filter.py` schreibt die rund 30 Verweise auf
+      andere Kapitel zu „Kapitel N des Whitepapers" um (Aufzählungen und
+      Bereichsangaben gesondert behandelt); ADR-Verweise ordnet stattdessen
+      das Vorwort ein, weil eine Umschreibung im Satz den Text zerrissen
+      hätte.
+
 - [ ] (Martin) Finale Durchsicht der v2.1; danach „Entwurf"-Vermerk von der
       Titelseite nehmen und Veröffentlichungsschritte (janda.io, optional
       Repo public + Release + Zenodo-DOI).

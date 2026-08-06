@@ -89,14 +89,15 @@ Quelle:   Abschnitt 19.1, Schritt 6 („Belegen"); Grafik abgeleitet aus
 ────────────────────────────────────────────────────────────────────────
 FOLIE 8 — Referenzimplementierung
 Kicker:   Referenzimplementierung
-Kernsatz: Kein Konzeptpapier: 27 fachliche Slices, 26 Releases in vier
+Kernsatz: Kein Konzeptpapier: 28 fachliche Slices, 27 Releases in vier
           Monaten.
-Text:     Rund 33.000 Zeilen Produktivcode, Testabdeckung als
+Text:     Rund 33.200 Zeilen Produktivcode, Testabdeckung als
           buildbrechendes Gate (Line ab 85 %, Branch ab 81 %). Die
           Architektur des Whitepapers war die Grundlage — das Kapitel
-          beschreibt, was daraus geworden ist. Stand: 26. Juli 2026.
+          beschreibt, was daraus geworden ist. Stand: 6. August 2026,
+          Release 0.20.0.
 Quelle:   Kapitel 19, „Kennzahlen der Codebasis" (Erhebungsstand
-          26.07.2026)
+          06.08.2026, main nach Release 0.20.0)
 
 ────────────────────────────────────────────────────────────────────────
 FOLIE 9 — Nächster Schritt (geplant)
