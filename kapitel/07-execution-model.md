@@ -53,7 +53,7 @@ public record TaskGraph(
 
 Nachdem der Task Graph erzeugt wurde, stellt sich die Frage, wie ein konkreter Entwicklungsauftrag während der Laufzeit durch das Agentensystem verarbeitet wird.
 
-![Laufzeitablauf eines Entwicklungsauftrags](abbildungen/out/abb07.pdf){width=80%}
+![Laufzeitablauf eines Entwicklungsauftrags](abbildungen/out/abb07.pdf){width=100%}
 
 Die Abbildung zeigt den typischen Ablauf eines Entwicklungsauftrags innerhalb eines agentischen Entwicklungssystems.
 

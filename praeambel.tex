@@ -93,8 +93,13 @@
 
 % --- Inhaltsverzeichnis: Platz fuer zweistellige Unterabschnittsnummern ---
 % Ohne Verbreiterung klebt "19.10" im Sonderdruck am Titel ("19.10Geplante").
-\DeclareTOCStyleEntry[numwidth=2.6em]{tocline}{section}
+\DeclareTOCStyleEntry[numwidth=3.1em]{tocline}{section}
 \DeclareTOCStyleEntry[numwidth=2.0em]{tocline}{chapter}
+% Gleiches Problem im Abbildungs- und Tabellenverzeichnis: dort tragen die
+% Eintraege Kapitelnummer + laufende Nummer ("19.10."), was in der schmalen
+% Voreinstellung ohne Abstand an den Titel stiess ("19.10.Deployment-Sicht").
+\DeclareTOCStyleEntry[numwidth=3.1em]{tocline}{figure}
+\DeclareTOCStyleEntry[numwidth=3.1em]{tocline}{table}
 
 % --- Pandoc-Kompatibilität ---
 % \tightlist wird von Pandoc für kompakte Listen ohne Zusatzabstand erzeugt
