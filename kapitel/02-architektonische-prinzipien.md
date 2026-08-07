@@ -41,9 +41,12 @@ den neuen acht auf.*
 > Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
 > lassen (19.2). AP-2 und AP-4 gelten bereits im Einzel-Run (ein
 > schreibender Agent je Lauf, mehrere unabhängige read-only Reviewer).
-> AP-3 ist seit Release 0.22.0 vollständig implementiert (Feature-Flag,
+> AP-3 ist seit Release 0.23.0 vollständig implementiert (Feature-Flag,
 > standardmäßig deaktiviert): Tasks werden aus einem Abhängigkeitsgraphen
 > parallelisiert und laufen in getrennten Arbeitsverzeichnissen — seit
-> 0.21.0 lesend, seit 0.22.0 auch schreibend. AP-2 gilt dabei
-> Workflow-weit: Ein Task startet nur, wenn seine Schreibbereiche mit
-> keinem aktiven Task kollidieren (19.10).
+> 0.21.0 lesend, seit 0.22.0 auch schreibend, und seit 0.23.0 gebunden an
+> versionierte Verträge, deren Änderung betroffene Tasks automatisch auf
+> Neuplanung setzt. AP-2 gilt dabei Workflow-weit: Ein Task startet nur,
+> wenn seine Schreibbereiche mit keinem aktiven Task kollidieren. Auch AP-6
+> ist dort maschinell erzwungen — ein Task wird nur zurückgesetzt, wenn der
+> Grund eine neue Eingabe trägt; Umsortieren allein genügt nicht (19.10).

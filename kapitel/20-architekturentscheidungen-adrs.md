@@ -568,12 +568,12 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 ## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — ersetzt ADR-1.
-> **Implementierungsstatus:** *Implemented* für die Roadmap-Stufen 0 bis 2
-> (Parent Workflow, Child Runs, Task-Graph, Synthese sowie seit 0.22.0
-> parallel **schreibende** Child Runs mit Merge Queue und Integration
-> Gate), hinter deaktiviertem Feature-Flag. Vertragsbasierte
-> Parallelisierung und dynamisches Replanning bleiben Stufen 3 und 4
-> (19.10).
+> **Implementierungsstatus:** *Implemented* für die Roadmap-Stufen 0 bis 3
+> und die Planänderungen aus Stufe 4 (Parent Workflow, Child Runs,
+> Task-Graph, Synthese, parallel **schreibende** Child Runs mit Merge Queue
+> und Integration Gate, Contract Registry, versionierte Planrevisionen),
+> hinter deaktiviertem Feature-Flag. Offen bleiben die Merge Intelligence
+> aus Stufe 4 und der verteilte Worker-Pool (19.10).
 
 ### Motivation / Kontext
 

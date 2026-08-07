@@ -32,8 +32,9 @@ Spezialisierung ist nicht automatisch ein Qualitätsgewinn. Die aktuelle
 Referenzimplementierung verwendet deshalb einen schreibenden Agenten je
 Run und mehrere unabhängige Reviewer. Die Workflow-Ebene führt parallele
 Child Runs ein — seit Release 0.21.0 für nicht-schreibende Analyse, seit
-0.22.0 auch schreibend, dort gebunden an abgegrenzte Schreibbereiche und
-erfüllte Abhängigkeiten (AP-2/AP-3, Kapitel 19.10).
+0.22.0 auch schreibend, dort gebunden an abgegrenzte Schreibbereiche,
+erfüllte Abhängigkeiten und seit 0.23.0 an versionierte Verträge
+(AP-2/AP-3, Kapitel 19.10).
 
 ![SDLC-Agenten-Pipeline — von der Anforderungsanalyse bis zum Deployment](abbildungen/out/abb03.pdf){width=100%}
 

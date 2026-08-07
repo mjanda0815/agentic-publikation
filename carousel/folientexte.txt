@@ -1,6 +1,6 @@
 Reintexte des LinkedIn-Karussells zum Whitepaper
 „Agentic Software Development — Enterprise Architecture with AI Agents"
-Martin Janda, Fassung 2.3, August 2026
+Martin Janda, Fassung 2.4, August 2026
 
 Diese Datei ist die redigierbare Textfassung von carousel/carousel.tex.
 Änderungen hier sind NICHT automatisch im PDF — sie müssen in carousel.tex
@@ -90,29 +90,30 @@ Quelle:   Abschnitt 19.1, Schritt 6 („Belegen"); Grafik abgeleitet aus
 ────────────────────────────────────────────────────────────────────────
 FOLIE 8 — Referenzimplementierung
 Kicker:   Referenzimplementierung
-Kernsatz: Vom Konzept zum System: 28 fachliche Slices, 29 Releases in
+Kernsatz: Vom Konzept zum System: 28 fachliche Slices, 32 Releases in
           vier Monaten.
-Text:     Rund 36.600 Zeilen Produktivcode, Testabdeckung als
+Text:     Rund 39.000 Zeilen Produktivcode, Testabdeckung als
           buildbrechendes Gate (Line ab 85 %, Branch ab 81 %). Die
           Architektur des Whitepapers war die Grundlage — das Kapitel
           beschreibt, was daraus geworden ist. Stand: 7. August 2026,
-          Release 0.22.0.
+          Release 0.24.0.
 Quelle:   Kapitel 19, „Kennzahlen der Codebasis" (Erhebungsstand
-          07.08.2026, main nach Release 0.22.0)
+          07.08.2026, main nach Release 0.24.0)
 
 ────────────────────────────────────────────────────────────────────────
 FOLIE 9 — Der Stand
 Kicker:   Der Stand
 Kernsatz: Parallelität entsteht aus Abhängigkeiten — nicht aus
           Agentenrollen.
-Text:     Umgesetzt seit Release 0.22.0, hinter einem standardmäßig
-          deaktivierten Feature-Flag. Der Weg dorthin ging bewusst über die
-          risikoärmste Stufe: erst parallele Analyse ohne Schreibrechte,
-          dann die Schreibrechte — gebunden an eine Besitzregel, die
-          überschneidende Schreibbereiche vor dem Start blockiert. Merge
-          Queue und Integration Gate führen danach zusammen.
+Text:     Umgesetzt bis Release 0.24.0, hinter einem standardmäßig
+          deaktivierten Feature-Flag. Der Weg ging bewusst stufenweise:
+          erst parallele Analyse ohne Schreibrechte, dann die Schreibrechte
+          — gebunden an eine Besitzregel —, dann versionierte Verträge,
+          gegen die gearbeitet wird, dann begründungspflichtige
+          Planänderungen. Erst die Koordination beweisen, dann die Rechte
+          verteilen.
 Quelle:   Management Summary; Abschnitt 19.10 inkl. Umsetzungsstand-Kasten
-          (Roadmap-Stufen 0 bis 2, Releases 0.21.0 und 0.22.0);
+          (Roadmap-Stufen 0 bis 4a, Releases 0.21.0 bis 0.24.0);
           Prinzipien AP-2/AP-3
 Hinweis:  Das Feature-Flag steht auf aus — umgesetzt heisst nicht aktiv.
 
@@ -125,6 +126,6 @@ Untertitel: Enterprise Architecture with AI Agents
           Factory. Praxisbeispiele mit Java, Spring Boot und
           Domain-Driven Design
 Text:     Vollständiges Whitepaper: Download-Link im Beitrag
-          janda.io · Überarbeitete und erweiterte Fassung 2.3,
+          janda.io · Überarbeitete und erweiterte Fassung 2.4,
           Stand: August 2026.
 Quelle:   Titel und Untertitel der Arbeit — wortgleich zum Titelblatt

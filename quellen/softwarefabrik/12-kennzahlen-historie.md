@@ -4,13 +4,13 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 388 | `find app/src/main/java -name '*.java'` |
-| Produktivcode | ~36.556 Zeilen | |
-| Testklassen | 269 | |
+| Produktivklassen | 405 | `find app/src/main/java -name '*.java'` |
+| Produktivcode | ~38.981 Zeilen | |
+| Testklassen | 275 | |
 | Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | |
-| Fachliche Slices | 28 (neu: `workflow`) | |
-| Datenbanktabellen | 51 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 43 (V1–V45) | |
+| Fachliche Slices | 29 (neu: `workflow`, `contract`) | |
+| Datenbanktabellen | 57 | `CREATE TABLE` in Migrationen |
+| Flyway-Migrationen | 47 (V1–V49) | |
 | HTTP-Routen | 156 in 34 Controllern | Mapping-Annotationen |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
@@ -21,10 +21,10 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 29 (0.1.0 – 0.22.0) | 2026-04-17 bis 2026-08-07 |
+| Releases | 32 (0.1.0 – 0.24.0) | 2026-04-17 bis 2026-08-07 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: `main` @ `ff0934b` (`v0.22.0`), 2026-08-07.*
+*Stand: `main` @ `8f7f174` (ein Commit nach `v0.24.0`), 2026-08-07.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -167,11 +167,34 @@ zwischen erneutem Versuch (max. zwei) und Verwerfen des Branches. Ein
 verworfener Branch macht das Integration Gate `FAILED`. Ein Kaskaden-Abbruch
 stoppt alle mittelbar abhängigen Tasks und verwirft offene Merge-Einträge.
 
-## 12.4 Offene Punkte (Stand 2026-08-07, nach 0.22.0)
+### Phase 9 — Vertraege und Planaenderungen, Roadmap-Stufen 3 und 4a (0.23.0/0.24.0)
+
+**Stufe 3** (V46–V48): eigener Blatt-Slice `contract` mit unveraenderlichen
+Fassungen, Content-Hash ueber den normalisierten Inhalt (Normalisierung
+bewusst minimal), sechs Vertragsarten (OpenAPI, AsyncAPI, JSON-Schema,
+Java-Interface, Domain Event, Akzeptanzkriterien). Bindung beim Start des
+Child Runs statt bei der Planung; Stale-Erkennung synchron in der
+Veroeffentlichungstransaktion; Merge-Blockade vor dem Einreihen und vor dem
+Merge.
+
+**Stufe 4a** (V49): `PlanRevision` haelt jede Planaenderung unveraenderlich
+fest (Grund, Pflichtbeschreibung, Ausloeser, betroffene Tasks), attestiert
+ueber `WORKFLOW_REPLANNED`. Von acht Replanning-Gruenden tragen sechs eine
+neue Eingabe; `ZUSCHNITT_GEAENDERT` und `REIHENFOLGE_GEAENDERT` nicht — ein
+Task wird nur bei neuer Eingabe zurueckgesetzt (AP-6 maschinell erzwungen).
+Aufteilen vererbt Abhaengigkeiten und Capability, aber nicht die
+Schreibbereiche; Zusammenfuehren erbt deren Vereinigung; laufende Tasks
+lassen sich nicht umschneiden.
+
+**Website:** KI-Chatbot (TrustChat) auf allen 44 Seiten DE+EN, mit
+entsprechend ergaenzter Datenschutzerklaerung. Betrifft die Website, nicht
+die Plattform.
+
+## 12.4 Offene Punkte (Stand 2026-08-07, nach 0.24.0)
 
 | Punkt | Art |
 |---|---|
-| Vertragsbasierte Parallelisierung (Stufe 3) und dynamisches Replanning (Stufe 4); Analyse und Schreiben laufen seit 0.21.0 bzw. 0.22.0 parallel | Roadmap |
+| Merge Intelligence (Stufe 4b) und verteilter Worker-Pool (Stufe 5); Stufen 0–3 und die Planaenderungen aus Stufe 4 sind umgesetzt | Roadmap |
 | Seat-scharfe Budget-Obergrenze (Auswertung je Seat existiert seit v0.17) | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end verifiziert | Verifikationslücke |
 | Vollständige Sandbox für Coding-Adapter | offen |

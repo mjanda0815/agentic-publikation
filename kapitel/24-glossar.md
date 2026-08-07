@@ -12,7 +12,7 @@
 | Child Run | Ein regulärer Run, der einem Workflow Task zugeordnet ist (seit 0.21.0 für nicht-schreibende Tasks implementiert, Feature-Flag; volle Ausprägung geplant — Kap. 19.10). |
 | CI/CD | Continuous Integration / Deployment – Automatisierte Pipeline. |
 | Claim Verification | Prüfung der Aussagen eines Agenten über seine eigene Arbeit, etwa „alle Tests bestehen“ (in v1.3: Halluzinationserkennung; Kap. 12, 19.5). |
-| Contract Version | Versionierter bzw. gehashter gemeinsamer Vertrag, gegen den mehrere Child Runs arbeiten (Zielarchitektur, Kap. 19.10). |
+| Contract Version | Versionierter bzw. gehashter gemeinsamer Vertrag, gegen den mehrere Child Runs arbeiten (seit 0.23.0 implementiert, Feature-Flag; Kap. 19.10). |
 | Control Plane | Steuerschicht, die Agentenläufe orchestriert, begrenzt und protokolliert, ohne selbst Code zu schreiben (Kap. 19). |
 | DAG | Directed Acyclic Graph – Gerichteter azyklischer Graph (Task Graph). |
 | DDD | Domain-Driven Design – Fachliche Softwaremodellierung. |
@@ -35,7 +35,7 @@
 | PSD2 | Payment Services Directive 2 – EU-Zahlungsdiensterichtlinie. |
 | Quality Gate | Aggregation der Reviewer-Befunde zu einer Entscheidung (PASS/WARN/FAIL, bei Prüferausfall ERROR — nie ein stiller Pass) (Kap. 12, 19). |
 | RBAC | Role-Based Access Control – Rollenbasierte Zugriffskontrolle. |
-| Replanner | Komponente, die den Task Graph auf Basis neuer Informationen versioniert anpasst (Zielarchitektur, Kap. 19.10). |
+| Replanner | Komponente, die den Task Graph auf Basis neuer Informationen versioniert anpasst (seit 0.24.0 implementiert, Feature-Flag; Kap. 19.10). |
 | RFC 9457 (vormals RFC 7807) | Problem Details for HTTP APIs – Strukturierte Fehlerantworten. |
 | RTM | Requirements Traceability Matrix – Anforderungsverfolgung. |
 | Run | Zustandsbehaftete Ausführungseinheit eines Agentenauftrags mit Phasen, Zuständen und Korrekturschleife (Kap. 19). |
