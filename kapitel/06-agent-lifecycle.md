@@ -16,6 +16,11 @@ Jeder Claude Code Agent durchläuft einen definierten Lebenszyklus von der Erste
 | 7 | Memory Update | Erkenntnisse, Findings und Entscheidungen werden in den Shared Knowledge Store geschrieben. Dieser Schritt ist essentiell für die Wissensübergabe an nachfolgende Agenten im Workflow. Er läuft vor dem endgültigen Übergang nach `TERMINATED` — der Endzustand erlaubt keine Übergänge mehr. |
 | 8 | Termination | Der Agent beendet sich durch: (a) erfolgreichen Abschluss, (b) Erreichen von maxTurns, (c) Budget-Erschöpfung, (d) explizite Stop-Condition, oder (e) Fehler-Eskalation. Das Ergebnis wird an den Orchestrator zurückgegeben. |
 
+> **Praxis-Check SoftwareFabrik (erweitert):** Der Lebenszyklus ist dort als
+> *Run* modelliert: sieben Phasen, 13 Zustände, persistiert, pausier- und
+> wiederaufnehmbar. Der Mensch ist als Zustand (`WAITING_FOR_APPROVAL`) Teil
+> des Automaten, nicht Nebenprozess (19.3).
+
 > **Versionshinweis (v2.2, gilt für Teil II):** Die Java-Beispiele der
 > Kapitel 6 bis 9 sind Modell-Skizzen zur Illustration des jeweiligen
 > Konzepts, formuliert gegen Java 21 LTS und Spring Boot 3.x. Sie sind
@@ -81,8 +86,3 @@ public class AgentLifecycle {
 ```
 
 > **Hinweis:** Der Agent Lifecycle ist das Fundament für das Execution Budget (Kapitel 7): Jede Phase verbraucht Tokens und Zeit. Context Build und Planning verbrauchen nach eigener Betriebserfahrung (SoftwareFabrik, Stand August 2026) rund 20–30 % des Token-Budgets, bevor die eigentliche Execution beginnt.
-
-> **Praxis-Check SoftwareFabrik (erweitert):** Der Lebenszyklus ist dort als
-> *Run* modelliert: sieben Phasen, 13 Zustände, persistiert, pausier- und
-> wiederaufnehmbar. Der Mensch ist als Zustand (`WAITING_FOR_APPROVAL`) Teil
-> des Automaten, nicht Nebenprozess (19.3).
