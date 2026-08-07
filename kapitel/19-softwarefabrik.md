@@ -664,7 +664,7 @@ ephemere Agent-Container je Run. Der Lizenz-Stack (OIDC-Provider plus
 Lizenzdienst) ist getrennt und optional; er kann außerhalb der
 Unternehmensgrenze stehen oder ganz entfallen.
 
-![Deployment-Sicht: ein Anwendungscontainer, eine Datenbank, optional getrennter Lizenz-Stack. Air-Gap-fähig](abbildungen/out/abb29.pdf){width=85%}
+![Deployment-Sicht: ein Anwendungscontainer, eine Datenbank, optional getrennter Lizenz-Stack. Air-Gap-fähig](abbildungen/out/abb29.pdf){width=100%}
 
 Die Startzeit-Härtung folgt durchgehend dem Prinzip *fail fast*: Der
 Compose-Stack bricht ohne Konfigurationsdatei ab statt mit
