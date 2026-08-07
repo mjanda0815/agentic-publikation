@@ -8,7 +8,7 @@
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
 > sind aus dem Quellcode des Systems erhoben (Erhebungsstand 6. August 2026
-> auf dem Entwicklungsstand `main` nach Release 0.21.0), nicht
+> auf dem Entwicklungsstand `main` nach Release 0.22.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,13 +16,13 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert und in Betrieb, Stand 0.21.0) und
+> dort Beschriebene ist implementiert und in Betrieb, Stand 0.22.0) und
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
-> je Stufe ausgewiesen: Die Stufen 0 und 1, also parallele
-> *nicht-schreibende* Analyse, sind seit Release 0.21.0 hinter einem
-> standardmäßig deaktivierten Feature-Flag umgesetzt; alles Weitere,
-> insbesondere jede Form parallelen Schreibens, ist als *geplant*
-> gekennzeichnet). Der aktuelle Stand verwendet genau einen
+> je Stufe ausgewiesen: Die Stufen 0 bis 2 sind hinter einem standardmäßig
+> deaktivierten Feature-Flag umgesetzt — seit 0.21.0 die parallele
+> *nicht-schreibende* Analyse, seit 0.22.0 auch parallel *schreibende*
+> Child Runs mit Pfad-Besitzmodell, Merge Queue und Integration Gate; die
+> Stufen 3 bis 5 sind als *geplant* gekennzeichnet). Der aktuelle Stand verwendet genau einen
 > schreibenden Agenten je Run und mehrere unabhängige Read-only-Reviewer.
 > Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
 > gleichzeitig schreibende Agenten Konfliktkosten, unklare Zurechnung und
@@ -81,24 +81,26 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 376 |
-| Produktivcode | ~35.000 Zeilen |
-| Testklassen | 264 |
+| Produktivklassen (Java) | 388 |
+| Produktivcode | ~36.600 Zeilen |
+| Testklassen | 269 |
 | Fachliche Slices (Module) | 28 |
-| Datenbanktabellen | 44 |
-| Flyway-Migrationen | 41 |
+| Datenbanktabellen | 51 |
+| Flyway-Migrationen | 43 |
 | Execution-Adapter | 10 |
 | Review-Adapter | 6 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 28 (0.1.0 bis 0.21.0, April–August 2026) |
+| Releases | 29 (0.1.0 bis 0.22.0, April–August 2026) |
 
-*Erhoben auf dem Entwicklungsstand `main` nach Release 0.21.0
-(6. August 2026). Der Zuwachs gegenüber Release 0.20.0 (27 Slices,
-39 Tabellen, 37 Migrationen) geht fast vollständig auf die Workflow-Ebene
-zurück: Release 0.21.0 hat die Roadmap-Stufen 0 und 1 umgesetzt (19.10) —
-ein neuer Slice (`workflow`), fünf neue Tabellen und vier Migrationen
-(V40–V43) für das Workflow-Aggregat mit Task-Graph und Synthese.*
+*Erhoben auf dem Entwicklungsstand `main` nach Release 0.22.0
+(7. August 2026). Der Zuwachs der letzten beiden Releases geht fast
+vollständig auf die Workflow-Ebene zurück: 0.21.0 brachte die
+Roadmap-Stufen 0 und 1 (Workflow-Aggregat, Task-Graph, Synthese; vier
+Migrationen V40–V43), 0.22.0 die Stufe 2 (Pfad-Besitzmodell mit
+Workspace-Leases, Merge Queue und Integration Gate; zwei Migrationen
+V44–V45 und sieben weitere Tabellen). Der `workflow`-Slice ist damit
+seit 0.21.0 der jüngste der 28 (19.10).*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
@@ -729,11 +731,13 @@ Parallelität deshalb von der Erzeugung auf die Bewertung. Aus demselben
 Grund wurde die Workspace-Isolation über Git-Worktrees (ADR-2) zur
 **Branch-Isolation auf einem projektpersistenten Workspace**: Iteration
 über Läufe hinweg schlägt parallele Isolation. Der Preis ist benannt —
-Läufe desselben Projekts sind nicht beliebig parallel; die parallel
-*schreibende* Multi-Branch-Ausführung ist bewusst zurückgestellt (Stufe 2).
-Die parallele Read-only-Analyse in getrennten Worktrees ist seit 0.21.0
-umgesetzt, und die Sperre gegen gleichzeitige Läufe vergleicht inzwischen
-den Workspace statt des Projekts (19.10).
+Läufe desselben Projekts waren zunächst nicht beliebig parallel. Die
+Read-only-Analyse in getrennten Worktrees kam mit 0.21.0, das parallele
+Schreiben mit 0.22.0 — Letzteres allerdings nicht als Rücknahme des
+Prinzips, sondern unter einer Besitzregel: Ein Task startet nur, wenn seine
+Schreibbereiche mit keinem aktiven Task kollidieren (19.10). Die Sperre
+gegen gleichzeitige Läufe vergleicht inzwischen den Workspace statt des
+Projekts.
 
 ### (2) Regelkreis statt Retry — Repository-Realität als Eingabe
 
@@ -797,7 +801,7 @@ Erhebungsstand 6. August 2026:
 
 | Punkt | Art |
 |---|---|
-| Parallel **schreibende** Child Runs (mehrere Branches je Projekt); parallele *Analyse* ist seit 0.21.0 verfügbar (Feature-Flag, Standard aus) | Gegenstand der Roadmap-Stufe 2 (19.10) |
+| Vertragsbasierte Parallelisierung (Contract Registry, Stale-Erkennung) und dynamisches Replanning; parallele Analyse *und* paralleles Schreiben sind seit 0.21.0 bzw. 0.22.0 verfügbar (Feature-Flag, Standard aus) | Gegenstand der Roadmap-Stufen 3 und 4 (19.10) |
 | Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
@@ -806,7 +810,7 @@ Erhebungsstand 6. August 2026:
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.21.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
+| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.22.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
 
 Dazu vier Beobachtungen aus dem Entwicklungsverlauf (28 Releases in rund
 vier Monaten), die sich verallgemeinern lassen:
@@ -856,21 +860,21 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 
 ## 19.10 Geplante Weiterentwicklung: vom Run zum parallelen Workflow *(Roadmap)*
 
-> **Status:** Die Roadmap-Stufen **0 und 1 sind in Release 0.21.0
-> umgesetzt** und hinter einem standardmäßig deaktivierten Feature-Flag
-> verfügbar: Mehrere **nicht-schreibende** Analyseläufe laufen parallel in
-> getrennten Worktrees und werden von einem Synthese-Schritt
-> zusammengeführt (siehe den Umsetzungsstand unten). Die Stufen 2 bis 5 —
-> und damit jede Form **parallelen Schreibens** — sind weiterhin geplant.
-> Grundlage ist die interne Entwicklungs-Roadmap der SoftwareFabrik;
-> Versions- und Phasenangaben der weiteren Stufen sind Vorschläge, keine
-> Zusagen.
+> **Status:** Die Roadmap-Stufen **0 bis 2 sind umgesetzt** und hinter
+> einem standardmäßig deaktivierten Feature-Flag verfügbar: 0.21.0 brachte
+> die parallele, nicht-schreibende Analyse, 0.22.0 die parallel
+> **schreibenden** Child Runs samt Pfad-Besitzmodell, Merge Queue und
+> Integration Gate (siehe den Umsetzungsstand unten). Die Stufen 3 bis 5 —
+> vertragsbasierte Parallelisierung, dynamisches Replanning und ein
+> verteilter Worker-Pool — sind weiterhin geplant. Grundlage ist die
+> interne Entwicklungs-Roadmap der SoftwareFabrik; Versions- und
+> Phasenangaben der weiteren Stufen sind Vorschläge, keine Zusagen.
 
 ### Das Zielbild
 
-Die SoftwareFabrik wird von einer Control Plane für einzelne Agentenläufe
+Die SoftwareFabrik ist von einer Control Plane für einzelne Agentenläufe
 zu einer Workflow-Plattform für mehrere koordinierte Läufe
-weiterentwickelt. Der bestehende Run bleibt die atomare Ausführungseinheit
+weiterentwickelt worden. Der bestehende Run bleibt die atomare Ausführungseinheit
 — er wird nicht ersetzt, sondern zum **Child Run** eines übergeordneten
 **Workflows**: Ein Workflow bildet ein Feature oder Vorhaben ab und zerlegt
 es in **Workflow-Tasks** mit Abhängigkeiten (Task Graph). Jeder schreibende
@@ -883,7 +887,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Parallelität findet zwischen isolierten Tasks und Runs statt. Innerhalb
 > eines Workspace existiert genau ein schreibender Agent.
 
-![Zielarchitektur der parallelen Agenten-Workflows (geplant): isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate](abbildungen/out/abb31.pdf){width=100%}
+![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Seit Release 0.22.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
 
 ### Die tragenden Prinzipien
 
@@ -919,14 +923,15 @@ validiert den Gesamtstand. Die Leitregel:
 |---|---|---|
 | 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig — **umgesetzt** (0.21.0) |
 | 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt ohne Änderungsrisiko, weil keine Schreibrechte | niedrig — **umgesetzt** (0.21.0) |
-| 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel |
+| 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel — **umgesetzt** (0.22.0) |
 | 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch |
 | 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch |
 | 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional |
 
-> **Umsetzungsstand der Stufen 0 und 1 (Release 0.21.0, 6. August 2026):**
-> Beide Stufen sind umgesetzt, das Feature-Flag steht standardmäßig auf
-> **aus**; ohne es verhält sich die Plattform unverändert.
+> **Umsetzungsstand der Stufen 0 bis 2 (Releases 0.21.0 und 0.22.0,
+> Stand 7. August 2026):** Alle drei Stufen sind umgesetzt, das
+> Feature-Flag steht standardmäßig auf **aus**; ohne es verhält sich die
+> Plattform unverändert.
 >
 > *Stufe 0* trägt die beiden Architekturentscheidungen — hierarchische
 > Orchestrierung mit der strikten Richtung Workflow führt zu Run, niemals
@@ -941,9 +946,9 @@ validiert den Gesamtstand. Die Leitregel:
 > *Stufe 1* führt die parallele Analyse aus: ein Workflow-Aggregat mit
 > elf Zuständen, Tasks mit zwölf Zuständen und einem Abhängigkeitsgraphen,
 > höchstens drei gleichzeitige Child Runs, jeder in einem eigenen
-> Worktree. Ausgeführt werden ausschließlich **nicht-schreibende**
-> Capabilities; das Fähigkeitsmodell kennt 22 Capabilities, von denen die
-> acht schreibenden in dieser Stufe technisch gesperrt sind. Die
+> Worktree. In dieser Stufe wurden ausschließlich **nicht-schreibende**
+> Capabilities ausgeführt; das Fähigkeitsmodell kennt 22 Capabilities,
+> davon acht schreibende, die erst Stufe 2 freigeschaltet hat. Die
 > menschliche Planfreigabe ist ein eigener Zustand, kein Nebenkanal, und
 > das Workflow-Budget greift *vor* dem Start der nächsten Task.
 >
@@ -954,6 +959,40 @@ validiert den Gesamtstand. Die Leitregel:
 > Analysen ausdrücklich ein und verbietet, sie zu glätten. Das ist dieselbe
 > Haltung wie bei der Claim Verification im Einzel-Run (19.5): Der Wert
 > mehrerer Perspektiven entsteht dort, wo sie sich widersprechen.
+>
+> *Stufe 2* (Release 0.22.0) erlaubt Tasks, Produktivcode zu ändern. Damit
+> das zurechenbar bleibt, kommen zwei Mechanismen hinzu — eine Besitzregel
+> **vor** der Ausführung und eine kontrollierte Zusammenführung **danach**.
+>
+> Jeder Task erklärt seine Pfadbereiche in drei Arten: `OWNED` (darf
+> schreiben), `READ_ONLY` (darf lesen) und `PROTECTED` (Schutzzone).
+> Überschneiden sie sich mit denen eines aktiven Tasks, startet er gar nicht
+> erst — der Konflikt wird verhindert, nicht später erkannt. Verglichen wird
+> auf Segmentgrenzen, damit `src/main` und `src/mainx` nicht fälschlich
+> kollidieren. Die Leases tragen eine Ablauffrist und einen Herzschlag: Ein
+> abgestürzter Agent legt den Workflow nicht dauerhaft lahm. Build-Dateien
+> und das Migrationsverzeichnis sind **immer** exklusiv, auch wenn ein Task
+> sie nicht anmeldet — die Erfahrung aus 19.8 (2), dass die härtesten
+> Befunde an den Übergängen liegen, ist hier zur Regel geworden.
+>
+> Nach erfolgreicher Ausführung führt eine **Merge Queue** die Child-Branches
+> *sequenziell* und in *Planreihenfolge* in einen Integrationsbranch — nicht
+> in der Reihenfolge, in der sie zufällig fertig wurden, sonst hinge das
+> Ergebnis an Laufzeiten. Erst der zusammengeführte Gesamtstand durchläuft
+> das **Integration Gate**: Das lokale Gate je Child Run prüft eine Änderung
+> *für sich*, das Integration Gate prüft, ob sie *zusammen* funktionieren.
+> Nur über dieses Urteil erreicht ein Workflow den Zustand `COMPLETED`.
+>
+> Zwei Entscheidungen sind bemerkenswert, weil sie dem Fail-Closed-Prinzip
+> folgen statt der Bequemlichkeit. Ein **Merge-Konflikt hält an, statt zu
+> scheitern**: Der Workflow geht in die Freigabe und zeigt die
+> Konfliktdateien; der Mensch entscheidet zwischen erneutem Versuch
+> (begrenzt auf zwei) und dem Verwerfen des Branches. Ein verworfener Branch
+> macht das Integration Gate `FAILED` — ein Workflow, dessen Arbeit
+> teilweise liegen blieb, gilt nicht als erfolgreich. Und ein **Kaskaden-
+> Abbruch** stoppt bei einem gescheiterten Task alle, die mittelbar auf ihm
+> aufbauen, und verwirft offene Merge-Einträge; ohne ihn blieben Nachfolger
+> blockiert und der Workflow käme nie zu einem Ende.
 >
 > Eine Nebenwirkung verdient Erwähnung, weil sie ein Muster dieses Kapitels
 > bestätigt: Die Sperre gegen gleichzeitige Läufe war projektweit
@@ -987,7 +1026,10 @@ zusammenfassen:
 > Schreibbereiche, Verträge und Zustände isoliert und durch einen
 > übergeordneten Workflow kontrolliert werden. Version 0.21.0 hat diesen
 > Weg an der risikoärmsten Stelle begonnen — mehrere Agenten analysieren
-> parallel, keiner schreibt. Damit ist die Reihenfolge selbst eine Aussage:
-> Erst die Koordination beweisen, dann die Schreibrechte verteilen. Von
-> einem kontrollierten Agentenlauf zu parallelen Agenten-Workflows — ohne
-> das Single-Writer-, Governance- und Nachweisprinzip aufzugeben.
+> parallel, keiner schreibt —, Version 0.22.0 hat die Schreibrechte
+> hinzugefügt, aber an eine Besitzregel gebunden: Wessen Schreibbereiche
+> sich überschneiden, startet nicht. Die Reihenfolge war selbst eine
+> Aussage: erst die Koordination beweisen, dann die Schreibrechte
+> verteilen. Von einem kontrollierten Agentenlauf zu parallelen
+> Agenten-Workflows — ohne das Single-Writer-, Governance- und
+> Nachweisprinzip aufzugeben.

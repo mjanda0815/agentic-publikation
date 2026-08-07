@@ -4,13 +4,13 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 376 | `find app/src/main/java -name '*.java'` |
-| Produktivcode | ~34.951 Zeilen | |
-| Testklassen | 264 | |
+| Produktivklassen | 388 | `find app/src/main/java -name '*.java'` |
+| Produktivcode | ~36.556 Zeilen | |
+| Testklassen | 269 | |
 | Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | |
 | Fachliche Slices | 28 (neu: `workflow`) | |
-| Datenbanktabellen | 44 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 41 (V1–V43) | |
+| Datenbanktabellen | 51 | `CREATE TABLE` in Migrationen |
+| Flyway-Migrationen | 43 (V1–V45) | |
 | HTTP-Routen | 156 in 34 Controllern | Mapping-Annotationen |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
@@ -21,10 +21,10 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 28 (0.1.0 – 0.21.0) | 2026-04-17 bis 2026-08-06 |
+| Releases | 29 (0.1.0 – 0.22.0) | 2026-04-17 bis 2026-08-07 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: `main` @ `8066887` (zwei Fix-Commits nach `v0.21.0`), 2026-08-06.*
+*Stand: `main` @ `ff0934b` (`v0.22.0`), 2026-08-07.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -143,11 +143,35 @@ Drei Muster, die sich für die Publikation verallgemeinern lassen:
    ArchUnit-Regeln stehen, kostet ein neuer Adapter eine Klasse und einen
    Test. Ohne sie wäre die Kopplung längst durch die Schichten diffundiert.
 
-## 12.4 Offene Punkte (Stand 2026-08-06, nach 0.21.0)
+### Phase 8 — Parallel schreibende Child Runs, Roadmap-Stufe 2 (0.22.0, August 2026)
+
+**2a — Pfad-Besitzmodell und Workspace-Leases** (Migration V44): Ein Task
+erklärt `OWNED`, `READ_ONLY` und `PROTECTED`. Überschneidungen mit einem
+aktiven Task verhindern den Start; der Vergleich läuft auf Segmentgrenzen
+(`src/main` kollidiert nicht mit `src/mainx`). Leases mit Ablauffrist und
+Herzschlag — ein abgestürzter Agent legt den Workflow nicht dauerhaft lahm.
+Build-Dateien (`pom.xml`, `build.gradle[.kts]`) und das
+Migrationsverzeichnis sind immer exklusiv, auch ohne Anmeldung.
+
+**2b — Merge Queue und Integration Gate** (Migration V45): Erfolgreiche
+Child-Branches werden sequenziell und in Planreihenfolge in einen
+Integrationsbranch geführt, nicht in Fertigstellungsreihenfolge. Das lokale
+Gate je Child Run prüft eine Änderung für sich, das Integration Gate den
+zusammengeführten Gesamtstand; nur über dessen Urteil erreicht ein Workflow
+`COMPLETED`. Merge-Status: `WARTEND`, `LAEUFT`, `GEMERGED`, `KONFLIKT`,
+`ABGEBROCHEN`.
+
+Ein Merge-Konflikt hält an, statt zu scheitern: Der Workflow geht nach
+`WAITING_FOR_APPROVAL` und zeigt die Konfliktdateien; entschieden wird
+zwischen erneutem Versuch (max. zwei) und Verwerfen des Branches. Ein
+verworfener Branch macht das Integration Gate `FAILED`. Ein Kaskaden-Abbruch
+stoppt alle mittelbar abhängigen Tasks und verwirft offene Merge-Einträge.
+
+## 12.4 Offene Punkte (Stand 2026-08-07, nach 0.22.0)
 
 | Punkt | Art |
 |---|---|
-| Parallel schreibende Child Runs (Stufe 2); parallele Analyse ist seit 0.21.0 verfügbar | Roadmap |
+| Vertragsbasierte Parallelisierung (Stufe 3) und dynamisches Replanning (Stufe 4); Analyse und Schreiben laufen seit 0.21.0 bzw. 0.22.0 parallel | Roadmap |
 | Seat-scharfe Budget-Obergrenze (Auswertung je Seat existiert seit v0.17) | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end verifiziert | Verifikationslücke |
 | Vollständige Sandbox für Coding-Adapter | offen |

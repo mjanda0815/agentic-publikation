@@ -21,14 +21,14 @@
 | Guardrails-Projektion | Materialisierung der versionierten Verhaltensregeln als AGENTS.md/CLAUDE.md je Lauf in den Workspace (Kap. 19). |
 | HPA | Horizontal Pod Autoscaler – Kubernetes-Skalierung. |
 | IaC | Infrastructure as Code – Deklarative Infrastruktur. |
-| Integration Gate | Quality Gate auf dem zusammengeführten Workflow-Stand (Zielarchitektur, Kap. 19.10). |
+| Integration Gate | Quality Gate auf dem zusammengeführten Workflow-Stand (seit 0.22.0 implementiert, Feature-Flag; Kap. 19.10). |
 | JPA | Jakarta Persistence API – ORM-Standard für Java. |
 | JWT | JSON Web Token – Authentifizierungstoken. |
 | K8s | Kubernetes – Container-Orchestrierung. |
 | LLM | Large Language Model – Großes Sprachmodell (z. B. Claude). |
 | Mandant | Isolationseinheit für Projekte, Läufe, Budgets und Policies in einer mehrmandantenfähigen Plattform (Kap. 19). |
 | MCP | Model Context Protocol – herstellerneutraler Industriestandard zur Werkzeuganbindung (ursprünglich Anthropic, seit 12/2025 Agentic AI Foundation / Linux Foundation; Kap. 18). |
-| Merge Coordinator | Komponente zur kontrollierten Rebase-, Merge-, Konflikt- und Revalidierungssteuerung (Zielarchitektur, Kap. 19.10). |
+| Merge Coordinator | Komponente zur kontrollierten Rebase-, Merge-, Konflikt- und Revalidierungssteuerung (seit 0.22.0 implementiert, Feature-Flag; Kap. 19.10). |
 | OWASP | Open Worldwide Application Security Project (bis 2023: Open Web Application Security Project) – Sicherheitsstandards. |
 | Plan-Run | Lauf, der nur analysiert und Arbeitsschritte vorschlägt; darf keinen Code ändern (Kap. 19). |
 | Policy-as-Code | Regeln als versioniertes, signiertes Dokument mit genau einer aktiven Version je Mandant (Kap. 19). |
@@ -49,4 +49,4 @@
 | Warum-Trace | Rekonstruktion je Lauf, welche Policy, welches Modell und welche Freigaben gewirkt haben (Kap. 19). |
 | Workflow | Übergeordnete, zustandsbehaftete Ausführungseinheit für ein Feature oder Vorhaben (seit 0.21.0 implementiert, Feature-Flag; Kap. 19.10). |
 | Workflow Task | Abgegrenzte Arbeitseinheit mit Abhängigkeiten, Capability, Schreibbereichen und optionalem Child Run (seit 0.21.0 implementiert, Feature-Flag; Schreibbereiche erst mit der vollen Ausprägung — Kap. 19.10). |
-| Workspace Lease | Zeitlich begrenzte Reservierung von Pfaden, Modulen oder exklusiven Ressourcen (Zielarchitektur, Kap. 19.10). |
+| Workspace Lease | Zeitlich begrenzte Reservierung von Pfaden, Modulen oder exklusiven Ressourcen (seit 0.22.0 implementiert, Feature-Flag; Kap. 19.10). |

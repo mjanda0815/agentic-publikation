@@ -10,7 +10,7 @@ Abgrenzung zum ersten Karussell (carousel.tex): Jenes argumentiert aus den
 Prinzipien des Whitepapers, dieses aus der Erfahrung des gebauten Systems —
 im Kern die vier Punkte, an denen die Praxis das Konzept korrigiert hat.
 
-Alle Kennzahlen: Erhebungsstand `main` nach Release 0.21.0 (6. August 2026).
+Alle Kennzahlen: Erhebungsstand `main` nach Release 0.22.0 (7. August 2026).
 Format: 10 Folien, quadratisch 1080 × 1080 bp.
 
 
@@ -27,11 +27,11 @@ Quelle:   Kapiteleinstieg 19
 ────────────────────────────────────────────────────────────────────────
 FOLIE 2 — Der Stand
 Kicker:   Der Stand
-Kernsatz: 28 fachliche Slices, 28 Releases, vier Monate.
-Text:     Rund 35.000 Zeilen Produktivcode und 264 Testklassen; die
+Kernsatz: 28 fachliche Slices, 29 Releases, vier Monate.
+Text:     Rund 36.600 Zeilen Produktivcode und 269 Testklassen; die
           Testabdeckung bricht den Build, wenn sie fällt. Java 25,
           Spring Boot 4, ein Deployment-Artefakt. Stand: 6. August 2026,
-          Release 0.21.0.
+          Release 0.22.0.
 Quelle:   19, „Kennzahlen der Codebasis"
 
 ────────────────────────────────────────────────────────────────────────
@@ -104,19 +104,20 @@ Text:     Das Kapitel benennt zehn offene Punkte, eingefrorene Modulzyklen
 Quelle:   19.9 inkl. „Threats to Validity"; die Tabelle führt zehn Zeilen
 
 ────────────────────────────────────────────────────────────────────────
-FOLIE 9 — Der nächste Schritt — begonnen
-Kicker:   Der nächste Schritt — begonnen
+FOLIE 9 — Der nächste Schritt — erreicht
+Kicker:   Der nächste Schritt — erreicht
 Kernsatz: Erst die Koordination beweisen. Dann die Schreibrechte
           verteilen.
-Text:     Seit Release 0.21.0 laufen mehrere Agenten parallel — in
+Text:     Seit Release 0.22.0 schreiben mehrere Agenten parallel — in
           getrennten Arbeitsverzeichnissen, koordiniert über einen
-          Abhängigkeitsgraphen, zusammengeführt von einem Synthese-Schritt,
-          der Widersprüche ausdrücklich einfordert statt sie zu glätten.
-          Keiner von ihnen darf schreiben: Die acht schreibenden
-          Fähigkeiten sind technisch gesperrt. Das parallele Schreiben ist
-          die nächste Stufe.
-Quelle:   19.10, Umsetzungsstand-Kasten (Roadmap-Stufen 0 und 1,
-          Release 0.21.0)
+          Abhängigkeitsgraphen. Wessen Schreibbereiche sich mit einem
+          aktiven Task überschneiden, startet gar nicht erst; Build-Dateien
+          und Migrationen sind immer exklusiv. Eine Merge Queue führt die
+          Branches in Planreihenfolge zusammen, ein Integration Gate prüft
+          den Gesamtstand. Alles hinter einem standardmäßig deaktivierten
+          Feature-Flag.
+Quelle:   19.10, Umsetzungsstand-Kasten (Roadmap-Stufen 0 bis 2,
+          Releases 0.21.0 und 0.22.0)
 
 ────────────────────────────────────────────────────────────────────────
 FOLIE 10 — Abschluss

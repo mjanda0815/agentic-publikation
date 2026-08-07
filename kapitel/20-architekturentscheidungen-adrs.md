@@ -154,10 +154,10 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 > Erzeugen, und mehrere gleichzeitig schreibende Agenten erzeugen
 > Konfliktkosten und einen nicht attestierbaren Zustand (19.8).
 > *Status (v2.2): durch die Praxis korrigiert — und in ADR-5
-> generalisiert: Die Workflow-Ebene existiert seit Release 0.21.0 für
-> nicht-schreibende Child Runs unter Single-Writer-Isolation je Workspace
-> (Feature-Flag, Standard aus); parallel schreibende Child Runs folgen mit
-> Stufe 2 (19.10).*
+> generalisiert: Die Workflow-Ebene erlaubt seit Release 0.22.0 auch
+> parallel schreibende Child Runs — unter Single-Writer-Isolation je
+> Workspace und einer Besitzregel, die überschneidende Schreibbereiche vor
+> dem Start blockiert (Feature-Flag, Standard aus; 19.10).*
 
 ## ADR-2: Workspace Isolation via Git Worktrees
 
@@ -167,9 +167,9 @@ Direkte Kommunikation zwischen Agenten erzeugt Koordinationsprobleme: Wer hat Vo
 > einem projektpersistenten Workspace** statt Worktrees je Agent, weil
 > Iteration über Läufe hinweg parallele Isolation schlägt (19.3). Worktrees
 > sind seit Release 0.21.0 als Isolationseinheit nicht-schreibender Child
-> Runs zurückgekehrt; für schreibende Child Runs werden sie zusätzlich
-> durch Workspace Leases abgesichert — siehe **ADR-6: Workspace Leases und
-> exklusive Ressourcen** sowie 19.10.
+> Runs zurückgekehrt und seit 0.22.0 auch für schreibende, dort abgesichert
+> durch Workspace Leases — siehe **ADR-6: Workspace Leases und exklusive
+> Ressourcen** sowie 19.10.
 
 ### Motivation / Kontext
 
@@ -257,9 +257,9 @@ Ein Agent committet und merged entweder alles oder nichts. Partial Merges (nur m
 > schlägt parallele Isolation — der zweite Lauf soll auf dem Ergebnis des
 > ersten aufsetzen. Der Preis (Läufe desselben Projekts nicht beliebig
 > parallel) ist benannt und akzeptiert (19.3, 19.8).
-> *Status (v2.2): Worktrees sind zurückgekehrt — seit 0.21.0 als
-> Isolationseinheit je nicht-schreibendem Child Run; für schreibende Child
-> Runs kommen Workspace Leases hinzu (ADR-6, 19.10).*
+> *Status (v2.3): Worktrees sind zurückgekehrt — seit 0.21.0 als
+> Isolationseinheit je nicht-schreibendem Child Run, seit 0.22.0 auch für
+> schreibende, dort abgesichert durch Workspace Leases (ADR-6, 19.10).*
 
 ## ADR-3: Guardrail Pipeline als Pflicht-Gate
 
@@ -568,11 +568,12 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 ## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — ersetzt ADR-1.
-> **Implementierungsstatus:** *In Umsetzung* — die Roadmap-Stufen 0 und 1
-> sind in Release 0.21.0 implementiert (Parent Workflow, Child Runs,
-> Task-Graph und Synthese für **nicht-schreibende** Tasks, hinter
-> deaktiviertem Feature-Flag); parallel schreibende Child Runs sind
-> Gegenstand von Stufe 2 (19.10).
+> **Implementierungsstatus:** *Implemented* für die Roadmap-Stufen 0 bis 2
+> (Parent Workflow, Child Runs, Task-Graph, Synthese sowie seit 0.22.0
+> parallel **schreibende** Child Runs mit Merge Queue und Integration
+> Gate), hinter deaktiviertem Feature-Flag. Vertragsbasierte
+> Parallelisierung und dynamisches Replanning bleiben Stufen 3 und 4
+> (19.10).
 
 ### Motivation / Kontext
 
@@ -609,7 +610,10 @@ Parallelitätsgewinn aufzehren, wenn Tasks schlecht geschnitten sind.
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — konkretisiert ADR-2
 > für parallele Child Runs.
-> **Implementierungsstatus:** *Planned* (Roadmap-Stufe 2, siehe 19.10).
+> **Implementierungsstatus:** *Implemented* seit Release 0.22.0: Pfadbereiche
+> in drei Arten (`OWNED`, `READ_ONLY`, `PROTECTED`), Konfliktprüfung auf
+> Segmentgrenzen **vor** dem Start, Leases mit Ablauffrist und Herzschlag,
+> Build-Dateien und Migrationsverzeichnis immer exklusiv (19.10).
 
 ### Entscheidung
 
@@ -632,8 +636,10 @@ bei unklarem Besitz gilt Fail Closed (AP-7).
 ## ADR-7: Zweistufiges Quality Gate
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — erweitert ADR-3.
-> **Implementierungsstatus:** *Planned* (Roadmap-Stufe 2, siehe 19.10);
-> das einstufige Gate je Lauf ist implementiert (19.5).
+> **Implementierungsstatus:** *Implemented* seit Release 0.22.0: Das lokale
+> Gate je Child Run prüft eine Änderung für sich, das Integration Gate den
+> zusammengeführten Gesamtstand; nur über dessen Urteil erreicht ein
+> Workflow den Zustand `COMPLETED` (19.10).
 
 ### Entscheidung
 
@@ -656,7 +662,8 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 > **Entscheidungsstatus:** *Accepted* (August 2026) — präzisiert ADR-4.
 > **Implementierungsstatus:** *Implemented* für die Run-Ebene (19.6) und
 > seit 0.21.0 auch für Workflow- und Task-Zustände samt Planfreigabe und
-> Workflow-Budget. Workspace Leases folgen mit Roadmap-Stufe 2 (19.10).
+> Workflow-Budget; seit 0.22.0 zusätzlich für Workspace Leases und die
+> Merge Queue (19.10).
 
 ### Entscheidung
 

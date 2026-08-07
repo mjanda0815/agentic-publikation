@@ -1,6 +1,6 @@
 % carousel/carousel.tex — LinkedIn-Karussell zum Whitepaper
 % „Agentic Software Development — Enterprise Architecture with AI Agents"
-% (Martin Janda, Fassung 2.2, August 2026)
+% (Martin Janda, Fassung 2.3, August 2026)
 %
 % Separates Dokument; das Whitepaper (main.tex) bleibt unverändert.
 % Eine Seite = eine Folie, quadratisch 1080 bp × 1080 bp (1080×1080-px-Äquivalent).
@@ -166,20 +166,20 @@
 % ============================================================================
 % FOLIE 8 — Referenzimplementierung
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", erhoben auf dem
-% Entwicklungsstand main nach Release 0.21.0 (6. August 2026):
-% 376 Produktivklassen, ~35.000 Zeilen Produktivcode, 28 fachliche Slices,
-% 28 Releases (0.1.0 bis 0.21.0, April–August 2026),
+% Entwicklungsstand main nach Release 0.22.0 (7. August 2026):
+% 388 Produktivklassen, ~36.600 Zeilen Produktivcode, 28 fachliche Slices,
+% 29 Releases (0.1.0 bis 0.22.0, April–August 2026),
 % Coverage-Gate Line >= 85 % / Branch >= 81 %
 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Referenzimplementierung}
-  \gross{Vom Konzept zum System: 28 fachliche Slices, 28 Releases in vier
+  \gross{Vom Konzept zum System: 28 fachliche Slices, 29 Releases in vier
     Monaten.}
   \vspace{48pt}
-  \erl{Rund 35.000 Zeilen Produktivcode, Testabdeckung als buildbrechendes
+  \erl{Rund 36.600 Zeilen Produktivcode, Testabdeckung als buildbrechendes
     Gate (Line ab 85 \%, Branch ab 81 \%). Die Architektur des Whitepapers
     war die Grundlage — das Kapitel beschreibt, was daraus geworden ist.
-    Stand: 6.\,August 2026, Release 0.21.0.}
+    Stand: 7.\,August 2026, Release 0.22.0.}
 \end{folie}
 
 % ============================================================================
@@ -193,17 +193,16 @@
 % Prinzip AP-3: Parallelität wird aus Abhängigkeiten abgeleitet, nicht aus
 % festen Agentenrollen.
 % ============================================================================
-\begin{folie}{Der Weg dorthin}
+\begin{folie}{Der Stand}
   \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
     Agentenrollen.}
   \vspace{48pt}
-  \erl{Seit Release 0.21.0 ist die risikoärmste Stufe umgesetzt — hinter
-    einem standardmäßig deaktivierten Feature-Flag: Mehrere Agenten
-    analysieren parallel in getrennten Arbeitsverzeichnissen, ein
-    Synthese-Schritt führt sie zusammen — und keiner von ihnen darf
-    schreiben. Paralleles Schreiben, Merge Coordinator und Integration Gate
-    folgen. Erst die Koordination beweisen, dann die Schreibrechte
-    verteilen.}
+  \erl{Umgesetzt seit Release 0.22.0, hinter einem standardmäßig
+    deaktivierten Feature-Flag. Der Weg dorthin ging bewusst über die
+    risikoärmste Stufe: erst parallele Analyse ohne Schreibrechte, dann die
+    Schreibrechte — gebunden an eine Besitzregel, die überschneidende
+    Schreibbereiche vor dem Start blockiert. Merge Queue und Integration
+    Gate führen danach zusammen.}
 \end{folie}
 
 % ============================================================================

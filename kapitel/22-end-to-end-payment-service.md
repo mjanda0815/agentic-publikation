@@ -15,7 +15,7 @@ Dabei wird sichtbar, wie die zuvor eingeführten Konzepte – insbesondere Task 
 > als **parallelen Workflow** der Zielarchitektur (Teil B, geplant). Die
 > ursprüngliche v1.3-Skizze mit sieben gleichzeitig arbeitenden
 > Lebenszyklus-Agenten ist damit durch zwei präzise Varianten ersetzt: die,
-> die läuft, und die, die überwiegend noch geplant ist.
+> die als Einzel-Run läuft, und die, die als paralleler Workflow läuft.
 
 ## 22.1 Ausgangssituation
 
@@ -44,7 +44,7 @@ inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 ## 22.3 Teil A — der implementierte Single-Run-Prozess
 
-> **Status: implementiert** (Referenzimplementierung, Stand 0.21.0; vgl.
+> **Status: implementiert** (Referenzimplementierung, Stand 0.22.0; vgl.
 > Kapitel 19.1–19.3).
 
 So läuft der Auftrag heute. Ein Lauf, ein schreibender Agent, mehrere
@@ -88,16 +88,15 @@ Bewertung, nicht bei der Erzeugung (AP-2, AP-4).
 
 ## 22.4 Teil B — derselbe Auftrag als paralleler Workflow
 
-> **Status: überwiegend geplant** (Zielarchitektur; vgl. 19.10 und ADR-5
-> bis ADR-7). Die Workflow-Ebene mit Task-Graph, parallelen Child Runs in
-> getrennten Worktrees, Planfreigabe und Synthese existiert seit Release
-> 0.21.0 — allerdings ausschließlich für **nicht-schreibende** Tasks und
-> hinter einem standardmäßig deaktivierten Feature-Flag. Der hier
-> skizzierte Ablauf verteilt Schreibrechte auf mehrere Child Runs und
-> greift zusätzlich auf Content-Hashes von Verträgen und
-> Konfliktklassifikation vor; er beschreibt damit die Roadmap-Stufen 2
-> bis 4. Die Skizze ist Pseudocode und beschreibt insoweit kein heute
-> verfügbares Verhalten.
+> **Status: überwiegend implementiert** (vgl. 19.10 und ADR-5 bis ADR-7).
+> Die Workflow-Ebene mit Task-Graph, parallelen Child Runs in getrennten
+> Worktrees, Planfreigabe, Synthese, Pfad-Besitzmodell, Merge Queue und
+> Integration Gate existiert seit Release 0.22.0 — hinter einem
+> standardmäßig deaktivierten Feature-Flag. Über den heutigen Stand hinaus
+> greift die Skizze bei den **Contract Versions mit Content-Hash** und der
+> **Konfliktklassifikation** vor; das sind die Roadmap-Stufen 3 und 4. Die
+> Skizze ist insgesamt Pseudocode: Sie zeigt die Struktur, nicht die
+> Aufrufsyntax des Systems.
 
 Der Payment Service besteht aus Teilen, die sich sauber schneiden lassen —
 genau der Fall, für den die Workflow-Ebene gedacht ist:

@@ -1,6 +1,6 @@
 % carousel/carousel-fabrik.tex — LinkedIn-Karussell zum Sonderdruck
 % „Die SoftwareFabrik — von der Referenzarchitektur zum System"
-% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.2, August 2026)
+% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.3, August 2026)
 %
 % Zweites Karussell des Projekts. Das erste (carousel.tex) argumentiert aus
 % den Prinzipien des Whitepapers; dieses argumentiert aus der Erfahrung des
@@ -14,7 +14,7 @@
 % INHALTLICHE HERKUNFT: Jede Folie trägt einen Kommentar „QUELLE:" mit dem
 % Abschnitt aus kapitel/19-softwarefabrik.md. Es sind ausschließlich Aussagen
 % aus dem Kapitel übernommen, nichts erfunden. Alle Kennzahlen sind auf dem
-% Erhebungsstand `main` nach Release 0.21.0 (6. August 2026).
+% Erhebungsstand `main` nach Release 0.22.0 (7. August 2026).
 % Redigierbare Reintexte: carousel/folientexte-fabrik.txt
 
 \documentclass[12pt]{article}
@@ -45,18 +45,18 @@
 % ============================================================================
 % FOLIE 2 — Kennzahlen
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", Erhebungsstand `main`
-% nach Release 0.21.0 (6. August 2026): 376 Produktivklassen, ~35.000 Zeilen
-% Produktivcode, 264 Testklassen, 28 fachliche Slices, 28 Releases
-% (0.1.0–0.21.0, April–August 2026), Coverage-Gate Line >= 85 % /
+% nach Release 0.22.0 (7. August 2026): 388 Produktivklassen, ~36.600 Zeilen
+% Produktivcode, 269 Testklassen, 28 fachliche Slices, 29 Releases
+% (0.1.0–0.22.0, April–August 2026), Coverage-Gate Line >= 85 % /
 % Branch >= 81 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Der Stand}
-  \gross{28 fachliche Slices, 28 Releases, vier Monate.}
+  \gross{28 fachliche Slices, 29 Releases, vier Monate.}
   \vspace{48pt}
-  \erl{Rund 35.000 Zeilen Produktivcode und 264 Testklassen; die
+  \erl{Rund 36.600 Zeilen Produktivcode und 269 Testklassen; die
     Testabdeckung bricht den Build, wenn sie unter die Schwelle fällt
     (Line 85 \%, Branch 81 \%). Java 25, Spring Boot 4,
-    ein Deployment-Artefakt. Stand: 6.\,August 2026, Release 0.21.0.}
+    ein Deployment-Artefakt. Stand: 7.\,August 2026, Release 0.22.0.}
 \end{folie}
 
 % ============================================================================
@@ -178,27 +178,26 @@
 
 % ============================================================================
 % FOLIE 9 — Naechster Schritt
-% QUELLE: Abschnitt 19.10 mit dem Umsetzungsstand-Kasten (Release 0.21.0,
-% 6. August 2026): Stufen 0 und 1 sind umgesetzt — Workflow-Aggregat mit
-% elf Zuständen, Tasks mit zwölf Zuständen und Abhängigkeitsgraph, höchstens
-% drei gleichzeitige Child Runs in eigenen Worktrees, Synthese-Task,
-% menschliche Planfreigabe als eigener Zustand, Workflow-Budget vor dem
-% Start der nächsten Task. Ausgeführt werden ausschliesslich
-% nicht-schreibende Capabilities; die acht schreibenden sind gesperrt.
-% Stufen 2 bis 5 — und damit jedes parallele Schreiben — sind geplant.
+% QUELLE: Abschnitt 19.10 mit dem Umsetzungsstand-Kasten (Releases 0.21.0
+% und 0.22.0, Stand 7. August 2026): Die Stufen 0 bis 2 sind umgesetzt.
+% Seit 0.22.0 duerfen Tasks Produktivcode aendern; ein Task erklaert
+% OWNED/READ_ONLY/PROTECTED-Pfadbereiche und startet nur, wenn sie sich mit
+% keinem aktiven Task ueberschneiden (Vergleich auf Segmentgrenzen).
+% Build-Dateien und Migrationsverzeichnis sind immer exklusiv. Eine Merge
+% Queue fuehrt die Branches sequenziell in Planreihenfolge zusammen, das
+% Integration Gate prueft den Gesamtstand. Stufen 3 bis 5 sind geplant.
 % ============================================================================
-\begin{folie}{Der nächste Schritt — begonnen}
+\begin{folie}{Der nächste Schritt — erreicht}
   \grossM{Erst die Koordination beweisen. Dann die Schreibrechte
     verteilen.}
   \vspace{48pt}
-  \erl{Seit Release 0.21.0 ist die Stufe umgesetzt, hinter einem
-    standardmäßig deaktivierten Feature-Flag: Mehrere Agenten arbeiten
-    parallel — in getrennten
-    Arbeitsverzeichnissen, koordiniert über einen Abhängigkeitsgraphen,
-    zusammengeführt von einem Synthese-Schritt, der Widersprüche
-    ausdrücklich einfordert statt sie zu glätten. Keiner von ihnen darf
-    schreiben: Die acht schreibenden Fähigkeiten sind technisch gesperrt.
-    Das parallele Schreiben ist die nächste Stufe.}
+  \erl{Seit Release 0.22.0 schreiben mehrere Agenten parallel — in
+    getrennten Arbeitsverzeichnissen, koordiniert über einen
+    Abhängigkeitsgraphen. Wessen Schreibbereiche sich mit einem aktiven
+    Task überschneiden, startet gar nicht erst; Build-Dateien und
+    Migrationen sind immer exklusiv. Eine Merge Queue führt die Branches in
+    Planreihenfolge zusammen, ein Integration Gate prüft den Gesamtstand.
+    Alles hinter einem standardmäßig deaktivierten Feature-Flag.}
 \end{folie}
 
 % ============================================================================
