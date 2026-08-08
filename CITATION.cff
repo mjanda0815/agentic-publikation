@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "Wenn Sie dieses Whitepaper zitieren, verwenden Sie bitte die folgenden Angaben."
 title: "Agentic Software Development — Enterprise Architecture with AI Agents"
 subtitle: "Von kontrollierten Einzel-Runs zur parallelen Agentic Software Factory. Praxisbeispiele mit Java, Spring Boot und Domain-Driven Design"
-version: "2.2"
-date-released: "2026-08-06"
+version: "2.6"
+date-released: "2026-08-08"
 license: CC-BY-4.0
 type: dataset
 authors:

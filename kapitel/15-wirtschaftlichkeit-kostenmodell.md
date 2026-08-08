@@ -175,6 +175,17 @@ folgenden Messgrößen:
 - entkommene Defekte und Rollbacks
 - Reviewzeit und Testabdeckungsänderung
 
+> **Praxis-Check SoftwareFabrik (Stand 0.27.0):** Ein Teil dieses
+> Messplans ist seit Release 0.27.0 implementiert (19.10, Stufe 6):
+> Time to Accepted Merge, Erstdurchlauf-Quote, Korrekturschleifen,
+> Planänderungen, Kosten je Workflow und Child Run, Merge-Konfliktquote
+> und Freigabe-Wartezeit werden aus ohnehin entstehenden Daten abgeleitet.
+> Vier Messgrößen weist die Plattform bewusst als Lücke aus, statt sie zu
+> schätzen — darunter die menschliche aktive Arbeitszeit (Wartezeit ist
+> nicht Arbeitszeit) und der Vergleich zur manuellen Umsetzung, dessen
+> Referenzgruppe im System nicht existiert. Der dreiarmige Vergleich
+> dieses Messplans steht damit weiter aus.
+
 Bis diese Messungen vorliegen, sind alle Produktivitäts- und ROI-Aussagen
 dieses Kapitels als Hypothesen bzw. Modellrechnungen zu lesen (vgl. 15.4,
 19.9).

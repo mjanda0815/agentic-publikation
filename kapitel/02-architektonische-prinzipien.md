@@ -22,8 +22,8 @@ Diese Prinzipien stehen nicht isoliert, sondern bedingen sich gegenseitig: Contr
 | Prinzip | Kapitelreferenzen | Durchsetzung |
 | --- | --- | --- |
 | AP-1: Controlled Non-Determinism | Kap. 6 (Lifecycle), Kap. 7 (Execution Model) | Zustandsautomat, Turn-Limits, Execution Budgets, Timeouts |
-| AP-2: Single Writer per Workspace | Kap. 16 (Workflows), Kap. 20 (ADR-2/ADR-5), 19.3/19.10 | Branch-/Worktree-Isolation, Workspace Leases (geplant) |
-| AP-3: Parallelism by Dependency | Kap. 16, 19.10 | Task-Graph, Schreibbereiche, versionierte Verträge (geplant) |
+| AP-2: Single Writer per Workspace | Kap. 16 (Workflows), Kap. 20 (ADR-2/ADR-5), 19.3/19.10 | Branch-/Worktree-Isolation, Workspace Leases (seit 0.22.0, Feature-Flag) |
+| AP-3: Parallelism by Dependency | Kap. 16, 19.10 | Task-Graph, Schreibbereiche, versionierte Verträge (seit 0.23.0, Feature-Flag) |
 | AP-4: Independent Verification | Kap. 12 (Guardrails), 19.5 | Read-only-Reviewer, Quality Gate, Claim Verification |
 | AP-5: Policy as Executable Structure | Kap. 4 (Repo-Konfiguration), 19.6 | Signierte Policy-Dokumente, Hooks, Gate-Policies |
 | AP-6: Human Authority | Kap. 9 (Failure Handling), 19.3 | Pflichtfreigaben als Prozesszustand, Segregation of Duties |
@@ -41,12 +41,13 @@ den neuen acht auf.*
 > Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
 > lassen (19.2). AP-2 und AP-4 gelten bereits im Einzel-Run (ein
 > schreibender Agent je Lauf, mehrere unabhängige read-only Reviewer).
-> AP-3 ist seit Release 0.25.0 vollständig implementiert (Feature-Flag,
+> AP-3 ist seit Release 0.23.0 vollständig implementiert (Feature-Flag,
 > standardmäßig deaktiviert): Tasks werden aus einem Abhängigkeitsgraphen
 > parallelisiert und laufen in getrennten Arbeitsverzeichnissen — seit
 > 0.21.0 lesend, seit 0.22.0 auch schreibend, und seit 0.23.0 gebunden an
 > versionierte Verträge, deren Änderung betroffene Tasks automatisch auf
 > Neuplanung setzt. AP-2 gilt dabei Workflow-weit: Ein Task startet nur,
-> wenn seine Schreibbereiche mit keinem aktiven Task kollidieren. Auch AP-6
-> ist dort maschinell erzwungen — ein Task wird nur zurückgesetzt, wenn der
+> wenn seine Schreibbereiche mit keinem aktiven Task kollidieren. Auch der
+> Regelkreis statt blindem Retry ist dort maschinell erzwungen — ein Task
+> wird nur zurückgesetzt, wenn der
 > Grund eine neue Eingabe trägt; Umsortieren allein genügt nicht (19.10).

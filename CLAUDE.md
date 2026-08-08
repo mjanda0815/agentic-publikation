@@ -1,14 +1,18 @@
 # CLAUDE.md — Whitepaper-Modernisierung „Agentic Software Development"
 
-> **STATUS: Version 2.2** (06.08.2026). Kennzahlen und Roadmap-Status
-> stehen auf SoftwareFabrik-Release **0.21.0** (Roadmap-Stufen 0 und 1
-> umgesetzt: parallele, nicht-schreibende Analyseläufe hinter
-> deaktiviertem Feature-Flag).
+> **STATUS: Version 2.6** (08.08.2026). Kennzahlen und Roadmap-Status
+> stehen auf SoftwareFabrik-Release **0.27.0** (Roadmap-Stufen 0 bis 4
+> und 6 umgesetzt, von Stufe 5 die Koordinationsschicht — alles hinter
+> deaktiviertem Feature-Flag; verteilter Betrieb zurückgestellt).
+> Kennzahlen immer auf dem Release-**Tag** erheben, nicht im
+> Arbeitsverzeichnis — dort können uncommittete Stände liegen.
 > Vier Artefakte gehören zusammen und müssen bei jedem Versionssprung der
 > SoftwareFabrik gemeinsam nachgezogen werden: `main.tex` (Whitepaper),
 > `main-fabrik.tex` (Sonderdruck — entsteht ohne Zusatzarbeit aus derselben
 > Kapitelquelle), `carousel/carousel.tex` und `carousel/carousel-fabrik.tex`
-> (plus die zugehörigen `folientexte*.txt`).
+> (plus die zugehörigen `folientexte*.txt`). Ebenfalls mitziehen:
+> `CITATION.cff` und `.zenodo.json` (Version + Datum — blieben bei
+> 2.3–2.5 hängen und mussten in 2.6 nachgezogen werden).
 > Betroffen sind praktisch immer: die Kennzahlentabelle und der
 > Erhebungsvermerk in Kapitel 19, der Statuskasten, die Ausbaustufen-Tabelle
 > und der Umsetzungsstand-Kasten in 19.10, der Implementierungsstatus von

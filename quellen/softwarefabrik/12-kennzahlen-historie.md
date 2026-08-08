@@ -4,14 +4,14 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 411 | `find app/src/main/java -name '*.java'` |
-| Produktivcode | ~40.107 Zeilen | |
-| Testklassen | 279 | |
-| Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | |
-| Fachliche Slices | 29 (neu: `workflow`, `contract`) | |
+| Produktivklassen | 417 | `git ls-tree -r v0.27.0 app/src/main/java`, `*.java` |
+| Produktivcode | ~40.577 Zeilen | |
+| Testklassen | 281 | |
+| Test-zu-Produktiv-Verhältnis | ~0,67 Klassen | |
+| Fachliche Slices | 30 (neu: `kennzahlen`) | |
 | Datenbanktabellen | 58 | `CREATE TABLE` in Migrationen |
 | Flyway-Migrationen | 49 (V1–V51) | |
-| HTTP-Routen | 156 in 34 Controllern | Mapping-Annotationen |
+| HTTP-Routen | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit) |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
 | Wizard-Templates | 18 | |
@@ -21,10 +21,12 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 33 (0.1.0 – 0.25.0) | 2026-04-17 bis 2026-08-07 |
+| Releases | 35 (0.1.0 – 0.27.0) | 2026-04-17 bis 2026-08-08 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: `main` @ `3fe0db7` (ein Commit nach `v0.25.0`), 2026-08-08.*
+*Stand: Tag `v0.27.0` (= `main` @ `0920d2d`), 2026-08-08. Uncommittete
+Arbeitsstände im Arbeitsverzeichnis (V52, Abdeckungs-Klassen) sind bewusst
+nicht mitgezählt — sie gehören zu keinem Release.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -190,7 +192,7 @@ lassen sich nicht umschneiden.
 entsprechend ergaenzter Datenschutzerklaerung. Betrifft die Website, nicht
 die Plattform.
 
-### Phase 10 — Merge Intelligence und Koordinationsschicht (0.25.0 + Phase 5a)
+### Phase 10 — Merge Intelligence und Koordinationsschicht (0.25.0/0.26.0)
 
 **Stufe 4b** (V50): Konfliktklassifikation in sieben Arten
 (`MIGRATIONSNUMMER`, `BUILD_KONFIGURATION`, `SPERRDATEI`, `NUR_FORMATIERUNG`,
@@ -203,15 +205,39 @@ Eskalationsbericht mit vollstaendigem Kontext; die Einordnung wird am
 Queue-Eintrag festgehalten, weil der Konflikttext nur im Moment der Analyse
 existiert.
 
-**Stufe 5a** (V51): Worker-Registrierung mit Ablaufzeit und Herzschlag,
-Anspruch vor Seitenwirkung. Der verteilte Betrieb ueber mehrere Hosts ist
-ausdruecklich zurueckgestellt — die Roadmap-Voraussetzung *gemessener
-Bedarf* ist nicht erfuellt. Dieselbe Maschinerie schloss aber auf einem Host
-drei reale Luecken: Nachfolger starteten nicht automatisch, nach einem
-Neustart nahm niemand laufende Arbeit wieder auf, und `CLAIMED` stand seit
-Phase 1 im Zustandsmodell, ohne je gesetzt zu werden.
+**Stufe 5a** (Release 0.26.0, V51): Worker-Registrierung mit Ablaufzeit und
+Herzschlag, Anspruch vor Seitenwirkung. Der verteilte Betrieb ueber mehrere
+Hosts ist ausdruecklich zurueckgestellt — die Roadmap-Voraussetzung
+*gemessener Bedarf* ist nicht erfuellt. Dieselbe Maschinerie schloss aber
+auf einem Host drei reale Luecken: Nachfolger starteten nicht automatisch,
+nach einem Neustart nahm niemand laufende Arbeit wieder auf, und `CLAIMED`
+stand seit Phase 1 im Zustandsmodell, ohne je gesetzt zu werden.
+Anspruchsverfall ohne stillen Erfolg: Ein noch nicht gestarteter Task geht
+zurueck nach `READY`, ein bereits laufender nach `FAILED` (Workspace in
+unbekanntem Zustand; Weg zurueck ueber das Replanning aus 4a). Automatischer
+Versand freigewordener Nachfolger hinter eigenem Flag
+(`softwarefabrik.workflow.dispatcher.enabled`, Default aus) — automatisches
+Starten von Laeufen kostet Tokens.
 
-## 12.4 Offene Punkte (Stand 2026-08-08, nach 0.25.0)
+### Phase 11 — Produktivitaets- und Qualitaetsmessung (0.27.0)
+
+**Stufe 6:** neuer Blatt-Slice `kennzahlen` (`/kennzahlen`), 30. Fachlichkeit,
+**ohne eigenes Schema und ohne Migration** — alle Werte werden aus ohnehin
+entstehenden Daten abgeleitet (eine mitgefuehrte Kennzahl weicht frueher
+oder spaeter von dem ab, was sie beschreiben soll). Messbar: Time to
+Accepted Merge, Erstdurchlauf-Quote, Korrekturschleifen, Planaenderungen,
+Kosten je Workflow und je Child Run, Merge-Konfliktquote samt Verteilung
+nach Konfliktart, Freigabe-Wartezeit. Vier Messgroessen der Roadmap werden
+ausdruecklich NICHT gemessen, sondern als `Messluecke` mit Begruendung
+ausgewiesen: menschliche aktive Arbeitszeit, Testabdeckungsaenderung,
+entkommene Defekte und Rollbacks, Vergleich zur manuellen Umsetzung. Der
+Typ `Quote` unterscheidet „ohne Nenner = unbekannt" von 0 % (UI zeigt
+einen Strich). Behoben: `KennzahlenController` lag ausserhalb von `..web..`
+und brach `LayeringRulesTest` — nicht zu verwechseln mit dem eingefrorenen
+Ratchet fuer Altschulden, der gruen war und den Verstoss gar nicht sehen
+konnte.
+
+## 12.4 Offene Punkte (Stand 2026-08-08, nach 0.27.0)
 
 | Punkt | Art |
 |---|---|

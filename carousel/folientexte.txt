@@ -90,30 +90,32 @@ Quelle:   Abschnitt 19.1, Schritt 6 („Belegen"); Grafik abgeleitet aus
 ────────────────────────────────────────────────────────────────────────
 FOLIE 8 — Referenzimplementierung
 Kicker:   Referenzimplementierung
-Kernsatz: Vom Konzept zum System: 28 fachliche Slices, 33 Releases in
+Kernsatz: Vom Konzept zum System: 30 fachliche Slices, 35 Releases in
           vier Monaten.
-Text:     Rund 40.100 Zeilen Produktivcode, Testabdeckung als
+Text:     Rund 40.600 Zeilen Produktivcode, Testabdeckung als
           buildbrechendes Gate (Line ab 85 %, Branch ab 81 %). Die
           Architektur des Whitepapers war die Grundlage — das Kapitel
           beschreibt, was daraus geworden ist. Stand: 8. August 2026,
-          Release 0.25.0.
+          Release 0.27.0.
 Quelle:   Kapitel 19, „Kennzahlen der Codebasis" (Erhebungsstand
-          08.08.2026, main nach Release 0.25.0)
+          08.08.2026, Release-Stand 0.27.0)
 
 ────────────────────────────────────────────────────────────────────────
 FOLIE 9 — Der Stand
 Kicker:   Der Stand
 Kernsatz: Parallelität entsteht aus Abhängigkeiten — nicht aus
           Agentenrollen.
-Text:     Umgesetzt bis Release 0.25.0, hinter einem standardmäßig
+Text:     Umgesetzt bis Release 0.27.0, hinter einem standardmäßig
           deaktivierten Feature-Flag. Der Weg ging bewusst stufenweise:
           erst parallele Analyse ohne Schreibrechte, dann die Schreibrechte
           — gebunden an eine Besitzregel —, dann versionierte Verträge,
-          gegen die gearbeitet wird, dann begründungspflichtige
-          Planänderungen. Erst die Koordination beweisen, dann die Rechte
-          verteilen.
+          dann begründungspflichtige Planänderungen, dann Merge-Konflikte
+          als Diagnose statt Sammelkategorie, zuletzt Koordinationsschicht
+          und eine Messung, die ihre Lücken ausweist. Der verteilte
+          Betrieb bleibt zurückgestellt, solange der Bedarf nicht
+          gemessen ist.
 Quelle:   Management Summary; Abschnitt 19.10 inkl. Umsetzungsstand-Kasten
-          (Roadmap-Stufen 0 bis 4a, Releases 0.21.0 bis 0.25.0);
+          (Roadmap-Stufen 0 bis 6, Releases 0.21.0 bis 0.27.0);
           Prinzipien AP-2/AP-3
 Hinweis:  Das Feature-Flag steht auf aus — umgesetzt heisst nicht aktiv.
 

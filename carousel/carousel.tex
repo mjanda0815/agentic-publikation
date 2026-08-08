@@ -166,25 +166,25 @@
 % ============================================================================
 % FOLIE 8 — Referenzimplementierung
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", erhoben auf dem
-% Entwicklungsstand main nach Release 0.25.0 (8. August 2026):
-% 411 Produktivklassen, ~40.100 Zeilen Produktivcode, 29 fachliche Slices,
-% 33 Releases (0.1.0 bis 0.25.0, April–August 2026),
+% Release-Stand 0.27.0 (8. August 2026):
+% 417 Produktivklassen, ~40.600 Zeilen Produktivcode, 30 fachliche Slices,
+% 35 Releases (0.1.0 bis 0.27.0, April–August 2026),
 % Coverage-Gate Line >= 85 % / Branch >= 81 %
 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Referenzimplementierung}
-  \gross{Vom Konzept zum System: 29 fachliche Slices, 33 Releases in vier
+  \gross{Vom Konzept zum System: 30 fachliche Slices, 35 Releases in vier
     Monaten.}
   \vspace{48pt}
-  \erl{Rund 40.100 Zeilen Produktivcode, Testabdeckung als buildbrechendes
+  \erl{Rund 40.600 Zeilen Produktivcode, Testabdeckung als buildbrechendes
     Gate (Line ab 85 \%, Branch ab 81 \%). Die Architektur des Whitepapers
     war die Grundlage — das Kapitel beschreibt, was daraus geworden ist.
-    Stand: 8.\,August 2026, Release 0.25.0.}
+    Stand: 8.\,August 2026, Release 0.27.0.}
 \end{folie}
 
 % ============================================================================
-% FOLIE 9 — Stand und Roadmap (umgesetzt: parallele Analyse; geplant:
-% paralleles Schreiben)
+% FOLIE 9 — Stand und Roadmap (Stufen 0 bis 4 und 6 umgesetzt, von Stufe 5
+% die Koordinationsschicht; verteilter Betrieb zurückgestellt)
 % QUELLE: Management Summary, Absätze 4 und 5, und Abschnitt 19.10: Ein Feature wird
 % in einen Task Graph zerlegt; unabhängige Tasks laufen als isolierte Child
 % Runs; „Jeder Child Run besitzt einen eigenen Branch oder Worktree und bleibt
@@ -197,12 +197,13 @@
   \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
     Agentenrollen.}
   \vspace{48pt}
-  \erl{Umgesetzt bis Release 0.25.0, hinter einem standardmäßig
+  \erl{Umgesetzt bis Release 0.27.0, hinter einem standardmäßig
     deaktivierten Feature-Flag. Der Weg ging bewusst stufenweise: erst
     parallele Analyse ohne Schreibrechte, dann die Schreibrechte — gebunden
     an eine Besitzregel —, dann versionierte Verträge, dann
     begründungspflichtige Planänderungen, dann Merge-Konflikte als Diagnose
-    statt Sammelkategorie. Der verteilte Betrieb bleibt zurückgestellt,
+    statt Sammelkategorie, zuletzt Koordinationsschicht und eine Messung,
+    die ihre Lücken ausweist. Der verteilte Betrieb bleibt zurückgestellt,
     solange der Bedarf nicht gemessen ist.}
 \end{folie}
 

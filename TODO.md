@@ -357,6 +357,44 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       `git clone --depth 1 file://<repo> /tmp/klontest && make -C /tmp/klontest pdf fabrik karussell`.
       Am 06.08.2026 so verifiziert: 157 / 33 Seiten, 2 × 10 Folien, keine
       LaTeX-Fehler, keine offenen Zitate, alle 30 Abbildungen eingecheckt.
+- [x] **Version 2.6: Abgleich auf SoftwareFabrik 0.27.0** (08.08.2026):
+      0.26.0 machte die Koordinationsschicht (Stufe 5a) zum Release —
+      neu aufgenommen: Anspruch vor Seitenwirkung, Anspruchsverfall ohne
+      stillen Erfolg (READY/FAILED), automatischer Versand hinter eigenem
+      Flag (Default aus). 0.27.0 setzte Stufe 6 um (Kennzahlen-Slice ohne
+      eigenes Schema; vier Messgrößen ausdrücklich als Messlücke
+      ausgewiesen; Quote ohne Nenner = unbekannt, nicht null).
+      Kennzahlen auf Tag v0.27.0 erhoben (uncommittete Arbeitsstände im
+      Fabrik-Arbeitsverzeichnis bewusst ausgeklammert): 417 Klassen,
+      ~40.600 Zeilen, 281 Testklassen, 30 Slices, 58 Tabellen, 49
+      Migrationen, 35 Releases. Nachgezogen: Kap. 19 (Hinweis- und
+      Statuskasten, Kennzahlentabelle, 19.9, 19.10 samt Ausbaustufen-Zeile 6
+      und neuen Kastenabsätzen 5a/6), ADR-5/ADR-8, 22.3/22.4, Management
+      Summary, beide Karussells samt Folientexten, CLAUDE.md-Status
+      (stand noch auf 2.2), quellen/softwarefabrik. Nebenbefunde behoben:
+      veralteter „Stufen 3 bis 5 geplant"-Satz im Kopf von Kap. 19,
+      „28 Releases" in 19.9, „28 fachliche Slices" auf Folie 8 des ersten
+      Karussells, 0.24.0/0.25.0-Verwechslung in folientexte-fabrik.txt.
+      Zweitgutachter-Befunde eingearbeitet: Stand-Datum in 19.9 (stand auf
+      6.8.), AP-6-Fehlnummerierung an vier Stellen (AP-6 ist Human
+      Authority; „Regelkreis statt blindem Retry" jetzt ausgeschrieben —
+      die interne Fabrik-Roadmap nummeriert ihre Prinzipien anders als das
+      Whitepaper!), Feature-Flag-Vorbehalt im Fabrik-Karussell ergänzt,
+      Stufe-3-Zeile präzisiert (ohne Consumer-/Provider-Vertragstests),
+      Sperren-Absatz in 19.10 als 0.21.0 attribuiert und vor Stufe 6
+      gezogen, „geplant"-Reste in der Kap.-2-Tabelle, ADR-4-Statuszeile
+      (Lease-Zustand seit 0.22.0), Sonderdruck-Seitenzahl auf Folie 10
+      (33 → 37), CITATION.cff und .zenodo.json (standen noch auf 2.2).
+- [ ] Beim nächsten SoftwareFabrik-Abgleich zuerst prüfen: Im
+      Fabrik-Arbeitsverzeichnis liegt bereits die Nacharbeit zu Stufe 6
+      (V52, Abdeckungs-Klassen; Roadmap nennt dann nur noch drei
+      Messlücken, Testabdeckungsänderung wird messbar). Betroffen: 19.10
+      (Stufe-6-Absatz), 19.9, 15.6-Praxis-Check, beide Karussells.
+- [ ] Präzisierung prüfen (Kap. 19, Technologiestack-Absatz): Spring
+      Boot 4 autokonfiguriert laut Release Notes einen Jackson-3
+      `JsonMapper`-Bean; die Formulierung „primärer ObjectMapper" ggf.
+      auf `JsonMapper` schärfen (Primärquelle: Spring-Boot-4.0-Release-
+      Notes, Spring-Blog „Introducing Jackson 3 support", Stand 10/2025).
 - [ ] (Martin) Veröffentlichungsschritte: janda.io, optional Repo public +
       Release + Zenodo-DOI. Bei einem Repost nach dem nächsten
       SoftwareFabrik-Release die Version auf 2.2 heben statt 2.1 still zu

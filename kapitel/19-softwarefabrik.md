@@ -7,8 +7,8 @@
 > die *Agentic Software Factory* (Produktname: SoftwareFabrik), ein vom
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
-> sind aus dem Quellcode des Systems erhoben (Erhebungsstand 6. August 2026
-> auf dem Entwicklungsstand `main` nach Release 0.25.0), nicht
+> sind aus dem Quellcode des Systems erhoben (Erhebungsstand 8. August 2026
+> auf dem Release-Stand 0.27.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,13 +16,16 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert und in Betrieb, Stand 0.25.0) und
+> dort Beschriebene ist implementiert und in Betrieb, Stand 0.27.0) und
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
-> je Stufe ausgewiesen: Die Stufen 0 bis 2 sind hinter einem standardmäßig
-> deaktivierten Feature-Flag umgesetzt — seit 0.21.0 die parallele
-> *nicht-schreibende* Analyse, seit 0.22.0 auch parallel *schreibende*
-> Child Runs mit Pfad-Besitzmodell, Merge Queue und Integration Gate; die
-> Stufen 3 bis 5 sind als *geplant* gekennzeichnet). Der aktuelle Stand verwendet genau einen
+> je Stufe ausgewiesen: Die Stufen 0 bis 4 sowie die Kennzahlenmessung der
+> Stufe 6 sind hinter einem standardmäßig deaktivierten Feature-Flag
+> umgesetzt — seit 0.21.0 die parallele *nicht-schreibende* Analyse, seit
+> 0.22.0 auch parallel *schreibende* Child Runs mit Pfad-Besitzmodell,
+> Merge Queue und Integration Gate, seit 0.26.0 eine Koordinationsschicht
+> mit Worker-Registrierung und Task-Ansprüchen, seit 0.27.0 die
+> Produktivitäts- und Qualitätsmessung; von Stufe 5 ist allein der
+> verteilte Betrieb über mehrere Hosts bewusst zurückgestellt). Der aktuelle Stand verwendet genau einen
 > schreibenden Agenten je Run und mehrere unabhängige Read-only-Reviewer.
 > Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
 > gleichzeitig schreibende Agenten Konfliktkosten, unklare Zurechnung und
@@ -81,28 +84,30 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 411 |
-| Produktivcode | ~40.100 Zeilen |
-| Testklassen | 279 |
-| Fachliche Slices (Module) | 29 |
+| Produktivklassen (Java) | 417 |
+| Produktivcode | ~40.600 Zeilen |
+| Testklassen | 281 |
+| Fachliche Slices (Module) | 30 |
 | Datenbanktabellen | 58 |
 | Flyway-Migrationen | 49 |
 | Execution-Adapter | 10 |
 | Review-Adapter | 6 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 33 (0.1.0 bis 0.25.0, April–August 2026) |
+| Releases | 35 (0.1.0 bis 0.27.0, April–August 2026) |
 
-*Erhoben auf dem Entwicklungsstand `main` nach Release 0.25.0
-(8. August 2026). Der Zuwachs der Releases 0.21.0 bis 0.25.0 geht fast
-vollständig auf die Workflow-Ebene zurück: 0.21.0 brachte die
-Roadmap-Stufen 0 und 1 (Workflow-Aggregat, Task-Graph, Synthese;
-Migrationen V40–V43), 0.22.0 die Stufe 2 (Pfad-Besitzmodell mit
-Workspace-Leases, Merge Queue und Integration Gate; V44–V45), 0.23.0 die
-Stufe 3 mit einem eigenen `contract`-Slice (V46–V48), 0.24.0 die Stufe 4a
-(versionierte Planänderungen; V49) und 0.25.0 die Stufe 4b (Merge
-Intelligence; V50). Die 29. Fachlichkeit ist damit die Vertragsverwaltung
-(19.10).*
+*Erhoben auf dem Release-Stand 0.27.0 (8. August 2026). Der Zuwachs der
+Releases 0.21.0 bis 0.27.0 geht fast vollständig auf die Workflow-Ebene
+zurück: 0.21.0 brachte die Roadmap-Stufen 0 und 1 (Workflow-Aggregat,
+Task-Graph, Synthese; Migrationen V40–V43), 0.22.0 die Stufe 2
+(Pfad-Besitzmodell mit Workspace-Leases, Merge Queue und Integration Gate;
+V44–V45), 0.23.0 die Stufe 3 mit einem eigenen `contract`-Slice (V46–V48),
+0.24.0 die Stufe 4a (versionierte Planänderungen; V49), 0.25.0 die
+Stufe 4b (Merge Intelligence; V50), 0.26.0 die Koordinationsschicht der
+Stufe 5 (Worker und Task-Ansprüche; V51) und 0.27.0 die
+Kennzahlenmessung der Stufe 6 — bewusst ohne eigene Migration, weil alle
+Werte aus ohnehin entstehenden Daten abgeleitet werden. Die 30.
+Fachlichkeit ist damit die Kennzahlenmessung (19.10).*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
@@ -813,11 +818,11 @@ welches Modell, wessen Freigabe.
 Ein System, das seine offenen Punkte benennt und seine Architekturschuld
 zählt, ist der glaubwürdigere Beleg für die Thesen dieses Whitepapers als
 eines, das angeblich keine hat. Die wesentlichen offenen Punkte,
-Erhebungsstand 6. August 2026:
+Erhebungsstand 8. August 2026:
 
 | Punkt | Art |
 |---|---|
-| Verteilter Betrieb über mehrere Hosts (Netz-Transport, Orchestrierung); die Stufen 0 bis 4 sind umgesetzt, von Stufe 5 die Koordinationsschicht auf einem Host (Feature-Flag, Standard aus) | bewusst zurückgestellt — die Roadmap-Voraussetzung *gemessener Bedarf* ist nicht erfüllt (19.10) |
+| Verteilter Betrieb über mehrere Hosts (Netz-Transport, Orchestrierung); die Stufen 0 bis 4 und 6 sind umgesetzt, von Stufe 5 die Koordinationsschicht auf einem Host (Feature-Flag, Standard aus) | bewusst zurückgestellt — die Roadmap-Voraussetzung *gemessener Bedarf* ist nicht erfüllt (19.10) |
 | Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
@@ -826,9 +831,9 @@ Erhebungsstand 6. August 2026:
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.25.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
+| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.27.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
 
-Dazu vier Beobachtungen aus dem Entwicklungsverlauf (28 Releases in rund
+Dazu vier Beobachtungen aus dem Entwicklungsverlauf (35 Releases in rund
 vier Monaten), die sich verallgemeinern lassen:
 
 1. **Governance kam spät, wurde aber strukturbildend** — siehe 19.8 (3).
@@ -856,7 +861,11 @@ vier Monaten), die sich verallgemeinern lassen:
 
 Ausdrücklich **nicht** behauptet werden quantifizierte Produktivitäts- oder
 ROI-Zahlen aus dem Betrieb der Fabrik selbst — dafür existiert keine
-kontrollierte Messung. Die Modellrechnungen aus Kapitel 15 bleiben
+kontrollierte Messung. Daran ändert auch die mit 0.27.0 eingebaute
+Kennzahlenmessung (19.10) nichts: Sie misst Durchlaufzeiten, Quoten und
+Kosten der Workflows, weist aber gerade den Vergleich zur manuellen
+Umsetzung als Messlücke aus, weil diese Referenzgruppe im System nicht
+existiert. Die Modellrechnungen aus Kapitel 15 bleiben
 Modellrechnungen; was dieses Kapitel belegt, ist etwas anderes: dass die
 Referenzarchitektur als lauffähiges, betreibbares, nachweisfähiges System
 existiert.
@@ -876,13 +885,15 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 
 ## 19.10 Geplante Weiterentwicklung: vom Run zum parallelen Workflow *(Roadmap)*
 
-> **Status:** Die Roadmap-Stufen **0 bis 4 sind umgesetzt** — alles hinter
-> einem standardmäßig deaktivierten Feature-Flag: 0.21.0 brachte die
+> **Status:** Die Roadmap-Stufen **0 bis 4 und 6 sind umgesetzt** — alles
+> hinter einem standardmäßig deaktivierten Feature-Flag: 0.21.0 brachte die
 > parallele, nicht-schreibende Analyse, 0.22.0 die parallel
 > **schreibenden** Child Runs samt Pfad-Besitzmodell, Merge Queue und
 > Integration Gate, 0.23.0 die vertragsbasierte Parallelisierung mit
 > eigener Contract Registry, 0.24.0 die versionierten, attestierten
-> Planänderungen und 0.25.0 die Merge Intelligence (siehe den
+> Planänderungen, 0.25.0 die Merge Intelligence, 0.26.0 die
+> Koordinationsschicht mit Worker-Registrierung und Task-Ansprüchen und
+> 0.27.0 die Produktivitäts- und Qualitätsmessung (siehe den
 > Umsetzungsstand unten). Stufe 5 — der verteilte Worker-Pool — trägt als
 > einzige eine ausdrückliche Voraussetzung: gemessenen Bedarf. Sie ist
 > deshalb bewusst nur zur Hälfte umgesetzt. Grundlage ist die interne
@@ -906,7 +917,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Parallelität findet zwischen isolierten Tasks und Runs statt. Innerhalb
 > eines Workspace existiert genau ein schreibender Agent.
 
-![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.25.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
+![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.27.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
 
 ### Die tragenden Prinzipien
 
@@ -943,13 +954,14 @@ validiert den Gesamtstand. Die Leitregel:
 | 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig — **umgesetzt** (0.21.0) |
 | 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt ohne Änderungsrisiko, weil keine Schreibrechte | niedrig — **umgesetzt** (0.21.0) |
 | 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel — **umgesetzt** (0.22.0) |
-| 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch — **umgesetzt** (0.23.0) |
+| 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch — **umgesetzt** (0.23.0; ohne Consumer-/Provider-Vertragstests) |
 | 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch — **umgesetzt** (0.24.0/0.25.0) |
-| 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional — Koordinationsschicht umgesetzt, Netz-Transport bewusst zurückgestellt |
+| 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional — Koordinationsschicht **umgesetzt** (0.26.0), Netz-Transport bewusst zurückgestellt |
+| 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** (0.27.0) |
 
-> **Umsetzungsstand der Stufen 0 bis 5a (Releases 0.21.0 bis 0.25.0,
-> Stand 8. August 2026):** Die Stufen 0 bis 4 sind vollständig umgesetzt,
-> von Stufe 5 die Koordinationsschicht; das Feature-Flag steht
+> **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.27.0,
+> Stand 8. August 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
+> umgesetzt, von Stufe 5 die Koordinationsschicht; das Feature-Flag steht
 > standardmäßig auf **aus**, ohne es verhält sich die Plattform
 > unverändert.
 >
@@ -1039,7 +1051,8 @@ validiert den Gesamtstand. Die Leitregel:
 > warum; genau das wird aber gefragt, meist Wochen später. Jede Änderung
 > liegt nun unveränderlich als Revision vor, mit Grund, Pflichtbeschreibung,
 > Auslöser und betroffenen Tasks, attestiert über die Audit-Hashkette.
-> Bemerkenswert ist, wie hier AP-6 hart erzwungen wird: Ein Task lässt sich
+> Bemerkenswert ist, wie hier das Rule-Loop-Prinzip (Regelkreis statt
+> blindem Retry, Kapitel 2) hart erzwungen wird: Ein Task lässt sich
 > nur zurücksetzen, wenn der Grund eine **neue Eingabe** trägt. Von den acht
 > möglichen Gründen zählen sechs als neue Information — Vertragsänderung,
 > Merge-Konflikt, Build-Fehler, Reviewer-Befund, gescheiterter Task,
@@ -1074,16 +1087,16 @@ validiert den Gesamtstand. Die Leitregel:
 > vor dem Merge versucht, nicht statt seiner** — und bei
 > Migrationskollisionen sowie inhaltlichen Widersprüchen ausdrücklich nicht,
 > obwohl er technisch möglich wäre: Er verschöbe diese Konflikte nur, und
-> ein Versuch ohne neue Information ist genau der blinde Retry, den AP-6
-> verbietet. Und der **Eskalationsbericht** nennt Branch, Task, Capability,
+> ein Versuch ohne neue Information ist genau der blinde Retry, den das
+> Rule-Loop-Prinzip verbietet. Und der **Eskalationsbericht** nennt Branch, Task, Capability,
 > Konfliktart, Dateien, bisherige Versuche, das Ergebnis eines etwaigen
 > Rebase, die beteiligten Vertragsfassungen und eine Empfehlung — wer
 > eskaliert wird, hat den Vorgang nicht verfolgt, und „Konflikt in drei
 > Dateien" zwänge ihn, den halben Zustand selbst zu rekonstruieren.
 >
-> *Stufe 5a* ist der interessanteste Fall, weil hier eine Voraussetzung
-> ernst genommen wurde. Die Stufe gilt laut Roadmap nur bei **gemessenem
-> Bedarf** — und der besteht für verteilten Betrieb nicht: Die
+> *Stufe 5a* (Release 0.26.0) ist der interessanteste Fall, weil hier eine
+> Voraussetzung ernst genommen wurde. Die Stufe gilt laut Roadmap nur bei
+> **gemessenem Bedarf** — und der besteht für verteilten Betrieb nicht: Die
 > Workflow-Ebene läuft hinter einem standardmäßig deaktivierten Flag, und
 > ein Pool über mehrere Hosts brächte Zugangsdaten und Workspace-Zugriff auf
 > weitere Maschinen, also Angriffsfläche für eine Last, die es nicht gibt.
@@ -1098,20 +1111,58 @@ validiert den Gesamtstand. Die Leitregel:
 > abgemeldeter Worker gilt ausdrücklich nicht als verwaist, sonst liefe bei
 > jedem Herunterfahren eine Aufräumaktion.
 >
-> Eine Nebenwirkung verdient Erwähnung, weil sie ein Muster dieses Kapitels
+> Drei Entscheidungen dieser Stufe tragen die Handschrift des Kapitels.
+> **Anspruch vor Seitenwirkung:** Ein Worker beansprucht einen Task, bevor
+> Worktree und Child Run entstehen — zwei Prozesse können nicht beide
+> gewinnen; das ist die technische Form von „ein Task wird höchstens einmal
+> aktiv geschrieben". **Kein stiller Erfolg beim Verfall:** Verfällt der
+> Anspruch eines toten Workers auf einen Task, der noch nicht lief, geht
+> der Task zurück nach `READY` — es ist nichts geschehen. Lief er bereits,
+> geht er nach `FAILED`, weil der Workspace in unbekanntem Zustand sein
+> kann; ihn still zu wiederholen wäre genau der blinde Retry, den das
+> Rule-Loop-Prinzip verbietet — der Weg zurück führt über das
+> begründungspflichtige Replanning der Stufe 4a. Und der **automatische Versand** freigewordener
+> Nachfolger sitzt hinter einem eigenen Schalter mit Standardwert aus:
+> Automatisches Starten von Läufen kostet Tokens — das schaltet man
+> bewusst ein.
+>
+> Eine Nebenwirkung vom Beginn dieser Entwicklungslinie (Release 0.21.0)
+> verdient hier noch Erwähnung, weil sie ein Muster dieses Kapitels
 > bestätigt: Die Sperre gegen gleichzeitige Läufe war projektweit
 > formuliert, begründete sich in ihrem eigenen Kommentar aber mit dem
-> *geteilten Workspace*. Sie vergleicht jetzt den effektiven Workspace —
+> *geteilten Workspace*. Sie vergleicht seither den effektiven Workspace —
 > getrennte Worktrees dürfen parallel laufen, dasselbe Verzeichnis
 > weiterhin nicht. Die Regel wurde dadurch **präziser, nicht schwächer**.
+>
+> *Stufe 6* (Release 0.27.0) baut die begleitende Produktivitäts- und
+> Qualitätsmessung ein — als 30. Fachlichkeit, bewusst **ohne eigenes
+> Schema**: Alle Werte werden aus Daten abgeleitet, die ohnehin entstehen,
+> denn eine Kennzahl, die in einer eigenen Tabelle mitgeführt wird, weicht
+> früher oder später von dem ab, was sie beschreiben soll. Messbar sind
+> Time to Accepted Merge, Erstdurchlauf-Quote, Korrekturschleifen,
+> Planänderungen, Kosten je Workflow und je Child Run, die
+> Merge-Konfliktquote samt Verteilung nach Konfliktart (aus Stufe 4b) und
+> die Freigabe-Wartezeit. Vier Messgrößen der Roadmap werden ausdrücklich
+> **nicht** gemessen, sondern als Lücke mit Begründung ausgewiesen: die
+> menschliche aktive Arbeitszeit (die Plattform sieht, wie lange etwas
+> *wartete*, nicht, ob jemand daran *arbeitete* — beides gleichzusetzen
+> wäre die verlockendste und falscheste Kennzahl), die
+> Testabdeckungsänderung, entkommene Defekte und Rollbacks (die Plattform
+> endet beim Merge) und der Vergleich zur manuellen Umsetzung (diese
+> Referenzgruppe existiert im System nicht). Eine Kennzahl, die anders
+> heißt als das, was sie misst, ist schlimmer als eine fehlende — sie wird
+> geglaubt. Und eine Quote ohne Nenner ist *unbekannt*, nicht null: Ein
+> Workflow ohne einen einzigen Merge hat keine Konfliktquote von 0 % — er
+> hat gar keine; die Oberfläche zeigt dafür einen Strich.
 
-Begleitend ab der ersten Stufe ist eine **Produktivitäts- und
-Qualitätsmessung** vorgesehen (aktive menschliche Arbeitszeit, Time to
-Accepted Merge, First-Pass-Gate-Rate, Merge-Konfliktrate, Kosten je
-akzeptierter Änderung, entkommene Defekte) — im Vergleich zwischen
-manueller Umsetzung, Einzel-Run und parallelem Workflow. Erst diese Messung
-kann die Wirtschaftlichkeitshypothesen aus Kapitel 15 in belegte Aussagen
-verwandeln (vgl. 15.6).
+Die begleitende **Produktivitäts- und Qualitätsmessung** ist mit 0.27.0
+eingebaut (Stufe 6, siehe oben) — mit ausgewiesenen Lücken: Gemessen wird,
+was aus den Daten der Plattform ableitbar ist; die aktive menschliche
+Arbeitszeit, die Testabdeckungsänderung, entkommene Defekte und der
+Vergleich zur manuellen Umsetzung
+sind als Messlücken benannt statt geschätzt. Erst eine kontrollierte
+Vergleichsmessung kann die Wirtschaftlichkeitshypothesen aus Kapitel 15 in
+belegte Aussagen verwandeln (vgl. Kapitel 15.6).
 
 Ausdrückliche **Nicht-Ziele** der ersten Ausbaustufen: freie
 Agent-zu-Agent-Chats, unbegrenzte Parallelität, automatische
@@ -1134,10 +1185,13 @@ zusammenfassen:
 > hinzu, band sie aber an eine Besitzregel: Wessen Schreibbereiche sich
 > überschneiden, startet nicht. 0.23.0 gab den gemeinsamen Verträgen eine
 > versionierte Fassung, gegen die gearbeitet wird, 0.24.0 machte jede
-> Planänderung begründungspflichtig und attestierbar, und 0.25.0 verwandelte
-> den Sammelbegriff Merge-Konflikt in eine Diagnose mit Handlungsempfehlung.
-> Erst die Koordination beweisen, dann die Schreibrechte verteilen, dann die
-> Verträge festhalten, dann das Umplanen nachweisbar machen — und den
-> verteilten Betrieb erst, wenn der Bedarf gemessen ist. Von einem kontrollierten Agentenlauf zu parallelen
+> Planänderung begründungspflichtig und attestierbar, 0.25.0 verwandelte
+> den Sammelbegriff Merge-Konflikt in eine Diagnose mit Handlungsempfehlung,
+> 0.26.0 gab den Workflows eine Koordinationsschicht, die Ansprüche vor
+> Seitenwirkungen stellt, und 0.27.0 eine Messung, die ihre eigenen Lücken
+> ausweist. Erst die Koordination beweisen, dann die Schreibrechte
+> verteilen, dann die Verträge festhalten, dann das Umplanen nachweisbar
+> machen, dann messen — und den verteilten Betrieb erst, wenn der Bedarf
+> gemessen ist. Von einem kontrollierten Agentenlauf zu parallelen
 > Agenten-Workflows — ohne das Single-Writer-, Governance- und
 > Nachweisprinzip aufzugeben.

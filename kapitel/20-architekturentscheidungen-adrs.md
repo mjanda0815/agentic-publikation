@@ -561,20 +561,24 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > alleinige Wahrheit: Der autoritative Zustand liegt in der Datenbank, weil
 > ein Auditor Fragen stellt, die `git log` nicht beantwortet — welche Policy
 > galt, welches Modell arbeitete, wer hat freigegeben (19.8).
-> *Status (v2.2): bestätigt und fortgeschrieben — Workflow-, Task- und
-> Planungszustand liegen seit 0.21.0 autoritativ in der Datenbank; der
-> Lease-Zustand folgt mit Stufe 2 (ADR-8, 19.10).*
+> *Status (v2.6): bestätigt und fortgeschrieben — Workflow-, Task- und
+> Planungszustand liegen seit 0.21.0 autoritativ in der Datenbank, der
+> Lease-Zustand seit 0.22.0 (ADR-8, 19.10).*
 
 ## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — ersetzt ADR-1.
 > **Implementierungsstatus:** *Implemented* für die Roadmap-Stufen 0 bis 4
-> (Parent Workflow, Child Runs, Task-Graph, Synthese, parallel
+> und 6 (Parent Workflow, Child Runs, Task-Graph, Synthese, parallel
 > **schreibende** Child Runs mit Merge Queue und Integration Gate, Contract
-> Registry, versionierte Planrevisionen, Merge Intelligence), hinter
-> deaktiviertem Feature-Flag. Von Stufe 5 ist die Koordinationsschicht
-> umgesetzt; der verteilte Betrieb über mehrere Hosts ist zurückgestellt,
-> weil die Voraussetzung gemessenen Bedarfs nicht erfüllt ist (19.10).
+> Registry, versionierte Planrevisionen, Merge Intelligence, seit 0.27.0
+> die Produktivitäts- und Qualitätsmessung), hinter deaktiviertem
+> Feature-Flag. Von Stufe 5 ist die Koordinationsschicht seit 0.26.0
+> umgesetzt — Worker-Registrierung mit Herzschlag, Anspruch vor
+> Seitenwirkung, automatischer Versand hinter eigenem, standardmäßig
+> deaktiviertem Schalter; der verteilte Betrieb über mehrere Hosts ist
+> zurückgestellt, weil die Voraussetzung gemessenen Bedarfs nicht erfüllt
+> ist (19.10).
 
 ### Motivation / Kontext
 
@@ -666,7 +670,10 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 > **Implementierungsstatus:** *Implemented* für die Run-Ebene (19.6) und
 > seit 0.21.0 auch für Workflow- und Task-Zustände samt Planfreigabe und
 > Workflow-Budget; seit 0.22.0 zusätzlich für Workspace Leases und die
-> Merge Queue (19.10).
+> Merge Queue, seit 0.26.0 für Worker-Registrierung und Task-Ansprüche
+> (19.10). Die Kennzahlen aus 0.27.0 bestätigen die Entscheidung von der
+> anderen Seite: Sie halten bewusst *keinen* eigenen Zustand, sondern
+> werden vollständig aus dem vorhandenen Prozesszustand abgeleitet.
 
 ### Entscheidung
 
