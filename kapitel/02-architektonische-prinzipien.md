@@ -41,7 +41,7 @@ den neuen acht auf.*
 > Debt-Ratchet friert bestehende Altschuld gezählt ein, statt sie wachsen zu
 > lassen (19.2). AP-2 und AP-4 gelten bereits im Einzel-Run (ein
 > schreibender Agent je Lauf, mehrere unabhängige read-only Reviewer).
-> AP-3 ist seit Release 0.23.0 vollständig implementiert (Feature-Flag,
+> AP-3 ist seit Release 0.25.0 vollständig implementiert (Feature-Flag,
 > standardmäßig deaktiviert): Tasks werden aus einem Abhängigkeitsgraphen
 > parallelisiert und laufen in getrennten Arbeitsverzeichnissen — seit
 > 0.21.0 lesend, seit 0.22.0 auch schreibend, und seit 0.23.0 gebunden an

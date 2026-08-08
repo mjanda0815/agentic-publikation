@@ -4,13 +4,13 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 405 | `find app/src/main/java -name '*.java'` |
-| Produktivcode | ~38.981 Zeilen | |
-| Testklassen | 275 | |
+| Produktivklassen | 411 | `find app/src/main/java -name '*.java'` |
+| Produktivcode | ~40.107 Zeilen | |
+| Testklassen | 279 | |
 | Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | |
 | Fachliche Slices | 29 (neu: `workflow`, `contract`) | |
-| Datenbanktabellen | 57 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 47 (V1–V49) | |
+| Datenbanktabellen | 58 | `CREATE TABLE` in Migrationen |
+| Flyway-Migrationen | 49 (V1–V51) | |
 | HTTP-Routen | 156 in 34 Controllern | Mapping-Annotationen |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
@@ -21,10 +21,10 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 32 (0.1.0 – 0.24.0) | 2026-04-17 bis 2026-08-07 |
+| Releases | 33 (0.1.0 – 0.25.0) | 2026-04-17 bis 2026-08-07 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: `main` @ `8f7f174` (ein Commit nach `v0.24.0`), 2026-08-07.*
+*Stand: `main` @ `3fe0db7` (ein Commit nach `v0.25.0`), 2026-08-08.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -190,11 +190,32 @@ lassen sich nicht umschneiden.
 entsprechend ergaenzter Datenschutzerklaerung. Betrifft die Website, nicht
 die Plattform.
 
-## 12.4 Offene Punkte (Stand 2026-08-07, nach 0.24.0)
+### Phase 10 — Merge Intelligence und Koordinationsschicht (0.25.0 + Phase 5a)
+
+**Stufe 4b** (V50): Konfliktklassifikation in sieben Arten
+(`MIGRATIONSNUMMER`, `BUILD_KONFIGURATION`, `SPERRDATEI`, `NUR_FORMATIERUNG`,
+`VERALTETER_BRANCH`, `INHALTLICHER_WIDERSPRUCH`, `UNBEKANNT`), geprueft von
+der teuersten zur harmlosesten Art. Analyse nebenwirkungsfrei ueber
+`git merge-tree --write-tree`. Rebase nur, wenn die Einordnung ihn als
+aussichtsreich einstuft — bei Migrationsnummer und inhaltlichem Widerspruch
+bewusst nicht (waere ein Retry ohne neue Information, AP-6).
+Eskalationsbericht mit vollstaendigem Kontext; die Einordnung wird am
+Queue-Eintrag festgehalten, weil der Konflikttext nur im Moment der Analyse
+existiert.
+
+**Stufe 5a** (V51): Worker-Registrierung mit Ablaufzeit und Herzschlag,
+Anspruch vor Seitenwirkung. Der verteilte Betrieb ueber mehrere Hosts ist
+ausdruecklich zurueckgestellt — die Roadmap-Voraussetzung *gemessener
+Bedarf* ist nicht erfuellt. Dieselbe Maschinerie schloss aber auf einem Host
+drei reale Luecken: Nachfolger starteten nicht automatisch, nach einem
+Neustart nahm niemand laufende Arbeit wieder auf, und `CLAIMED` stand seit
+Phase 1 im Zustandsmodell, ohne je gesetzt zu werden.
+
+## 12.4 Offene Punkte (Stand 2026-08-08, nach 0.25.0)
 
 | Punkt | Art |
 |---|---|
-| Merge Intelligence (Stufe 4b) und verteilter Worker-Pool (Stufe 5); Stufen 0–3 und die Planaenderungen aus Stufe 4 sind umgesetzt | Roadmap |
+| Verteilter Betrieb ueber mehrere Hosts (Stufe 5b); Stufen 0–4 und die Koordinationsschicht aus 5a sind umgesetzt | bewusst zurueckgestellt, Voraussetzung nicht erfuellt |
 | Seat-scharfe Budget-Obergrenze (Auswertung je Seat existiert seit v0.17) | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end verifiziert | Verifikationslücke |
 | Vollständige Sandbox für Coding-Adapter | offen |

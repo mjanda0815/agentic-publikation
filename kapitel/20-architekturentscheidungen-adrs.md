@@ -568,12 +568,13 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 ## ADR-5: Hierarchische Orchestrierung mit Parent Workflow und Child Runs
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — ersetzt ADR-1.
-> **Implementierungsstatus:** *Implemented* für die Roadmap-Stufen 0 bis 3
-> und die Planänderungen aus Stufe 4 (Parent Workflow, Child Runs,
-> Task-Graph, Synthese, parallel **schreibende** Child Runs mit Merge Queue
-> und Integration Gate, Contract Registry, versionierte Planrevisionen),
-> hinter deaktiviertem Feature-Flag. Offen bleiben die Merge Intelligence
-> aus Stufe 4 und der verteilte Worker-Pool (19.10).
+> **Implementierungsstatus:** *Implemented* für die Roadmap-Stufen 0 bis 4
+> (Parent Workflow, Child Runs, Task-Graph, Synthese, parallel
+> **schreibende** Child Runs mit Merge Queue und Integration Gate, Contract
+> Registry, versionierte Planrevisionen, Merge Intelligence), hinter
+> deaktiviertem Feature-Flag. Von Stufe 5 ist die Koordinationsschicht
+> umgesetzt; der verteilte Betrieb über mehrere Hosts ist zurückgestellt,
+> weil die Voraussetzung gemessenen Bedarfs nicht erfüllt ist (19.10).
 
 ### Motivation / Kontext
 
@@ -639,7 +640,9 @@ bei unklarem Besitz gilt Fail Closed (AP-7).
 > **Implementierungsstatus:** *Implemented* seit Release 0.22.0: Das lokale
 > Gate je Child Run prüft eine Änderung für sich, das Integration Gate den
 > zusammengeführten Gesamtstand; nur über dessen Urteil erreicht ein
-> Workflow den Zustand `COMPLETED` (19.10).
+> Workflow den Zustand `COMPLETED`. Seit 0.25.0 ordnet eine
+> Konfliktklassifikation die Merge-Konflikte in sieben Arten ein und
+> entscheidet daran, ob ein Rebase überhaupt aussichtsreich ist (19.10).
 
 ### Entscheidung
 

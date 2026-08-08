@@ -1,6 +1,6 @@
 % carousel/carousel.tex — LinkedIn-Karussell zum Whitepaper
 % „Agentic Software Development — Enterprise Architecture with AI Agents"
-% (Martin Janda, Fassung 2.4, August 2026)
+% (Martin Janda, Fassung 2.5, August 2026)
 %
 % Separates Dokument; das Whitepaper (main.tex) bleibt unverändert.
 % Eine Seite = eine Folie, quadratisch 1080 bp × 1080 bp (1080×1080-px-Äquivalent).
@@ -166,20 +166,20 @@
 % ============================================================================
 % FOLIE 8 — Referenzimplementierung
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", erhoben auf dem
-% Entwicklungsstand main nach Release 0.24.0 (7. August 2026):
-% 405 Produktivklassen, ~39.000 Zeilen Produktivcode, 29 fachliche Slices,
-% 32 Releases (0.1.0 bis 0.24.0, April–August 2026),
+% Entwicklungsstand main nach Release 0.25.0 (8. August 2026):
+% 411 Produktivklassen, ~40.100 Zeilen Produktivcode, 29 fachliche Slices,
+% 33 Releases (0.1.0 bis 0.25.0, April–August 2026),
 % Coverage-Gate Line >= 85 % / Branch >= 81 %
 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Referenzimplementierung}
-  \gross{Vom Konzept zum System: 29 fachliche Slices, 32 Releases in vier
+  \gross{Vom Konzept zum System: 29 fachliche Slices, 33 Releases in vier
     Monaten.}
   \vspace{48pt}
-  \erl{Rund 36.600 Zeilen Produktivcode, Testabdeckung als buildbrechendes
+  \erl{Rund 40.100 Zeilen Produktivcode, Testabdeckung als buildbrechendes
     Gate (Line ab 85 \%, Branch ab 81 \%). Die Architektur des Whitepapers
     war die Grundlage — das Kapitel beschreibt, was daraus geworden ist.
-    Stand: 7.\,August 2026, Release 0.24.0.}
+    Stand: 8.\,August 2026, Release 0.25.0.}
 \end{folie}
 
 % ============================================================================
@@ -197,12 +197,13 @@
   \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
     Agentenrollen.}
   \vspace{48pt}
-  \erl{Umgesetzt bis Release 0.24.0, hinter einem standardmäßig
+  \erl{Umgesetzt bis Release 0.25.0, hinter einem standardmäßig
     deaktivierten Feature-Flag. Der Weg ging bewusst stufenweise: erst
     parallele Analyse ohne Schreibrechte, dann die Schreibrechte — gebunden
-    an eine Besitzregel —, dann versionierte Verträge, gegen die gearbeitet
-    wird, dann begründungspflichtige Planänderungen. Erst die Koordination
-    beweisen, dann die Rechte verteilen.}
+    an eine Besitzregel —, dann versionierte Verträge, dann
+    begründungspflichtige Planänderungen, dann Merge-Konflikte als Diagnose
+    statt Sammelkategorie. Der verteilte Betrieb bleibt zurückgestellt,
+    solange der Bedarf nicht gemessen ist.}
 \end{folie}
 
 % ============================================================================

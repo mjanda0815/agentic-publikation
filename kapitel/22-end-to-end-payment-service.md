@@ -44,7 +44,7 @@ inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 ## 22.3 Teil A — der implementierte Single-Run-Prozess
 
-> **Status: implementiert** (Referenzimplementierung, Stand 0.24.0; vgl.
+> **Status: implementiert** (Referenzimplementierung, Stand 0.25.0; vgl.
 > Kapitel 19.1–19.3).
 
 So läuft der Auftrag heute. Ein Lauf, ein schreibender Agent, mehrere
@@ -93,10 +93,10 @@ Bewertung, nicht bei der Erzeugung (AP-2, AP-4).
 > Worktrees, Planfreigabe, Synthese, Pfad-Besitzmodell, Merge Queue und
 > Integration Gate existiert seit Release 0.22.0, die **Contract Versions
 > mit Content-Hash** seit 0.23.0 — alles hinter einem standardmäßig
-> deaktivierten Feature-Flag. Über den heutigen Stand hinaus greift die
-> Skizze nur noch bei der **Konfliktklassifikation** vor (Roadmap-Stufe 4b).
-> Die Skizze ist insgesamt Pseudocode: Sie zeigt die Struktur, nicht die
-> Aufrufsyntax des Systems.
+> deaktivierten Feature-Flag; die **Konfliktklassifikation** kam mit 0.25.0
+> hinzu. Der hier skizzierte Ablauf ist damit vollständig durch
+> implementierte Mechanismen gedeckt. Die Skizze bleibt Pseudocode: Sie
+> zeigt die Struktur, nicht die Aufrufsyntax des Systems.
 
 Der Payment Service besteht aus Teilen, die sich sauber schneiden lassen —
 genau der Fall, für den die Workflow-Ebene gedacht ist:

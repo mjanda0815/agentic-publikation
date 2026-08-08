@@ -8,7 +8,7 @@
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
 > sind aus dem Quellcode des Systems erhoben (Erhebungsstand 6. August 2026
-> auf dem Entwicklungsstand `main` nach Release 0.24.0), nicht
+> auf dem Entwicklungsstand `main` nach Release 0.25.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,7 +16,7 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert und in Betrieb, Stand 0.24.0) und
+> dort Beschriebene ist implementiert und in Betrieb, Stand 0.25.0) und
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
 > je Stufe ausgewiesen: Die Stufen 0 bis 2 sind hinter einem standardmäßig
 > deaktivierten Feature-Flag umgesetzt — seit 0.21.0 die parallele
@@ -81,27 +81,28 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 405 |
-| Produktivcode | ~39.000 Zeilen |
-| Testklassen | 275 |
+| Produktivklassen (Java) | 411 |
+| Produktivcode | ~40.100 Zeilen |
+| Testklassen | 279 |
 | Fachliche Slices (Module) | 29 |
-| Datenbanktabellen | 57 |
-| Flyway-Migrationen | 47 |
+| Datenbanktabellen | 58 |
+| Flyway-Migrationen | 49 |
 | Execution-Adapter | 10 |
 | Review-Adapter | 6 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 32 (0.1.0 bis 0.24.0, April–August 2026) |
+| Releases | 33 (0.1.0 bis 0.25.0, April–August 2026) |
 
-*Erhoben auf dem Entwicklungsstand `main` nach Release 0.24.0
-(7. August 2026). Der Zuwachs der Releases 0.21.0 bis 0.24.0 geht fast
+*Erhoben auf dem Entwicklungsstand `main` nach Release 0.25.0
+(8. August 2026). Der Zuwachs der Releases 0.21.0 bis 0.25.0 geht fast
 vollständig auf die Workflow-Ebene zurück: 0.21.0 brachte die
 Roadmap-Stufen 0 und 1 (Workflow-Aggregat, Task-Graph, Synthese;
 Migrationen V40–V43), 0.22.0 die Stufe 2 (Pfad-Besitzmodell mit
 Workspace-Leases, Merge Queue und Integration Gate; V44–V45), 0.23.0 die
-Stufe 3 mit einem eigenen `contract`-Slice (V46–V48) und 0.24.0 die Stufe
-4a (versionierte Planänderungen; V49). Die 29. Fachlichkeit ist damit die
-Vertragsverwaltung (19.10).*
+Stufe 3 mit einem eigenen `contract`-Slice (V46–V48), 0.24.0 die Stufe 4a
+(versionierte Planänderungen; V49) und 0.25.0 die Stufe 4b (Merge
+Intelligence; V50). Die 29. Fachlichkeit ist damit die Vertragsverwaltung
+(19.10).*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
@@ -218,16 +219,16 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 57 Tabellen in 47 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
+![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 49 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
 V19–V25 Plan-/Build-Runs, Branches, Quality Gate (Lebenszyklus), V26–V33
 ausschließlich Mandanten- und Nachweisstrukturen (Mehrmandantenfähigkeit
 und Nachweisfähigkeit), V34–V39 Repository-Realität, Skills, Routinen, V40–V45 die
-Workflow-Ebene und damit die Parallelität, V46–V49 Vertragsregistrierung
-und versionierte Planänderungen. Auf diese Kurve kommt Abschnitt 19.8
-zurück.
+Workflow-Ebene und damit die Parallelität, V46–V51 Vertragsregistrierung,
+versionierte Planänderungen, Konfliktklassifikation und Worker-Ansprüche.
+Auf diese Kurve kommt Abschnitt 19.8 zurück.
 
 ## 19.3 Das Ausführungsmodell: der Run
 
@@ -816,7 +817,7 @@ Erhebungsstand 6. August 2026:
 
 | Punkt | Art |
 |---|---|
-| Merge Intelligence (Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline) und der verteilte Worker-Pool; die Stufen 0 bis 3 und die versionierten Planänderungen aus Stufe 4 sind umgesetzt (Feature-Flag, Standard aus) | Gegenstand der Roadmap-Stufen 4b und 5 (19.10) |
+| Verteilter Betrieb über mehrere Hosts (Netz-Transport, Orchestrierung); die Stufen 0 bis 4 sind umgesetzt, von Stufe 5 die Koordinationsschicht auf einem Host (Feature-Flag, Standard aus) | bewusst zurückgestellt — die Roadmap-Voraussetzung *gemessener Bedarf* ist nicht erfüllt (19.10) |
 | Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
@@ -825,7 +826,7 @@ Erhebungsstand 6. August 2026:
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.24.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
+| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.25.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
 
 Dazu vier Beobachtungen aus dem Entwicklungsverlauf (28 Releases in rund
 vier Monaten), die sich verallgemeinern lassen:
@@ -875,17 +876,18 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 
 ## 19.10 Geplante Weiterentwicklung: vom Run zum parallelen Workflow *(Roadmap)*
 
-> **Status:** Die Roadmap-Stufen **0 bis 3 sind umgesetzt**, Stufe 4 zur
-> Hälfte — alles hinter einem standardmäßig deaktivierten Feature-Flag:
-> 0.21.0 brachte die parallele, nicht-schreibende Analyse, 0.22.0 die
-> parallel **schreibenden** Child Runs samt Pfad-Besitzmodell, Merge Queue
-> und Integration Gate, 0.23.0 die vertragsbasierte Parallelisierung mit
-> eigener Contract Registry und 0.24.0 die versionierten, attestierten
-> Planänderungen (siehe den Umsetzungsstand unten). Offen bleiben die
-> Merge Intelligence aus Stufe 4 und der verteilte Worker-Pool (Stufe 5).
-> Grundlage ist die interne Entwicklungs-Roadmap der SoftwareFabrik;
-> Versions- und Phasenangaben der weiteren Stufen sind Vorschläge, keine
-> Zusagen.
+> **Status:** Die Roadmap-Stufen **0 bis 4 sind umgesetzt** — alles hinter
+> einem standardmäßig deaktivierten Feature-Flag: 0.21.0 brachte die
+> parallele, nicht-schreibende Analyse, 0.22.0 die parallel
+> **schreibenden** Child Runs samt Pfad-Besitzmodell, Merge Queue und
+> Integration Gate, 0.23.0 die vertragsbasierte Parallelisierung mit
+> eigener Contract Registry, 0.24.0 die versionierten, attestierten
+> Planänderungen und 0.25.0 die Merge Intelligence (siehe den
+> Umsetzungsstand unten). Stufe 5 — der verteilte Worker-Pool — trägt als
+> einzige eine ausdrückliche Voraussetzung: gemessenen Bedarf. Sie ist
+> deshalb bewusst nur zur Hälfte umgesetzt. Grundlage ist die interne
+> Entwicklungs-Roadmap der SoftwareFabrik; Versions- und Phasenangaben sind
+> Vorschläge, keine Zusagen.
 
 ### Das Zielbild
 
@@ -904,7 +906,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Parallelität findet zwischen isolierten Tasks und Runs statt. Innerhalb
 > eines Workspace existiert genau ein schreibender Agent.
 
-![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.24.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
+![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.25.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
 
 ### Die tragenden Prinzipien
 
@@ -942,13 +944,14 @@ validiert den Gesamtstand. Die Leitregel:
 | 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt ohne Änderungsrisiko, weil keine Schreibrechte | niedrig — **umgesetzt** (0.21.0) |
 | 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel — **umgesetzt** (0.22.0) |
 | 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch — **umgesetzt** (0.23.0) |
-| 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch — **teilweise umgesetzt** (0.24.0: Planänderungen) |
-| 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional |
+| 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch — **umgesetzt** (0.24.0/0.25.0) |
+| 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional — Koordinationsschicht umgesetzt, Netz-Transport bewusst zurückgestellt |
 
-> **Umsetzungsstand der Stufen 0 bis 4a (Releases 0.21.0 bis 0.24.0,
-> Stand 7. August 2026):** Die Stufen 0 bis 3 sind vollständig umgesetzt,
-> Stufe 4 zur Hälfte; das Feature-Flag steht standardmäßig auf **aus**,
-> ohne es verhält sich die Plattform unverändert.
+> **Umsetzungsstand der Stufen 0 bis 5a (Releases 0.21.0 bis 0.25.0,
+> Stand 8. August 2026):** Die Stufen 0 bis 4 sind vollständig umgesetzt,
+> von Stufe 5 die Koordinationsschicht; das Feature-Flag steht
+> standardmäßig auf **aus**, ohne es verhält sich die Plattform
+> unverändert.
 >
 > *Stufe 0* trägt die beiden Architekturentscheidungen — hierarchische
 > Orchestrierung mit der strikten Richtung Workflow führt zu Run, niemals
@@ -1055,6 +1058,46 @@ validiert den Gesamtstand. Die Leitregel:
 > Zuschnitt unter einem arbeitenden Agenten zu ändern, machte das Ergebnis
 > niemandem mehr zurechenbar.
 >
+> *Stufe 4b* (Release 0.25.0) macht aus „Merge-Konflikt" eine Diagnose. Bis
+> dahin war das eine Sammelkategorie: Zwei konkurrierende Migrationsnummern,
+> eine doppelt hinzugefügte Abhängigkeit und ein echter logischer
+> Widerspruch sehen für Git gleich aus, verlangen aber völlig verschiedene
+> Reaktionen. Sieben Konfliktarten werden nun unterschieden, geprüft von der
+> teuersten zur harmlosesten — eine Migrationskollision, die nebenbei einen
+> Formatierungskonflikt enthält, bleibt eine Migrationskollision; die
+> umgekehrte Einordnung lüde zum Überschreiben ein. Die Analyse läuft
+> nebenwirkungsfrei im Objektspeicher, ohne Arbeitsbaum und Index
+> anzufassen, damit der Integrations-Worktree währenddessen einen
+> definierten Stand behält.
+>
+> Zwei Details passen zur Argumentation dieses Kapitels. Ein **Rebase wird
+> vor dem Merge versucht, nicht statt seiner** — und bei
+> Migrationskollisionen sowie inhaltlichen Widersprüchen ausdrücklich nicht,
+> obwohl er technisch möglich wäre: Er verschöbe diese Konflikte nur, und
+> ein Versuch ohne neue Information ist genau der blinde Retry, den AP-6
+> verbietet. Und der **Eskalationsbericht** nennt Branch, Task, Capability,
+> Konfliktart, Dateien, bisherige Versuche, das Ergebnis eines etwaigen
+> Rebase, die beteiligten Vertragsfassungen und eine Empfehlung — wer
+> eskaliert wird, hat den Vorgang nicht verfolgt, und „Konflikt in drei
+> Dateien" zwänge ihn, den halben Zustand selbst zu rekonstruieren.
+>
+> *Stufe 5a* ist der interessanteste Fall, weil hier eine Voraussetzung
+> ernst genommen wurde. Die Stufe gilt laut Roadmap nur bei **gemessenem
+> Bedarf** — und der besteht für verteilten Betrieb nicht: Die
+> Workflow-Ebene läuft hinter einem standardmäßig deaktivierten Flag, und
+> ein Pool über mehrere Hosts brächte Zugangsdaten und Workspace-Zugriff auf
+> weitere Maschinen, also Angriffsfläche für eine Last, die es nicht gibt.
+> Der Netz-Transport ist deshalb bewusst zurückgestellt. Dieselbe Maschinerie
+> schloss aber auf *einem* Host eine reale Lücke: Tasks starteten nur auf
+> Knopfdruck, ein durch seinen Vorgänger frei gewordener Nachfolger blieb
+> liegen; nach einem Neustart nahm niemand laufende Arbeit wieder auf; und
+> der Reservierungszustand `CLAIMED` stand seit Stufe 1 im Zustandsmodell,
+> ohne je gesetzt zu werden. Worker-Registrierung mit Ablaufzeit und
+> Herzschlag schließt das — nach demselben Muster wie die Workspace Leases,
+> weil ein abgestürzter Prozess nichts mehr freigeben kann. Ein geordnet
+> abgemeldeter Worker gilt ausdrücklich nicht als verwaist, sonst liefe bei
+> jedem Herunterfahren eine Aufräumaktion.
+>
 > Eine Nebenwirkung verdient Erwähnung, weil sie ein Muster dieses Kapitels
 > bestätigt: Die Sperre gegen gleichzeitige Läufe war projektweit
 > formuliert, begründete sich in ihrem eigenen Kommentar aber mit dem
@@ -1090,9 +1133,11 @@ zusammenfassen:
 > analysieren parallel, keiner schreibt. 0.22.0 fügte die Schreibrechte
 > hinzu, band sie aber an eine Besitzregel: Wessen Schreibbereiche sich
 > überschneiden, startet nicht. 0.23.0 gab den gemeinsamen Verträgen eine
-> versionierte Fassung, gegen die gearbeitet wird, und 0.24.0 machte jede
-> Planänderung begründungspflichtig und attestierbar. Erst die Koordination
-> beweisen, dann die Schreibrechte verteilen, dann die Verträge festhalten,
-> dann das Umplanen selbst nachweisbar machen. Von einem kontrollierten Agentenlauf zu parallelen
+> versionierte Fassung, gegen die gearbeitet wird, 0.24.0 machte jede
+> Planänderung begründungspflichtig und attestierbar, und 0.25.0 verwandelte
+> den Sammelbegriff Merge-Konflikt in eine Diagnose mit Handlungsempfehlung.
+> Erst die Koordination beweisen, dann die Schreibrechte verteilen, dann die
+> Verträge festhalten, dann das Umplanen nachweisbar machen — und den
+> verteilten Betrieb erst, wenn der Bedarf gemessen ist. Von einem kontrollierten Agentenlauf zu parallelen
 > Agenten-Workflows — ohne das Single-Writer-, Governance- und
 > Nachweisprinzip aufzugeben.
