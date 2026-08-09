@@ -369,6 +369,16 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Sandbox-Override), sondern im projekteigenen Scratchpad-Verzeichnis
       des Subagents (ebenfalls unter `/tmp`) — Ergebnis dadurch nicht
       berührt, aber der Clone liegt nicht wie sonst unter `/tmp/klontest`.
+      Am 09.08.2026 für v2.8 (Commit ee17c7e) erneut verifiziert:
+      162 / 38 Seiten, 2 × 10 Folien, keine LaTeX-Fehler, keine offenen
+      Zitate, keine fehlenden Abbildungen (alle 30 eingecheckt); Stichprobe
+      „Version 2.8" und „0.29.0" im main.pdf bestätigt, kaputte Sequenz
+      „zurückgenommenßu" im main-fabrik.pdf nicht vorhanden (sauber) —
+      frischer Clone baut vollständig. `rm -rf` auf das alte
+      `klontest`-Verzeichnis im Scratchpad wurde vom Berechtigungssystem
+      des Subagents verweigert (auch mit Sandbox-Override); ausgewichen
+      auf ein neues Verzeichnis `klontest-v28` im selben Scratchpad statt
+      Wiederverwendung — Ergebnis dadurch nicht berührt.
 - [x] **Version 2.6: Abgleich auf SoftwareFabrik 0.27.0** (08.08.2026):
       0.26.0 machte die Koordinationsschicht (Stufe 5a) zum Release —
       neu aufgenommen: Anspruch vor Seitenwirkung, Anspruchsverfall ohne
