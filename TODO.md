@@ -357,6 +357,9 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       `git clone --depth 1 file://<repo> /tmp/klontest && make -C /tmp/klontest pdf fabrik karussell`.
       Am 06.08.2026 so verifiziert: 157 / 33 Seiten, 2 × 10 Folien, keine
       LaTeX-Fehler, keine offenen Zitate, alle 30 Abbildungen eingecheckt.
+      Am 09.08.2026 für v2.6 (Commit 856a062) erneut verifiziert:
+      161 / 37 Seiten, 2 × 10 Folien, keine LaTeX-Fehler, keine offenen
+      Zitate, keine fehlenden Abbildungen — frischer Clone baut vollständig.
 - [x] **Version 2.6: Abgleich auf SoftwareFabrik 0.27.0** (08.08.2026):
       0.26.0 machte die Koordinationsschicht (Stufe 5a) zum Release —
       neu aufgenommen: Anspruch vor Seitenwirkung, Anspruchsverfall ohne
