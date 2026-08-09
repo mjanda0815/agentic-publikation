@@ -576,7 +576,8 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > der Testabdeckungsänderung, seit 0.29.0 der Rollback-Erkennung, deren
 > Zuschnitt die strikte Richtung dieses ADR bestätigt: getrennte Anwender
 > für Run- und Workflow-Ebene, weil der `run`-Slice nichts von der
-> Workflow-Ebene wissen darf), hinter deaktiviertem
+> Workflow-Ebene wissen darf —, seit 0.30.0 der Eingriffs- und
+> Aufwandserfassung an der Freigabeentscheidung), hinter deaktiviertem
 > Feature-Flag. Von Stufe 5 ist die Koordinationsschicht seit 0.26.0
 > umgesetzt — Worker-Registrierung mit Herzschlag, Anspruch vor
 > Seitenwirkung, automatischer Versand hinter eigenem, standardmäßig
@@ -679,8 +680,9 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 > anderen Seite: Sie halten bewusst *keinen* eigenen Zustand, sondern
 > werden vollständig aus dem vorhandenen Prozesszustand abgeleitet — auch
 > die mit 0.28.0 nachgereichten Abdeckungswerte liegen am Build-Ergebnis
-> (V52) und die Rollback-Anker aus 0.29.0 an Merge-Queue-Eintrag und Run
-> (V53), nicht in einer eigenen Kennzahlentabelle.
+> (V52), die Rollback-Anker aus 0.29.0 an Merge-Queue-Eintrag und Run
+> (V53) und das erfragte Aufwandsfeld aus 0.30.0 an der
+> Freigabeentscheidung (V54), nicht in einer eigenen Kennzahlentabelle.
 
 ### Entscheidung
 

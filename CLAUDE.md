@@ -1,12 +1,16 @@
 # CLAUDE.md — Whitepaper-Modernisierung „Agentic Software Development"
 
-> **STATUS: Version 2.8** (09.08.2026). Kennzahlen und Roadmap-Status
-> stehen auf SoftwareFabrik-Release **0.29.0** (Roadmap-Stufen 0 bis 4
-> und 6 umgesetzt — einschließlich Testabdeckungsänderung (0.28.0) und
-> Rollback-Erkennung (0.29.0); drei Messlücken, davon „entkommene
-> Defekte" seit 0.29.0 auf die Defekt-Hälfte verengt —, von Stufe 5 die
+> **STATUS: Version 2.9** (10.08.2026). Kennzahlen und Roadmap-Status
+> stehen auf SoftwareFabrik-Release **0.30.0** (Roadmap-Stufen 0 bis 4
+> und 6 umgesetzt — einschließlich Testabdeckungsänderung (0.28.0),
+> Rollback-Erkennung (0.29.0) sowie Eingriffs- und Aufwandserfassung
+> (0.30.0); drei Messlücken, davon „entkommene Defekte" seit 0.29.0 auf
+> die Defekt-Hälfte verengt und „aktive Arbeitszeit" seit 0.30.0 in
+> messbare Eingriffe und erfragten Aufwand zerlegt —, von Stufe 5 die
 > Koordinationsschicht; alles hinter
-> deaktiviertem Feature-Flag; verteilter Betrieb zurückgestellt).
+> deaktiviertem Feature-Flag; Ausnahmen ohne Flag: Einzel-Run-Teil der
+> Rollback-Erkennung und Aufwandsfeld an der Run-Freigabe; verteilter
+> Betrieb zurückgestellt).
 > Kennzahlen immer auf dem Release-**Tag** erheben, nicht im
 > Arbeitsverzeichnis — dort können uncommittete Stände liegen.
 > Vier Artefakte gehören zusammen und müssen bei jedem Versionssprung der

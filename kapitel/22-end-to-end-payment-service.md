@@ -12,7 +12,9 @@ Dabei wird sichtbar, wie die zuvor eingeführten Konzepte – insbesondere Task 
 > wie er heute in der Referenzimplementierung stattfindet — ein
 > **Single-Run-Prozess** mit einem schreibenden Agenten und parallelen
 > Reviewern (Teil A, implementiert). Abschnitt 22.4 zeigt denselben Auftrag
-> als **parallelen Workflow** der Zielarchitektur (Teil B, geplant). Die
+> als **parallelen Workflow** (Teil B, umgesetzt hinter standardmäßig
+> deaktiviertem Feature-Flag; offen ist allein der verteilte Betrieb über
+> mehrere Hosts). Die
 > ursprüngliche v1.3-Skizze mit sieben gleichzeitig arbeitenden
 > Lebenszyklus-Agenten ist damit durch zwei präzise Varianten ersetzt: die,
 > die als Einzel-Run läuft, und die, die als paralleler Workflow läuft.
@@ -34,7 +36,7 @@ Validierung, Integration und Übergabe gliedern. Wie diese Phasen technisch
 ausgeführt werden, hängt vom Architekturstand ab: Die aktuelle
 Referenzimplementierung verarbeitet den Auftrag als **einen**
 zustandsbehafteten Run mit einem schreibenden Agenten und mehreren
-unabhängigen Reviewern. Die Zielarchitektur zerlegt denselben Auftrag in
+unabhängigen Reviewern. Die Workflow-Ebene zerlegt denselben Auftrag in
 einen Parent Workflow mit mehreren isolierten Child Runs. Die folgenden
 beiden Abschnitte stellen beide Varianten gegenüber.
 
@@ -44,7 +46,7 @@ inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 ## 22.3 Teil A — der implementierte Single-Run-Prozess
 
-> **Status: implementiert** (Referenzimplementierung, Stand 0.29.0; vgl.
+> **Status: implementiert** (Referenzimplementierung, Stand 0.30.0; vgl.
 > Kapitel 19.1–19.3).
 
 So läuft der Auftrag heute. Ein Lauf, ein schreibender Agent, mehrere

@@ -175,25 +175,31 @@ folgenden Messgrößen:
 - entkommene Defekte und Rollbacks
 - Reviewzeit und Testabdeckungsänderung
 
-> **Praxis-Check SoftwareFabrik (Stand 0.29.0):** Ein Teil dieses
+> **Praxis-Check SoftwareFabrik (Stand 0.30.0):** Ein Teil dieses
 > Messplans ist seit Release 0.27.0 implementiert (19.10, Stufe 6):
 > Time to Accepted Merge, Erstdurchlauf-Quote, Korrekturschleifen,
 > Planänderungen, Kosten je Workflow und Child Run, Merge-Konfliktquote
 > und Freigabe-Wartezeit werden aus ohnehin entstehenden Daten abgeleitet;
 > seit 0.28.0 kommt die Testabdeckungsänderung hinzu (in Prozentpunkten,
 > erst ab der zweiten Messung), seit 0.29.0 die Rollback-Quote aus der
-> Git-Historie (als Untergrenze ausgewiesen). Drei Messgrößen weist die
+> Git-Historie (als Untergrenze ausgewiesen), seit 0.30.0 die Eingriffe
+> und die Entscheiderzahl aus der Freigabeentscheidung — dazu ein
+> erfragter, freiwilliger Aufwand, der nur zusammen mit seiner
+> Abdeckungsquote ausgewiesen und nie mit Gemessenem verrechnet wird.
+> Drei Messgrößen weist die
 > Plattform bewusst als Lücke aus, statt sie zu
 > schätzen: die menschliche aktive Arbeitszeit (Wartezeit ist
-> nicht Arbeitszeit), entkommene Defekte (sauber messbar erst über eine
+> nicht Arbeitszeit; seit 0.30.0 in messbare Eingriffe und erfragten
+> Aufwand zerlegt — die Arbeitszeit selbst bleibt Lücke), entkommene
+> Defekte (sauber messbar erst über eine
 > Ticketsystem-Anbindung, die es nicht gibt; die Rollback-Hälfte dieser
 > Lücke ist seit 0.29.0 geschlossen) und der
 > Vergleich zur manuellen Umsetzung, dessen
 > Referenzgruppe im System nicht existiert. Gemessen wird überwiegend auf
 > der Workflow-Ebene, die weiterhin hinter dem standardmäßig deaktivierten
-> Feature-Flag steht; allein die Rollback-Erkennung greift zusätzlich am
-> Einzel-Run und damit ohne Flag. Der dreiarmige Vergleich
-> dieses Messplans steht damit weiter aus.
+> Feature-Flag steht; allein der Einzel-Run-Teil der Rollback-Erkennung
+> und das Aufwandsfeld an der Run-Freigabe wirken auch ohne Flag. Der
+> dreiarmige Vergleich dieses Messplans steht damit weiter aus.
 
 Bis diese Messungen vorliegen, sind alle Produktivitäts- und ROI-Aussagen
 dieses Kapitels als Hypothesen bzw. Modellrechnungen zu lesen (vgl. 15.4,

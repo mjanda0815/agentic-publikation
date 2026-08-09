@@ -484,6 +484,41 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Dazu S-Befunde: Feature-Flag-Pauschalen präzisiert (Einzel-Run-Teil
       der Rollback-Erkennung wirkt ohne Flag — Kopfkasten, 19.10, 15.6),
       widerlegte Begründung „Plattform endet beim Merge" in 15.6 ersetzt.
+- [x] **Version 2.9: Abgleich auf SoftwareFabrik 0.30.0** (10.08.2026):
+      0.30.0 zerlegte die Messlücke „menschliche aktive Arbeitszeit",
+      statt sie zu schließen: messbar sind jetzt Eingriffe und
+      Entscheiderzahl (aus der Freigabeentscheidung abgeleitet), erfragt
+      ein freiwilliges Aufwandsfeld an der Freigabe (V54, nullable,
+      Plausibilitätsgrenze eine Woche), immer mit Aufwandsabdeckung
+      („45 min aus 3/12") ausgewiesen und nie mit Gemessenem verrechnet;
+      bewusst nicht gebaut: Telemetrie/Leerlauf-Erkennung. Das Aufwandsfeld
+      wirkt (wie der Einzel-Run-Teil der Rollback-Erkennung) auch ohne
+      Workflow-Flag — die „einzige Ausnahme" von 2.8 ist damit ein Paar.
+      Die Schema-gegen-JPA-Mapping-Tests aus 0.30.0 sind bewusst nur als
+      ein Satz in 19.9 (4) aufgenommen (übersprungener Prüfschritt meldet
+      sich als Nicht-Bestehen); Details in quellen/softwarefabrik.
+      Kennzahlen auf Tag v0.30.0 (= e72a599): 421 Klassen, ~41.700 Zeilen,
+      291 Testklassen, 30 Slices, 58 Tabellen, 52 Migrationen (V1–V54),
+      161 Routen in 34 Controllern (unverändert), 38 Releases. Nachgezogen:
+      Kap. 19 (Kästen, Tabelle, Migrationsverlauf, abb26/abb31-
+      Unterschriften, 19.9, 19.10 samt neuem 0.30.0-Absatz), 15.6,
+      ADR-5/ADR-8, 22 (Kopfkasten/22.2/22.3), Management Summary, beide
+      Karussells samt Folientexten, CITATION.cff/.zenodo.json
+      (Seitenzahlen 162/38 → 164/39), CLAUDE.md-Status,
+      quellen/softwarefabrik.
+- [x] **Version 2.9, Zweitgutachter-Runde** (10.08.2026): Keine
+      Faktenfehler; eingearbeitet: „jede Freigabe" auf
+      „Freigabeentscheidung eines Laufs" präzisiert (die
+      Workflow-Planfreigabe erzeugt keine ApprovalDecision und trägt das
+      Feld nicht); zwei „geplant"-Reste entfernt (22-Kopfkasten „Teil B,
+      geplant" und die Überschrift 19.10 „Geplante Weiterentwicklung" —
+      beide widersprachen dem eigenen Statuskasten, seit 2.6
+      mitgeschleppt); Messlücken-Aufzählung in Listenreihenfolge; Kap.-15-
+      und Management-Summary-Flag-Ausnahmen vereinheitlicht;
+      folientexte-fabrik-Kopf ohne Fassungsnummer; ASCII-„Turn" in
+      Kap. 6 (einziger Fund außerhalb von Codeblöcken repo-weit);
+      Fabrik-Roadmap-„AP-6" in quellen/ ausgeschrieben
+      (Verwechslungsgefahr mit AP-6 des Whitepapers).
 - [ ] Prüfschritt ins Makefile aufnehmen: ASCII-`"` in kapitel/*.md
       außerhalb von Codeblöcken ablehnen (babel-Shorthand-Falle, siehe
       2.8-Befund B1).

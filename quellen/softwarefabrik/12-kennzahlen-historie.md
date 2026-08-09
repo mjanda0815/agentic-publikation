@@ -4,13 +4,13 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 421 | `git ls-tree -r v0.29.0 app/src/main/java`, `*.java` |
-| Produktivcode | ~41.553 Zeilen | |
-| Testklassen | 287 | |
-| Test-zu-Produktiv-Verhältnis | ~0,68 Klassen | |
-| Fachliche Slices | 30 (neu: `kennzahlen`) | |
+| Produktivklassen | 421 | `git ls-tree -r v0.30.0 app/src/main/java`, `*.java` |
+| Produktivcode | ~41.737 Zeilen | |
+| Testklassen | 291 | |
+| Test-zu-Produktiv-Verhältnis | ~0,69 Klassen | |
+| Fachliche Slices | 30 (seit 0.27.0: `kennzahlen`) | |
 | Datenbanktabellen | 58 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 51 (V1–V53) | |
+| Flyway-Migrationen | 52 (V1–V54) | |
 | HTTP-Routen | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit) |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
@@ -21,11 +21,11 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 37 (0.1.0 – 0.29.0) | 2026-04-17 bis 2026-08-09 |
+| Releases | 38 (0.1.0 – 0.30.0) | 2026-04-17 bis 2026-08-09 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: Tag `v0.29.0` (= `main` @ `dc83455`), 2026-08-09. Arbeitsverzeichnis
-sauber.*
+*Stand: Tag `v0.30.0` (= `e72a599`), 2026-08-09; erhoben auf dem Tag
+(am 2026-08-10), nicht im Arbeitsverzeichnis.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -182,7 +182,9 @@ Merge.
 fest (Grund, Pflichtbeschreibung, Ausloeser, betroffene Tasks), attestiert
 ueber `WORKFLOW_REPLANNED`. Von acht Replanning-Gruenden tragen sechs eine
 neue Eingabe; `ZUSCHNITT_GEAENDERT` und `REIHENFOLGE_GEAENDERT` nicht — ein
-Task wird nur bei neuer Eingabe zurueckgesetzt (AP-6 maschinell erzwungen).
+Task wird nur bei neuer Eingabe zurueckgesetzt (Regelkreis statt blindem
+Retry maschinell erzwungen — „Rule Loop" der Fabrik-Roadmap; nicht mit
+AP-6 des Whitepapers verwechseln, dort Human Authority).
 Aufteilen vererbt Abhaengigkeiten und Capability, aber nicht die
 Schreibbereiche; Zusammenfuehren erbt deren Vereinigung; laufende Tasks
 lassen sich nicht umschneiden.
@@ -199,7 +201,8 @@ die Plattform.
 der teuersten zur harmlosesten Art. Analyse nebenwirkungsfrei ueber
 `git merge-tree --write-tree`. Rebase nur, wenn die Einordnung ihn als
 aussichtsreich einstuft — bei Migrationsnummer und inhaltlichem Widerspruch
-bewusst nicht (waere ein Retry ohne neue Information, AP-6).
+bewusst nicht (waere ein Retry ohne neue Information — Rule-Loop-Prinzip
+der Fabrik-Roadmap).
 Eskalationsbericht mit vollstaendigem Kontext; die Einordnung wird am
 Queue-Eintrag festgehalten, weil der Konflikttext nur im Moment der Analyse
 existiert.
@@ -259,7 +262,28 @@ und `RUN_ZURUECKGENOMMEN`. Die Messluecke heisst nur noch „entkommene
 Defekte" — die Rollback-Haelfte ist geschlossen, die Defekt-Haelfte braeuchte
 eine Ticketsystem-Anbindung, die es nicht gibt.
 
-## 12.4 Offene Punkte (Stand 2026-08-09, nach 0.29.0)
+**0.30.0 — Arbeitszeit-Luecke zerlegt, Schema gegen Mapping geprueft** (V54):
+Die Messluecke „menschliche aktive Arbeitszeit" bleibt bestehen, ist aber
+zerlegt: *Eingriffe* (wie oft ein Mensch entscheiden musste) und
+*Entscheiderzahl* sind messbar, beide aus `ApprovalDecision` abgeleitet
+(ausgewiesen in `WorkflowKennzahlen`); dazu ein freiwilliges Aufwandsfeld an
+der Freigabe (`approval_decision.aufwand_minuten`, nullable, Check-Constraint
+max. 10080 Minuten = eine Woche) — erfragt, nicht gemessen, nie mit
+Abgeleitetem verrechnet, immer mit *Aufwandsabdeckung* („45 min aus 3/12")
+ausgewiesen. Das Feld steht auch an der Einzel-Run-Freigabe
+(`RunController.freigeben`) und wirkt dort ohne Workflow-Flag. Bewusst nicht
+gebaut: Interaktions-Telemetrie/Leerlauf-Erkennung. Ausserdem zwei neue
+Schema-Tests gegen die zweimal zugeschlagene Fehlerklasse
+Migration-vs.-JPA-Mapping (0.23.0: `CHAR(64)`/`varchar(64)`; V53:
+`merge_queue_eintrag` statt `merge_queue_entry`): `SchemaMappingTest`
+(Namensvergleich ohne Docker) und `SchemaValidierungTest` (Testcontainers,
+Flyway + Hibernate `validate`; Ueberspringen ohne Docker wird ausdruecklich
+als Nicht-Bestehen gemeldet); beide gegen absichtliche Abweichungen
+geprueft. Hintergrund: Die Suite laeuft gegen H2 mit `ddl-auto=create-drop`
+und abgeschaltetem Flyway und kann diese Fehlerklasse per Konstruktion nicht
+sehen. Website: Foliensatz zum Sonderdruck als Download (DE+EN).
+
+## 12.4 Offene Punkte (Stand 2026-08-10, nach 0.30.0)
 
 | Punkt | Art |
 |---|---|
