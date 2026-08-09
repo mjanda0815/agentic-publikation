@@ -7,8 +7,8 @@
 > die *Agentic Software Factory* (Produktname: SoftwareFabrik), ein vom
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
-> sind aus dem Quellcode des Systems erhoben (Erhebungsstand 8. August 2026
-> auf dem Release-Stand 0.27.0), nicht
+> sind aus dem Quellcode des Systems erhoben (Erhebungsstand 9. August 2026
+> auf dem Release-Stand 0.28.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,7 +16,7 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert und in Betrieb, Stand 0.27.0) und
+> dort Beschriebene ist implementiert und in Betrieb, Stand 0.28.0) und
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
 > je Stufe ausgewiesen: Die Stufen 0 bis 4 sowie die Kennzahlenmessung der
 > Stufe 6 sind hinter einem standardmäßig deaktivierten Feature-Flag
@@ -24,7 +24,8 @@
 > 0.22.0 auch parallel *schreibende* Child Runs mit Pfad-Besitzmodell,
 > Merge Queue und Integration Gate, seit 0.26.0 eine Koordinationsschicht
 > mit Worker-Registrierung und Task-Ansprüchen, seit 0.27.0 die
-> Produktivitäts- und Qualitätsmessung; von Stufe 5 ist allein der
+> Produktivitäts- und Qualitätsmessung (seit 0.28.0 einschließlich der
+> Testabdeckungsänderung); von Stufe 5 ist allein der
 > verteilte Betrieb über mehrere Hosts bewusst zurückgestellt). Der aktuelle Stand verwendet genau einen
 > schreibenden Agenten je Run und mehrere unabhängige Read-only-Reviewer.
 > Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
@@ -84,20 +85,20 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 417 |
-| Produktivcode | ~40.600 Zeilen |
-| Testklassen | 281 |
+| Produktivklassen (Java) | 419 |
+| Produktivcode | ~41.000 Zeilen |
+| Testklassen | 285 |
 | Fachliche Slices (Module) | 30 |
 | Datenbanktabellen | 58 |
-| Flyway-Migrationen | 49 |
+| Flyway-Migrationen | 50 |
 | Execution-Adapter | 10 |
 | Review-Adapter | 6 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 35 (0.1.0 bis 0.27.0, April–August 2026) |
+| Releases | 36 (0.1.0 bis 0.28.0, April–August 2026) |
 
-*Erhoben auf dem Release-Stand 0.27.0 (8. August 2026). Der Zuwachs der
-Releases 0.21.0 bis 0.27.0 geht fast vollständig auf die Workflow-Ebene
+*Erhoben auf dem Release-Stand 0.28.0 (9. August 2026). Der Zuwachs der
+Releases 0.21.0 bis 0.28.0 geht fast vollständig auf die Workflow-Ebene
 zurück: 0.21.0 brachte die Roadmap-Stufen 0 und 1 (Workflow-Aggregat,
 Task-Graph, Synthese; Migrationen V40–V43), 0.22.0 die Stufe 2
 (Pfad-Besitzmodell mit Workspace-Leases, Merge Queue und Integration Gate;
@@ -106,7 +107,9 @@ V44–V45), 0.23.0 die Stufe 3 mit einem eigenen `contract`-Slice (V46–V48),
 Stufe 4b (Merge Intelligence; V50), 0.26.0 die Koordinationsschicht der
 Stufe 5 (Worker und Task-Ansprüche; V51) und 0.27.0 die
 Kennzahlenmessung der Stufe 6 — bewusst ohne eigene Migration, weil alle
-Werte aus ohnehin entstehenden Daten abgeleitet werden. Die 30.
+Werte aus ohnehin entstehenden Daten abgeleitet werden. 0.28.0 reichte die
+Messung der Testabdeckungsänderung nach; deren Werte liegen am
+Build-Ergebnis (V52), nicht in einer eigenen Kennzahlentabelle. Die 30.
 Fachlichkeit ist damit die Kennzahlenmessung (19.10).*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
@@ -117,8 +120,10 @@ Service-Mesh. Die Komplexität des Systems liegt in der *Steuerung von
 Nichtdeterminismus*, nicht in der Infrastruktur, und genau dort soll sie
 auch bleiben. Zwei Umstellungspunkte des Sprungs auf Spring Boot 4 sind
 für Nachbauer erwähnenswert: Jackson 3 (`tools.jackson`) ist dort der
-primäre `ObjectMapper` — `com.fasterxml` ist nur noch transitiv verfügbar,
-neuer Serialisierungscode muss den Jackson-3-Bean injizieren oder einen
+Standard — auto-konfiguriert wird ein Jackson-3-`JsonMapper`; Jackson 2
+(`com.fasterxml`) bleibt zwar im Dependency-Management, wird aber nicht
+mehr auto-konfiguriert, neuer Serialisierungscode muss also den
+Jackson-3-Bean injizieren oder einen
 eigenen Mapper mitbringen —, und Signaturen über persistierte Daten
 brauchen auf Millisekunden trunkierte Zeitstempel (19.6).
 
@@ -156,12 +161,12 @@ verlangt, braucht eine Rolle, die sie liest.
 
 Die Fabrik ist ein **modularer Monolith**: ein Maven-Modul, ein
 Deployment-Artefakt, je ein sauber geschnittenes Paket (*Slice*) pro
-Bounded Context — insgesamt 29. Jeder Slice trägt seine eigenen Schichten (`domain`,
+Bounded Context — insgesamt 30. Jeder Slice trägt seine eigenen Schichten (`domain`,
 `application`, `web`, teils `infrastructure`); externe Systeme —
 Coding-CLIs, Git, Maven, Scanner, GitHub-API — sitzen ausschließlich hinter
 Ports.
 
-![Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails, observability, contract) konsumieren nur; die technischen Querschnittspakete common und web sind nicht dargestellt](abbildungen/out/abb23.pdf){width=100%}
+![Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails, observability, contract, kennzahlen) konsumieren nur; die technischen Querschnittspakete common und web sind nicht dargestellt](abbildungen/out/abb23.pdf){width=100%}
 
 Die Größenverteilung der Slices ist selbst eine Aussage: `run` und
 `execution` machen zusammen ein Viertel der Codebasis aus — die Steuerung
@@ -224,7 +229,7 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 49 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
+![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 50 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
@@ -232,7 +237,8 @@ V19–V25 Plan-/Build-Runs, Branches, Quality Gate (Lebenszyklus), V26–V33
 ausschließlich Mandanten- und Nachweisstrukturen (Mehrmandantenfähigkeit
 und Nachweisfähigkeit), V34–V39 Repository-Realität, Skills, Routinen, V40–V45 die
 Workflow-Ebene und damit die Parallelität, V46–V51 Vertragsregistrierung,
-versionierte Planänderungen, Konfliktklassifikation und Worker-Ansprüche.
+versionierte Planänderungen, Konfliktklassifikation und Worker-Ansprüche,
+V52 die Abdeckungswerte am Build-Ergebnis.
 Auf diese Kurve kommt Abschnitt 19.8 zurück.
 
 ## 19.3 Das Ausführungsmodell: der Run
@@ -818,7 +824,7 @@ welches Modell, wessen Freigabe.
 Ein System, das seine offenen Punkte benennt und seine Architekturschuld
 zählt, ist der glaubwürdigere Beleg für die Thesen dieses Whitepapers als
 eines, das angeblich keine hat. Die wesentlichen offenen Punkte,
-Erhebungsstand 8. August 2026:
+Erhebungsstand 9. August 2026:
 
 | Punkt | Art |
 |---|---|
@@ -831,9 +837,9 @@ Erhebungsstand 8. August 2026:
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.27.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
+| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.28.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
 
-Dazu vier Beobachtungen aus dem Entwicklungsverlauf (35 Releases in rund
+Dazu vier Beobachtungen aus dem Entwicklungsverlauf (36 Releases in rund
 vier Monaten), die sich verallgemeinern lassen:
 
 1. **Governance kam spät, wurde aber strukturbildend** — siehe 19.8 (3).
@@ -861,7 +867,8 @@ vier Monaten), die sich verallgemeinern lassen:
 
 Ausdrücklich **nicht** behauptet werden quantifizierte Produktivitäts- oder
 ROI-Zahlen aus dem Betrieb der Fabrik selbst — dafür existiert keine
-kontrollierte Messung. Daran ändert auch die mit 0.27.0 eingebaute
+kontrollierte Messung. Daran ändert auch die mit 0.27.0 eingebaute und
+mit 0.28.0 um die Testabdeckungsänderung erweiterte
 Kennzahlenmessung (19.10) nichts: Sie misst Durchlaufzeiten, Quoten und
 Kosten der Workflows, weist aber gerade den Vergleich zur manuellen
 Umsetzung als Messlücke aus, weil diese Referenzgruppe im System nicht
@@ -893,7 +900,8 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 > eigener Contract Registry, 0.24.0 die versionierten, attestierten
 > Planänderungen, 0.25.0 die Merge Intelligence, 0.26.0 die
 > Koordinationsschicht mit Worker-Registrierung und Task-Ansprüchen und
-> 0.27.0 die Produktivitäts- und Qualitätsmessung (siehe den
+> 0.27.0 die Produktivitäts- und Qualitätsmessung, um die 0.28.0 die
+> Testabdeckungsänderung ergänzte (siehe den
 > Umsetzungsstand unten). Stufe 5 — der verteilte Worker-Pool — trägt als
 > einzige eine ausdrückliche Voraussetzung: gemessenen Bedarf. Sie ist
 > deshalb bewusst nur zur Hälfte umgesetzt. Grundlage ist die interne
@@ -917,7 +925,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Parallelität findet zwischen isolierten Tasks und Runs statt. Innerhalb
 > eines Workspace existiert genau ein schreibender Agent.
 
-![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.27.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
+![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.28.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
 
 ### Die tragenden Prinzipien
 
@@ -957,10 +965,10 @@ validiert den Gesamtstand. Die Leitregel:
 | 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch — **umgesetzt** (0.23.0; ohne Consumer-/Provider-Vertragstests) |
 | 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch — **umgesetzt** (0.24.0/0.25.0) |
 | 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional — Koordinationsschicht **umgesetzt** (0.26.0), Netz-Transport bewusst zurückgestellt |
-| 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** (0.27.0) |
+| 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** (0.27.0/0.28.0) |
 
-> **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.27.0,
-> Stand 8. August 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
+> **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.28.0,
+> Stand 9. August 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
 > umgesetzt, von Stufe 5 die Koordinationsschicht; das Feature-Flag steht
 > standardmäßig auf **aus**, ohne es verhält sich die Plattform
 > unverändert.
@@ -1142,23 +1150,40 @@ validiert den Gesamtstand. Die Leitregel:
 > Time to Accepted Merge, Erstdurchlauf-Quote, Korrekturschleifen,
 > Planänderungen, Kosten je Workflow und je Child Run, die
 > Merge-Konfliktquote samt Verteilung nach Konfliktart (aus Stufe 4b) und
-> die Freigabe-Wartezeit. Vier Messgrößen der Roadmap werden ausdrücklich
-> **nicht** gemessen, sondern als Lücke mit Begründung ausgewiesen: die
+> die Freigabe-Wartezeit. Vier Messgrößen der Roadmap wies 0.27.0
+> ausdrücklich als Lücke mit Begründung aus, statt sie zu schätzen; drei
+> davon bestehen fort: die
 > menschliche aktive Arbeitszeit (die Plattform sieht, wie lange etwas
 > *wartete*, nicht, ob jemand daran *arbeitete* — beides gleichzusetzen
-> wäre die verlockendste und falscheste Kennzahl), die
-> Testabdeckungsänderung, entkommene Defekte und Rollbacks (die Plattform
-> endet beim Merge) und der Vergleich zur manuellen Umsetzung (diese
-> Referenzgruppe existiert im System nicht). Eine Kennzahl, die anders
+> wäre die verlockendste und falscheste Kennzahl), entkommene Defekte und
+> Rollbacks (die Plattform endet beim Merge) und der Vergleich zur
+> manuellen Umsetzung (diese Referenzgruppe existiert im System nicht).
+> Eine Kennzahl, die anders
 > heißt als das, was sie misst, ist schlimmer als eine fehlende — sie wird
 > geglaubt. Und eine Quote ohne Nenner ist *unbekannt*, nicht null: Ein
 > Workflow ohne einen einzigen Merge hat keine Konfliktquote von 0 % — er
 > hat gar keine; die Oberfläche zeigt dafür einen Strich.
+>
+> Die vierte Lücke aus 0.27.0 — die Testabdeckungsänderung — schloss
+> Release 0.28.0: Der Abdeckungsbericht liegt ohnehin im Workspace, er
+> wurde nur nie gelesen. Die Konstruktion trägt dieselbe Haltung wie der
+> Rest der Stufe. Gelesen wird in fester Formatreihenfolge (JaCoCo,
+> Cobertura, Istanbul), damit die Kennzahl nicht davon abhängt, welche
+> Datei das Dateisystem zuerst nennt. Die Abdeckungsspalten am
+> Build-Ergebnis (Migration V52)
+> sind bewusst **nullable** — ein Projekt ohne Abdeckungsbericht hat nicht
+> null Prozent Abdeckung, man weiß es schlicht nicht. Die Änderung wird in
+> **Prozentpunkten** ausgewiesen, nicht in Prozent, und erscheint erst ab
+> der zweiten Messung — eine Änderung gegenüber nichts ist keine Änderung.
+> Und der Bericht wird bewusst **ohne XML-Parser** gelesen: Er stammt aus
+> agentengeneriertem Code und ist damit nicht vertrauenswürdig; ein
+> vollwertiger Parser wäre eine XXE-Angriffsfläche direkt im Eingabepfad.
 
 Die begleitende **Produktivitäts- und Qualitätsmessung** ist mit 0.27.0
-eingebaut (Stufe 6, siehe oben) — mit ausgewiesenen Lücken: Gemessen wird,
+eingebaut und mit 0.28.0 um die Testabdeckungsänderung ergänzt (Stufe 6,
+siehe oben) — mit ausgewiesenen Lücken: Gemessen wird,
 was aus den Daten der Plattform ableitbar ist; die aktive menschliche
-Arbeitszeit, die Testabdeckungsänderung, entkommene Defekte und der
+Arbeitszeit, entkommene Defekte und der
 Vergleich zur manuellen Umsetzung
 sind als Messlücken benannt statt geschätzt. Erst eine kontrollierte
 Vergleichsmessung kann die Wirtschaftlichkeitshypothesen aus Kapitel 15 in

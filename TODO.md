@@ -388,11 +388,40 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       gezogen, „geplant"-Reste in der Kap.-2-Tabelle, ADR-4-Statuszeile
       (Lease-Zustand seit 0.22.0), Sonderdruck-Seitenzahl auf Folie 10
       (33 → 37), CITATION.cff und .zenodo.json (standen noch auf 2.2).
-- [ ] Beim nächsten SoftwareFabrik-Abgleich zuerst prüfen: Im
+- [x] Beim nächsten SoftwareFabrik-Abgleich zuerst prüfen: Im
       Fabrik-Arbeitsverzeichnis liegt bereits die Nacharbeit zu Stufe 6
       (V52, Abdeckungs-Klassen; Roadmap nennt dann nur noch drei
       Messlücken, Testabdeckungsänderung wird messbar). Betroffen: 19.10
       (Stufe-6-Absatz), 19.9, 15.6-Praxis-Check, beide Karussells.
+      → Mit Version 2.7 (Abgleich auf 0.28.0, 09.08.2026) erledigt.
+- [x] **Version 2.7: Abgleich auf SoftwareFabrik 0.28.0** (09.08.2026):
+      0.28.0 reichte die Testabdeckungsänderung der Stufe 6 nach (V52 am
+      Build-Ergebnis, Spalten bewusst nullable, Ausweis in Prozentpunkten
+      ab der zweiten Messung, Lesen ohne XML-Parser wegen XXE-Fläche im
+      agentengenerierten Code) — Messlücken 4 → 3, exakt wie im
+      vorstehenden Punkt vorgemerkt. Kennzahlen auf Tag v0.28.0: 419
+      Klassen, ~41.000 Zeilen, 285 Testklassen, 30 Slices, 58 Tabellen,
+      50 Migrationen (V1–V52), 36 Releases. Nachgezogen: Kap. 19 (Kästen,
+      Tabelle, 19.9, 19.10 samt neuem Nachreichungs-Absatz), 15.6, ADR-5/
+      ADR-8, 22.3, Management Summary, beide Karussells samt Folientexten,
+      CITATION.cff/.zenodo.json, CLAUDE.md-Status, quellen/softwarefabrik.
+      Abgleich lief erstmals automatisch an (Tag-Wächter auf das
+      Fabrik-Repo, parallel zur Release-Session). Zweitgutachter-Befunde
+      eingearbeitet: drei Zahlen-/Datums-Nachzügler (abb26-Unterschrift
+      49 → 50 Migrationen, „insgesamt 29" Slices in 19.2, Stand-Datum in
+      19.9), Stufe-6-Absatz chronologisch präzisiert (0.27.0 wies vier
+      Lücken aus, drei bestehen fort), abb23 um den kennzahlen-Slice
+      ergänzt, Karussell-Quellenzeilen, Feature-Flag-Halbsatz in 15.6,
+      Glossar-Altstände (Child Run/Workflow Task standen auf „geplant"),
+      Jackson-Formulierung präzisiert (JsonMapper auto-konfiguriert,
+      Jackson 2 bleibt im Dependency-Management; Primärquelle Spring-Boot-
+      4.0-Release-Notes).
+- [ ] Beim nächsten SoftwareFabrik-Abgleich zuerst prüfen: Im
+      Fabrik-Arbeitsverzeichnis liegt bereits V53__rollback_erkennung.sql
+      (unreleased). Damit fällt voraussichtlich die Messlücke „entkommene
+      Defekte und Rollbacks" (Messlücken 3 → 2). Betroffen: 19.9, 19.10
+      (Stufe-6-Absätze), 15.6-Praxis-Check, beide Karussells. Kennzahlen
+      weiterhin nur auf dem Release-Tag erheben.
 - [ ] Präzisierung prüfen (Kap. 19, Technologiestack-Absatz): Spring
       Boot 4 autokonfiguriert laut Release Notes einen Jackson-3
       `JsonMapper`-Bean; die Formulierung „primärer ObjectMapper" ggf.
@@ -409,3 +438,11 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
 - [ ] Später: Veröffentlichung (janda.io), optional public + Release + DOI
       (Zenodo-GitHub-Integration besteht bereits; archiviert nur öffentliche
       Releases).
+- [x] Zahlenabweichung Sonderdruck-Seitenzahl: Folie 10 des Fabrik-
+      Karussells nennt „37 Seiten" (Fundstelle:
+      `carousel/carousel-fabrik.tex` Zeile 220, wortgleich
+      `carousel/folientexte-fabrik.txt` Zeile 133). Der tatsächliche Build
+      von `build/main-fabrik.pdf` (Stand 09.08.2026, nach Ergänzung des
+      „kennzahlen"-Knotens in `abbildungen/abb23.mmd`) hat **38 Seiten**
+      (`pdfinfo`). → Auf 38 aktualisiert (Ursache: Kapitel 19 ist in 2.7
+      um die Nachreichungs-Absätze gewachsen), Karussell neu gebaut.

@@ -90,22 +90,22 @@ Quelle:   Abschnitt 19.1, Schritt 6 („Belegen"); Grafik abgeleitet aus
 ────────────────────────────────────────────────────────────────────────
 FOLIE 8 — Referenzimplementierung
 Kicker:   Referenzimplementierung
-Kernsatz: Vom Konzept zum System: 30 fachliche Slices, 35 Releases in
+Kernsatz: Vom Konzept zum System: 30 fachliche Slices, 36 Releases in
           vier Monaten.
-Text:     Rund 40.600 Zeilen Produktivcode, Testabdeckung als
+Text:     Rund 41.000 Zeilen Produktivcode, Testabdeckung als
           buildbrechendes Gate (Line ab 85 %, Branch ab 81 %). Die
           Architektur des Whitepapers war die Grundlage — das Kapitel
-          beschreibt, was daraus geworden ist. Stand: 8. August 2026,
-          Release 0.27.0.
+          beschreibt, was daraus geworden ist. Stand: 9. August 2026,
+          Release 0.28.0.
 Quelle:   Kapitel 19, „Kennzahlen der Codebasis" (Erhebungsstand
-          08.08.2026, Release-Stand 0.27.0)
+          09.08.2026, Release-Stand 0.28.0)
 
 ────────────────────────────────────────────────────────────────────────
 FOLIE 9 — Der Stand
 Kicker:   Der Stand
 Kernsatz: Parallelität entsteht aus Abhängigkeiten — nicht aus
           Agentenrollen.
-Text:     Umgesetzt bis Release 0.27.0, hinter einem standardmäßig
+Text:     Umgesetzt bis Release 0.28.0, hinter einem standardmäßig
           deaktivierten Feature-Flag. Der Weg ging bewusst stufenweise:
           erst parallele Analyse ohne Schreibrechte, dann die Schreibrechte
           — gebunden an eine Besitzregel —, dann versionierte Verträge,
@@ -115,7 +115,7 @@ Text:     Umgesetzt bis Release 0.27.0, hinter einem standardmäßig
           Betrieb bleibt zurückgestellt, solange der Bedarf nicht
           gemessen ist.
 Quelle:   Management Summary; Abschnitt 19.10 inkl. Umsetzungsstand-Kasten
-          (Roadmap-Stufen 0 bis 6, Releases 0.21.0 bis 0.27.0);
+          (Roadmap-Stufen 0 bis 6, Releases 0.21.0 bis 0.28.0);
           Prinzipien AP-2/AP-3
 Hinweis:  Das Feature-Flag steht auf aus — umgesetzt heisst nicht aktiv.
 

@@ -166,20 +166,20 @@
 % ============================================================================
 % FOLIE 8 — Referenzimplementierung
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", erhoben auf dem
-% Release-Stand 0.27.0 (8. August 2026):
-% 417 Produktivklassen, ~40.600 Zeilen Produktivcode, 30 fachliche Slices,
-% 35 Releases (0.1.0 bis 0.27.0, April–August 2026),
+% Release-Stand 0.28.0 (9. August 2026):
+% 419 Produktivklassen, ~41.000 Zeilen Produktivcode, 30 fachliche Slices,
+% 36 Releases (0.1.0 bis 0.28.0, April–August 2026),
 % Coverage-Gate Line >= 85 % / Branch >= 81 %
 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Referenzimplementierung}
-  \gross{Vom Konzept zum System: 30 fachliche Slices, 35 Releases in vier
+  \gross{Vom Konzept zum System: 30 fachliche Slices, 36 Releases in vier
     Monaten.}
   \vspace{48pt}
-  \erl{Rund 40.600 Zeilen Produktivcode, Testabdeckung als buildbrechendes
+  \erl{Rund 41.000 Zeilen Produktivcode, Testabdeckung als buildbrechendes
     Gate (Line ab 85 \%, Branch ab 81 \%). Die Architektur des Whitepapers
     war die Grundlage — das Kapitel beschreibt, was daraus geworden ist.
-    Stand: 8.\,August 2026, Release 0.27.0.}
+    Stand: 9.\,August 2026, Release 0.28.0.}
 \end{folie}
 
 % ============================================================================
@@ -197,7 +197,7 @@
   \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
     Agentenrollen.}
   \vspace{48pt}
-  \erl{Umgesetzt bis Release 0.27.0, hinter einem standardmäßig
+  \erl{Umgesetzt bis Release 0.28.0, hinter einem standardmäßig
     deaktivierten Feature-Flag. Der Weg ging bewusst stufenweise: erst
     parallele Analyse ohne Schreibrechte, dann die Schreibrechte — gebunden
     an eine Besitzregel —, dann versionierte Verträge, dann

@@ -1,6 +1,6 @@
 % carousel/carousel-fabrik.tex — LinkedIn-Karussell zum Sonderdruck
 % „Die SoftwareFabrik — von der Referenzarchitektur zum System"
-% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.6, August 2026)
+% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.7, August 2026)
 %
 % Zweites Karussell des Projekts. Das erste (carousel.tex) argumentiert aus
 % den Prinzipien des Whitepapers; dieses argumentiert aus der Erfahrung des
@@ -14,7 +14,7 @@
 % INHALTLICHE HERKUNFT: Jede Folie trägt einen Kommentar „QUELLE:" mit dem
 % Abschnitt aus kapitel/19-softwarefabrik.md. Es sind ausschließlich Aussagen
 % aus dem Kapitel übernommen, nichts erfunden. Alle Kennzahlen sind auf dem
-% Release-Stand 0.27.0 (8. August 2026).
+% Release-Stand 0.28.0 (9. August 2026).
 % Redigierbare Reintexte: carousel/folientexte-fabrik.txt
 
 \documentclass[12pt]{article}
@@ -45,18 +45,18 @@
 % ============================================================================
 % FOLIE 2 — Kennzahlen
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", Erhebungsstand
-% Release 0.27.0 (8. August 2026): 417 Produktivklassen, ~40.600 Zeilen
-% Produktivcode, 281 Testklassen, 30 fachliche Slices, 35 Releases
-% (0.1.0–0.27.0, April–August 2026), Coverage-Gate Line >= 85 % /
+% Release 0.28.0 (9. August 2026): 419 Produktivklassen, ~41.000 Zeilen
+% Produktivcode, 285 Testklassen, 30 fachliche Slices, 36 Releases
+% (0.1.0–0.28.0, April–August 2026), Coverage-Gate Line >= 85 % /
 % Branch >= 81 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Der Stand}
-  \gross{30 fachliche Slices, 35 Releases, vier Monate.}
+  \gross{30 fachliche Slices, 36 Releases, vier Monate.}
   \vspace{48pt}
-  \erl{Rund 40.600 Zeilen Produktivcode und 281 Testklassen; die
+  \erl{Rund 41.000 Zeilen Produktivcode und 285 Testklassen; die
     Testabdeckung bricht den Build, wenn sie unter die Schwelle fällt
     (Line 85 \%, Branch 81 \%). Java 25, Spring Boot 4,
-    ein Deployment-Artefakt. Stand: 8.\,August 2026, Release 0.27.0.}
+    ein Deployment-Artefakt. Stand: 9.\,August 2026, Release 0.28.0.}
 \end{folie}
 
 % ============================================================================
@@ -179,7 +179,7 @@
 % ============================================================================
 % FOLIE 9 — Naechster Schritt
 % QUELLE: Abschnitt 19.10 mit dem Umsetzungsstand-Kasten (Releases 0.21.0
-% bis 0.27.0, Stand 8. August 2026): Die Stufen 0 bis 4 und 6 sind
+% bis 0.28.0, Stand 9. August 2026): Die Stufen 0 bis 4 und 6 sind
 % umgesetzt, von Stufe 5 die Koordinationsschicht (0.26.0). Seit 0.22.0
 % duerfen Tasks Produktivcode aendern; ein Task erklaert
 % OWNED/READ_ONLY/PROTECTED-Pfadbereiche und startet nur, wenn sie sich mit
@@ -217,7 +217,7 @@
   \vspace{64pt}
   \erl{\textcolor{tinte}{\bfseries Sonderdruck und vollständiges Whitepaper:
     Download-Link im Beitrag}\\
-    janda.io \textperiodcentered{} 37 Seiten, Stand: August 2026. Alle
+    janda.io \textperiodcentered{} 38 Seiten, Stand: August 2026. Alle
     Angaben aus dem Quellcode erhoben.}
 \end{folie}
 

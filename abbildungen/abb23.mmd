@@ -17,7 +17,7 @@ flowchart LR
     end
     subgraph LEAF["Blatt-Slices<br/>(konsumieren nur)"]
         direction TB
-        PROV["provenance"] ~~~ EXP["export"] ~~~ GR["guardrails"] ~~~ OBS["observability"] ~~~ CTR["contract"]
+        PROV["provenance"] ~~~ EXP["export"] ~~~ GR["guardrails"] ~~~ OBS["observability"] ~~~ CTR["contract"] ~~~ KZ["kennzahlen"]
     end
     subgraph WFL["Workflow-Ebene<br/>(neu, Feature-Flag aus)"]
         direction TB

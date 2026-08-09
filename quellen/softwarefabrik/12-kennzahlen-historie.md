@@ -4,13 +4,13 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 417 | `git ls-tree -r v0.27.0 app/src/main/java`, `*.java` |
-| Produktivcode | ~40.577 Zeilen | |
-| Testklassen | 281 | |
-| Test-zu-Produktiv-Verhältnis | ~0,67 Klassen | |
+| Produktivklassen | 419 | `git ls-tree -r v0.28.0 app/src/main/java`, `*.java` |
+| Produktivcode | ~41.035 Zeilen | |
+| Testklassen | 285 | |
+| Test-zu-Produktiv-Verhältnis | ~0,68 Klassen | |
 | Fachliche Slices | 30 (neu: `kennzahlen`) | |
 | Datenbanktabellen | 58 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 49 (V1–V51) | |
+| Flyway-Migrationen | 50 (V1–V52) | |
 | HTTP-Routen | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit) |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
@@ -21,12 +21,12 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 35 (0.1.0 – 0.27.0) | 2026-04-17 bis 2026-08-08 |
+| Releases | 36 (0.1.0 – 0.28.0) | 2026-04-17 bis 2026-08-09 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: Tag `v0.27.0` (= `main` @ `0920d2d`), 2026-08-08. Uncommittete
-Arbeitsstände im Arbeitsverzeichnis (V52, Abdeckungs-Klassen) sind bewusst
-nicht mitgezählt — sie gehören zu keinem Release.*
+*Stand: Tag `v0.28.0` (= `main` @ `8b01a57`), 2026-08-09. Arbeitsverzeichnis
+sauber; die bei 0.27.0 noch uncommitteten Abdeckungs-Klassen und V52 sind
+mit 0.28.0 released und jetzt mitgezählt.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -237,7 +237,17 @@ und brach `LayeringRulesTest` — nicht zu verwechseln mit dem eingefrorenen
 Ratchet fuer Altschulden, der gruen war und den Verstoss gar nicht sehen
 konnte.
 
-## 12.4 Offene Punkte (Stand 2026-08-08, nach 0.27.0)
+**0.28.0 — Testabdeckungsaenderung nachgereicht** (V52): `AbdeckungsLeser`
+liest den ohnehin im Workspace liegenden Abdeckungsbericht nach jedem Build
+in drei Formaten (JaCoCo, Cobertura, Istanbul; feste Pruefreihenfolge,
+damit die Kennzahl nicht vom Dateisystem abhaengt). Zeilen-/Zweigabdeckung
+samt Quelle am `build_result`; Spalten bewusst nullable (kein Bericht heisst
+unbekannt, nicht 0 %). Ausweis in Prozentpunkten, erst ab der zweiten
+Messung. Bewusst ohne XML-Parser gelesen — agentengenerierter Code ist
+nicht vertrauenswuerdig, ein Parser waere eine XXE-Angriffsflaeche im
+Eingabepfad. Messluecken damit 4 → 3.
+
+## 12.4 Offene Punkte (Stand 2026-08-09, nach 0.28.0)
 
 | Punkt | Art |
 |---|---|

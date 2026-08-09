@@ -9,7 +9,7 @@
 | Blatt-Slice | Modul, das nur konsumiert und von keinem anderen konsumiert wird — Entwurfsmuster zur Zyklenvermeidung (Kap. 19). |
 | BPMN | Business Process Model and Notation – Geschäftsprozessmodellierung. |
 | Build-Run | Lauf, der ein Backlog-Element umsetzt: Code auf isoliertem Branch, validiert, gemergt oder als Pull Request (Kap. 19). |
-| Child Run | Ein regulärer Run, der einem Workflow Task zugeordnet ist (seit 0.21.0 für nicht-schreibende Tasks implementiert, Feature-Flag; volle Ausprägung geplant — Kap. 19.10). |
+| Child Run | Ein regulärer Run, der einem Workflow Task zugeordnet ist (seit 0.21.0 für nicht-schreibende, seit 0.22.0 auch für schreibende Tasks implementiert, Feature-Flag — Kap. 19.10). |
 | CI/CD | Continuous Integration / Deployment – Automatisierte Pipeline. |
 | Claim Verification | Prüfung der Aussagen eines Agenten über seine eigene Arbeit, etwa „alle Tests bestehen“ (in v1.3: Halluzinationserkennung; Kap. 12, 19.5). |
 | Contract Version | Versionierter bzw. gehashter gemeinsamer Vertrag, gegen den mehrere Child Runs arbeiten (seit 0.23.0 implementiert, Feature-Flag; Kap. 19.10). |
@@ -48,5 +48,5 @@
 | Testcontainers | Docker-basierte Integrationstests für Java. |
 | Warum-Trace | Rekonstruktion je Lauf, welche Policy, welches Modell und welche Freigaben gewirkt haben (Kap. 19). |
 | Workflow | Übergeordnete, zustandsbehaftete Ausführungseinheit für ein Feature oder Vorhaben (seit 0.21.0 implementiert, Feature-Flag; Kap. 19.10). |
-| Workflow Task | Abgegrenzte Arbeitseinheit mit Abhängigkeiten, Capability, Schreibbereichen und optionalem Child Run (seit 0.21.0 implementiert, Feature-Flag; Schreibbereiche erst mit der vollen Ausprägung — Kap. 19.10). |
+| Workflow Task | Abgegrenzte Arbeitseinheit mit Abhängigkeiten, Capability, Schreibbereichen und optionalem Child Run (seit 0.21.0 implementiert, die Schreibbereiche seit 0.22.0; Feature-Flag — Kap. 19.10). |
 | Workspace Lease | Zeitlich begrenzte Reservierung von Pfaden, Modulen oder exklusiven Ressourcen (seit 0.22.0 implementiert, Feature-Flag; Kap. 19.10). |

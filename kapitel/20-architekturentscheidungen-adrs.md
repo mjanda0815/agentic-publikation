@@ -572,7 +572,8 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > und 6 (Parent Workflow, Child Runs, Task-Graph, Synthese, parallel
 > **schreibende** Child Runs mit Merge Queue und Integration Gate, Contract
 > Registry, versionierte Planrevisionen, Merge Intelligence, seit 0.27.0
-> die Produktivitäts- und Qualitätsmessung), hinter deaktiviertem
+> die Produktivitäts- und Qualitätsmessung — seit 0.28.0 einschließlich
+> der Testabdeckungsänderung), hinter deaktiviertem
 > Feature-Flag. Von Stufe 5 ist die Koordinationsschicht seit 0.26.0
 > umgesetzt — Worker-Registrierung mit Herzschlag, Anspruch vor
 > Seitenwirkung, automatischer Versand hinter eigenem, standardmäßig
@@ -673,7 +674,9 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 > Merge Queue, seit 0.26.0 für Worker-Registrierung und Task-Ansprüche
 > (19.10). Die Kennzahlen aus 0.27.0 bestätigen die Entscheidung von der
 > anderen Seite: Sie halten bewusst *keinen* eigenen Zustand, sondern
-> werden vollständig aus dem vorhandenen Prozesszustand abgeleitet.
+> werden vollständig aus dem vorhandenen Prozesszustand abgeleitet — auch
+> die mit 0.28.0 nachgereichten Abdeckungswerte liegen am Build-Ergebnis
+> (V52), nicht in einer eigenen Kennzahlentabelle.
 
 ### Entscheidung
 

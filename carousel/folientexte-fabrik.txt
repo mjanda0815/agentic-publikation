@@ -10,7 +10,7 @@ Abgrenzung zum ersten Karussell (carousel.tex): Jenes argumentiert aus den
 Prinzipien des Whitepapers, dieses aus der Erfahrung des gebauten Systems —
 im Kern die vier Punkte, an denen die Praxis das Konzept korrigiert hat.
 
-Alle Kennzahlen: Erhebungsstand Release 0.27.0 (8. August 2026).
+Alle Kennzahlen: Erhebungsstand Release 0.28.0 (9. August 2026).
 Format: 10 Folien, quadratisch 1080 × 1080 bp.
 
 
@@ -27,11 +27,11 @@ Quelle:   Kapiteleinstieg 19
 ────────────────────────────────────────────────────────────────────────
 FOLIE 2 — Der Stand
 Kicker:   Der Stand
-Kernsatz: 30 fachliche Slices, 35 Releases, vier Monate.
-Text:     Rund 40.600 Zeilen Produktivcode und 281 Testklassen; die
+Kernsatz: 30 fachliche Slices, 36 Releases, vier Monate.
+Text:     Rund 41.000 Zeilen Produktivcode und 285 Testklassen; die
           Testabdeckung bricht den Build, wenn sie fällt. Java 25,
-          Spring Boot 4, ein Deployment-Artefakt. Stand: 8. August 2026,
-          Release 0.27.0.
+          Spring Boot 4, ein Deployment-Artefakt. Stand: 9. August 2026,
+          Release 0.28.0.
 Quelle:   19, „Kennzahlen der Codebasis"
 
 ────────────────────────────────────────────────────────────────────────
@@ -119,7 +119,7 @@ Text:     Seit Release 0.22.0 schreiben mehrere Agenten parallel — wessen
           weil die eigene Voraussetzung — gemessener Bedarf — nicht
           erfüllt ist.
 Quelle:   19.10, Umsetzungsstand-Kasten (Roadmap-Stufen 0 bis 6,
-          Releases 0.21.0 bis 0.27.0)
+          Releases 0.21.0 bis 0.28.0)
 Hinweis:  Das Feature-Flag steht auf aus — umgesetzt heisst nicht aktiv.
 
 ────────────────────────────────────────────────────────────────────────
@@ -130,6 +130,6 @@ Untertitel: Von der Referenzarchitektur zum System — Aufbau, Governance
           und Grenzen einer Referenzimplementierung
 Text:     Sonderdruck und vollständiges Whitepaper: Download-Link im
           Beitrag
-          janda.io · 37 Seiten, Stand: August 2026. Alle Angaben aus dem
+          janda.io · 38 Seiten, Stand: August 2026. Alle Angaben aus dem
           Quellcode erhoben.
 Quelle:   Titel und Vorwort des Sonderdrucks (main-fabrik.tex)

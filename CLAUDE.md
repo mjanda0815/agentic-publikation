@@ -1,8 +1,9 @@
 # CLAUDE.md — Whitepaper-Modernisierung „Agentic Software Development"
 
-> **STATUS: Version 2.6** (08.08.2026). Kennzahlen und Roadmap-Status
-> stehen auf SoftwareFabrik-Release **0.27.0** (Roadmap-Stufen 0 bis 4
-> und 6 umgesetzt, von Stufe 5 die Koordinationsschicht — alles hinter
+> **STATUS: Version 2.7** (09.08.2026). Kennzahlen und Roadmap-Status
+> stehen auf SoftwareFabrik-Release **0.28.0** (Roadmap-Stufen 0 bis 4
+> und 6 umgesetzt — seit 0.28.0 einschließlich Testabdeckungsänderung,
+> Messlücken 4 → 3 —, von Stufe 5 die Koordinationsschicht; alles hinter
 > deaktiviertem Feature-Flag; verteilter Betrieb zurückgestellt).
 > Kennzahlen immer auf dem Release-**Tag** erheben, nicht im
 > Arbeitsverzeichnis — dort können uncommittete Stände liegen.
