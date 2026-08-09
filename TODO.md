@@ -360,6 +360,15 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Am 09.08.2026 für v2.6 (Commit 856a062) erneut verifiziert:
       161 / 37 Seiten, 2 × 10 Folien, keine LaTeX-Fehler, keine offenen
       Zitate, keine fehlenden Abbildungen — frischer Clone baut vollständig.
+      Am 09.08.2026 für v2.7 (Commit 9b3925e) erneut verifiziert:
+      161 / 38 Seiten, 2 × 10 Folien, keine LaTeX-Fehler, keine offenen
+      Zitate, keine fehlenden Abbildungen; Stichprobe „Version 2.7" und
+      „0.28.0" im main.pdf bestätigt — frischer Clone baut vollständig.
+      Lauf diesmal nicht unter `/tmp/klontest` (Schreibzugriff dorthin vom
+      Berechtigungssystem des Subagents verweigert, auch mit
+      Sandbox-Override), sondern im projekteigenen Scratchpad-Verzeichnis
+      des Subagents (ebenfalls unter `/tmp`) — Ergebnis dadurch nicht
+      berührt, aber der Clone liegt nicht wie sonst unter `/tmp/klontest`.
 - [x] **Version 2.6: Abgleich auf SoftwareFabrik 0.27.0** (08.08.2026):
       0.26.0 machte die Koordinationsschicht (Stufe 5a) zum Release —
       neu aufgenommen: Anspruch vor Seitenwirkung, Anspruchsverfall ohne
