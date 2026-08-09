@@ -4,13 +4,13 @@
 
 | Kennzahl | Wert | Erhebung |
 |---|---|---|
-| Produktivklassen | 419 | `git ls-tree -r v0.28.0 app/src/main/java`, `*.java` |
-| Produktivcode | ~41.035 Zeilen | |
-| Testklassen | 285 | |
+| Produktivklassen | 421 | `git ls-tree -r v0.29.0 app/src/main/java`, `*.java` |
+| Produktivcode | ~41.553 Zeilen | |
+| Testklassen | 287 | |
 | Test-zu-Produktiv-Verhältnis | ~0,68 Klassen | |
 | Fachliche Slices | 30 (neu: `kennzahlen`) | |
 | Datenbanktabellen | 58 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 50 (V1–V52) | |
+| Flyway-Migrationen | 51 (V1–V53) | |
 | HTTP-Routen | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit) |
 | Execution-Adapter | 10 | |
 | Review-Adapter | 6 | |
@@ -21,12 +21,11 @@
 | Rollen | 5 | |
 | Compliance-Profile | 4 | |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 36 (0.1.0 – 0.28.0) | 2026-04-17 bis 2026-08-09 |
+| Releases | 37 (0.1.0 – 0.29.0) | 2026-04-17 bis 2026-08-09 |
 | CI-Jobs je Push | 6 | |
 
-*Stand: Tag `v0.28.0` (= `main` @ `8b01a57`), 2026-08-09. Arbeitsverzeichnis
-sauber; die bei 0.27.0 noch uncommitteten Abdeckungs-Klassen und V52 sind
-mit 0.28.0 released und jetzt mitgezählt.*
+*Stand: Tag `v0.29.0` (= `main` @ `dc83455`), 2026-08-09. Arbeitsverzeichnis
+sauber.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -247,7 +246,20 @@ Messung. Bewusst ohne XML-Parser gelesen — agentengenerierter Code ist
 nicht vertrauenswuerdig, ein Parser waere eine XXE-Angriffsflaeche im
 Eingabepfad. Messluecken damit 4 → 3.
 
-## 12.4 Offene Punkte (Stand 2026-08-09, nach 0.28.0)
+**0.29.0 — Rollback-Erkennung nachgereicht** (V53): `GitService.findeRollbacks`
+liest Reverts aus der Git-Historie; `merge_queue_entry` und `run` halten
+Merge-Commit und Ruecknahme als Anker. Zwei duenne Anwender
+(`RollbackErkennung` fuer den Workflow, `RunRollbackErkennung` fuer den
+Einzel-Run beim Basis-Abgleich), weil der `run`-Slice nach ADR-0014 nichts
+vom `workflow`-Slice wissen darf — der Einzel-Run ist der Normalfall, dieser
+Teil wirkt also auch ohne Workflow-Flag. Gemessen wird der Revert, nicht der
+Defekt; die Quote ist als Untergrenze ausgewiesen; nur verankerte
+Auslieferungen stehen im Nenner. Attestiert ueber `MERGE_ZURUECKGENOMMEN`
+und `RUN_ZURUECKGENOMMEN`. Die Messluecke heisst nur noch „entkommene
+Defekte" — die Rollback-Haelfte ist geschlossen, die Defekt-Haelfte braeuchte
+eine Ticketsystem-Anbindung, die es nicht gibt.
+
+## 12.4 Offene Punkte (Stand 2026-08-09, nach 0.29.0)
 
 | Punkt | Art |
 |---|---|

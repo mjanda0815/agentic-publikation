@@ -1,6 +1,6 @@
 Reintexte des LinkedIn-Karussells zum Whitepaper
 „Agentic Software Development — Enterprise Architecture with AI Agents"
-Martin Janda, Fassung 2.5, August 2026
+Martin Janda, Fassung 2.8, August 2026
 
 Diese Datei ist die redigierbare Textfassung von carousel/carousel.tex.
 Änderungen hier sind NICHT automatisch im PDF — sie müssen in carousel.tex
@@ -90,22 +90,22 @@ Quelle:   Abschnitt 19.1, Schritt 6 („Belegen"); Grafik abgeleitet aus
 ────────────────────────────────────────────────────────────────────────
 FOLIE 8 — Referenzimplementierung
 Kicker:   Referenzimplementierung
-Kernsatz: Vom Konzept zum System: 30 fachliche Slices, 36 Releases in
+Kernsatz: Vom Konzept zum System: 30 fachliche Slices, 37 Releases in
           vier Monaten.
-Text:     Rund 41.000 Zeilen Produktivcode, Testabdeckung als
+Text:     Rund 41.500 Zeilen Produktivcode, Testabdeckung als
           buildbrechendes Gate (Line ab 85 %, Branch ab 81 %). Die
           Architektur des Whitepapers war die Grundlage — das Kapitel
           beschreibt, was daraus geworden ist. Stand: 9. August 2026,
-          Release 0.28.0.
+          Release 0.29.0.
 Quelle:   Kapitel 19, „Kennzahlen der Codebasis" (Erhebungsstand
-          09.08.2026, Release-Stand 0.28.0)
+          09.08.2026, Release-Stand 0.29.0)
 
 ────────────────────────────────────────────────────────────────────────
 FOLIE 9 — Der Stand
 Kicker:   Der Stand
 Kernsatz: Parallelität entsteht aus Abhängigkeiten — nicht aus
           Agentenrollen.
-Text:     Umgesetzt bis Release 0.28.0, hinter einem standardmäßig
+Text:     Umgesetzt bis Release 0.29.0, hinter einem standardmäßig
           deaktivierten Feature-Flag. Der Weg ging bewusst stufenweise:
           erst parallele Analyse ohne Schreibrechte, dann die Schreibrechte
           — gebunden an eine Besitzregel —, dann versionierte Verträge,
@@ -115,7 +115,7 @@ Text:     Umgesetzt bis Release 0.28.0, hinter einem standardmäßig
           Betrieb bleibt zurückgestellt, solange der Bedarf nicht
           gemessen ist.
 Quelle:   Management Summary; Abschnitt 19.10 inkl. Umsetzungsstand-Kasten
-          (Roadmap-Stufen 0 bis 6, Releases 0.21.0 bis 0.28.0);
+          (Roadmap-Stufen 0 bis 6, Releases 0.21.0 bis 0.29.0);
           Prinzipien AP-2/AP-3
 Hinweis:  Das Feature-Flag steht auf aus — umgesetzt heisst nicht aktiv.
 
@@ -128,6 +128,6 @@ Untertitel: Enterprise Architecture with AI Agents
           Factory. Praxisbeispiele mit Java, Spring Boot und
           Domain-Driven Design
 Text:     Vollständiges Whitepaper: Download-Link im Beitrag
-          janda.io · Überarbeitete und erweiterte Fassung 2.5,
+          janda.io · Überarbeitete und erweiterte Fassung 2.8,
           Stand: August 2026.
 Quelle:   Titel und Untertitel der Arbeit — wortgleich zum Titelblatt

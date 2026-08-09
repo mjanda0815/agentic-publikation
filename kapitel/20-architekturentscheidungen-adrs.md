@@ -573,7 +573,10 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > **schreibende** Child Runs mit Merge Queue und Integration Gate, Contract
 > Registry, versionierte Planrevisionen, Merge Intelligence, seit 0.27.0
 > die Produktivitäts- und Qualitätsmessung — seit 0.28.0 einschließlich
-> der Testabdeckungsänderung), hinter deaktiviertem
+> der Testabdeckungsänderung, seit 0.29.0 der Rollback-Erkennung, deren
+> Zuschnitt die strikte Richtung dieses ADR bestätigt: getrennte Anwender
+> für Run- und Workflow-Ebene, weil der `run`-Slice nichts von der
+> Workflow-Ebene wissen darf), hinter deaktiviertem
 > Feature-Flag. Von Stufe 5 ist die Koordinationsschicht seit 0.26.0
 > umgesetzt — Worker-Registrierung mit Herzschlag, Anspruch vor
 > Seitenwirkung, automatischer Versand hinter eigenem, standardmäßig
@@ -587,7 +590,7 @@ ADR-1 entschied sich für sieben spezialisierte, gleichzeitig arbeitende
 Agenten unter einem Orchestrator. Die Referenzimplementierung hat diese
 Entscheidung korrigiert: Mehrere gleichzeitig **schreibende** Agenten auf
 einem Repository erzeugen Konfliktkosten, Zurechnungsprobleme („wer hat das
-geschrieben?") und Zwischenstände, die sich nicht attestieren lassen. Der
+geschrieben?“) und Zwischenstände, die sich nicht attestieren lassen. Der
 Nutzen mehrerer Agenten liegt in Perspektivenvielfalt — und die ist beim
 Prüfen wertvoller als beim Erzeugen (19.8).
 
@@ -676,7 +679,8 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 > anderen Seite: Sie halten bewusst *keinen* eigenen Zustand, sondern
 > werden vollständig aus dem vorhandenen Prozesszustand abgeleitet — auch
 > die mit 0.28.0 nachgereichten Abdeckungswerte liegen am Build-Ergebnis
-> (V52), nicht in einer eigenen Kennzahlentabelle.
+> (V52) und die Rollback-Anker aus 0.29.0 an Merge-Queue-Eintrag und Run
+> (V53), nicht in einer eigenen Kennzahlentabelle.
 
 ### Entscheidung
 

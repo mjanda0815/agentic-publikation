@@ -425,17 +425,58 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Jackson-Formulierung präzisiert (JsonMapper auto-konfiguriert,
       Jackson 2 bleibt im Dependency-Management; Primärquelle Spring-Boot-
       4.0-Release-Notes).
-- [ ] Beim nächsten SoftwareFabrik-Abgleich zuerst prüfen: Im
+- [x] Beim nächsten SoftwareFabrik-Abgleich zuerst prüfen: Im
       Fabrik-Arbeitsverzeichnis liegt bereits V53__rollback_erkennung.sql
       (unreleased). Damit fällt voraussichtlich die Messlücke „entkommene
       Defekte und Rollbacks" (Messlücken 3 → 2). Betroffen: 19.9, 19.10
       (Stufe-6-Absätze), 15.6-Praxis-Check, beide Karussells. Kennzahlen
       weiterhin nur auf dem Release-Tag erheben.
-- [ ] Präzisierung prüfen (Kap. 19, Technologiestack-Absatz): Spring
+      → Mit Version 2.8 (0.29.0, 09.08.2026) erledigt — die Vorhersage
+      „3 → 2" traf so nicht ein: Die Lücke wurde **halbiert und
+      umbenannt** (nur die Rollback-Hälfte ist messbar, „entkommene
+      Defekte" bleibt als Lücke; es sind weiterhin drei). Lehre: Nicht
+      die Lückenzahl vormerken, sondern die Stelle.
+- [x] **Version 2.8: Abgleich auf SoftwareFabrik 0.29.0** (09.08.2026):
+      0.29.0 reichte die Rollback-Erkennung der Stufe 6 nach (V53:
+      Merge-Commit als Anker an Merge-Queue und Run;
+      GitService.findeRollbacks). Aufgenommen, weil es die Haltung des
+      Kapitels belegt: Gemessen wird der Revert, nicht der Defekt; die
+      Quote ist als Untergrenze benannt; nur verankerte Auslieferungen
+      stehen im Nenner. Bemerkenswert: getrennte Anwender für Run- und
+      Workflow-Ebene (strikte Richtung aus ADR-5), und der
+      Einzel-Run-Teil wirkt auch ohne Workflow-Flag. Kennzahlen auf Tag
+      v0.29.0: 421 Klassen, ~41.500 Zeilen, 287 Testklassen, 30 Slices,
+      58 Tabellen, 51 Migrationen (V1–V53), 37 Releases. Nachgezogen:
+      Kap. 19 (Kästen, Tabelle, 19.9, 19.10 samt neuem 0.29.0-Absatz),
+      15.6, ADR-5/ADR-8, 22.3, Management Summary, beide Karussells samt
+      Folientexten (dabei zwei Altstände im carousel.tex-Kopf bereinigt:
+      „Fassung 2.5" und der ABGRENZUNG-Kommentar von v2.2),
+      CITATION.cff/.zenodo.json, CLAUDE.md-Status, quellen/softwarefabrik.
+- [x] Präzisierung prüfen (Kap. 19, Technologiestack-Absatz): Spring
       Boot 4 autokonfiguriert laut Release Notes einen Jackson-3
       `JsonMapper`-Bean; die Formulierung „primärer ObjectMapper" ggf.
       auf `JsonMapper` schärfen (Primärquelle: Spring-Boot-4.0-Release-
       Notes, Spring-Blog „Introducing Jackson 3 support", Stand 10/2025).
+      → Mit dem 2.7-Abgleich umformuliert, Zweitgutachter hat die neue
+      Fassung bei 2.8 gegen die Primärquellen bestätigt (Jackson-2-Support
+      dort als deprecated markiert, Entfernung in späterem 4.x angekündigt).
+- [x] **Version 2.8, Zweitgutachter-Runde** (09.08.2026): Vier blockierende
+      Befunde behoben — (1) ASCII-Anführungszeichen wirkten als
+      babel-Shorthands und zerstörten im PDF Folgezeichen („nicht
+      zurückgenommenßu"); neun Stellen in Kap. 19 (drei davon seit
+      2.5–2.7 unentdeckt durch drei Review-Runden!) und eine in Kap. 20
+      auf typografische Zeichen umgestellt. (2) abb26-Unterschrift
+      50 → 51 Migrationen (derselbe Nachzügler-Typ wie bei 2.7 — die
+      Abbildungsunterschriften in die Abgleich-Checkliste aufgenommen).
+      (3) Karussell-Abschlussfolie/Folientexte standen auf Fassung
+      2.2/2.5. (4) CITATION.cff/.zenodo.json-Beschreibungstexte standen
+      inhaltlich auf 2.2/0.21.0 mit alten Seitenzahlen (157/33 → 162/38).
+      Dazu S-Befunde: Feature-Flag-Pauschalen präzisiert (Einzel-Run-Teil
+      der Rollback-Erkennung wirkt ohne Flag — Kopfkasten, 19.10, 15.6),
+      widerlegte Begründung „Plattform endet beim Merge" in 15.6 ersetzt.
+- [ ] Prüfschritt ins Makefile aufnehmen: ASCII-`"` in kapitel/*.md
+      außerhalb von Codeblöcken ablehnen (babel-Shorthand-Falle, siehe
+      2.8-Befund B1).
 - [ ] (Martin) Veröffentlichungsschritte: janda.io, optional Repo public +
       Release + Zenodo-DOI. Bei einem Repost nach dem nächsten
       SoftwareFabrik-Release die Version auf 2.2 heben statt 2.1 still zu

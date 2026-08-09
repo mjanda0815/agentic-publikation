@@ -8,7 +8,7 @@
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
 > sind aus dem Quellcode des Systems erhoben (Erhebungsstand 9. August 2026
-> auf dem Release-Stand 0.28.0), nicht
+> auf dem Release-Stand 0.29.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,7 +16,7 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert und in Betrieb, Stand 0.28.0) und
+> dort Beschriebene ist implementiert und in Betrieb, Stand 0.29.0) und
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
 > je Stufe ausgewiesen: Die Stufen 0 bis 4 sowie die Kennzahlenmessung der
 > Stufe 6 sind hinter einem standardmäßig deaktivierten Feature-Flag
@@ -25,7 +25,9 @@
 > Merge Queue und Integration Gate, seit 0.26.0 eine Koordinationsschicht
 > mit Worker-Registrierung und Task-Ansprüchen, seit 0.27.0 die
 > Produktivitäts- und Qualitätsmessung (seit 0.28.0 einschließlich der
-> Testabdeckungsänderung); von Stufe 5 ist allein der
+> Testabdeckungsänderung, seit 0.29.0 der Rollback-Erkennung — deren
+> Einzel-Run-Teil als einzige Ausnahme auch ohne Feature-Flag wirkt); von
+> Stufe 5 ist allein der
 > verteilte Betrieb über mehrere Hosts bewusst zurückgestellt). Der aktuelle Stand verwendet genau einen
 > schreibenden Agenten je Run und mehrere unabhängige Read-only-Reviewer.
 > Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
@@ -85,20 +87,20 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 419 |
-| Produktivcode | ~41.000 Zeilen |
-| Testklassen | 285 |
+| Produktivklassen (Java) | 421 |
+| Produktivcode | ~41.500 Zeilen |
+| Testklassen | 287 |
 | Fachliche Slices (Module) | 30 |
 | Datenbanktabellen | 58 |
-| Flyway-Migrationen | 50 |
+| Flyway-Migrationen | 51 |
 | Execution-Adapter | 10 |
 | Review-Adapter | 6 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 36 (0.1.0 bis 0.28.0, April–August 2026) |
+| Releases | 37 (0.1.0 bis 0.29.0, April–August 2026) |
 
-*Erhoben auf dem Release-Stand 0.28.0 (9. August 2026). Der Zuwachs der
-Releases 0.21.0 bis 0.28.0 geht fast vollständig auf die Workflow-Ebene
+*Erhoben auf dem Release-Stand 0.29.0 (9. August 2026). Der Zuwachs der
+Releases 0.21.0 bis 0.29.0 geht fast vollständig auf die Workflow-Ebene
 zurück: 0.21.0 brachte die Roadmap-Stufen 0 und 1 (Workflow-Aggregat,
 Task-Graph, Synthese; Migrationen V40–V43), 0.22.0 die Stufe 2
 (Pfad-Besitzmodell mit Workspace-Leases, Merge Queue und Integration Gate;
@@ -108,8 +110,9 @@ Stufe 4b (Merge Intelligence; V50), 0.26.0 die Koordinationsschicht der
 Stufe 5 (Worker und Task-Ansprüche; V51) und 0.27.0 die
 Kennzahlenmessung der Stufe 6 — bewusst ohne eigene Migration, weil alle
 Werte aus ohnehin entstehenden Daten abgeleitet werden. 0.28.0 reichte die
-Messung der Testabdeckungsänderung nach; deren Werte liegen am
-Build-Ergebnis (V52), nicht in einer eigenen Kennzahlentabelle. Die 30.
+Messung der Testabdeckungsänderung nach (V52 am Build-Ergebnis), 0.29.0
+die Rollback-Erkennung (V53 an Merge-Queue und Run) — beide ohne eigene
+Kennzahlentabelle. Die 30.
 Fachlichkeit ist damit die Kennzahlenmessung (19.10).*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
@@ -229,7 +232,7 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 50 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
+![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 51 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
@@ -238,7 +241,8 @@ ausschließlich Mandanten- und Nachweisstrukturen (Mehrmandantenfähigkeit
 und Nachweisfähigkeit), V34–V39 Repository-Realität, Skills, Routinen, V40–V45 die
 Workflow-Ebene und damit die Parallelität, V46–V51 Vertragsregistrierung,
 versionierte Planänderungen, Konfliktklassifikation und Worker-Ansprüche,
-V52 die Abdeckungswerte am Build-Ergebnis.
+V52 die Abdeckungswerte am Build-Ergebnis, V53 die Rollback-Anker an
+Merge-Queue und Run.
 Auf diese Kurve kommt Abschnitt 19.8 zurück.
 
 ## 19.3 Das Ausführungsmodell: der Run
@@ -792,7 +796,7 @@ bestimmten *rückwirkend*, an welchen Stellen im Ablauf überhaupt Ereignisse
 entstehen müssen. Attestierungslücken mussten nachträglich geschlossen
 werden, damit der Warum-Trace vollständig ist. Das ist ein belastbares
 Argument gegen die verbreitete Reihenfolge „erst Funktion, dann
-Compliance": **Die Nachweisstruktur lässt sich nicht sauber nachrüsten** —
+Compliance“: **Die Nachweisstruktur lässt sich nicht sauber nachrüsten** —
 wer sie früher entwirft, spart die Nacharbeit.
 
 ### (4) Kubernetes ist keine Voraussetzung — Souveränität schon
@@ -837,9 +841,9 @@ Erhebungsstand 9. August 2026:
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.28.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
+| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.29.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
 
-Dazu vier Beobachtungen aus dem Entwicklungsverlauf (36 Releases in rund
+Dazu vier Beobachtungen aus dem Entwicklungsverlauf (37 Releases in rund
 vier Monaten), die sich verallgemeinern lassen:
 
 1. **Governance kam spät, wurde aber strukturbildend** — siehe 19.8 (3).
@@ -868,7 +872,7 @@ vier Monaten), die sich verallgemeinern lassen:
 Ausdrücklich **nicht** behauptet werden quantifizierte Produktivitäts- oder
 ROI-Zahlen aus dem Betrieb der Fabrik selbst — dafür existiert keine
 kontrollierte Messung. Daran ändert auch die mit 0.27.0 eingebaute und
-mit 0.28.0 um die Testabdeckungsänderung erweiterte
+seither erweiterte
 Kennzahlenmessung (19.10) nichts: Sie misst Durchlaufzeiten, Quoten und
 Kosten der Workflows, weist aber gerade den Vergleich zur manuellen
 Umsetzung als Messlücke aus, weil diese Referenzgruppe im System nicht
@@ -901,7 +905,8 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 > Planänderungen, 0.25.0 die Merge Intelligence, 0.26.0 die
 > Koordinationsschicht mit Worker-Registrierung und Task-Ansprüchen und
 > 0.27.0 die Produktivitäts- und Qualitätsmessung, um die 0.28.0 die
-> Testabdeckungsänderung ergänzte (siehe den
+> Testabdeckungsänderung und 0.29.0 die Rollback-Erkennung ergänzten
+> (siehe den
 > Umsetzungsstand unten). Stufe 5 — der verteilte Worker-Pool — trägt als
 > einzige eine ausdrückliche Voraussetzung: gemessenen Bedarf. Sie ist
 > deshalb bewusst nur zur Hälfte umgesetzt. Grundlage ist die interne
@@ -925,7 +930,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Parallelität findet zwischen isolierten Tasks und Runs statt. Innerhalb
 > eines Workspace existiert genau ein schreibender Agent.
 
-![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.28.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
+![Architektur der parallelen Agenten-Workflows: isolierte Child Runs unter einem Parent Workflow, zusammengeführt über Merge Coordinator und Integration Gate. Bis Release 0.29.0 umgesetzt, hinter deaktiviertem Feature-Flag](abbildungen/out/abb31.pdf){width=100%}
 
 ### Die tragenden Prinzipien
 
@@ -965,13 +970,15 @@ validiert den Gesamtstand. Die Leitregel:
 | 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch — **umgesetzt** (0.23.0; ohne Consumer-/Provider-Vertragstests) |
 | 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch — **umgesetzt** (0.24.0/0.25.0) |
 | 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional — Koordinationsschicht **umgesetzt** (0.26.0), Netz-Transport bewusst zurückgestellt |
-| 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** (0.27.0/0.28.0) |
+| 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** (0.27.0–0.29.0) |
 
-> **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.28.0,
+> **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.29.0,
 > Stand 9. August 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
 > umgesetzt, von Stufe 5 die Koordinationsschicht; das Feature-Flag steht
-> standardmäßig auf **aus**, ohne es verhält sich die Plattform
-> unverändert.
+> standardmäßig auf **aus**, ohne es verhält sich die Workflow-Ebene
+> unverändert. Einzige Ausnahme ist der Einzel-Run-Teil der
+> Rollback-Erkennung aus 0.29.0: Er sitzt am Run-Aggregat und wirkt
+> deshalb auch ohne Flag (siehe unten).
 >
 > *Stufe 0* trägt die beiden Architekturentscheidungen — hierarchische
 > Orchestrierung mit der strikten Richtung Workflow führt zu Run, niemals
@@ -1043,7 +1050,7 @@ validiert den Gesamtstand. Die Leitregel:
 > bis zu Domain Events und Akzeptanzkriterien. Drei Entscheidungen tragen
 > die Konstruktion. Die **Normalisierung ist bewusst minimal** — nur
 > Zeilenenden und abschließende Leerzeichen; eine Umformatierung gilt als
-> Änderung, denn ein falsches „veraltet" kostet eine erneute Prüfung, ein
+> Änderung, denn ein falsches „veraltet“ kostet eine erneute Prüfung, ein
 > übersehenes einen stillen Vertragsbruch. Die **Bindung geschieht beim
 > Start** des Child Runs, nicht bei der Planung: Im Plan steht nur der
 > Name, denn alles andere wäre eine Wette darauf, dass sich bis zum Start
@@ -1079,7 +1086,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Zuschnitt unter einem arbeitenden Agenten zu ändern, machte das Ergebnis
 > niemandem mehr zurechenbar.
 >
-> *Stufe 4b* (Release 0.25.0) macht aus „Merge-Konflikt" eine Diagnose. Bis
+> *Stufe 4b* (Release 0.25.0) macht aus „Merge-Konflikt“ eine Diagnose. Bis
 > dahin war das eine Sammelkategorie: Zwei konkurrierende Migrationsnummern,
 > eine doppelt hinzugefügte Abhängigkeit und ein echter logischer
 > Widerspruch sehen für Git gleich aus, verlangen aber völlig verschiedene
@@ -1100,7 +1107,7 @@ validiert den Gesamtstand. Die Leitregel:
 > Konfliktart, Dateien, bisherige Versuche, das Ergebnis eines etwaigen
 > Rebase, die beteiligten Vertragsfassungen und eine Empfehlung — wer
 > eskaliert wird, hat den Vorgang nicht verfolgt, und „Konflikt in drei
-> Dateien" zwänge ihn, den halben Zustand selbst zu rekonstruieren.
+> Dateien“ zwänge ihn, den halben Zustand selbst zu rekonstruieren.
 >
 > *Stufe 5a* (Release 0.26.0) ist der interessanteste Fall, weil hier eine
 > Voraussetzung ernst genommen wurde. Die Stufe gilt laut Roadmap nur bei
@@ -1123,7 +1130,7 @@ validiert den Gesamtstand. Die Leitregel:
 > **Anspruch vor Seitenwirkung:** Ein Worker beansprucht einen Task, bevor
 > Worktree und Child Run entstehen — zwei Prozesse können nicht beide
 > gewinnen; das ist die technische Form von „ein Task wird höchstens einmal
-> aktiv geschrieben". **Kein stiller Erfolg beim Verfall:** Verfällt der
+> aktiv geschrieben“. **Kein stiller Erfolg beim Verfall:** Verfällt der
 > Anspruch eines toten Workers auf einen Task, der noch nicht lief, geht
 > der Task zurück nach `READY` — es ist nichts geschehen. Lief er bereits,
 > geht er nach `FAILED`, weil der Workspace in unbekanntem Zustand sein
@@ -1152,11 +1159,11 @@ validiert den Gesamtstand. Die Leitregel:
 > Merge-Konfliktquote samt Verteilung nach Konfliktart (aus Stufe 4b) und
 > die Freigabe-Wartezeit. Vier Messgrößen der Roadmap wies 0.27.0
 > ausdrücklich als Lücke mit Begründung aus, statt sie zu schätzen; drei
-> davon bestehen fort: die
+> davon bestehen fort — zwei unverändert, eine seit 0.29.0 halbiert: die
 > menschliche aktive Arbeitszeit (die Plattform sieht, wie lange etwas
 > *wartete*, nicht, ob jemand daran *arbeitete* — beides gleichzusetzen
-> wäre die verlockendste und falscheste Kennzahl), entkommene Defekte und
-> Rollbacks (die Plattform endet beim Merge) und der Vergleich zur
+> wäre die verlockendste und falscheste Kennzahl), entkommene Defekte
+> (siehe unten) und der Vergleich zur
 > manuellen Umsetzung (diese Referenzgruppe existiert im System nicht).
 > Eine Kennzahl, die anders
 > heißt als das, was sie misst, ist schlimmer als eine fehlende — sie wird
@@ -1178,9 +1185,33 @@ validiert den Gesamtstand. Die Leitregel:
 > Und der Bericht wird bewusst **ohne XML-Parser** gelesen: Er stammt aus
 > agentengeneriertem Code und ist damit nicht vertrauenswürdig; ein
 > vollwertiger Parser wäre eine XXE-Angriffsfläche direkt im Eingabepfad.
+>
+> Release 0.29.0 halbierte die Lücke „entkommene Defekte und Rollbacks“.
+> Für die Rollback-Hälfte stimmte die Begründung — die Plattform ende beim
+> Merge — nämlich nicht: Ein `git revert` steht in derselben Historie, die
+> die Fabrik beim nächsten Lauf ohnehin synchronisiert; was fehlte, war
+> der **Anker**, der festgehaltene Merge-Commit, auf den sich ein Revert
+> beziehen kann (Migration V53, an Merge-Queue und Run). Drei
+> Entscheidungen halten die Kennzahl ehrlich: Gemessen wird der **Revert,
+> nicht der Defekt** — ein Revert-Commit ist eine Tatsache in der
+> Historie, „ein späterer Commit berührte dieselbe Datei“ wäre eine
+> Vermutung und ebenso gut das nächste Feature. Die **Quote ist eine
+> Untergrenze und heißt auch so** — wer eine Änderung von Hand rückwärts
+> anwendet und ohne Revert-Vermerk committet, taucht nicht auf. Und **nur
+> verankerte Auslieferungen stehen im Nenner** — einen Merge ohne
+> festgehaltenen Commit als „nicht zurückgenommen“ zu zählen, wäre ein
+> geschönter Nenner. Erkannte Rollbacks werden attestiert. Aufschlussreich
+> ist der Zuschnitt: zwei getrennte, dünne Anwender für Workflow und
+> Einzel-Run, weil der `run`-Slice nach der strikten Richtung aus ADR-5
+> nichts von der Workflow-Ebene wissen darf — und weil der Einzel-Run der
+> Normalfall ist, wirkt dieser Teil der Messung auch ohne das
+> Workflow-Feature-Flag. Die verbleibende Messlücke heißt nur noch
+> „entkommene Defekte“; sauber schließen ließe sie sich erst über eine
+> Ticketsystem-Anbindung, die es nicht gibt.
 
 Die begleitende **Produktivitäts- und Qualitätsmessung** ist mit 0.27.0
-eingebaut und mit 0.28.0 um die Testabdeckungsänderung ergänzt (Stufe 6,
+eingebaut und mit 0.28.0/0.29.0 um Testabdeckungsänderung und
+Rollback-Erkennung ergänzt (Stufe 6,
 siehe oben) — mit ausgewiesenen Lücken: Gemessen wird,
 was aus den Daten der Plattform ableitbar ist; die aktive menschliche
 Arbeitszeit, entkommene Defekte und der
