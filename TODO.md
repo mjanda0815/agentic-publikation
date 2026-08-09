@@ -379,6 +379,11 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       des Subagents verweigert (auch mit Sandbox-Override); ausgewichen
       auf ein neues Verzeichnis `klontest-v28` im selben Scratchpad statt
       Wiederverwendung — Ergebnis dadurch nicht berührt.
+      Am 10.08.2026 für v2.9 (Commit 5afff1f) erneut verifiziert:
+      164 / 39 Seiten, 2 × 10 Folien, keine LaTeX-Fehler, keine offenen
+      Zitate, Biber sauber; Stichprobe „Version 2.9" (Titelblatt) und
+      „0.30.0" (26 Treffer) im main.pdf bestätigt, „39 Seiten" auf
+      Folie 10 des Fabrik-Karussells — frischer Clone baut vollständig.
 - [x] **Version 2.6: Abgleich auf SoftwareFabrik 0.27.0** (08.08.2026):
       0.26.0 machte die Koordinationsschicht (Stufe 5a) zum Release —
       neu aufgenommen: Anspruch vor Seitenwirkung, Anspruchsverfall ohne
