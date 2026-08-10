@@ -37,7 +37,7 @@ public class AgentLifecycle {
 
     public enum Phase {
         SPAWNED, CONTEXT_BUILDING, PLANNING, EXECUTING,
-        TOOL_INTERACTION, VALIDATING, TERMINATED, MEMORY_UPDATING;
+        TOOL_INTERACTION, VALIDATING, MEMORY_UPDATING, TERMINATED;
 
         public Set<Phase> allowedTransitions() {
             return switch (this) {

@@ -31,7 +31,7 @@ die Verfünffachung der Tokenzahl binnen weniger Monate (gemessen an der
 Textmenge wegen des neuen Tokenizers knapp das Vierfache) ist selbst ein
 Argument dafür, Kontextgrößen nie fest in Architekturentscheidungen
 einzubauen). Alles, was
-der Agent in einem Turn "sieht", existiert nur hier. Session Memory
+der Agent in einem Turn „sieht“, existiert nur hier. Session Memory
 erweitert dies über mehrere Turns innerhalb eines Tasks: Der Agent kann sich
 an seine eigenen früheren Tool-Aufrufe und deren Ergebnisse erinnern, aber
 nicht an Informationen anderer Agenten.

@@ -1,6 +1,6 @@
 # CLAUDE.md — Whitepaper-Modernisierung „Agentic Software Development"
 
-> **STATUS: Version 2.9** (10.08.2026). Kennzahlen und Roadmap-Status
+> **STATUS: Version 3.0** (10.08.2026). Kennzahlen und Roadmap-Status
 > stehen auf SoftwareFabrik-Release **0.30.0** (Roadmap-Stufen 0 bis 4
 > und 6 umgesetzt — einschließlich Testabdeckungsänderung (0.28.0),
 > Rollback-Erkennung (0.29.0) sowie Eingriffs- und Aufwandserfassung
@@ -24,7 +24,14 @@
 > Erhebungsvermerk in Kapitel 19, der Statuskasten, die Ausbaustufen-Tabelle
 > und der Umsetzungsstand-Kasten in 19.10, der Implementierungsstatus von
 > ADR-5 und ADR-8, die Statuszeilen in 22.3/22.4 sowie je zwei Folien beider
-> Karussells. Bei inhaltlichen Sprüngen die Whitepaper-Version heben
+> Karussells. **Seit 3.0** ist der Release-Verlauf 0.21.0–0.30.0 nur noch an
+> genau einer Stelle ausgeschrieben — Release-Verlaufstabelle in 19.10
+> (`kapitel/19-softwarefabrik.md`); Management Summary, Kap.-2-Praxis-Check,
+> 19-Kopfkasten, 19.1-Erhebungsvermerk, 19.10-Statuskasten, „Die neue
+> Position" und die ADR-Statuszeilen verweisen nur noch dorthin. Beim
+> nächsten Release also: eine Tabellenzeile ergänzen statt sechs Stellen
+> synchronisieren — und die Kurzverweise nicht wieder zu Litaneien ausbauen.
+> Bei inhaltlichen Sprüngen die Whitepaper-Version heben
 > (2.1 → 2.2 …), nicht still ändern.
 
 ## Projekt

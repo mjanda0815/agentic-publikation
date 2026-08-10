@@ -92,16 +92,17 @@ Bewertung, nicht bei der Erzeugung (AP-2, AP-4).
 
 > **Status: überwiegend implementiert** — es fehlt allein der verteilte
 > Betrieb über mehrere Hosts, Stufe 5b (vgl. 19.10 und ADR-5 bis ADR-7).
-> Die Workflow-Ebene mit Task-Graph, parallelen Child Runs in getrennten
-> Worktrees, Planfreigabe, Synthese, Pfad-Besitzmodell, Merge Queue und
-> Integration Gate existiert seit Release 0.22.0, die **Contract Versions
-> mit Content-Hash** seit 0.23.0 — alles hinter einem standardmäßig
-> deaktivierten Feature-Flag; die **Konfliktklassifikation** kam mit 0.25.0
-> hinzu, die **Koordinationsschicht**, die freigewordene Nachfolger-Tasks
-> selbsttätig aufnimmt, mit 0.26.0 (der automatische Versand hinter einem
-> eigenen Schalter, Standard aus). Der hier skizzierte Ablauf ist damit
-> vollständig durch implementierte Mechanismen gedeckt. Die Skizze bleibt
-> Pseudocode: Sie zeigt die Struktur, nicht die Aufrufsyntax des Systems.
+> Die Workflow-Ebene — Task-Graph, parallele Child Runs in getrennten
+> Worktrees, Planfreigabe, Synthese, Pfad-Besitzmodell, Merge Queue,
+> Integration Gate, Contract Versions, Konfliktklassifikation und
+> Koordinationsschicht — ist vollständig implementiert und steht hinter
+> einem standardmäßig deaktivierten Feature-Flag (der automatische Versand
+> freigewordener Nachfolger-Tasks zusätzlich hinter einem eigenen
+> Schalter, Standard aus); welches Release welchen Baustein brachte, zeigt
+> die Release-Verlaufstabelle in 19.10. Der hier skizzierte Ablauf ist
+> damit vollständig durch implementierte Mechanismen gedeckt. Die Skizze
+> bleibt Pseudocode: Sie zeigt die Struktur, nicht die Aufrufsyntax des
+> Systems.
 
 Der Payment Service besteht aus Teilen, die sich sauber schneiden lassen —
 genau der Fall, für den die Workflow-Ebene gedacht ist:

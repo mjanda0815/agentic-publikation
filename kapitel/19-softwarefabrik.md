@@ -20,18 +20,12 @@
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
 > je Stufe ausgewiesen: Die Stufen 0 bis 4 sowie die Kennzahlenmessung der
 > Stufe 6 sind hinter einem standardmäßig deaktivierten Feature-Flag
-> umgesetzt — seit 0.21.0 die parallele *nicht-schreibende* Analyse, seit
-> 0.22.0 auch parallel *schreibende* Child Runs mit Pfad-Besitzmodell,
-> Merge Queue und Integration Gate, seit 0.26.0 eine Koordinationsschicht
-> mit Worker-Registrierung und Task-Ansprüchen, seit 0.27.0 die
-> Produktivitäts- und Qualitätsmessung (seit 0.28.0 einschließlich der
-> Testabdeckungsänderung, seit 0.29.0 der Rollback-Erkennung, seit
-> 0.30.0 der Eingriffs- und Aufwandserfassung an der
-> Freigabeentscheidung — der Einzel-Run-Teil der Rollback-Erkennung und
-> das Aufwandsfeld an der Run-Freigabe wirken als einzige Ausnahmen auch
-> ohne Feature-Flag); von
-> Stufe 5 ist allein der
-> verteilte Betrieb über mehrere Hosts bewusst zurückgestellt). Der aktuelle Stand verwendet genau einen
+> umgesetzt, von Stufe 5 die Koordinationsschicht auf einem Host; allein
+> der verteilte Betrieb über mehrere Hosts ist bewusst zurückgestellt.
+> Welches Release welche Stufe brachte, zeigt die Release-Verlaufstabelle
+> in 19.10; zwei Ausnahmen wirken auch ohne Feature-Flag: der
+> Einzel-Run-Teil der Rollback-Erkennung und das Aufwandsfeld an der
+> Run-Freigabe). Der aktuelle Stand verwendet genau einen
 > schreibenden Agenten je Run und mehrere unabhängige Read-only-Reviewer.
 > Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
 > gleichzeitig schreibende Agenten Konfliktkosten, unklare Zurechnung und
@@ -104,20 +98,9 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 *Erhoben auf dem Release-Stand 0.30.0 (9. August 2026). Der Zuwachs der
 Releases 0.21.0 bis 0.30.0 geht fast vollständig auf die Workflow-Ebene
-zurück: 0.21.0 brachte die Roadmap-Stufen 0 und 1 (Workflow-Aggregat,
-Task-Graph, Synthese; Migrationen V40–V43), 0.22.0 die Stufe 2
-(Pfad-Besitzmodell mit Workspace-Leases, Merge Queue und Integration Gate;
-V44–V45), 0.23.0 die Stufe 3 mit einem eigenen `contract`-Slice (V46–V48),
-0.24.0 die Stufe 4a (versionierte Planänderungen; V49), 0.25.0 die
-Stufe 4b (Merge Intelligence; V50), 0.26.0 die Koordinationsschicht der
-Stufe 5 (Worker und Task-Ansprüche; V51) und 0.27.0 die
-Kennzahlenmessung der Stufe 6 — bewusst ohne eigene Migration, weil alle
-Werte aus ohnehin entstehenden Daten abgeleitet werden. 0.28.0 reichte die
-Messung der Testabdeckungsänderung nach (V52 am Build-Ergebnis), 0.29.0
-die Rollback-Erkennung (V53 an Merge-Queue und Run), 0.30.0 die Eingriffs-
-und Aufwandserfassung (V54 an der Freigabeentscheidung) — alle drei ohne
-eigene Kennzahlentabelle. Die 30.
-Fachlichkeit ist damit die Kennzahlenmessung (19.10).*
+zurück — welches Release welche Roadmap-Stufe brachte (einschließlich der
+Migrationen V40–V54), dokumentiert die Release-Verlaufstabelle in 19.10.
+Die 30. Fachlichkeit ist die Kennzahlenmessung (19.10).*
 
 Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
@@ -236,7 +219,7 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-![Kernaggregate des Datenmodells. Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 52 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
+![Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 52 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
@@ -906,22 +889,36 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 ## 19.10 Vom Run zum parallelen Workflow: Ausbaustufen und Umsetzungsstand *(Roadmap)*
 
 > **Status:** Die Roadmap-Stufen **0 bis 4 und 6 sind umgesetzt** — alles
-> hinter einem standardmäßig deaktivierten Feature-Flag: 0.21.0 brachte die
-> parallele, nicht-schreibende Analyse, 0.22.0 die parallel
-> **schreibenden** Child Runs samt Pfad-Besitzmodell, Merge Queue und
-> Integration Gate, 0.23.0 die vertragsbasierte Parallelisierung mit
-> eigener Contract Registry, 0.24.0 die versionierten, attestierten
-> Planänderungen, 0.25.0 die Merge Intelligence, 0.26.0 die
-> Koordinationsschicht mit Worker-Registrierung und Task-Ansprüchen und
-> 0.27.0 die Produktivitäts- und Qualitätsmessung, um die 0.28.0 die
-> Testabdeckungsänderung, 0.29.0 die Rollback-Erkennung und 0.30.0 die
-> Eingriffs- und Aufwandserfassung ergänzten
-> (siehe den
-> Umsetzungsstand unten). Stufe 5 — der verteilte Worker-Pool — trägt als
-> einzige eine ausdrückliche Voraussetzung: gemessenen Bedarf. Sie ist
-> deshalb bewusst nur zur Hälfte umgesetzt. Grundlage ist die interne
-> Entwicklungs-Roadmap der SoftwareFabrik; Versions- und Phasenangaben sind
-> Vorschläge, keine Zusagen.
+> hinter einem standardmäßig deaktivierten Feature-Flag; welches Release
+> welche Stufe brachte, zeigt die folgende Release-Verlaufstabelle.
+> Stufe 5 — der verteilte Worker-Pool — trägt als einzige eine
+> ausdrückliche Voraussetzung: gemessenen Bedarf. Sie ist deshalb bewusst
+> nur zur Hälfte umgesetzt. Grundlage ist die interne Entwicklungs-Roadmap
+> der SoftwareFabrik; Versions- und Phasenangaben sind Vorschläge, keine
+> Zusagen.
+
+### Der Release-Verlauf 0.21.0 bis 0.30.0
+
+Diese Tabelle ist die autoritative Zuordnung von Releases zu
+Roadmap-Stufen; alle anderen Stellen des Whitepapers — Management
+Summary, Praxis-Checks, Kennzahlen-Erhebungsvermerk (19.1) und die
+ADR-Statuszeilen — verweisen hierher, statt den Verlauf zu wiederholen.
+
+| Release | Stufe | Inhalt | Migrationen |
+|--------|------|------------------------------------------------------|--------------|
+| 0.21.0 | 0 + 1 | Workflow-Aggregat, Task-Graph, parallele *nicht-schreibende* Analyse mit Synthese-Task und menschlicher Planfreigabe | V40–V43 |
+| 0.22.0 | 2 | Parallel *schreibende* Child Runs: Pfad-Besitzmodell, Workspace Leases, Merge Queue, Integration Gate | V44–V45 |
+| 0.23.0 | 3 | Contract Registry (eigener `contract`-Slice): versionierte, gehashte Verträge mit Stale-Erkennung | V46–V48 |
+| 0.24.0 | 4a | Versionierte, attestierte Planänderungen; Rücksetzen nur mit neuer Eingabe | V49 |
+| 0.25.0 | 4b | Merge Intelligence: sieben Konfliktarten, Rebase-/Revalidierungs-Pipeline, Eskalationsbericht | V50 |
+| 0.26.0 | 5a | Koordinationsschicht: Worker-Registrierung mit Herzschlag, Anspruch vor Seitenwirkung | V51 |
+| 0.27.0 | 6 | Produktivitäts- und Qualitätsmessung; nicht Messbares als Lücke ausgewiesen statt geschätzt | keine (bewusst) |
+| 0.28.0 | 6 | Testabdeckungsänderung (am Build-Ergebnis, in Prozentpunkten) | V52 |
+| 0.29.0 | 6 | Rollback-Erkennung als ausgewiesene Untergrenze; der Einzel-Run-Teil wirkt ohne Feature-Flag | V53 |
+| 0.30.0 | 6 | Eingriffs- und Aufwandserfassung an der Freigabeentscheidung; das Aufwandsfeld wirkt ohne Feature-Flag | V54 |
+
+*Stand: 9. August 2026, erhoben auf den Release-Tags. Die Details je
+Stufe nennt der Kasten zum Umsetzungsstand weiter unten.*
 
 ### Das Zielbild
 
@@ -974,13 +971,13 @@ validiert den Gesamtstand. Die Leitregel:
 
 | Stufe | Inhalt | Risiko |
 |---|---|---|
-| 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig — **umgesetzt** (0.21.0) |
-| 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt ohne Änderungsrisiko, weil keine Schreibrechte | niedrig — **umgesetzt** (0.21.0) |
-| 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel — **umgesetzt** (0.22.0) |
-| 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch — **umgesetzt** (0.23.0; ohne Consumer-/Provider-Vertragstests) |
-| 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch — **umgesetzt** (0.24.0/0.25.0) |
-| 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional — Koordinationsschicht **umgesetzt** (0.26.0), Netz-Transport bewusst zurückgestellt |
-| 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** (0.27.0–0.30.0) |
+| 0 | Architektur- und Datenmodellvorbereitung: Parent-Child-Referenzen, Workflow-Ereignisse in Audit und Warum-Trace, Feature-Flag; bestehende Einzel-Runs bleiben unverändert lauffähig | niedrig — **umgesetzt** |
+| 1 | Parallele Read-only-Analyse: mehrere Analyse-Runs (Requirements, Architektur, Security, Testplanung) parallel, Synthese-Task, menschliche Planfreigabe — Planung bleibt ohne Änderungsrisiko, weil keine Schreibrechte | niedrig — **umgesetzt** |
+| 2 | Parallele Child Runs für unabhängige Module: Branch/Worktree je Task, Workspace Leases, Merge Queue, lokales Gate je Child Run, Integration Gate | mittel — **umgesetzt** |
+| 3 | Vertragsbasierte Parallelisierung: Contract Registry, Content-Hash je Vertrag, automatische Stale-Erkennung, Consumer-/Provider-Vertragstests | mittel–hoch — **umgesetzt** (ohne Consumer-/Provider-Vertragstests) |
+| 4 | Dynamisches Replanning und Merge Intelligence: versionierte Planänderungen, Konfliktklassifikation, Rebase-/Revalidierungs-Pipeline, Eskalation mit vollständigem Kontext | hoch — **umgesetzt** |
+| 5 | Distributed Worker Pool (nur bei gemessenem Bedarf): persistente Task-Queue, Worker-Leasing, horizontale Skalierung — Single-Host- und Air-Gap-Betrieb bleiben erhalten | optional — Koordinationsschicht **umgesetzt**, Netz-Transport bewusst zurückgestellt |
+| 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** |
 
 > **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.30.0,
 > Stand 9. August 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
@@ -1274,19 +1271,11 @@ zusammenfassen:
 > Weiterentwicklung verwirft diese Praxiserkenntnis nicht, sondern
 > generalisiert sie: Mehrere Agenten dürfen parallel arbeiten, sofern
 > Schreibbereiche, Verträge und Zustände isoliert und durch einen
-> übergeordneten Workflow kontrolliert werden. Der Weg dorthin ist selbst
-> eine Aussage: 0.21.0 begann an der risikoärmsten Stelle — mehrere Agenten
-> analysieren parallel, keiner schreibt. 0.22.0 fügte die Schreibrechte
-> hinzu, band sie aber an eine Besitzregel: Wessen Schreibbereiche sich
-> überschneiden, startet nicht. 0.23.0 gab den gemeinsamen Verträgen eine
-> versionierte Fassung, gegen die gearbeitet wird, 0.24.0 machte jede
-> Planänderung begründungspflichtig und attestierbar, 0.25.0 verwandelte
-> den Sammelbegriff Merge-Konflikt in eine Diagnose mit Handlungsempfehlung,
-> 0.26.0 gab den Workflows eine Koordinationsschicht, die Ansprüche vor
-> Seitenwirkungen stellt, und 0.27.0 eine Messung, die ihre eigenen Lücken
-> ausweist. Erst die Koordination beweisen, dann die Schreibrechte
-> verteilen, dann die Verträge festhalten, dann das Umplanen nachweisbar
-> machen, dann messen — und den verteilten Betrieb erst, wenn der Bedarf
-> gemessen ist. Von einem kontrollierten Agentenlauf zu parallelen
-> Agenten-Workflows — ohne das Single-Writer-, Governance- und
-> Nachweisprinzip aufzugeben.
+> übergeordneten Workflow kontrolliert werden. Der Weg dorthin — die
+> Release-Verlaufstabelle am Anfang von 19.10 — ist selbst eine Aussage,
+> denn seine Reihenfolge folgt dem Risiko: erst die Koordination beweisen,
+> dann die Schreibrechte verteilen, dann die Verträge festhalten, dann das
+> Umplanen nachweisbar machen, dann messen — und den verteilten Betrieb
+> erst, wenn der Bedarf gemessen ist. Von einem kontrollierten Agentenlauf
+> zu parallelen Agenten-Workflows — ohne das Single-Writer-, Governance-
+> und Nachweisprinzip aufzugeben.

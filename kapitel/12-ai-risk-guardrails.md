@@ -24,6 +24,8 @@ Guardrails erzwingen definierte technische Mindestkriterien, liefern strukturier
 
 ![AI-Guardrails-Pipeline zur Validierung agentisch erzeugter Codeänderungen](abbildungen/out/abb13.pdf){width=100%}
 
+\FloatBarrier
+
 | Komponente | Funktion | Umsetzung |
 | --- | --- | --- |
 | Claim Verification (in v1.3: Halluzinations-Erkennung) | Prüft ob Code auf existierenden Patterns basiert | Grep/AST-Analyse vor Commit |

@@ -35,7 +35,9 @@ public class SecretScannerHook {
         Pattern.compile("AKIA[0-9A-Z]{16}"),                  // AWS Access Key
         Pattern.compile("ghp_[0-9a-zA-Z]{36}"),               // GitHub Token
         Pattern.compile("-----BEGIN (RSA |EC )?PRIVATE KEY"), // Private Keys
-        // High-entropy hex (SHA1-like)
+        // High-entropy hex (SHA1-like). Achtung: matcht auch jede
+        // Git-Commit-SHA — in der Praxis False-Positive-Filter nötig
+        // (z. B. Allowlist für .git-Pfade und Lockfiles)
         Pattern.compile("[0-9a-f]{40}")
     );
 

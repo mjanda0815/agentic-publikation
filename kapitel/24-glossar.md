@@ -30,6 +30,7 @@
 | MCP | Model Context Protocol – herstellerneutraler Industriestandard zur Werkzeuganbindung (ursprünglich Anthropic, seit 12/2025 Agentic AI Foundation / Linux Foundation; Kap. 18). |
 | Merge Coordinator | Komponente zur kontrollierten Rebase-, Merge-, Konflikt- und Revalidierungssteuerung (seit 0.22.0 implementiert, Feature-Flag; Kap. 19.10). |
 | OWASP | Open Worldwide Application Security Project (bis 2023: Open Web Application Security Project) – Sicherheitsstandards. |
+| Owned Paths | Die Pfade, die ein Workflow Task exklusiv beschreiben darf — technische Grundlage des Single-Writer-Prinzips (Kap. 22.4, 19.10). |
 | Plan-Run | Lauf, der nur analysiert und Arbeitsschritte vorschlägt; darf keinen Code ändern (Kap. 19). |
 | Policy-as-Code | Regeln als versioniertes, signiertes Dokument mit genau einer aktiven Version je Mandant (Kap. 19). |
 | PSD2 | Payment Services Directive 2 – EU-Zahlungsdiensterichtlinie. |
@@ -43,7 +44,6 @@
 | SDLC | Software Development Lifecycle – Entwicklungslebenszyklus. |
 | Sealed Interface | Java-Feature zur Einschränkung implementierender Klassen. |
 | Single Writer | Prinzip: Innerhalb eines Branch, Worktree oder Workspace arbeitet genau ein Agent schreibend (Kap. 19). |
-| Owned Paths | Die Pfade, die ein Workflow Task exklusiv beschreiben darf — technische Grundlage des Single-Writer-Prinzips (Kap. 22.4, 19.10). |
 | Slice | Fachlich geschnittenes Modul (Bounded Context) eines modularen Monolithen (Kap. 19). |
 | Testcontainers | Docker-basierte Integrationstests für Java. |
 | Warum-Trace | Rekonstruktion je Lauf, welche Policy, welches Modell und welche Freigaben gewirkt haben (Kap. 19). |

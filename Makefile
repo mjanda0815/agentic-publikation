@@ -1,10 +1,10 @@
 # Makefile — Pandoc/LaTeX-Build-Pipeline für das Whitepaper
 # „Agentic Software Development — Enterprise Architecture with AI Agents"
 #
-# Quelle des Fließtexts sind die Markdown-Kapitel in kapitel/ (00–23).
+# Quelle des Fließtexts sind die Markdown-Kapitel in kapitel/ (00–24).
 # kapitel/00-management-summary.md ist das unnummerierte Management Summary
 # (wird nach der Pandoc-Konvertierung von \chapter zu \addchap gewandelt,
-# siehe Ziel `tex`). Kapitel 01–23 tragen die Original-Kapitelnummerierung.
+# siehe Ziel `tex`). Kapitel 01–24 tragen die Original-Kapitelnummerierung.
 #
 # Kapitel-Überschriften tragen im Markdown die Original-Nummerierung
 # (z. B. "# 1 Warum KI-Agenten in der Softwareentwicklung?",
@@ -13,7 +13,7 @@
 # \section etc. nummerieren automatisch). Die Markdown-Quelldateien selbst
 # bleiben dabei unverändert.
 #
-# Die sechs Teile (TEIL I–VI) werden NICHT aus den Kapitel-Markdown-Dateien
+# Die sieben Teile (TEIL I–VII) werden NICHT aus den Kapitel-Markdown-Dateien
 # erzeugt, sondern als \part{...} direkt in main.tex gesetzt.
 
 PANDOC := pandoc
@@ -25,6 +25,10 @@ CHAPTERS := 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22
 # Pandoc setzt bei Abbildungen height=\textheight; ohne Abzug fuer die
 # Bildunterschrift laufen ganzseitige Floats ueber ("Float too large").
 FIG_HEIGHT := sed 's/height=.textheight/height=0.86\\textheight/'
+# Pandoc escapt ^ als Akzent-Makro \^{} — das setzt den Akzent-Glyphen
+# (Copy-Paste liefert dann U+02C6 statt ^; eine kopierte Regex [ˆ"] waere
+# nicht mehr invertierend). \textasciicircum{} setzt das ASCII-Zeichen.
+FIX_CARET := sed 's/\\\^{}/\\textasciicircum{}/g'
 # Nummern strippen + unnummerierte Zwischenueberschriften als {-} markieren
 # (zaunbewusst; ersetzt den frueheren reinen sed-Filter)
 STRIP_NUMBERING := python3 skripte/kapitel-filter.py <
@@ -51,12 +55,12 @@ tex: $(BUILD)
 			$(STRIP_NUMBERING) "$$src" | $(PANDOC) -f markdown -t latex \
 				--top-level-division=chapter --biblatex --highlight-style=tango \
 				| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k$$n-/g" \
-				| $(FIG_HEIGHT) | $(ADDCHAP) > $(BUILD)/$$n.tex; \
+				| $(FIG_HEIGHT) | $(FIX_CARET) | $(ADDCHAP) > $(BUILD)/$$n.tex; \
 		else \
 			$(STRIP_NUMBERING) "$$src" | $(PANDOC) -f markdown -t latex \
 				--top-level-division=chapter --biblatex --highlight-style=tango \
 				| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k$$n-/g" \
-				| $(FIG_HEIGHT) > $(BUILD)/$$n.tex; \
+				| $(FIG_HEIGHT) | $(FIX_CARET) > $(BUILD)/$$n.tex; \
 		fi; \
 	done
 
@@ -112,5 +116,5 @@ fabrik: $(BUILD)
 		| $(PANDOC) -f markdown -t latex --top-level-division=chapter \
 			--biblatex --highlight-style=tango \
 		| sed -E "s/\\\\(hypertarget|label)\\{/\\\\\\1{k19-/g" \
-		| $(FIG_HEIGHT) > $(BUILD)/19-fabrik.tex
+		| $(FIG_HEIGHT) | $(FIX_CARET) > $(BUILD)/19-fabrik.tex
 	$(LATEXMK) -pdf -interaction=nonstopmode -outdir=$(BUILD) main-fabrik.tex

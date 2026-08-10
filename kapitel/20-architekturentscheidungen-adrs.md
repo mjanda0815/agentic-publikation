@@ -569,21 +569,23 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 
 > **Entscheidungsstatus:** *Accepted* (August 2026) — ersetzt ADR-1.
 > **Implementierungsstatus:** *Implemented* für die Roadmap-Stufen 0 bis 4
-> und 6 (Parent Workflow, Child Runs, Task-Graph, Synthese, parallel
+> und 6 — Parent Workflow, Child Runs, Task-Graph, Synthese, parallel
 > **schreibende** Child Runs mit Merge Queue und Integration Gate, Contract
-> Registry, versionierte Planrevisionen, Merge Intelligence, seit 0.27.0
-> die Produktivitäts- und Qualitätsmessung — seit 0.28.0 einschließlich
-> der Testabdeckungsänderung, seit 0.29.0 der Rollback-Erkennung, deren
-> Zuschnitt die strikte Richtung dieses ADR bestätigt: getrennte Anwender
-> für Run- und Workflow-Ebene, weil der `run`-Slice nichts von der
-> Workflow-Ebene wissen darf —, seit 0.30.0 der Eingriffs- und
-> Aufwandserfassung an der Freigabeentscheidung), hinter deaktiviertem
-> Feature-Flag. Von Stufe 5 ist die Koordinationsschicht seit 0.26.0
-> umgesetzt — Worker-Registrierung mit Herzschlag, Anspruch vor
-> Seitenwirkung, automatischer Versand hinter eigenem, standardmäßig
-> deaktiviertem Schalter; der verteilte Betrieb über mehrere Hosts ist
-> zurückgestellt, weil die Voraussetzung gemessenen Bedarfs nicht erfüllt
-> ist (19.10).
+> Registry, versionierte Planrevisionen, Merge Intelligence sowie die
+> Produktivitäts- und Qualitätsmessung samt Testabdeckungsänderung,
+> Rollback-Erkennung und Eingriffs- und Aufwandserfassung —, hinter
+> deaktiviertem Feature-Flag, mit zwei Ausnahmen, die ohne Flag wirken
+> (Einzel-Run-Teil der Rollback-Erkennung, Aufwandsfeld an der
+> Run-Freigabe); die Zuordnung der Releases zeigt die
+> Release-Verlaufstabelle in 19.10. Von Stufe 5 ist die
+> Koordinationsschicht umgesetzt — Worker-Registrierung mit Herzschlag,
+> Anspruch vor Seitenwirkung, automatischer Versand hinter eigenem,
+> standardmäßig deaktiviertem Schalter; der verteilte Betrieb über mehrere
+> Hosts ist zurückgestellt, weil die Voraussetzung gemessenen Bedarfs
+> nicht erfüllt ist. Der Zuschnitt der Rollback-Erkennung bestätigt die
+> strikte Richtung dieses ADR: getrennte Anwender für Run- und
+> Workflow-Ebene, weil der `run`-Slice nichts von der Workflow-Ebene
+> wissen darf (19.10).
 
 ### Motivation / Kontext
 

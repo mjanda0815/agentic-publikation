@@ -27,7 +27,7 @@ public record TaskGraph(
             @Nullable String resultRef
     ) {}
 
-    public enum TaskStatus { PENDING, READY, RUNNING, COMPLETED, FAILED, SKIPPED }
+    public enum TaskStatus { PENDING, RUNNING, COMPLETED, FAILED, SKIPPED }
 
     // Nächste ausführbare Tasks (alle Abhängigkeiten erfüllt)
     public List<TaskNode> readyTasks() {

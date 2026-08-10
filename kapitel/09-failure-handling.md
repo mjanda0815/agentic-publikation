@@ -2,7 +2,7 @@
 
 > **Hinweis:** In Enterprise-Umgebungen ist nicht die Frage ob, sondern wann ein Agent scheitert. Ein robustes Failure-Handling-Modell ist der Unterschied zwischen einem Prototyp und einem produktionsreifen System.
 
-Das Failure-Handling-Modell definiert fünf Eskalationsstufen, die je nach Schwere und Art des Fehlers greifen. Das Modell folgt dem Prinzip "automatisiere was möglich, eskaliere was nötig":
+Das Failure-Handling-Modell definiert fünf Eskalationsstufen, die je nach Schwere und Art des Fehlers greifen. Das Modell folgt dem Prinzip „automatisiere was möglich, eskaliere was nötig“:
 
 | # | Strategie | Beschreibung | Anwendungsfall |
 | --- | --- | --- | --- |

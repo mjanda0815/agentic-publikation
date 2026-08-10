@@ -71,6 +71,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 public class AmountCheckWorker {
     private static final Money THRESHOLD = Money.of(10000, "EUR");
 
+    // Spring-Zeebe-SDK vor 8.1; seither (und im Camunda Spring SDK):
+    // @JobWorker — siehe Versionshinweis am Kapitelanfang
     @ZeebeWorker(type = "payment-amount-check", timeout = 30000, maxJobsActive = 10)
     public void handle(@ZeebeVariable Money amount, @ZeebeVariable String paymentId,
             JobClient client, ActivatedJob job) {

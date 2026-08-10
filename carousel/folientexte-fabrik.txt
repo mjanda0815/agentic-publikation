@@ -1,6 +1,6 @@
 Reintexte des LinkedIn-Karussells zum Sonderdruck
 „Die SoftwareFabrik — von der Referenzarchitektur zum System"
-Martin Janda, Sonderdruck zur Whitepaper-Fassung 2.9, August 2026
+Martin Janda, Sonderdruck zur Whitepaper-Fassung 3.0, August 2026
 
 Redigierbare Textfassung von carousel/carousel-fabrik.tex. Änderungen hier
 sind NICHT automatisch im PDF — sie müssen in carousel-fabrik.tex nachgezogen

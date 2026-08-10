@@ -524,6 +524,64 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Kap. 6 (einziger Fund außerhalb von Codeblöcken repo-weit);
       Fabrik-Roadmap-„AP-6" in quellen/ ausgeschrieben
       (Verwechslungsgefahr mit AP-6 des Whitepapers).
+- [x] **Version 3.0: Redaktions- und Satzdurchgang über alle vier PDFs**
+      (10.08.2026, nach externem Gutachten; Versionssprung auf 3.0 passend
+      zum zugrunde liegenden Fabrik-Release 0.30.0):
+      **Redaktionell:** Die fünf- bis sechsfach fast wortgleiche
+      Release-Litanei 0.21.0→0.30.0 (Management Summary, 19-Kopfkasten,
+      19.1-Erhebungsvermerk, 19.10-Statuskasten, ADR-5, „Die neue
+      Position", Kap.-2-Praxis-Check) auf eine autoritative
+      **Release-Verlaufstabelle** in 19.10 konsolidiert (Release → Stufe →
+      Inhalt → Migrationen V40–V54); alle anderen Stellen auf zwei Sätze
+      plus Verweis gekürzt — beim nächsten Release ist nur noch eine
+      Tabellenzeile zu ergänzen. Management Summary dabei für Erstleser
+      entlastet (Bewegung statt Release-Nummern, ein Stand-Anker bleibt).
+      Doppelter Satzanfang in der abb26-Unterschrift (19.4) entfernt;
+      Glossar „Owned Paths" alphabetisch einsortiert; Tokenizer-Angabe in
+      15.1 präzisiert („bis zu rund 35 %, inhaltsabhängig; Faktor
+      1,0x–1,35x").
+      **Satz/PDF:** Kap.-12-Komponententabelle nicht mehr von Abb. 12.2
+      zerrissen (\FloatBarrier + placeins; zusätzlich Needspace vor jeder
+      longtable gegen Kopf+Einzelzeile am Seitenende);
+      Inhaltsverzeichnis-Nummernbox für „VII." verbreitert
+      (numwidth Part); PDF-Metadaten via \hypersetup in beiden
+      Hauptdokumenten (Title/Author/Subject/Keywords/pdflang).
+      **Copy-Paste-Fidelity der Listings:** Pandoc escapt `^` als
+      Akzent-Makro \^{} → kopiert als U+02C6; Fix als sed-Stufe FIX_CARET
+      im Makefile (\textasciicircum), dazu glyphtounicode +
+      \pdfgentounicode, upquote (gerade Anführungszeichen) und
+      Umbruchpfeile per accsupp mit leerem ActualText — kopierte Regexes
+      und Code sind jetzt gültig (pdftotext-verifiziert: kein U+02C6,
+      kein Umbruchpfeil mehr im extrahierten Text).
+      **Listings inhaltlich:** Phase-Enum in Kap. 6 in Tabellenreihenfolge
+      (MEMORY_UPDATING vor TERMINATED); ungenutzten Status READY aus der
+      TaskStatus-Enum in Kap. 7 entfernt (readyTasks filtert PENDING);
+      False-Positive-Kommentar am High-Entropy-Pattern in Kap. 14 (matcht
+      jede Git-SHA); @ZeebeWorker-Listing in Kap. 17 trägt den
+      @JobWorker-Hinweis jetzt als Kommentar im Listing selbst.
+      Seitenzahlen: Whitepaper 164 → 165, Sonderdruck 39 (unverändert);
+      README (stand noch auf 2.2/157/33), CITATION.cff, .zenodo.json,
+      beide Titelseiten und CLAUDE.md nachgezogen.
+- [x] **Version 3.0, Zweitgutachter-Runde** (10.08.2026): Zwei
+      blockierende Befunde eingearbeitet — (B1) beide Karussells samt
+      Folientexten standen noch auf „Fassung 2.9" (Wiederholung des
+      2.8-Fehlers; auf 3.0 gehoben, neu gebaut); (B2) die
+      Tokenizer-Präzisierung „1,0x–1,35x" stand nicht in der zitierten
+      Quelle @anthropicmodels (dort „roughly 30%"), sondern im
+      Migrationsleitfaden → neuer Bib-Eintrag @anthropicmigration, Satz
+      nennt jetzt beide Quellen. Dazu: Randüberlauf (25 pt) der neuen
+      Tabellen-Fußnote behoben; ADR-5-Status nennt die zwei
+      Flag-Ausnahmen wieder explizit; Tabellen-Einleitung sagt
+      „des Whitepapers" (Sonderdruck!); Rest-Litanei in 22.4 auf die
+      Tabelle umgestellt (nannte 0.22.0 pauschal für Stufe-0/1-Bausteine);
+      Camunda-Kommentar korrigiert (@JobWorker seit Spring Zeebe 8.1,
+      nicht 8.5); vier ASCII-`"` in Prosa von Kap. 3/8/9/23 (die
+      2.9-Notiz „einziger Fund" war unvollständig); Makefile-/
+      Präambel-Kommentare entstaubt (sechs→sieben Teile, 00–24).
+      Faktentreue der Release-Verlaufstabelle vom Gutachter Zeile für
+      Zeile gegen quellen/softwarefabrik bestätigt (V40–V54 lückenlos,
+      keine Widersprüche zum Umsetzungsstand-Kasten, kein Faktenverlust
+      durch die Kürzungen); Preistabelle 15.1 erneut quellengeprüft.
 - [ ] Prüfschritt ins Makefile aufnehmen: ASCII-`"` in kapitel/*.md
       außerhalb von Codeblöcken ablehnen (babel-Shorthand-Falle, siehe
       2.8-Befund B1).

@@ -1,10 +1,16 @@
 % praeambel.tex — Paket- und Layout-Konfiguration
 % Whitepaper „Agentic Software Development — Enterprise Architecture with
-% AI Agents", modernisierte Fassung 2026 (v1.3 -> v2.0)
+% AI Agents", modernisierte Fassung 2026 (v1.3 -> v2.x/v3.x)
 
 % --- Encoding, Sprache, Schrift ---
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+% Copy-Paste-Fidelity: ToUnicode-CMaps fuer alle Glyphen. Ohne dies liefert
+% das Kopieren aus Code-Listings u. a. fuer ^ den Modifier-Zirkumflex ˆ
+% (U+02C6) statt U+005E — eine kopierte Regex-Zeichenklasse [ˆ"] waere
+% dann nicht mehr invertierend.
+\input{glyphtounicode}
+\pdfgentounicode=1
 \usepackage[ngerman]{babel}
 \usepackage[style=german]{csquotes}
 \usepackage{microtype}
@@ -52,14 +58,24 @@
 % Pandoc setzt Code als verbatim; fvextra rüstet Zeilenumbruch nach.
 % breakautoindent: die Fortsetzungszeile beginnt in der Einrückspalte der
 % umbrochenen Zeile; ein dezenter grauer Pfeil markiert den Umbruch.
+% upquote: gerade Anführungszeichen und Backticks in Verbatim (statt
+% typographischer) — kopierter Code bleibt gültiger Code.
 \usepackage{fvextra}
+\usepackage{upquote}
+\usepackage{xcolor}
+% accsupp: der Umbruchpfeil ist reine Optik und darf beim Kopieren aus dem
+% PDF keinen Text beitragen (ActualText leer).
+\usepackage{accsupp}
+\newcommand{\umbruchpfeil}{%
+  \BeginAccSupp{ActualText={}}%
+  \textcolor{gray}{\tiny$\hookrightarrow$}%
+  \EndAccSupp{}}
 \RecustomVerbatimEnvironment{verbatim}{Verbatim}{%
   breaklines=true,
   breakautoindent=true,
-  breaksymbolleft={\textcolor{gray}{\tiny$\hookrightarrow$}},
+  breaksymbolleft={\umbruchpfeil},
   breaksymbolindentleft=0.6em,
   fontsize=\small}
-\usepackage{xcolor}
 
 % Pandoc-Syntax-Highlighting (Stil: tango; Makros generiert via
 % `pandoc -s --highlight-style=tango`, abgelegt in praeambel-highlighting.tex)
@@ -68,7 +84,7 @@
   commandchars=\\\{\},
   breaklines=true,
   breakautoindent=true,
-  breaksymbolleft={\textcolor{gray}{\tiny$\hookrightarrow$}},
+  breaksymbolleft={\umbruchpfeil},
   breaksymbolindentleft=0.6em,
   fontsize=\small}
 
@@ -90,11 +106,21 @@
 \setcounter{topnumber}{3}
 \setcounter{bottomnumber}{2}
 \setcounter{totalnumber}{4}
+% placeins stellt \FloatBarrier bereit — punktuell dort eingesetzt, wo eine
+% verschobene Abbildung sonst mitten in einer mehrseitigen Tabelle landet
+% (z. B. Komponenten-Tabelle in Kapitel 12).
+\usepackage{placeins}
+% Mehrseitige Tabellen (longtable) nicht mit Kopf + einzelner Zeile am
+% Seitenende beginnen lassen — dann lieber die Tabelle auf die Folgeseite.
+\BeforeBeginEnvironment{longtable}{\Needspace*{6\baselineskip}}
 
 % --- Inhaltsverzeichnis: Platz fuer zweistellige Unterabschnittsnummern ---
-% Ohne Verbreiterung klebt "19.10" im Sonderdruck am Titel ("19.10Geplante").
+% Ohne Verbreiterung klebt "19.10" im Sonderdruck am Titel ("19.10Vom Run").
 \DeclareTOCStyleEntry[numwidth=3.1em]{tocline}{section}
 \DeclareTOCStyleEntry[numwidth=2.0em]{tocline}{chapter}
+% Gleiches Problem bei den Teilen: die Voreinstellung ist fuer dreistellige
+% roemische Ziffern zu schmal ("VII.Architekturentscheidungen").
+\DeclareTOCStyleEntry[numwidth=3.0em]{tocline}{part}
 % Gleiches Problem im Abbildungs- und Tabellenverzeichnis: dort tragen die
 % Eintraege Kapitelnummer + laufende Nummer ("19.10."), was in der schmalen
 % Voreinstellung ohne Abstand an den Titel stiess ("19.10.Deployment-Sicht").

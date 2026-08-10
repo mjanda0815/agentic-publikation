@@ -22,8 +22,10 @@ Tabelle war bei Drucklegung bereits überholt. Die Bewegung ist dabei nicht
 monoton nach unten: Die Haiku-Klasse wurde über zwei
 Generationen hinweg viermal teurer je Token — von Haiku 3 ($0.25/$1.25)
 über Haiku 3.5 ($0.80/$4) auf Haiku 4.5 ($1/$5) —, und seit der
-Opus-4.7-Generation erzeugt ein neuer Tokenizer für denselben Text rund 30 %
-mehr Tokens [@anthropicmodels] — Token-Preise sind generationsübergreifend
+Opus-4.7-Generation erzeugt ein neuer Tokenizer für denselben Text bis zu
+rund 35 % mehr Tokens (inhaltsabhängig; Anthropics Migrationsleitfaden
+nennt einen Faktor von 1,0x bis 1,35x, der Modellüberblick „rund 30 %“)
+[@anthropicmigration; @anthropicmodels] — Token-Preise sind generationsübergreifend
 also nur mit Vorbehalt vergleichbar. Die Lehre: Preistabellen in
 Kostenmodellen für agentische Entwicklung brauchen zwingend ein Stand-Datum,
 und Wirtschaftlichkeitsrechnungen sind in beide Richtungen schnell veraltet.

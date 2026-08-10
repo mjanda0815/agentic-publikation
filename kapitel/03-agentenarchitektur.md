@@ -81,7 +81,7 @@ Werkzeug-Dokumentation zu prüfen:
 
 | Parameter | Pflicht | Typ | Beschreibung |
 | --- | --- | --- | --- |
-| subagent_type | Ja | string | Welcher Agententyp gestartet wird (z. B. "code-reviewer"); eigene Typen werden als Markdown-Dateien mit Frontmatter unter `.claude/agents/` definiert |
+| subagent_type | Ja | string | Welcher Agententyp gestartet wird (z. B. `code-reviewer`); eigene Typen werden als Markdown-Dateien mit Frontmatter unter `.claude/agents/` definiert |
 | prompt | Ja | string | Detaillierte Aufgabenanweisungen mit Kontext und Erwartungen |
 | description | Ja | string | Kurze Zusammenfassung der Aufgabe (laut Tool-Schema, für Anzeige und Logging) |
 | model | Nein | enum | Modellklasse für diesen Agenten (sonnet, opus, haiku, …); ohne Angabe erbt der Agent das Modell der Hauptsitzung |
