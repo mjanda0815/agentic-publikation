@@ -636,6 +636,15 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       verifiziert (PDFs 200/byte-identisch, Reihenfolge, Einzelseite).
       Details im Log des janda-io-migration-Projekts
       (logs/2026-08-10-content-whitepaper-v3.0.log).
+- [x] **LinkedIn-Post-Entwürfe zu beiden Karussells** (10.08.2026):
+      `carousel/linkedin-posts.md` — je Karussell ein Beitragstext
+      (Whitepaper: Prinzipien-Hook „fehlende Prozessschicht";
+      Fabrik: „Bauen korrigiert" mit den vier Positionsverschiebungen
+      und dem CI-Gate-Befund), Dokumenttitel-Vorschläge,
+      Links-im-Kommentar-Variante, Posting-Empfehlung (zeitversetzt,
+      Whitepaper zuerst). Alle Kennzahlen aus Kapitel 19
+      (Stand 0.30.0), Feature-Flag-Vorbehalt und ROI-Verzicht im
+      Text. Posten macht Martin selbst.
 - [x] **Klontest für v3.0 verifiziert** (10.08.2026): frischer
       `git clone --depth 1` + `make pdf fabrik karussell` baut fehlerfrei;
       Whitepaper 165 Seiten, Sonderdruck 39 Seiten, 2 × 10 Folien.
