@@ -613,8 +613,14 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Als PR #113 im Fabrik-Repo (neues Deck nach Namensschema, Link/
       Chip-Nachzug auf whitepaper/doku DE+EN, v2.9-Deck bleibt für
       Deep-Links); Fabrik-Session für Merge/Deploy benachrichtigt.
-- [ ] Deploy-Verifikation PPTX v3.0 nach Merge von PR #113: neue
-      PPTX-URL per curl auf HTTP 200, Live-Seiten gegen Repo diffen.
+- [x] **Deploy-Verifikation PPTX v3.0 bestanden** (10.08.2026): PR #113
+      squash-gemergt (695ac15) und deployt. Per curl: neue PPTX-URL
+      HTTP 200 (116.919 Bytes), heruntergeladenes Live-Deck zeigt auf
+      der Titel-Folie „Whitepaper v3.0"; v2.9-Deck weiter 200
+      (Deep-Links); alle vier geänderten Seiten (whitepaper/doku,
+      DE+EN) live byte-identisch zum Repo. Damit ist die
+      v3.0-Veröffentlichung vollständig — kein 2.9-Verweis mehr auf
+      der Website.
 - [x] **Klontest für v3.0 verifiziert** (10.08.2026): frischer
       `git clone --depth 1` + `make pdf fabrik karussell` baut fehlerfrei;
       Whitepaper 165 Seiten, Sonderdruck 39 Seiten, 2 × 10 Folien.
