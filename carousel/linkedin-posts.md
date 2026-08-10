@@ -41,6 +41,8 @@ https://www.janda.io/veroeffentlichungen
 Quellen, Abbildungsskripte und Build-Pipeline:
 https://github.com/mjanda0815/agentic-publikation
 
+Was die Praxis am Konzept korrigiert hat — die Referenzimplementierung hat vier Positionen des Whitepapers verschoben —, folgt in einem eigenen Beitrag.
+
 #AgenticSoftwareDevelopment #CodingAgents #SoftwareArchitecture #EnterpriseArchitecture #Governance #Java #SpringBoot
 
 **Variante „Links im ersten Kommentar":** Die beiden Link-Zeilen am Ende
@@ -59,7 +61,9 @@ Quellen und Build-Pipeline: https://github.com/mjanda0815/agentic-publikation"
 
 Eine Architektur aufschreiben ist das eine. Sie zu bauen korrigiert sie.
 
-Aus einem Whitepaper über den kontrollierten Einsatz von Coding-Agenten wurde ein laufendes System: 30 fachliche Slices, 38 Releases in vier Monaten, rund 41.700 Zeilen Produktivcode, Testabdeckung als buildbrechendes Gate. Interessanter als die Zahlen sind die vier Stellen, an denen die Praxis das Konzept korrigiert hat:
+Vor einer Woche habe ich hier die Prinzipien des Whitepapers „Agentic Software Development" gezeigt (Link zum Beitrag im ersten Kommentar). Heute der zweite Teil: was das Bauen daran korrigiert hat.
+
+Aus dem Whitepaper wurde ein laufendes System: 30 fachliche Slices, 38 Releases in vier Monaten, rund 41.700 Zeilen Produktivcode, Testabdeckung als buildbrechendes Gate. Interessanter als die Zahlen sind die vier Stellen, an denen die Praxis das Konzept korrigiert hat:
 
 1️⃣ Perspektivenvielfalt ist beim Prüfen wertvoller als beim Erzeugen. Geplant waren sieben parallele Spezialagenten — gebaut wurde ein schreibender Agent je Lauf, mit mehreren unabhängigen Prüfern danach.
 
@@ -78,10 +82,19 @@ https://www.janda.io/veroeffentlichungen
 
 #SoftwareFabrik #AgenticSoftwareDevelopment #CodingAgents #ControlPlane #SoftwareArchitecture #Java #SpringBoot
 
-**Variante „Links im ersten Kommentar":** Link-Zeile ersetzen durch
-„Sonderdruck (39 Seiten) und Whitepaper: Link im ersten Kommentar."; als
-ersten Kommentar posten:
-„Sonderdruck und Whitepaper (CC BY 4.0): https://www.janda.io/veroeffentlichungen"
+**Erster Kommentar (in jedem Fall posten — der Beitragstext verweist
+darauf):**
+„Teil 1 mit den Prinzipien des Whitepapers: <URL des ersten Beitrags
+nach dem Posten hier eintragen> — Sonderdruck und Whitepaper (CC BY 4.0):
+https://www.janda.io/veroeffentlichungen"
+
+**Variante „Links komplett im ersten Kommentar":** Zusätzlich die
+Link-Zeile im Beitragstext ersetzen durch „Sonderdruck (39 Seiten) und
+Whitepaper: Link im ersten Kommentar."
+
+**Hinweis:** Falls zwischen den Posts mehr oder weniger als eine Woche
+liegt, „Vor einer Woche" im Einstieg anpassen (z. B. „Vor ein paar
+Tagen", „Letzte Woche").
 
 ---
 
