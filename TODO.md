@@ -601,9 +601,20 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       v1.3-Deep-Link und v2.9-Fassungen weiter 200, PPTX (v2.9-Stand)
       erreichbar; alle acht Seiten live byte-identisch zum Repo-Stand
       (/index.html liefert 301 auf / — kein Drift, nur Redirect).
-      Offen bleibt allein die PPTX-Regenerierung auf v3.0 durch die
-      Fabrik-Seite (im PR und per Nachricht erbeten; Seiten verlinken
-      bis dahin bewusst das v2.9-Deck mit expliziter Stand-Angabe).
+      Offen blieb zunächst die PPTX-Regenerierung auf v3.0 — siehe
+      Folgeeintrag: entfiel, das Deck wurde direkt aktualisiert.
+- [x] **Foliensatz (PPTX) auf v3.0 nachgezogen** (10.08.2026): Martins
+      Klarstellung — das Deck wurde außerhalb mit Claude erstellt, keine
+      Fabrik-Regenerierung nötig. Direkt im PPTX (ZIP/XML) angepasst:
+      Version stand nur an zwei Textstellen (Titel-Folie „Whitepaper
+      v2.9" und Notiz zu Folie 1); Inhalt und Erhebungsstand (0.30.0,
+      9.8.2026) unverändert. Validiert: Dateiliste identisch zum
+      Original, nur die zwei XMLs geändert, alle XMLs wohlgeformt.
+      Als PR #113 im Fabrik-Repo (neues Deck nach Namensschema, Link/
+      Chip-Nachzug auf whitepaper/doku DE+EN, v2.9-Deck bleibt für
+      Deep-Links); Fabrik-Session für Merge/Deploy benachrichtigt.
+- [ ] Deploy-Verifikation PPTX v3.0 nach Merge von PR #113: neue
+      PPTX-URL per curl auf HTTP 200, Live-Seiten gegen Repo diffen.
 - [x] **Klontest für v3.0 verifiziert** (10.08.2026): frischer
       `git clone --depth 1` + `make pdf fabrik karussell` baut fehlerfrei;
       Whitepaper 165 Seiten, Sonderdruck 39 Seiten, 2 × 10 Folien.
