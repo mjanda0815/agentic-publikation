@@ -621,6 +621,21 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       DE+EN) live byte-identisch zum Repo. Damit ist die
       v3.0-Veröffentlichung vollständig — kein 2.9-Verweis mehr auf
       der Website.
+- [x] **v3.0 auf janda.io veröffentlicht** (10.08.2026, von Martin
+      beauftragt): Beide PDFs nach `images/misc/pdf/` der Joomla-6-Site
+      (Namensschema wie softwarefabrik.io); den bestehenden Artikel in
+      /veroeffentlichungen **angepasst statt neu angelegt** (URL/Alias
+      bleibt stabil): Teaser auf v3.0 umgeschrieben — der alte nannte
+      noch „sieben spezialisierte Agenten" und „70–80 % Aufwands-
+      reduktion", was das Whitepaper selbst inzwischen als
+      Modellrechnung einordnet —, jetzt mit SoftwareFabrik-Teil VI,
+      Links auf Whitepaper (165 S.) und Sonderdruck (39 S.),
+      Repro-Hinweis auf das GitHub-Repo (public) und CC-BY-Zeile im
+      Stil der DeFi-Einträge; v1.3 als „Frühere Fassung" verlinkt.
+      Sortierung gedreht: Eintrag steht jetzt oben. Per curl
+      verifiziert (PDFs 200/byte-identisch, Reihenfolge, Einzelseite).
+      Details im Log des janda-io-migration-Projekts
+      (logs/2026-08-10-content-whitepaper-v3.0.log).
 - [x] **Klontest für v3.0 verifiziert** (10.08.2026): frischer
       `git clone --depth 1` + `make pdf fabrik karussell` baut fehlerfrei;
       Whitepaper 165 Seiten, Sonderdruck 39 Seiten, 2 × 10 Folien.
