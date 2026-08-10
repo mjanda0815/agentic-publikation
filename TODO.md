@@ -582,6 +582,13 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Zeile gegen quellen/softwarefabrik bestätigt (V40–V54 lückenlos,
       keine Widersprüche zum Umsetzungsstand-Kasten, kein Faktenverlust
       durch die Kürzungen); Preistabelle 15.1 erneut quellengeprüft.
+- [x] **Klontest für v3.0 verifiziert** (10.08.2026): frischer
+      `git clone --depth 1` + `make pdf fabrik karussell` baut fehlerfrei;
+      Whitepaper 165 Seiten, Sonderdruck 39 Seiten, 2 × 10 Folien.
+      Zusätzlich verifiziert (pdftotext/pdfinfo): PDF-Metadaten gesetzt,
+      Inhaltsverzeichnis „VII. Architekturentscheidungen" mit Abstand,
+      Kap.-12-Tabelle ungerissen unter Abb. 12.2, kopierter Regex-Text
+      `[^\"]` korrekt (kein U+02C6), keine Umbruchpfeile im Kopiertext.
 - [ ] Prüfschritt ins Makefile aufnehmen: ASCII-`"` in kapitel/*.md
       außerhalb von Codeblöcken ablehnen (babel-Shorthand-Falle, siehe
       2.8-Befund B1).
