@@ -594,10 +594,16 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       regenerieren; im PR erbeten). Fabrik-Session benachrichtigt
       (Squash-Merge, Deploy, curl-Verifikation beider Download-URLs plus
       v1.3-Deep-Link, Deploy-Commits ins Repo).
-- [ ] Deploy-Verifikation v3.0 nach Vollzugsmeldung der Fabrik-Session:
-      beide Download-URLs und v1.3-Deep-Link per curl auf HTTP 200,
-      Live-hrefs gegen das Repo diffen (Lehren aus 2.8, siehe
-      Abgleich-Checkliste Punkt 9).
+- [x] **Deploy-Verifikation v3.0 bestanden** (10.08.2026): Die
+      Fabrik-Session hat PR #112 squash-gemergt (0e609b5) und deployt.
+      Per curl geprüft: beide neuen Download-URLs HTTP 200 mit
+      byte-identischer Größe zum Repo (1.336.201 / 727.694 Bytes),
+      v1.3-Deep-Link und v2.9-Fassungen weiter 200, PPTX (v2.9-Stand)
+      erreichbar; alle acht Seiten live byte-identisch zum Repo-Stand
+      (/index.html liefert 301 auf / — kein Drift, nur Redirect).
+      Offen bleibt allein die PPTX-Regenerierung auf v3.0 durch die
+      Fabrik-Seite (im PR und per Nachricht erbeten; Seiten verlinken
+      bis dahin bewusst das v2.9-Deck mit expliziter Stand-Angabe).
 - [x] **Klontest für v3.0 verifiziert** (10.08.2026): frischer
       `git clone --depth 1` + `make pdf fabrik karussell` baut fehlerfrei;
       Whitepaper 165 Seiten, Sonderdruck 39 Seiten, 2 × 10 Folien.
