@@ -582,6 +582,22 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Zeile gegen quellen/softwarefabrik bestätigt (V40–V54 lückenlos,
       keine Widersprüche zum Umsetzungsstand-Kasten, kein Faktenverlust
       durch die Kürzungen); Preistabelle 15.1 erneut quellengeprüft.
+- [x] **Website-Übernahme für v3.0 eingeleitet** (10.08.2026): Beide PDFs
+      ins Fabrik-Repo gelegt (Namensschema
+      `Agentic_Software_Development_v3.0.pdf` /
+      `…_v3.0_SoftwareFabrik_0.30.0.pdf`), acht Seiten (whitepaper/index/
+      doku/projektueberblick, DE+EN) mit Links, Seitenzahlen (165) und
+      Versions-Chips nachgezogen — erstmals regelkonform als
+      Feature-Branch `website/whitepaper-v3.0` + PR #112 (statt direkt auf
+      main, vgl. 2.9-Lektion). PPTX verlinkt bewusst weiter den Stand
+      v2.9/0.30.0 mit expliziter Stand-Angabe (nur die Fabrik-Session kann
+      regenerieren; im PR erbeten). Fabrik-Session benachrichtigt
+      (Squash-Merge, Deploy, curl-Verifikation beider Download-URLs plus
+      v1.3-Deep-Link, Deploy-Commits ins Repo).
+- [ ] Deploy-Verifikation v3.0 nach Vollzugsmeldung der Fabrik-Session:
+      beide Download-URLs und v1.3-Deep-Link per curl auf HTTP 200,
+      Live-hrefs gegen das Repo diffen (Lehren aus 2.8, siehe
+      Abgleich-Checkliste Punkt 9).
 - [x] **Klontest für v3.0 verifiziert** (10.08.2026): frischer
       `git clone --depth 1` + `make pdf fabrik karussell` baut fehlerfrei;
       Whitepaper 165 Seiten, Sonderdruck 39 Seiten, 2 × 10 Folien.
