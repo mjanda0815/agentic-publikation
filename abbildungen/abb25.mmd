@@ -14,6 +14,10 @@ stateDiagram-v2
     VALIDATING --> WAITING_FOR_PR: Push + Pull Request
     WAITING_FOR_PR --> COMPLETED: CI grün + gemerged
     WAITING_FOR_PR --> NEEDS_CORRECTION: CI rot
+    VALIDATING --> WAITING_FOR_INPUT: Spec-Run mit offenen Fragen
+    WAITING_FOR_INPUT --> COMPLETED: beantwortet, Folge-Run
+    WAITING_FOR_INPUT --> CANCELLED
+    WAITING_FOR_INPUT --> FAILED
     VALIDATING --> COMPLETED
     RUNNING --> FAILED
     RUNNING --> TIMEOUT

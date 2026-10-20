@@ -46,8 +46,8 @@ inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 ## 22.3 Teil A — der implementierte Single-Run-Prozess
 
-> **Status: implementiert** (Referenzimplementierung, Stand 0.30.0; vgl.
-> Kapitel 19.1–19.3).
+> **Status: implementiert** (Referenzimplementierung, Stand 0.38.0; vgl.
+> Kapitel 19.1–19.5; die optionale Anforderungsebene in 19.11).
 
 So läuft der Auftrag heute. Ein Lauf, ein schreibender Agent, mehrere
 unabhängige Prüfer:
@@ -55,7 +55,9 @@ unabhängige Prüfer:
 1. **Spezifizieren.** Aus dem Wizard entstehen versionierte
    Markdown-Artefakte (Projektbeschreibung, Instruktionen, Guardrails,
    Definition of Done). Der Mensch editiert sie, bevor der Lauf startet —
-   hier wird Absicht maschinenlesbar.
+   hier wird Absicht maschinenlesbar. Mit eingeschaltetem Spec-Modus kommt
+   eine freigegebene Produkt-Spec mit nummerierten Akzeptanzkriterien
+   hinzu, an die der Lauf gebunden wird (19.11).
 2. **Anlegen und prüfen.** Der Orchestrator prüft Modell-Policy, erlaubte
    Adapter, Attestierungspflicht und Budgetgrenzen; die geltende
    Policy-Version wird attestiert. Verlangt sie eine Freigabe vor der
@@ -65,15 +67,17 @@ unabhängige Prüfer:
    Projektgedächtnis und die Guardrails-Projektion (`AGENTS.md` plus
    minimale `CLAUDE.md`) werden geschrieben, dann zweigt der Lauf auf einen
    eigenen Branch ab (`sdlc/run-<id>`).
-4. **Ausführen.** Genau **ein** Agentenprozess läuft in der Sandbox auf dem
-   Workspace — Domain, Application und Infrastruktur des Payment Service
+4. **Ausführen.** Genau **ein** Agent läuft als Prozess auf dem Host —
+   mit frischem Home-Verzeichnis, ohne nicht freigegebene Werkzeugserver
+   (19.4) — auf dem Workspace — Domain, Application und Infrastruktur des Payment Service
    entstehen nacheinander im selben Lauf. Logs, Token- und Kostenzähler
    laufen live mit.
 5. **Validieren.** Build-Gate (`mvn verify`), Commit auf dem Run-Branch —
    auch bei Misserfolg, damit die Arbeit inspizierbar bleibt —, optional
-   SBOM, dann das Quality Gate: sechs Read-only-Reviewer parallel auf dem
+   SBOM, dann das Quality Gate: sechs Read-only-Reviewer nacheinander auf dem
    Diff (zwei LLM-Reviews, Security, Architektur, Claim Verification,
-   Dependency-Scan), aggregiert zu PASS/WARN/FAIL bzw. ERROR.
+   Dependency-Scan), bei Spec-Bezug als siebter der Abgleich mit den
+   Akzeptanzkriterien, aggregiert zu PASS/WARN/FAIL bzw. ERROR.
 6. **Korrigieren.** Bei Build-Fehler, blockierendem Gate, Merge-Konflikt
    oder roter CI wird der Befund als Feedback-Text in einen erneuten
    Agentenlauf eingespeist — maximal zwei Versuche, danach bleibt der Lauf
@@ -85,7 +89,7 @@ unabhängige Prüfer:
    vor; der Warum-Trace beantwortet für diesen Payment Service, welche
    Policy galt, welches Modell gearbeitet hat und wer freigegeben hat.
 
-Die Parallelität liegt hier ausschließlich in Schritt 5 — bei der
+Mehrere Perspektiven gibt es hier ausschließlich in Schritt 5 — bei der
 Bewertung, nicht bei der Erzeugung (AP-2, AP-4).
 
 ## 22.4 Teil B — derselbe Auftrag als paralleler Workflow

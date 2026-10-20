@@ -4,6 +4,10 @@ Neun Diagramme als Mermaid-Quelltext. Die Nummerierung schließt an das
 Abbildungsverzeichnis von v1.3 an (dort endet es bei Abbildung 20), damit die
 Vorschläge direkt übernommen werden können.
 
+*Stand v0.38.0:* Abbildungen 21, 23–30 sind auf den Tag `v0.38.0`
+nachgezogen (Sandbox-Korrektur nach ADR-0017, MCP-Gateway, Spec-Run-Zustand
+`WAITING_FOR_INPUT`, sieben Reviewer, 63 Tabellen).
+
 Rendern für LaTeX z. B. mit
 `mmdc -i diagramm.mmd -o abbildungen/abb21.pdf -b transparent`.
 
@@ -24,15 +28,18 @@ flowchart TB
 
     FAB["<b>Agentic Software Factory</b><br/>Control Plane<br/>Spring Boot 4 · Java 25"]
 
-    subgraph "Coding-Agenten (Subprozesse)"
+    subgraph "Coding-Agenten (Host-Prozesse, ephemeres HOME, MCP-Nullzustand)"
         CLI["Vendor-CLIs<br/>Claude Code · Codex · Gemini<br/>Aider · Kimi · lokales LLM"]
         GW["Cloud-Gateways<br/>Bedrock · Vertex AI · Azure OpenAI"]
     end
 
+    MCPG["MCP-Gateway (optional)<br/>eigener Prozess · nur lesende Tools"]
+    VER["Offline-Verifier<br/>prüft Audit-Export ohne Fabrik"]
+
     subgraph "Externe Systeme"
         GIT["Git-Remote / GitHub<br/>Push · Pull Request · CI-Status"]
         SEC["Scanner<br/>Trivy · OWASP DC"]
-        LIC["Lizenz-Stack<br/>Keycloak + License-Service"]
+        LIC["Lizenz-Stack (optional)<br/>License-Service · Ed25519-JWS"]
     end
 
     DB[("PostgreSQL 18<br/>Runs · Artefakte · Audit-Kette")]
@@ -46,6 +53,9 @@ flowchart TB
     FAB --> SEC
     FAB <--> LIC
     FAB <--> DB
+    FAB -.-> MCPG
+    CLI -.MCP.-> MCPG
+    AUD -.Export.-> VER
 ```
 
 ---
@@ -86,7 +96,9 @@ flowchart TB
 ## Abbildung 23 — Slice-Landkarte
 
 *Bildunterschrift:* Fachliche Slices der Fabrik, gruppiert nach Aufgabe.
-Blatt-Slices (`provenance`, `export`, `guardrails`) konsumieren nur.
+Blatt-Slices (`provenance`, `export`, `guardrails`, `kennzahlen`,
+`contract`, `canary`) konsumieren nur; `mcp` ist eine Senke. Stand v0.38.0
+(34 Pakete inkl. `common`/`web`, die hier fehlen).
 
 ```mermaid
 flowchart LR
@@ -96,6 +108,7 @@ flowchart LR
         PR[prompt]
         AG[agent]
         TE[team]
+        SPC[spec]
     end
 
     subgraph EXEC["Ausführung"]
@@ -106,6 +119,7 @@ flowchart LR
         VAL[validation]
         SK[skills]
         SD[sdlc]
+        WF[workflow]
     end
 
     subgraph QUAL["Bewertung"]
@@ -121,6 +135,8 @@ flowchart LR
         SET[settings]
         SECR[secrets]
         LIC[license]
+        MCP[mcp]
+        MCPG[mcpgateway]
     end
 
     subgraph LEAF["Blatt-Slices"]
@@ -128,6 +144,9 @@ flowchart LR
         EXP[export]
         GR[guardrails]
         OBS[observability]
+        KZ[kennzahlen]
+        CT[contract]
+        CAN[canary]
     end
 
     SPEC --> RUN
@@ -140,6 +159,11 @@ flowchart LR
     RUN -.Ereignisse.-> AUD
     AUD --> PROV
     AUD --> EXP
+    WF --> RUN
+    RUN --> SPC
+    RUN -.Port.-> MCP
+    MCPG --> MCP
+    CAN --> MCP
 ```
 
 ---
@@ -156,7 +180,7 @@ sequenceDiagram
     participant O as RunOrchestrationService
     participant P as PolicyAsCode / Modell-Policy
     participant WS as WorkspaceService + Git
-    participant AD as ExecutionAdapter (Sandbox)
+    participant AD as ExecutionAdapter (Host-Prozess, Nullzustand)
     participant QG as QualityGate (Reviewer)
     participant AU as Audit-Hashkette
 
@@ -170,7 +194,7 @@ sequenceDiagram
     U-->>O: freigegeben
     O->>AD: Prompt ausführen (Stream: Logs, Tokens, Phasen)
     AD-->>O: Diff + Exitcode
-    O->>QG: Reviewer parallel auf den Diff
+    O->>QG: Reviewer nacheinander auf den Branch-Diff (base...run-branch)
     QG-->>O: PASS / WARN / FAIL + Findings
     alt Gate FAIL oder Build FAIL
         O->>AD: Korrekturlauf mit Feedback (max. 2 Versuche)
@@ -187,8 +211,9 @@ sequenceDiagram
 
 ## Abbildung 25 — Zustandsautomat des Runs
 
-*Bildunterschrift:* Zustandsmodell eines Runs. Alle Übergänge sind zentral
-in `RunStatusTransitions` hinterlegt; unerlaubte Übergänge werfen.
+*Bildunterschrift:* Zustandsmodell eines Runs (14 Zustände, Stand v0.38.0).
+Alle Übergänge sind zentral in `RunStatusTransitions` hinterlegt; unerlaubte
+Übergänge werfen. `WAITING_FOR_INPUT` tritt nur bei Spec-Runs auf.
 
 ```mermaid
 stateDiagram-v2
@@ -207,6 +232,9 @@ stateDiagram-v2
     VALIDATING --> WAITING_FOR_PR: Push + Pull Request
     WAITING_FOR_PR --> COMPLETED: CI grün + gemerged
     WAITING_FOR_PR --> NEEDS_CORRECTION: CI rot
+    VALIDATING --> WAITING_FOR_INPUT: Spec-Run mit offenen Fragen
+    WAITING_FOR_INPUT --> COMPLETED: fortgesetzt (Folge-Run)
+    WAITING_FOR_INPUT --> CANCELLED
     VALIDATING --> COMPLETED
     RUNNING --> FAILED
     RUNNING --> TIMEOUT
@@ -221,8 +249,9 @@ stateDiagram-v2
 
 ## Abbildung 26 — Datenmodell (Ausschnitt)
 
-*Bildunterschrift:* Kernaggregate des Datenmodells. Vollständig: 39 Tabellen,
-37 Flyway-Migrationen.
+*Bildunterschrift:* Kernaggregate des Datenmodells. Vollständig (Stand
+v0.38.0): 63 Tabellen, 61 Flyway-Migrationen (V1–V65). Die Workflow-Tabellen
+(V40–V54) sind hier nicht dargestellt.
 
 ```mermaid
 erDiagram
@@ -250,6 +279,11 @@ erDiagram
     POLICY_DOCUMENT ||--o{ RUN : "regelt"
     AUDIT_EVENT ||--o| AUDIT_CHAIN_CHECKPOINT : "verankert"
     SKILL_CATALOG_ENTRY ||--o{ SKILL_VERSION : "versioniert"
+
+    PROJECT_DEFINITION ||--o{ SPEC : "Produkt-Specs"
+    SPEC ||--o{ SPEC_VERSION : "Fassungen"
+    SPEC ||--o{ SPEC_APPROVAL : "Freigabe-Historie"
+    SPEC_VERSION ||--o{ SPEC_FRAGE : "Rückfragen"
 ```
 
 ---
@@ -265,11 +299,12 @@ flowchart TB
     PORT["<b>ExecutionAdapter</b> (Port)<br/>name() · execute(request, eventHandler)"]
     REG["ExecutionAdapterRegistry<br/>Auflösung: Run &gt; Projekt &gt; User &gt; Global &gt; YAML"]
     ROUT["ModelRoutingService<br/>Capability-Profil je Rolle (PLAN/BUILD)"]
-    SB["ExecutionSandboxFactory<br/>lokal | Container (--network=none, read-only)"]
+    AH["AgentHome<br/>ephemeres HOME je CLI-Aufruf<br/>Env-Allowlist · MCP-Nullzustand"]
+    SB["ExecutionSandboxFactory<br/>nur Build/Tests + trivy:<br/>lokal | Container (read-only, Limits)"]
 
     APPL --> REG --> PORT
     ROUT --> REG
-    PORT --> SB
+    PORT --> AH
 
     subgraph CLIA["CLI-Adapter"]
         M[mock]
@@ -286,12 +321,17 @@ flowchart TB
         AZ[azure-openai]
     end
 
-    SB --> CLIA
-    SB --> GWA
+    AH --> CLIA
+    AH --> GWA
+    VAL["validation / review<br/>mvn verify · trivy"] --> SB
 
     SEC["SecretsResolver<br/>AES-GCM · Abo-Modus strippt API-Key"]
-    SEC -.Prozessumgebung.-> SB
+    SEC -.Prozessumgebung.-> AH
 ```
+
+> Korrektur (Stand v0.38.0, ADR-0017): Die Coding-Adapter laufen als
+> Host-Prozess; die Container-Variante der Sandbox kapselt ausschließlich
+> Build/Tests und trivy des generierten Projekts.
 
 ---
 
@@ -314,6 +354,8 @@ flowchart LR
     EV --> TR --> EXP
     VER --> EXP
     SBOM["SBOM je Build<br/>+ Ed25519-Signatur über den Digest"] --> EXP
+    OV["Offline-Verifier (nur JDK)<br/>Exit 0 · 1 · 2<br/>Anker: Schlüssel-Fingerabdruck"]
+    EXP -- "Schema 2.0" --> OV
 ```
 
 ---
@@ -321,7 +363,8 @@ flowchart LR
 ## Abbildung 29 — Deployment
 
 *Bildunterschrift:* Deployment-Sicht: ein Anwendungscontainer, eine Datenbank,
-optional getrennter Lizenz-Stack. Air-Gap-fähig.
+optional getrennter Lizenz-Stack und MCP-Gateway. Air-Gap-fähig. Die
+Coding-Agenten laufen als Host-Prozesse der App (Stand v0.38.0).
 
 ```mermaid
 flowchart TB
@@ -333,20 +376,21 @@ flowchart TB
         APP --- WSV
     end
 
-    subgraph SBX["Ephemere Agent-Sandbox (optional)"]
-        CT["Container je Run<br/>--cpus 2 --memory 4g<br/>--pids-limit 512 --read-only<br/>--network=none"]
+    subgraph SBX["Ephemere Build-/Scan-Container (optional)"]
+        CT["mvn verify · trivy<br/>--cpus 2 --memory 4g<br/>--pids-limit 512 --read-only<br/>(Netz für Dependency-/DB-Download)"]
     end
 
+    MG["MCP-Gateway (optional)<br/>127.0.0.1 oder externer Dienst"]
+
     subgraph LICS["Lizenz-Stack (optional, extern)"]
-        KC["Keycloak<br/>OIDC · Device-Flow"]
         LS["License-Service<br/>eigene PostgreSQL"]
     end
 
     REM["Git-Remote / GitHub<br/>nur Hosts der Allowlist"]
 
     APP --> CT
-    APP -. "Lease-JWT, 7 Tage,<br/>offline verifiziert" .-> LS
-    LS --- KC
+    APP -.-> MG
+    APP -. "Lizenz/Lease als Ed25519-JWS,<br/>offline verifiziert" .-> LS
     APP --> REM
 ```
 
@@ -360,7 +404,7 @@ Eingaben des nächsten Laufs.
 ```mermaid
 flowchart LR
     EX["Execution<br/>Agent erzeugt Diff"] --> BUILD["Build-Gate<br/>mvn verify / npm run build"]
-    BUILD --> GATE["Quality Gate<br/>6 Reviewer, parallel"]
+    BUILD --> GATE["Quality Gate<br/>7 Reviewer"]
     GATE -->|PASS| MERGE["Branch-Abschluss<br/>Merge oder Pull Request"]
     GATE -->|"FAIL / Build rot /<br/>Merge-Konflikt / CI rot"| FB["Feedback-Text<br/>Findings, Konfliktdateien, Logs"]
     FB --> COUNT{"Versuch &lt; 2 ?"}

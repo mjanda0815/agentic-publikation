@@ -69,8 +69,10 @@ public class SecretScannerHook {
 ```
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Fünfstufiges RBAC,
-> Mandantenisolation mit festgeschriebenem IDOR-Test, Umgebungs-Allowlist,
-> Container-Sandbox mit `--network=none`, Host-Allowlist gegen
+> Mandantenisolation mit festgeschriebenem IDOR-Test, Umgebungs-Allowlist
+> und frisches Home-Verzeichnis je Agentenaufruf, MCP-Nullzustand mit
+> Isolationsnachweis je CLI-Version, optionale Container-Sandbox für Build
+> und Scans (nicht für die Agenten selbst), Host-Allowlist gegen
 > Token-Exfiltration. Die härtesten realen Befunde kamen aus adversarialen
 > Re-Reviews und lagen an den Übergängen zwischen Automatismen — nicht in
 > den Funktionen selbst (19.4, 19.6, 19.9).

@@ -1,16 +1,20 @@
 # CLAUDE.md — Whitepaper-Modernisierung „Agentic Software Development"
 
-> **STATUS: Version 3.0** (10.08.2026). Kennzahlen und Roadmap-Status
-> stehen auf SoftwareFabrik-Release **0.30.0** (Roadmap-Stufen 0 bis 4
-> und 6 umgesetzt — einschließlich Testabdeckungsänderung (0.28.0),
-> Rollback-Erkennung (0.29.0) sowie Eingriffs- und Aufwandserfassung
-> (0.30.0); drei Messlücken, davon „entkommene Defekte" seit 0.29.0 auf
-> die Defekt-Hälfte verengt und „aktive Arbeitszeit" seit 0.30.0 in
-> messbare Eingriffe und erfragten Aufwand zerlegt —, von Stufe 5 die
-> Koordinationsschicht; alles hinter
-> deaktiviertem Feature-Flag; Ausnahmen ohne Flag: Einzel-Run-Teil der
-> Rollback-Erkennung und Aufwandsfeld an der Run-Freigabe; verteilter
-> Betrieb zurückgestellt).
+> **STATUS: Version 3.1** (20.10.2026). Kennzahlen und Roadmap-Status
+> stehen auf SoftwareFabrik-Release **0.38.0** (Tag `v0.38.0`; eine
+> Version 0.37.0 gibt es nicht). Workflow-Roadmap unverändert: Stufen 0
+> bis 4 und 6 umgesetzt, von Stufe 5 die Koordinationsschicht, alles
+> hinter deaktiviertem Feature-Flag (Ausnahmen ohne Flag: Einzel-Run-Teil
+> der Rollback-Erkennung, Aufwandsfeld an der Run-Freigabe), verteilter
+> Betrieb zurückgestellt. Neu seit 3.0: zwei Linien in der
+> Release-Verlaufstabelle — Absicherung/Nachweis (0.31.0–0.34.0:
+> MCP-Nullzustand, Canary, Offline-Verifier, MCP-Gateway) und
+> Spec-Driven Development (0.35.0, 0.36.0, 0.38.0; eigener Abschnitt
+> 19.11, opt-in hinter eigenem Flag; die Governance-Stufe 0.39.0 ist
+> NICHT enthalten). 3.1 korrigiert außerdem drei Altfehler aus 2.x/3.0:
+> Agenten laufen nie im Container (Container nur für Build/Scans, mit
+> Netz), Reviewer laufen nacheinander statt parallel, Lizenz ist
+> Ed25519-JWT ohne Keycloak (30 Tage bis 1 Jahr, nicht 7 Tage).
 > Kennzahlen immer auf dem Release-**Tag** erheben, nicht im
 > Arbeitsverzeichnis — dort können uncommittete Stände liegen.
 > Vier Artefakte gehören zusammen und müssen bei jedem Versionssprung der
@@ -24,7 +28,7 @@
 > Erhebungsvermerk in Kapitel 19, der Statuskasten, die Ausbaustufen-Tabelle
 > und der Umsetzungsstand-Kasten in 19.10, der Implementierungsstatus von
 > ADR-5 und ADR-8, die Statuszeilen in 22.3/22.4 sowie je zwei Folien beider
-> Karussells. **Seit 3.0** ist der Release-Verlauf 0.21.0–0.30.0 nur noch an
+> Karussells. **Seit 3.0** ist der Release-Verlauf (seit 3.1: 0.21.0–0.38.0) nur noch an
 > genau einer Stelle ausgeschrieben — Release-Verlaufstabelle in 19.10
 > (`kapitel/19-softwarefabrik.md`); Management Summary, Kap.-2-Praxis-Check,
 > 19-Kopfkasten, 19.1-Erhebungsvermerk, 19.10-Statuskasten, „Die neue

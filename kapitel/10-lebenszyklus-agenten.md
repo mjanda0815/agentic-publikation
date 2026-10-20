@@ -316,6 +316,6 @@ spec:
 > **Praxis-Check SoftwareFabrik (abweichend):** Die sieben Rollen existieren
 > dort teils als Agentenrollen im Kontext (Definitionen, Teams), teils als
 > Systemfunktionen: Planung = Plan-Run, Review = Read-only-Reviewer-Schicht,
-> Testing/Deployment = Build-Gate und Meilenstein-Release. Die Parallelität
-> wurde von der Erzeugung auf die Bewertung verschoben — ein Agent je Lauf,
+> Testing/Deployment = Build-Gate und Meilenstein-Release. Die
+> Perspektivenvielfalt wurde von der Erzeugung auf die Bewertung verschoben — ein Agent je Lauf,
 > mehrere Prüfer (19.3, 19.5, 19.8).

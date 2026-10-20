@@ -253,7 +253,7 @@ Ein Agent committet und merged entweder alles oder nichts. Partial Merges (nur m
 
 > **Praxis-Check SoftwareFabrik (abweichend):** Statt Worktrees je Agent:
 > Branch-Isolation auf einem projektpersistenten Workspace, ergänzt um
-> Prozess- bzw. Container-Isolation. Grund: Iteration über Läufe hinweg
+> Prozessisolation (Container nur für Build und Scans, 19.4). Grund: Iteration über Läufe hinweg
 > schlägt parallele Isolation — der zweite Lauf soll auf dem Ergebnis des
 > ersten aufsetzen. Der Preis (Läufe desselben Projekts nicht beliebig
 > parallel) ist benannt und akzeptiert (19.3, 19.8).
@@ -585,7 +585,9 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > nicht erfüllt ist. Der Zuschnitt der Rollback-Erkennung bestätigt die
 > strikte Richtung dieses ADR: getrennte Anwender für Run- und
 > Workflow-Ebene, weil der `run`-Slice nichts von der Workflow-Ebene
-> wissen darf (19.10).
+> wissen darf (19.10). Nachträge: Die Rollen- und Mandantenprüfung der
+> Workflow-Ebene fehlte vor 0.34.0 (19.6); seit 0.36.0 binden die Child
+> Runs eines Workflows dieselbe freigegebene Spec-Fassung (19.11).
 
 ### Motivation / Kontext
 
@@ -684,7 +686,11 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 > die mit 0.28.0 nachgereichten Abdeckungswerte liegen am Build-Ergebnis
 > (V52), die Rollback-Anker aus 0.29.0 an Merge-Queue-Eintrag und Run
 > (V53) und das erfragte Aufwandsfeld aus 0.30.0 an der
-> Freigabeentscheidung (V54), nicht in einer eigenen Kennzahlentabelle.
+> Freigabeentscheidung (V54, seit 0.34.0 auch an der Planfreigabe, V59),
+> nicht in einer eigenen Kennzahlentabelle. Die Anforderungsebene aus
+> 0.35.0 folgt demselben Schnitt: Spec-Fassungen und Freigaben liegen
+> unveränderlich und autoritativ in der Datenbank, die Datei im Repository
+> ist Projektion (19.11).
 
 ### Entscheidung
 

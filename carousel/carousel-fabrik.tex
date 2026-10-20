@@ -1,6 +1,6 @@
 % carousel/carousel-fabrik.tex — LinkedIn-Karussell zum Sonderdruck
 % „Die SoftwareFabrik — von der Referenzarchitektur zum System"
-% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 3.0, August 2026)
+% (Martin Janda, Sonderdruck zur Whitepaper-Fassung 3.1, Oktober 2026)
 %
 % Zweites Karussell des Projekts. Das erste (carousel.tex) argumentiert aus
 % den Prinzipien des Whitepapers; dieses argumentiert aus der Erfahrung des
@@ -14,7 +14,7 @@
 % INHALTLICHE HERKUNFT: Jede Folie trägt einen Kommentar „QUELLE:" mit dem
 % Abschnitt aus kapitel/19-softwarefabrik.md. Es sind ausschließlich Aussagen
 % aus dem Kapitel übernommen, nichts erfunden. Alle Kennzahlen sind auf dem
-% Release-Stand 0.30.0 (9. August 2026).
+% Release-Stand 0.38.0 (20. Oktober 2026).
 % Redigierbare Reintexte: carousel/folientexte-fabrik.txt
 
 \documentclass[12pt]{article}
@@ -45,18 +45,18 @@
 % ============================================================================
 % FOLIE 2 — Kennzahlen
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", Erhebungsstand
-% Release 0.30.0 (9. August 2026): 421 Produktivklassen, ~41.700 Zeilen
-% Produktivcode, 291 Testklassen, 30 fachliche Slices, 38 Releases
-% (0.1.0–0.30.0, April–August 2026), Coverage-Gate Line >= 85 % /
+% Release 0.38.0 (20. Oktober 2026): 499 Produktivklassen, ~54.000 Zeilen
+% Produktivcode, 353 Testklassen, 34 fachliche Slices, 46 Releases
+% (0.1.0–0.38.0, April–Oktober 2026), Coverage-Gate Line >= 85 % /
 % Branch >= 81 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Der Stand}
-  \gross{30 fachliche Slices, 38 Releases, vier Monate.}
+  \gross{34 fachliche Slices, 46 Releases, sechs Monate.}
   \vspace{48pt}
-  \erl{Rund 41.700 Zeilen Produktivcode und 291 Testklassen; die
+  \erl{Rund 54.000 Zeilen Produktivcode und 353 Testklassen; die
     Testabdeckung bricht den Build, wenn sie unter die Schwelle fällt
     (Line 85 \%, Branch 81 \%). Java 25, Spring Boot 4,
-    ein Deployment-Artefakt. Stand: 9.\,August 2026, Release 0.30.0.}
+    ein Deployment-Artefakt. Stand: 20.\,Oktober 2026, Release 0.38.0.}
 \end{folie}
 
 % ============================================================================
@@ -87,7 +87,7 @@
   \vspace{58pt}
   \erl{Geplant waren sieben parallele Spezialagenten. Gebaut wurde ein
     schreibender Agent je Lauf — und mehrere unabhängige Prüfer danach. Die
-    Parallelität wanderte von der Erzeugung auf die Bewertung.}
+    Vielstimmigkeit wanderte von der Erzeugung in die Prüfung.}
 \end{folie}
 
 % ============================================================================
@@ -129,7 +129,7 @@
 % QUELLE: Abschnitt 19.8 (4) „Kubernetes ist keine Voraussetzung —
 % Souveränität schon": Die reale Zielgruppe fragt zuerst nach Betreibbarkeit
 % im eigenen Haus. Vgl. Prinzip AP-8 und Abschnitt 19.7 (Ein-Prozess-
-% Betrieb, lokale Modelle, netzlose Sandbox, Lizenz ohne Rückkanal).
+% Betrieb, lokale Modelle, Lizenz ohne Rückkanal).
 % ============================================================================
 \begin{folie}{Korrektur 4}
   \gross{Kubernetes ist keine Voraussetzung. Souveränität schon.}
@@ -171,7 +171,7 @@
   \grossM{Ein System, das seine Architekturschuld zählt, ist der bessere
     Beleg als eines, das angeblich keine hat.}
   \vspace{48pt}
-  \erl{Das Kapitel benennt zehn offene Punkte, eingefrorene Modulzyklen und
+  \erl{Das Kapitel benennt elf offene Punkte, eingefrorene Modulzyklen und
     einen Testdefekt. Und es behauptet ausdrücklich keine Produktivitäts-
     oder ROI-Zahlen: Dafür fehlt die kontrollierte Messung.}
 \end{folie}
@@ -186,7 +186,9 @@
 % keinem aktiven Task ueberschneiden. Seit 0.23.0 versionierte Vertraege,
 % seit 0.24.0 begruendungspflichtige Planaenderungen, seit 0.27.0 die
 % Kennzahlenmessung mit ausgewiesenen Messluecken. Der verteilte Betrieb
-% (Stufe 5b) ist zurueckgestellt — gemessener Bedarf fehlt.
+% (Stufe 5b) ist zurueckgestellt — gemessener Bedarf fehlt. Letzter Satz:
+% Abschnitt 19.11 (seit 0.35.0 Specs mit Akzeptanzkriterien-IDs, seit 0.38.0
+% Conformance-Pruefung im Gate; opt-in, eigenes Feature-Flag).
 % ============================================================================
 \begin{folie}{Der nächste Schritt — erreicht}
   \grossM{Erst die Koordination beweisen. Dann die Schreibrechte
@@ -200,7 +202,8 @@
     aus, was sie nicht messen kann. Die Workflow-Ebene hinter einem
     standardmäßig deaktivierten Feature-Flag; nur der verteilte Betrieb bleibt
     zurückgestellt, weil die eigene Voraussetzung — gemessener Bedarf —
-    nicht erfüllt ist.}
+    nicht erfüllt ist. Seit 0.38.0 prüft das Gate auf Wunsch auch, ob
+    freigegebene Akzeptanzkriterien durch Tests belegt sind.}
 \end{folie}
 
 % ============================================================================
@@ -217,7 +220,7 @@
   \vspace{64pt}
   \erl{\textcolor{tinte}{\bfseries Sonderdruck und vollständiges Whitepaper:
     Download-Link im Beitrag}\\
-    janda.io \textperiodcentered{} 39 Seiten, Stand: August 2026. Alle
+    janda.io \textperiodcentered{} 49 Seiten, Stand: Oktober 2026. Alle
     Angaben aus dem Quellcode erhoben.}
 \end{folie}
 

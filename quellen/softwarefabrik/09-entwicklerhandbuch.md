@@ -10,7 +10,7 @@ als Grundlage eines „So baut man so etwas selbst"-Kapitels.
 |---|---|
 | JDK | 25 |
 | Maven | 3.9+ (Wrapper vorhanden) |
-| Docker / Podman | für PostgreSQL, optional für die Container-Sandbox |
+| Docker / Podman | für PostgreSQL, optional für die Container-Sandbox (kapselt nur Build/Tests und trivy, nicht die Coding-Agenten — Stand v0.38.0) |
 | Optional | Coding-CLI (`claude`, `codex`, `gemini`, `aider`, `kimi`), `trivy` |
 
 Ohne jede CLI ist das System vollständig lauffähig: Der `mock`-Adapter ist
@@ -60,9 +60,9 @@ mvn -f app/pom.xml -Pe2e verify    # Playwright-E2E (on demand)
 
 | Stufe | Werkzeug | Prinzip |
 |---|---|---|
-| Unit | JUnit 5, Mockito, AssertJ | je Service, ohne Spring-Kontext |
+| Unit | JUnit Jupiter (Stand v0.38.0: 6.0.3 über die Spring-Boot-4.1.1-BOM), Mockito, AssertJ | je Service, ohne Spring-Kontext |
 | Integration | `@WebMvcTest`, `@DataJpaTest` gegen H2 | Slice-Tests |
-| Architektur | ArchUnit 1.4.1 | Schichten, Ports, Debt-Ratchet |
+| Architektur | ArchUnit 1.5.1 (Stand v0.38.0; bei 0.19.0 1.4.1) | Schichten, Ports, Debt-Ratchet |
 | Boot-Smoke | Docker Compose + echtes PostgreSQL | `/actuator/health` = UP |
 | E2E | Playwright | on demand, `-Pe2e` |
 
@@ -70,8 +70,14 @@ mvn -f app/pom.xml -Pe2e verify    # Playwright-E2E (on demand)
 Stellen, sondern testbare Verdrahtung — Netz-Adapter bekommen eine
 injizierbare URL und werden gegen einen lokalen `HttpServer` getestet;
 CLI-Adapter bekommen einen injizierbaren `ProcessRunner`. Das ist der Grund,
-warum eine 33-kLOC-Codebasis mit sehr viel Prozess- und Netzanbindung
-überhaupt 85 % Line-Coverage erreichen kann.
+warum eine Codebasis von heute rund 54 kLOC (Stand v0.38.0; bei 0.19.0
+~33 kLOC) mit sehr viel Prozess- und Netzanbindung überhaupt 85 %
+Line-Coverage erreichen kann.
+
+Seit 0.30.0 prüfen zusätzlich `SchemaMappingTest` und `SchemaValidierungTest`
+(Testcontainers, Flyway + Hibernate `validate`) Migrationen gegen das
+JPA-Mapping, weil die Suite selbst gegen H2 mit `create-drop` läuft (siehe
+`12-kennzahlen-historie.md`).
 
 ## 9.4 Konventionen
 
@@ -93,9 +99,15 @@ warum eine 33-kLOC-Codebasis mit sehr viel Prozess- und Netzanbindung
 1. Klasse in `execution/<vendor>/` anlegen, `ExecutionAdapter` implementieren.
 2. `name()` eindeutig wählen; `alwaysAvailable()` nur, wenn kein externes
    Binary nötig ist.
-3. Prozessstart über `VendorCliRunner` / `ExecutionSandboxFactory`, nicht
-   direkt über `ProcessBuilder` — sonst umgeht der Adapter Sandbox und
-   `EnvAllowlist`.
+3. Prozessstart über `VendorCliRunner`, nicht direkt über `ProcessBuilder` —
+   sonst umgeht der Adapter `EnvAllowlist`, das ephemere HOME (`AgentHome`)
+   und die `ProzessRegistry` (Abbruch). *Stand v0.38.0:* Die
+   `ExecutionSandboxFactory` bzw. der Container gilt nur für Build/Tests und
+   trivy, nicht für Agent-CLIs (ADR-0017).
+   Startet der Adapter eine Agent-CLI: `brauchtIsolationsnachweis()` auf
+   `true`, `cliVersion()` und `anmeldedaten()` (Auth-Projektion ins
+   ephemere HOME) implementieren — sonst ist der Adapter in Profilen mit
+   MCP-Standardverbot nicht nachweisbar bzw. gesperrt.
 4. Events (Logzeile, Token, Phase) über den `eventHandler` melden, sonst
    bleibt die Live-Ansicht leer.
 5. Braucht der Vendor einen Abo-Modus: `…AuthResolver` + `…AuthMode` nach dem
@@ -116,6 +128,13 @@ gibt keine Registrierungsliste, die man vergessen könnte.
    (SECURITY/HIGH+, ARCHITECTURE/CRITICAL, Reviewer-Absturz).
 4. Reviewer bleiben **read-only**. Ein schreibender Reviewer hebt die Trennung
    auf, die das Gate erst begründet.
+5. Ein Reviewer mit Agent-CLI meldet wie Execution-Adapter
+   `brauchtIsolationsnachweis()`/`cliVersion()`; regelbasierte Reviewer
+   (z. B. `spec-conformance`) bleiben bei `false`. Ein LLM-Reviewer darf nur
+   PASSED melden, wenn ein Ergebnis nachweisbar ist (seit 0.33.0).
+6. Kontext, den `review` nicht importieren darf (etwa der Spec-Kontext),
+   kommt als `ReviewRequest.metadata` (`SpecKontext`), nicht als neue
+   Slice-Kante.
 
 ### Neue Migration
 
@@ -135,17 +154,25 @@ Architekturzeichnung stehen:
    und reihenfolgeabhängig — der Test wird lokal grün und in CI rot.
    *Regel:* neue Klassen in Blatt-Slices legen; Refreeze nur unterhalb der
    Grenze; nach einem `git merge main` in einen Feature-Branch den Store neu
-   einfrieren.
+   einfrieren. *Nachtrag (Stand v0.38.0):* Der früher gesetzte Property-Name
+   `cycles.maxNumberOfCyclesToDetect` wirkte nie; richtig ist
+   `cycles.maxNumberToDetect` (seit 0.29.0 auf 400). Die Codebasis hatte
+   zufällig genau 100 Zyklen — vollständig, aber ohne Sicherheitsabstand
+   (`archunit.properties`).
 2. **Coverage in CI liegt systematisch unter lokal** (etwa 0,01–0,012 Branch),
    weil Vendor-CLI-Prozesspfade lokal häufiger durchlaufen werden. Lokal also
    mit Reserve zielen, nicht knapp über der Schwelle.
 3. **Secret-Scanner und Testfixtures.** `gitleaks` schlägt auf PEM-Label in
    Krypto-Hilfsklassen an — gelöst über eine pfad-gescopte Allowlist mit
    `useDefault=true`, nicht durch Abschalten des Scanners.
-4. **Jackson 2 vs. 3.** Spring Boot 4.0.7 stellt Jackson 3 (`tools.jackson`)
-   als primären `ObjectMapper` bereit; `com.fasterxml` ist nur transitiv da.
-   Für neue Serialisierung entweder den Jackson-3-Bean injizieren oder — wie
-   beim Audit-Export — einen eigenen Mapper mit String-only-DTOs verwenden.
+4. **Jackson 2 vs. 3.** Spring Boot 4 stellt Jackson 3 (`tools.jackson`)
+   als primären `ObjectMapper` bereit. Für neue Serialisierung entweder den
+   Jackson-3-Bean injizieren oder — wie beim Audit-Export — einen eigenen
+   Mapper mit String-only-DTOs verwenden. *Stand v0.38.0:* `com.fasterxml`
+   (Jackson 2) kam bis 0.30.0 nur transitiv über Flyway 11 mit; mit Spring
+   Boot 4.1.1 und Flyway 12 (nutzt Jackson 3) startete der Kontext ohne
+   explizite Abhängigkeit nicht mehr (`NoClassDefFoundError`) — seit 0.31.0
+   ist Jackson 2 deshalb explizit deklariert.
 5. **Signaturen und Zeitstempel.** Ohne Trunkierung auf Millisekunden ist eine
    Signatur nach dem PostgreSQL-Roundtrip nicht mehr byte-stabil.
 6. **Ein CI-Job, der sich ohne Secret selbst überspringt, zeigt ein grünes
@@ -153,15 +180,24 @@ Architekturzeichnung stehen:
    die Secrets gesetzt sind.
 7. **Offener Defekt:** Ein Integrationstest committet unter bestimmten
    Bedingungen in das reale Repository statt in ein temporäres
-   (Test-Isolationsdefekt).
+   (Test-Isolationsdefekt). TODO(verify): Status am Tag v0.38.0 nicht belegt.
+8. **Ein Fehler, der wie Erfolg aussieht, fällt keinem Erfolgstest auf.** Die
+   vier in 0.33.0 behobenen Stellen (stiller Review-PASS, Gate auf leerem
+   Diff, Abbruch ohne Prozessende, Build-Runs ohne Schreibrechte) und die
+   0-€-Bewertung aller Claude-Läufe bis 0.34.0 lagen jeweils im Pfad, der
+   „grün" meldete (`07-review-qualitygate.md`, 7.4a;
+   `06-adapter-und-modellschicht.md`, 6.7).
 
 ## 9.7 CI-Pipeline
 
-GitHub Actions (`.github/workflows/ci.yml`), sechs Jobs:
+GitHub Actions (`.github/workflows/ci.yml`); Stand v0.38.0 sieben
+Job-Definitionen (Build & Test, OWASP und Docker-Image als Matrix je Modul):
 
 | Job | Inhalt |
 |---|---|
-| **Build & Test** (Matrix je Modul) | `mvn verify` inkl. Tests, ArchUnit und JaCoCo-Gate; Reports als Artefakte |
+| **Build & Test** (Matrix `app`, `license-service`) | `mvn verify` inkl. Tests, ArchUnit und JaCoCo-Gate; Reports als Artefakte |
+| **Offline-Verifier** (seit 0.32.0) | Build, Test und Export-Kompatibilität des Verifier-JARs gegen echte Exporte der Fabrik (ADR-0023 E6) |
+| **MCP-Gateway** (seit 0.34.0) | Build und Test gegen echte Test-MCP-Server (stdio, Streamable HTTP) |
 | **Boot-Smoke** | echtes PostgreSQL, `container`-Profil, wartet auf `/actuator/health` = UP |
 | **OWASP Dependency-Check** | mit NVD-Cache; Erstlauf dauert lange, danach gecacht |
 | **Secret-Scan** | `gitleaks` über die volle Historie |
@@ -181,7 +217,7 @@ Entwickler
 Lokal:  mvn verify   →  Tests · ArchUnit · Ratchet · JaCoCo · Trivy
    │  Push + Pull Request
    ▼
-CI:     6 Jobs       →  Build · Smoke · OWASP · gitleaks · Image+SBOM
+CI:     7 Jobs       →  Build · Verifier · Gateway · Smoke · OWASP · gitleaks · Image+SBOM
    │  Squash-Merge
    ▼
 Release: Version · CHANGELOG · Tag · GitHub-Release · Deploy

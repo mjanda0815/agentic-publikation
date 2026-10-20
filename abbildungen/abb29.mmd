@@ -7,18 +7,24 @@ flowchart TB
         APP --- WSV
     end
 
-    subgraph SBX["Ephemere Agent-Sandbox (optional)"]
-        CT["Container je Run<br/>--cpus 2 --memory 4g<br/>--pids-limit 512 --read-only<br/>--network=none"]
+    subgraph AGT["Agentenlauf (Host-Prozess)"]
+        CLI["Coding-CLI je Aufruf<br/>ephemeres HOME · Env-Allowlist<br/>MCP-Nullzustand"]
     end
 
-    subgraph LICS["Lizenz-Stack (optional, extern)"]
-        KC["Keycloak<br/>OIDC · Device-Flow"]
+    subgraph SBX["Build-/Scan-Sandbox (optional)"]
+        CT["Container je Schritt<br/>mvn verify · SBOM · Dependency-Scan<br/>read-only Root-FS, Limits, mit Netz"]
+    end
+
+    GW["MCP-Gateway (optional)<br/>eigener Prozess, nur lesende Tools"]
+
+    subgraph LICS["Lizenzdienst (optional, extern)"]
         LS["License-Service<br/>eigene PostgreSQL"]
     end
 
     REM["Git-Remote / GitHub<br/>nur Hosts der Allowlist"]
 
+    APP --> CLI
     APP --> CT
-    APP -. "Lease-JWT, 7 Tage,<br/>offline verifiziert" .-> LS
-    LS --- KC
+    CLI -. "nur freigegebene Server" .-> GW
+    APP -. "Ed25519-Lizenz-JWT,<br/>offline verifiziert" .-> LS
     APP --> REM

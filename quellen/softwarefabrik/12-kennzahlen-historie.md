@@ -2,30 +2,35 @@
 
 ## 12.1 Kennzahlen
 
-| Kennzahl | Wert | Erhebung |
-|---|---|---|
-| Produktivklassen | 421 | `git ls-tree -r v0.30.0 app/src/main/java`, `*.java` |
-| Produktivcode | ~41.737 Zeilen | |
-| Testklassen | 291 | |
-| Test-zu-Produktiv-Verhältnis | ~0,69 Klassen | |
-| Fachliche Slices | 30 (seit 0.27.0: `kennzahlen`) | |
-| Datenbanktabellen | 58 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 52 (V1–V54) | |
-| HTTP-Routen | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit) |
-| Execution-Adapter | 10 | |
-| Review-Adapter | 6 | |
-| Wizard-Templates | 18 | |
-| Run-Zustände / Phasen | 13 / 7 | |
-| Workflow-Zustände / Task-Zustände | 11 / 12 | seit 0.21.0 |
-| Workflow-Capabilities | 22 (8 schreibend, 6 analysierend, 8 prüfend) | seit 0.21.0 |
-| Rollen | 5 | |
-| Compliance-Profile | 4 | |
-| Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | JaCoCo, buildbrechend |
-| Releases | 38 (0.1.0 – 0.30.0) | 2026-04-17 bis 2026-08-09 |
-| CI-Jobs je Push | 6 | |
+| Kennzahl | v0.38.0 | v0.30.0 | Erhebung |
+|---|---|---|---|
+| Produktivklassen | 499 | 421 | `git ls-tree -r <tag> app/src/main/java`, `*.java` |
+| Produktivcode | ~53.967 Zeilen | ~41.737 Zeilen | Zeilen aller dieser Dateien (`git show <tag>:<datei> \| wc -l`) |
+| Testklassen | 353 | 291 | `app/src/test/java`, `*.java` |
+| Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | ~0,69 Klassen | |
+| Fachliche Slices | 34 | 30 | Pakete unter `io.softwarefabrik.app` (bisherige Zählweise); neu: `canary`, `mcp`, `mcpgateway`, `spec` |
+| Datenbanktabellen | 63 | 58 | `CREATE TABLE` in Migrationen |
+| Flyway-Migrationen | 61 (V1–V65) | 52 (V1–V54) | Dateien in `db/migration`; nicht vergeben: V10, V11, V55, V57 |
+| HTTP-Routen | 184 in 39 Controllern | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit ohne Tests); Controller = Dateien mit Mapping-Annotation |
+| Execution-Adapter | 10 | 10 | `implements ExecutionAdapter` |
+| Review-Adapter | 7 | 6 | neu: `SpecConformanceReviewerAdapter` |
+| Wizard-Templates | 18 | 18 | `TemplateRegistry.builtin()` |
+| Run-Zustände / Phasen | 14 / 7 | 13 / 7 | neu: `WAITING_FOR_INPUT` |
+| Run-Arten | 3 (BUILD, PLAN, SPEC) | 2 | `RunKind` |
+| Workflow-Zustände / Task-Zustände | 11 / 12 | 11 / 12 | |
+| Rollen | 5 | 5 | `Rolle` |
+| Compliance-Profile | 4 | 4 | `ComplianceProfil` |
+| Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | dto. | JaCoCo, buildbrechend (`app/pom.xml`) |
+| Releases | 46 (0.1.0 – 0.38.0) | 38 (0.1.0 – 0.30.0) | `## [x.y.z]` in `CHANGELOG.md`; 2026-04-17 bis 2026-10-20; eine Version 0.37.0 gibt es nicht |
+| CI-Jobs je Push | 7 | 5 | Jobs in `.github/workflows/ci.yml`; neu `verifier`, `gateway` |
+| Eigenständige Module neben `app/` | `license-service/`, `verifier/` (~1.000 Zeilen), `gateway/` (~2.400 Zeilen) | `license-service/` | nicht in den Klassen-/Zeilenzahlen enthalten |
 
-*Stand: Tag `v0.30.0` (= `e72a599`), 2026-08-09; erhoben auf dem Tag
-(am 2026-08-10), nicht im Arbeitsverzeichnis.*
+*Stand: Tag `v0.38.0` (= `1fb8aac`), 2026-10-20; erhoben auf dem Tag (am
+2026-10-20, per Worktree bzw. `git show v0.38.0:…`), nicht im
+Arbeitsverzeichnis. Die Vergleichsspalte v0.30.0 wurde mit demselben
+Verfahren neu erhoben und reproduziert die Werte der Fassung 3.0 exakt —
+mit einer Ausnahme: Die Fassung 3.0 nannte 6 CI-Jobs, `ci.yml` am Tag
+`v0.30.0` enthält 5.*
 
 ## 12.2 Entwicklungsverlauf
 
@@ -283,18 +288,95 @@ geprueft. Hintergrund: Die Suite laeuft gegen H2 mit `ddl-auto=create-drop`
 und abgeschaltetem Flyway und kann diese Fehlerklasse per Konstruktion nicht
 sehen. Website: Foliensatz zum Sonderdruck als Download (DE+EN).
 
-## 12.4 Offene Punkte (Stand 2026-08-10, nach 0.30.0)
+### Phase 12 — Absicherung der Agentenläufe und unabhängiger Nachweis (0.31.0–0.34.0, September/Oktober 2026)
+
+Grundlage: ADR-0016 (MCP-Readiness, Ist-Analyse), ADR-0017 (Nullzustand),
+ADR-0022 (Canary-Harness), ADR-0023 (Offline-Verifier), ADR-0018
+(MCP-Gateway); Details in `08-governance-compliance.md` (8.7.1, 8.11) und
+`06-adapter-und-modellschicht.md`.
+
+**0.31.0** (V56): MCP-Nullzustand für alle Agentenläufe — ephemeres HOME
+je CLI-Aufruf mit kopierten Auth-Dateien, Claude Code zusätzlich mit
+`--strict-mcp-config`, leerer `--mcp-config` und
+`ENABLE_CLAUDEAI_MCP_SERVERS=false` (beobachtet an Claude Code 2.1.283:
+`.mcp.json` im Workspace startete im `--print`-Modus ohne Trust-Rückfrage);
+Workspace-Prüfung mit `MCP_KONFIG_BASELINE`/`_VORGEFUNDEN`/
+`_AGENT_GESCHRIEBEN`; Policy-Felder `mcpStandardverbot` (BAIT/MaRisk/DORA,
+BSI/VS-NfD) und `erlaubtePlugins` (Plugins standardmäßig gesperrt);
+Canary-Harness mit signiertem Register `isolationsnachweis`. Spring Boot
+4.1.1. Die seit 0.20.0 befristet akzeptierte Laufzeit-CVE entfiel durch
+ein Tomcat-Update. Bei der Vorbereitung fiel auf, dass die Agent-CLIs nie
+im Container liefen (ADR-0017, „Korrektur zu ADR-0016") — die
+Container-Sandbox kapselt nur Build und trivy-Scans, und zwar mit Netz.
+
+**0.32.0**: Offline-Verifier (`verifier/`, nur JDK, Exit 0/1/2,
+Vertrauensanker Fingerabdruck) und Audit-Export-Schema 2.0
+(Hash-Stellvertreter, signierter Ketten-Kopf, signierte Run-Manifeste,
+im Run angewandte Policy-Versionen).
+
+**0.33.0/0.33.1** (V58): Prüfung der Claude-Anbindung fand vier Stellen
+„Erfolg ohne Beleg" — stiller PASS der LLM-Reviewer bei Fehler-Exit, Gate
+auf leerem Diff (`git diff HEAD` statt Branch-Diff), Abbruch ohne
+Prozessende (neu: `ProzessRegistry`), Build-Runs ohne Schreibrechte (neu:
+`--permission-mode acceptEdits` + `--allowedTools`; Reviews `dontAsk`).
+BYOS entfernt, Abo-Modus als persönliche Nutzung; `kosten_geschaetzt`
+kennzeichnet Abo-Kosten als Schätzung; Rollen-Defaults der Modellwahl,
+`RUN_MODELL_AUFGELOEST` mit `quelle=`. 0.33.1: Patch-Sweep ohne Migration.
+
+**0.34.0** (V59–V60): MCP-Gateway (eigener Prozess, nur lesende Tools,
+Pinning, `MCP_TOOL_AUFRUF` je Aufruf, fail-closed Zustellung, Standard
+aus); Hooks/Projekt-Settings importierter Repos bei Claude Code
+abgeschaltet (`--setting-sources=user`, `disableAllHooks`); Rollen- und
+Mandantenprüfung der Workflow-Ebene nachgezogen (fehlte bis dahin);
+Claude-Läufe wurden mit 0 € bewertet (Parser las nicht geliefertes Feld)
+— behoben, dazu Cache-Schreib-Tokens und CLI-Kostenschätzung; Aufwandsfeld
+an der Planfreigabe; Kennzahl „Eingriffe" zählt die Planfreigabe.
+
+### Phase 13 — Spec-Driven Development (0.35.0–0.38.0, Oktober 2026)
+
+Grundlage: ADR-0027 (Status *Proposed*), `docs/roadmap/spec-driven-development.md`,
+`specs/SPEC-001…005`; Details in `13-spec-driven-development.md`.
+
+**0.35.0** (V61–V62): Slice `spec`, Produkt-Spec mit AC-IDs, Fassungen
+mit SHA-256, Freigabe ab MAINTAINER (`SPEC_APPROVED`), Spec-Modus
+AUS/LEICHT/STRENG, Feature-Flag `softwarefabrik.spec.enabled` + FeatureGate
+(Professional/Enterprise); Backlog-Bezug; `ReviewRequest.acceptanceCriteria`
+erstmals gefüllt (vorher fest `null` — die AC-Prüfung des
+Halluzinations-Reviewers lief bis dahin ins Leere).
+
+**0.36.0** (V63): Traceability — Commit-Trailer, `RUN_SPEC_GEBUNDEN`,
+Warum-Trace, Objective-Kopf, Spec-Index in `AGENTS.md`, Workflow-Task-
+Bindung, Spiegelung des AC-Blocks als Vertrag, Freigabe gegen
+Gleichzeitigkeit gesichert.
+
+**0.38.0** (V64–V65; bündelt die Roadmap-Stufen 0.37 und 0.38, keine
+Version 0.37.0): Conformance-Reviewer `spec-conformance`, Spec-Drift
+(`SPEC_DRIFT`, Veraltet-Markierung), Spec-Run (`RunKind.SPEC`,
+`WAITING_FOR_INPUT`, `spec_frage`), Reverse-Spec.
+
+**Nicht Teil des Stands:** Roadmap-Stufe 0.39.0 (SPEC-005 — Policy-Pflicht
+`pflichtSpecFreigabe`, Mindest-AC-Abdeckung, Export 2.1 mit signierten
+Spec-Fassungen, Spec-Kennzahlen); zum Erhebungszeitpunkt in Umsetzung.
+
+## 12.4 Offene Punkte (Stand 2026-10-20, nach 0.38.0)
 
 | Punkt | Art |
 |---|---|
-| Verteilter Betrieb ueber mehrere Hosts (Stufe 5b); Stufen 0–4 und die Koordinationsschicht aus 5a sind umgesetzt | bewusst zurueckgestellt, Voraussetzung nicht erfuellt |
+| Verteilter Betrieb über mehrere Hosts (Stufe 5b); Stufen 0–4, 6 und die Koordinationsschicht aus 5a sind umgesetzt | bewusst zurückgestellt, Voraussetzung nicht erfüllt |
 | Seat-scharfe Budget-Obergrenze (Auswertung je Seat existiert seit v0.17) | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end verifiziert | Verifikationslücke |
-| Vollständige Sandbox für Coding-Adapter | offen |
-| Test-Isolationsdefekt: Integrationstest committet ins reale Repository | Defekt |
-| Architektur-Altschuld: eingefrorene Modulzyklen + 13 `web → JpaRepository` | dokumentierte Schuld |
+| Agent-CLIs laufen als Host-Prozess; Agent-Container (Auth-Projektion, Netz nur zu Modell-APIs) eigenes Arbeitspaket (ADR-0017) | offen |
+| MCP-Gateway nur lesend, nur Ausführung mit Claude Code; Canary-Fall „Gateway projiziert" und Hook-Markerquelle (ADR-0018 Schritt 3, ADR-0017 Nachtrag) | Verifikationslücke |
+| Preisstatus unbekannter Modelle weiterhin 0 € (`ModelPricingProperties`) | Budgetlücke |
+| Legacy-Verifikationsstatus in der Plattform undifferenziert (Verifier unterscheidet für Exporte) | Nachweislücke |
+| SBOM ohne Scanner wird übersprungen (`SbomService`, `SKIPPED`) | Fail-Closed-Lücke |
+| Test-Isolationsdefekt (Integrationstest committet ins reale Repository) — Stand 0.19.0, für 0.38.0 nicht belegt | Status ungeklärt |
+| Architektur-Altschuld: eingefrorene Modulzyklen (Baseline genau 100 Zyklen; wirksame Kappung seit 0.29.0: 400) + 13 `web → JpaRepository` | dokumentierte Schuld |
+| SDD-Governance (0.39.0, SPEC-005) | geplant |
 | Playwright-E2E-Suite als Standard nach jedem Deploy | geplant |
-| Eine Laufzeit-CVE ohne verfügbaren Fix, akzeptiert mit Ablaufdatum | bewusst akzeptiert |
+
+Entfallen gegenüber 0.30.0: die befristet akzeptierte Laufzeit-CVE
+(seit 0.31.0 ohne Suppression grün).
 
 Diese Liste gehört bewusst in die Publikation. Ein System, das seine offenen
 Punkte benennt und seine Architekturschuld *zählt*, ist der glaubwürdigere
@@ -326,3 +408,9 @@ Für Fußnoten mit konkreter Fundstelle:
 | ADRs | `docs/adr/` |
 | Runbooks | `docs/runbooks/` |
 | Versionshistorie | `CHANGELOG.md` |
+| MCP-Nullzustand, Workspace-Prüfung | `execution/sandbox/AgentHome.java`, `mcp/McpWorkspacePruefung.java` |
+| Isolationsnachweis (Canary) | `canary/CanaryService.java`, `mcp/IsolationsnachweisRegister.java` (V56) |
+| MCP-Gateway | Modul `gateway/`, Slice `mcpgateway/` |
+| Offline-Verifier, Export 2.0 | Modul `verifier/`, `export/AuditExportService.java`, `docs/verifier.md` |
+| Sandbox-Reichweite | `execution/sandbox/SandboxScopeAdvisory.java`, `docs/security/sandbox.md` |
+| Spec-Driven Development | Slice `spec/` (`SpecParser`, `SpecVersion`, `SpecService`), `review/reviewer/SpecConformanceReviewerAdapter.java`, `specs/_vorlage/spec.md`, ADR-0027 |

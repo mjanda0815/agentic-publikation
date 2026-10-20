@@ -17,7 +17,7 @@ Jeder Claude Code Agent durchläuft einen definierten Lebenszyklus von der Erste
 | 8 | Termination | Der Agent beendet sich durch: (a) erfolgreichen Abschluss, (b) Erreichen von maxTurns, (c) Budget-Erschöpfung, (d) explizite Stop-Condition, oder (e) Fehler-Eskalation. Das Ergebnis wird an den Orchestrator zurückgegeben. |
 
 > **Praxis-Check SoftwareFabrik (erweitert):** Der Lebenszyklus ist dort als
-> *Run* modelliert: sieben Phasen, 13 Zustände, persistiert, pausier- und
+> *Run* modelliert: sieben Phasen, 14 Zustände, persistiert, pausier- und
 > wiederaufnehmbar. Der Mensch ist als Zustand (`WAITING_FOR_APPROVAL`) Teil
 > des Automaten, nicht Nebenprozess (19.3).
 
@@ -27,7 +27,7 @@ Jeder Claude Code Agent durchläuft einen definierten Lebenszyklus von der Erste
 > gekürzt (Imports, Konstruktoren, Exception-Handling teilweise
 > weggelassen) und nicht als lauffähige Bibliothek getestet. Der
 > Produktivstand des in Kapitel 19 beschriebenen Systems ist Java 25 und
-> Spring Boot 4.0.
+> Spring Boot 4.1.
 
 ## Java-Beispiel: Agent Lifecycle Manager
 

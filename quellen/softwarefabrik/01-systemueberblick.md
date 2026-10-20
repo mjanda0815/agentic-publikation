@@ -35,10 +35,13 @@ Projektidee  →  Wizard  →  Spezifikations-Artefakte  →  Run  →  Review/G
    Markdown-Artefakte (`PROJECT.md`, `INSTRUCTIONS.md`, `AGENTS.md`,
    `WORKFLOW.md`, `DEFINITION_OF_DONE.md`, `README.md`), die der Mensch vor
    dem Lauf editieren kann. Das ist der Punkt, an dem menschliche Absicht
-   maschinenlesbar wird.
-3. **Ausführen.** Ein *Run* durchläuft sieben Phasen. Der Coding-Agent läuft in
-   einer Sandbox auf einem projektpersistenten Workspace mit eigenem
-   Git-Repository, auf einem eigenen Branch.
+   maschinenlesbar wird. Seit 0.35.0 kommt optional (Feature-Flag, Spec-Modus
+   je Projekt) eine freigegebene **Produkt-Spec** mit Akzeptanzkriterien und
+   IDs hinzu (`13-spec-driven-development.md`).
+3. **Ausführen.** Ein *Run* durchläuft sieben Phasen. Der Coding-Agent läuft
+   als Host-Prozess mit ephemerem HOME, Env-Allowlist und MCP-Nullzustand
+   (Stand v0.38.0, ADR-0017) auf einem projektpersistenten Workspace mit
+   eigenem Git-Repository, auf einem eigenen Branch.
 4. **Prüfen.** Read-only-Review-Adapter analysieren den Diff; ein Quality Gate
    aggregiert die Befunde zu PASS/WARN/FAIL. Bei Fehlschlag speist die
    Plattform das Feedback zurück in den Agenten — bis zu zwei automatische
@@ -54,35 +57,40 @@ Projektidee  →  Wizard  →  Spezifikations-Artefakte  →  Run  →  Review/G
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 362 |
-| Produktivcode | ~33.000 Zeilen |
-| Testklassen | 257 |
-| Fachliche Slices (Module) | 27 |
-| Datenbanktabellen | 39 |
-| Flyway-Migrationen | 37 (V1–V39, zwei Nummern historisch übersprungen) |
+| Produktivklassen (Java, `app/`) | 499 |
+| Produktivcode (`app/`) | ~54.000 Zeilen (53.967) |
+| Testklassen (`app/`) | 353 |
+| Slices (Pakete unter `io.softwarefabrik.app`, inkl. `common` und `web`) | 34 |
+| Datenbanktabellen | 63 |
+| Flyway-Migrationen | 61 (V1–V65; V10, V11, V55, V57 nicht vergeben) |
 | Execution-Adapter | 10 |
-| Review-Adapter | 6 |
+| Review-Adapter | 7 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 26 (0.1.0 … 0.19.0, seit 2026-04-17) |
+| Releases | 46 (0.1.0 … 0.38.0, 2026-04-17 bis 2026-10-20; eine Version 0.37.0 gibt es nicht) |
 
-*Erhoben auf `main` @ `526d718`, 2026-07-26.*
+*Stand v0.38.0: erhoben auf dem Tag `v0.38.0` (= `1fb8aac`), 2026-10-20;
+Klassen-/Zeilenzahlen per `git ls-tree -r v0.38.0`, `*.java`. Frühere
+Erhebung: `main` @ `526d718` (0.19.0), 2026-07-26.*
 
 ## 1.4 Technologiestack
 
 | Ebene | Wahl |
 |---|---|
 | Sprache / Runtime | Java 25 |
-| Framework | Spring Boot 4.0.7 (WebMVC, Data JPA, Security, OAuth2-Client, Actuator) |
+| Framework | Spring Boot 4.1.1 seit 0.31.0, vorher 4.0.x (WebMVC, Data JPA, Security, OAuth2-Client, Actuator) |
 | UI | Server-Rendered Thymeleaf + HTMX, Server-Sent Events für Live-Logs. Kein SPA. |
-| Persistenz | PostgreSQL 18, Flyway-Migrationen, Hibernate mit `ddl-auto=validate` |
-| Sicherheit | Spring Security, BCrypt (Cost 12), AES-GCM für Secrets, Ed25519 für Attestierung, RS256-Lease-JWTs für Lizenzen |
-| Qualität | JUnit 5, Mockito, AssertJ, ArchUnit 1.4.1, JaCoCo 0.8.15, Playwright (E2E, on demand) |
+| Persistenz | PostgreSQL 18 (Image 18.6), Flyway 13.10.3 (seit 0.33.0; mit Boot 4.1.1 zunächst 12.4), Hibernate mit `ddl-auto=validate` |
+| JSON | Jackson 3 (`tools.jackson`) als Boot-Standard; Jackson 2 seit 0.31.0 **explizite** Abhängigkeit (kam vorher nur transitiv über Flyway 11) |
+| Sicherheit | Spring Security, BCrypt (Cost 12), AES-GCM für Secrets, Ed25519 für Attestierung und Lizenzen (Ed25519-JWS, ADR-0005; der frühere Keycloak/RS256-Lizenzstack wurde mit 0.4.0 entfernt) |
+| Qualität | JUnit Jupiter 6 (Boot-BOM), Mockito, AssertJ, ArchUnit 1.5.1, JaCoCo 0.8.15, Playwright 1.63.0 (E2E, on demand) |
 | Supply Chain | Trivy (Filesystem + Image), OWASP Dependency-Check, gitleaks, CycloneDX-SBOM |
-| Betrieb | Docker Compose (App + Postgres), systemd auf der Demo-Instanz |
+| Betrieb | Docker Compose (App + Postgres), systemd auf der Demo-Instanz; optional MCP-Gateway als eigener Prozess (seit 0.34.0, Default aus) |
+| Weitere Module | `license-service/` (Lizenzdienst), `verifier/` (Offline-Verifier, nur JDK, ADR-0023, seit 0.32.0), `gateway/` (MCP-Gateway, JDK-HTTP + Jackson, ADR-0018, seit 0.34.0) — je eigenes Maven-Modul neben `app/`, ohne Abhängigkeit auf den Fabrik-Code |
 
-Die Wahl ist bewusst konservativ: ein Maven-Modul, ein Prozess, eine
-Datenbank. Kein Cluster, kein Message-Broker, kein Service-Mesh. Die
+Die Wahl ist bewusst konservativ: ein Anwendungsmodul (`app/`), ein Prozess,
+eine Datenbank. Der Offline-Verifier ist bewusst ein getrenntes Werkzeug für
+Dritte; der MCP-Gateway läuft nur, wenn er eingeschaltet ist. Kein Cluster, kein Message-Broker, kein Service-Mesh. Die
 Komplexität des Systems liegt in der *Steuerung von Nichtdeterminismus*,
 nicht in der Infrastruktur — und genau dort soll sie auch bleiben.
 
@@ -97,7 +105,12 @@ per ArchUnit erzwungen.
 **Abo- statt Token-Abrechnung.** Für Claude Code, Codex und Kimi existiert
 neben dem API-Key-Modus ein Abo-Modus (OAuth-Credentials der CLI). Im
 Abo-Modus wird der jeweilige API-Key aktiv aus der Prozessumgebung entfernt,
-damit nicht versehentlich pro Token abgerechnet wird.
+damit nicht versehentlich pro Token abgerechnet wird. *Stand v0.38.0:* Der
+Abo-Modus ist seit 0.33.0 als **persönliche Nutzung** durch den Abo-Inhaber
+gerahmt (Betriebsmodus `EINZELPLATZ_ABO`); mehrere Nutzer mit eigenem Abo auf
+einem Server (BYOS) wurden entfernt, Team-Betrieb läuft über `TEAM_API_POOL`
+mit API-Key. Abo-Kosten erscheinen als „Schätzung (API-Tarif), nicht
+abgerechnet" (`run_metrics.kosten_geschaetzt`, V58).
 
 **Iterativer Lebenszyklus, nicht nur Greenfield.** Projekte haben einen
 persistenten Workspace mit Git-Historie. Plan-Runs erzeugen ein Backlog
@@ -113,6 +126,31 @@ Kostenattribution und harte Budget-Caps pro Mandant.
 
 **Supply-Chain-Nachweis.** SBOM pro Build, Ed25519-Signatur über den
 SBOM-Digest, Dependency- und Lizenz-Scan als blockierender Reviewer.
+
+### Ergänzungen seit 0.19.0 (Stand v0.38.0)
+
+**Workflow-Ebene (0.21.0–0.30.0).** Hierarchische Workflows mit parallelen
+Child Runs in getrennten Worktrees, Merge Queue, Contract Registry,
+Replanning und Kennzahlen — hinter dem Feature-Flag
+`softwarefabrik.workflow.enabled` (Default aus). Details in
+`12-kennzahlen-historie.md`.
+
+**MCP-Governance (0.31.0–0.34.0).** MCP-Nullzustand für alle Agentenläufe
+(ephemeres HOME je CLI-Aufruf, Claude Code mit `--strict-mcp-config`, leerer
+`--mcp-config`, seit 0.34.0 zusätzlich `--setting-sources=user` und
+`disableAllHooks`), Workspace-Prüfung mit Audit-Ereignissen,
+Canary-Harness für signierte Isolationsnachweise je CLI-Version,
+optionaler MCP-Gateway nur für lesende Tools mit Pinning und
+signiertem Protokoll jedes Aufrufs (`08-governance-compliance.md`, 8.11).
+
+**Unabhängige Prüfbarkeit (0.32.0).** Audit-Export Schema 2.0 und ein
+eigenständiger Offline-Verifier (nur JDK), der einen Export ohne Zugriff auf
+die Fabrik prüft (`08-governance-compliance.md`, 8.7).
+
+**Spec-Driven Development (0.35.0–0.38.0, opt-in).** Versionierte,
+freigegebene Produkt-Specs mit Akzeptanzkriterien-IDs, Traceability bis zum
+Commit, Conformance-Reviewer, Spec-Drift und Spec-Runs
+(`13-spec-driven-development.md`; ADR-0027 Status *Proposed*).
 
 ## 1.6 Bewusste Nicht-Ziele
 
@@ -135,15 +173,34 @@ Aussagen begrenzen:
 - Die drei **Cloud-Gateway-Adapter** (Bedrock, Vertex, Azure OpenAI) sind
   konfigurierbar und degradieren sauber, wurden aber **nicht** end-to-end
   gegen echte Cloud-Credentials verifiziert.
-- Die **Container-Sandbox** existiert und ist aktivierbar
-  (`execution.sandbox.variant=container`), ist aber nicht der Default; ohne
-  Docker im PATH fällt das System auf lokale Prozessisolation zurück.
+- **Sandbox-Reichweite (Korrektur, Stand v0.38.0; ADR-0017 „Korrektur zu
+  ADR-0016", `execution/sandbox/SandboxScopeAdvisory.java`):** Die
+  Coding-Adapter (Claude Code, Codex, Gemini, Aider, Kimi, Gateways,
+  local-llm) laufen in **keiner** Variante im Container, sondern immer als
+  Host-Prozess — seit 0.31.0 mit ephemerem HOME je CLI-Aufruf,
+  Env-Allowlist und MCP-Nullzustand. Die aktivierbare Container-Variante
+  (`execution.sandbox.variant=container`, nicht Default) kapselt nur
+  Build/Tests (`mvn verify`) und trivy (SBOM, Dependency-Scan) des
+  generierten Projekts; ohne Docker im PATH fällt sie auf lokale Prozesse
+  zurück. Agent-CLIs im Container sind ein eigenes, offenes Arbeitspaket.
+  Das ephemere HOME schützt vor *Konfiguration*, nicht vor gezieltem Lesen
+  über absolute Pfade.
 - Der **Architektur-Ratchet** friert bestehende Modul-Zyklen und 13
   `web → JpaRepository`-Zugriffe als Altschuld ein. Neue Verstöße brechen den
-  Build, die bestehenden sind dokumentierte, noch zu tilgende Schuld.
+  Build, die bestehenden sind dokumentierte, noch zu tilgende Schuld. Am Tag
+  v0.38.0 enthält die Baseline genau 100 Zyklen-Einträge; der Cap steht seit
+  0.29.0 auf 400 (siehe `02-architektur.md`, 2.6).
 - **Budget-Caps** wirken je Mandant. Eine Kostenauswertung je Seat (auslösender
   Nutzer) existiert seit v0.17 (`/mandanten/seat-kosten`), eine seat-scharfe
   Obergrenze gibt es nicht.
 - Ein bekannter **Test-Isolationsdefekt** ist offen: ein Integrationstest
   committet unter bestimmten Bedingungen in das reale Repository statt in ein
-  temporäres.
+  temporäres. TODO(verify): Status am Tag v0.38.0 nicht im Code/CHANGELOG
+  belegt.
+- Der **MCP-Gateway** ist der einzige *MCP*-Weg, nicht der einzige *Netz*weg:
+  Ohne Agent-Container kann ein Agentenprozess weiterhin direkt ins Netz
+  (ADR-0018, Konsequenzen). Er bedient zunächst nur die Ausführung mit Claude
+  Code und nur lesende Tools.
+- **Spec-Driven Development** ist opt-in (Flag + Spec-Modus), ADR-0027 steht
+  auf *Proposed*; die Governance-Stufe (SPEC-005, Roadmap 0.39) ist nicht
+  umgesetzt.

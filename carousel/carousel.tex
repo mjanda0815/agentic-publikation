@@ -1,6 +1,6 @@
 % carousel/carousel.tex — LinkedIn-Karussell zum Whitepaper
 % „Agentic Software Development — Enterprise Architecture with AI Agents"
-% (Martin Janda, Fassung 3.0, August 2026)
+% (Martin Janda, Fassung 3.1, Oktober 2026)
 %
 % Separates Dokument; das Whitepaper (main.tex) bleibt unverändert.
 % Eine Seite = eine Folie, quadratisch 1080 bp × 1080 bp (1080×1080-px-Äquivalent).
@@ -14,9 +14,11 @@
 %
 % ABGRENZUNG IMPLEMENTIERT / GEPLANT: Das Whitepaper trennt konsequent zwischen
 % implementiertem Stand und Zielarchitektur. Die Folien halten diese Trennung
-% ein — Folie 9 nennt den bis 0.30.0 umgesetzten Stand (Roadmap-Stufen 0 bis 4
-% und 6, Koordinationsschicht aus 5) samt Feature-Flag-Vorbehalt; nur der
-% verteilte Betrieb (5b) bleibt zurückgestellt.
+% ein — Folie 9 nennt den bis 0.30.0 umgesetzten Stand der Workflow-Ebene
+% (Roadmap-Stufen 0 bis 4 und 6, Koordinationsschicht aus 5) samt
+% Feature-Flag-Vorbehalt und die seit 0.35.0 ergänzte, ebenfalls opt-in
+% geschaltete Anforderungsebene; nur der verteilte Betrieb (5b) bleibt
+% zurückgestellt.
 
 \documentclass[12pt]{article}
 
@@ -47,7 +49,7 @@
   \erl{Coding-Agenten rufen Werkzeuge selbstständig auf. Das macht sie
     produktiv — und ihre Ausführung nichtdeterministisch und
     sicherheitsrelevant. Befunde der überarbeiteten Fassung, Stand
-    August 2026.}
+    Oktober 2026.}
 \end{folie}
 
 % ============================================================================
@@ -167,20 +169,20 @@
 % ============================================================================
 % FOLIE 8 — Referenzimplementierung
 % QUELLE: Abschnitt 19, „Kennzahlen der Codebasis", erhoben auf dem
-% Release-Stand 0.30.0 (9. August 2026):
-% 421 Produktivklassen, ~41.700 Zeilen Produktivcode, 30 fachliche Slices,
-% 38 Releases (0.1.0 bis 0.30.0, April–August 2026),
+% Release-Stand 0.38.0 (20. Oktober 2026):
+% 499 Produktivklassen, ~54.000 Zeilen Produktivcode, 34 fachliche Slices,
+% 46 Releases (0.1.0 bis 0.38.0, April–Oktober 2026),
 % Coverage-Gate Line >= 85 % / Branch >= 81 %
 % (JaCoCo, buildbrechend).
 % ============================================================================
 \begin{folie}{Referenzimplementierung}
-  \gross{Vom Konzept zum System: 30 fachliche Slices, 38 Releases in vier
+  \gross{Vom Konzept zum System: 34 fachliche Slices, 46 Releases in sechs
     Monaten.}
   \vspace{48pt}
-  \erl{Rund 41.700 Zeilen Produktivcode, Testabdeckung als buildbrechendes
+  \erl{Rund 54.000 Zeilen Produktivcode, Testabdeckung als buildbrechendes
     Gate (Line ab 85 \%, Branch ab 81 \%). Die Architektur des Whitepapers
     war die Grundlage — das Kapitel beschreibt, was daraus geworden ist.
-    Stand: 9.\,August 2026, Release 0.30.0.}
+    Stand: 20.\,Oktober 2026, Release 0.38.0.}
 \end{folie}
 
 % ============================================================================
@@ -192,7 +194,8 @@
 % dem Single-Writer-Prinzip unterworfen. Ein Merge Coordinator und ein
 % abschließendes Integration Gate führen die Ergebnisse kontrolliert zusammen."
 % Prinzip AP-3: Parallelität wird aus Abhängigkeiten abgeleitet, nicht aus
-% festen Agentenrollen.
+% festen Agentenrollen. Letzter Satz: Abschnitt 19.11 (Anforderungsebene seit
+% 0.35.0, opt-in; Child Runs binden dieselbe freigegebene Spec-Fassung).
 % ============================================================================
 \begin{folie}{Der Stand}
   \grossM{Parallelität entsteht aus Abhängigkeiten — nicht aus
@@ -205,7 +208,9 @@
     begründungspflichtige Planänderungen, dann Merge-Konflikte als Diagnose
     statt Sammelkategorie, zuletzt Koordinationsschicht und eine Messung,
     die ihre Lücken ausweist. Der verteilte Betrieb bleibt zurückgestellt,
-    solange der Bedarf nicht gemessen ist.}
+    solange der Bedarf nicht gemessen ist. Seit 0.35.0 arbeiten die Läufe
+    auf Wunsch gegen freigegebene Specs mit nummerierten
+    Akzeptanzkriterien.}
 \end{folie}
 
 % ============================================================================
@@ -225,8 +230,8 @@
   \vspace{52pt}
   \erl{\textcolor{tinte}{\bfseries Vollständiges Whitepaper:
     Download-Link im Beitrag}\\
-    janda.io \textperiodcentered{} Überarbeitete und erweiterte Fassung 3.0,
-    Stand: August 2026.}
+    janda.io \textperiodcentered{} Überarbeitete und erweiterte Fassung 3.1,
+    Stand: Oktober 2026.}
 \end{folie}
 
 \end{document}
