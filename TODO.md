@@ -652,6 +652,81 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Inhaltsverzeichnis „VII. Architekturentscheidungen" mit Abstand,
       Kap.-12-Tabelle ungerissen unter Abb. 12.2, kopierter Regex-Text
       `[^\"]` korrekt (kein U+02C6), keine Umbruchpfeile im Kopiertext.
+- [x] **Version 3.1: Abgleich auf SoftwareFabrik 0.38.0** (20.10.2026,
+      in der Fabrik-Session beauftragt): Kennzahlen auf Tag v0.38.0
+      (= 1fb8aac) erhoben, Verfahren an v0.30.0 kalibriert (reproduziert
+      die 3.0-Werte exakt, bis auf CI-Jobs 6 → tatsächlich 5): 499
+      Klassen, ~54.000 Zeilen, 353 Testklassen, 34 Slices, 63 Tabellen,
+      61 Migrationen (V1–V65; V10/V11/V55/V57 nicht vergeben), 7
+      Review-Adapter, 184 Routen in 39 Controllern, 46 Releases, 7 CI-Jobs.
+      Release-Verlaufstabelle um 0.31.0–0.38.0 ergänzt (zwei neue Linien:
+      Absicherung/Nachweis und SDD; es gibt keine 0.37.0). Neu:
+      Abschnitt 19.11 Spec-Driven Development (Produkt-Spec, EARS mit
+      neuer Quelle @mavin2009ears, Freigabe, Traceability, Conformance,
+      Drift, Spec-Run/Reverse-Spec; 0.39-Governance ausdrücklich nicht
+      enthalten), MCP-Nullzustand/Canary/Gateway in 19.4, Offline-Verifier
+      in 19.6. Nachgezogen: Kopfkästen, 19.1–19.10, ADR-5/ADR-8 und
+      ADR-2-Praxis-Check, 22.3, Praxis-Checks in Kap. 6/10/12/13/14/15/
+      16/18, Management Summary, Glossar (+8 Begriffe), beide Karussells
+      samt Folientexten, CITATION.cff/.zenodo.json/README (178/49 Seiten),
+      CLAUDE.md-Status, quellen/softwarefabrik (01–12 auf v0.38.0, neu
+      13-spec-driven-development.md).
+      **Drei Altfehler korrigiert, die seit 2.0 im Text standen** (beim
+      Code-Abgleich gefunden, im Text offen als Korrektur ausgewiesen):
+      (1) Coding-Agenten liefen nie im Container — die Container-Sandbox
+      kapselt nur Build/SBOM/Dependency-Scan, und zwar mit Netz; die
+      „netzlose Agent-Sandbox" gab es nicht (19.4, 19.7, 19.8, Kap. 2,
+      13, 14, 20, abb27/abb29). (2) Die Reviewer laufen nacheinander,
+      nicht parallel (19.5, 19.8, Kap. 0, 10, 16, 22, abb30, Fabrik-
+      Karussell Folie 3). (3) Lizenz: Ed25519-JWT ohne Keycloak/OIDC,
+      Laufzeit 30 Tage bis 1 Jahr statt „7 Tage" (19.7, abb21/abb29);
+      der Keycloak-Stack war schon mit Fabrik 0.4.0 entfernt.
+      Dazu ehrlich aufgenommen: 0.33.0-Befunde „Erfolg ohne Beleg"
+      (stiller Review-PASS, Gate auf leerem Diff, Abbruch ohne
+      Prozessende, Build ohne Schreibrechte), 0-€-Bewertung der
+      Claude-Läufe bis 0.34.0, fehlende Workflow-RBAC bis 0.34.0,
+      AC-Prüfung des Halluzinations-Reviewers lief bis 0.35.0 ins Leere,
+      ArchUnit-Kappung erst seit 0.29.0 wirksam. CVE-Zeile in 19.9
+      entfallen (seit 0.31.0 ohne Suppression).
+      **Build:** mermaid-cli auf 12.0.0 gepinnt (11.x renderte in der
+      aktuellen Umgebung leere Beschriftungen; 12.x kennt `--pdfFit`
+      nicht mehr), `wrappingWidth` in mermaid.json; neu gerendert nur
+      abb21, abb23–25, abb27, abb29, abb30.
+- [x] **Version 3.1, Faktencheck + Zweitgutachter-Runde** (20.10.2026):
+      Faktencheck (~120 Punkte gegen Tag v0.38.0, keine blockierenden
+      Befunde) und Zweitgutachten zu 19.11/19.4–19.7 eingearbeitet:
+      Image-Scan führt weiter 17 begründete `.trivyignore`-Ausnahmen
+      (Satz „ohne Ausnahmeeintrag" auf den Abhängigkeits-Scan beschränkt);
+      Kernablauf 19.1 sagte noch „Sandbox"; „bis 0.3x"-Angaben auf
+      „vor 0.3x" vereinheitlicht; `contract` ist kein Blatt-Slice
+      (workflow importiert ihn — Abb. 23 und 19.10 korrigiert);
+      Keycloak-Ablösung auf April 2026 (vor 0.2.0) datiert;
+      Spec-Signierbarkeit als 0.39 geplant markiert; Stub-Tests nicht als
+      „nachgewiesen"; „durch Tests belegt" → „in Tests referenziert";
+      Superlativ „größte Hebelwirkung" entfernt; EARS mit allen fünf
+      Schablonen; Kürzel SDD/AC eingeführt; Glossar um SDD, Spec-Modus,
+      Reverse-Spec ergänzt. EARS-Quelle extern bestätigt.
+- [ ] Klontest für v3.1 (frischer Clone, `make pdf fabrik karussell`,
+      Seitenzahlen 178/49 bestätigen).
+- [ ] Nach SoftwareFabrik **v0.39.0** (SDD-Governance, SPEC-005) nachziehen:
+      eine Zeile in der Release-Verlaufstabelle (19.10), Kennzahlen +
+      Erhebungsvermerk auf Tag v0.39.0, 19.11 (Status-Kasten und
+      „Einordnung": Policy-Pflicht `pflichtSpecFreigabe`,
+      Mindest-AC-Abdeckung, Export 2.1 mit signierten Spec-Fassungen,
+      Spec-Kennzahlen — nur was am Tag wirklich drin ist), 19.9-Zeile
+      „SDD-Governance … geplant", Compliance-Profil-Tabelle in 19.6 (falls
+      EU_AI_ACT/BAIT neue Felder setzen), 19.6 Audit-Export/Verifier,
+      15.6-Praxis-Check (Spec-Kennzahlen), beide Karussells (Folie 2/8
+      Kennzahlen, Folie 9), Version 3.2 (Titel, CITATION.cff,
+      .zenodo.json, README, CLAUDE.md).
+- [ ] (Martin) Test-Isolationsdefekt aus 19.9 („Integrationstest
+      committet ins reale Repository", Stand 0.19.0) im Fabrik-Repo
+      klären: behoben oder offen? Bis dahin als „Status ungeklärt"
+      ausgewiesen.
+- [ ] Übrige Abbildungen (abb01–18, abb22, abb26, abb28, abb31) bei
+      Gelegenheit mit mermaid-cli 12.0.0 neu rendern, damit alle
+      Abbildungen aus demselben Renderer stammen (Layout ändert sich
+      leicht; vorher Sichtprüfung).
 - [ ] Prüfschritt ins Makefile aufnehmen: ASCII-`"` in kapitel/*.md
       außerhalb von Codeblöcken ablehnen (babel-Shorthand-Falle, siehe
       2.8-Befund B1).

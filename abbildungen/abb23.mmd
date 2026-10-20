@@ -1,15 +1,15 @@
 flowchart LR
     subgraph SPEC["Spezifikation"]
         direction TB
-        WIZ["wizard"] ~~~ PD["projectdefinition"] ~~~ PR["prompt"] ~~~ AG["agent"] ~~~ TE["team"]
+        WIZ["wizard"] ~~~ PD["projectdefinition"] ~~~ PR["prompt"] ~~~ AG["agent"] ~~~ TE["team"] ~~~ SP["spec"]
     end
     subgraph GOV["Governance"]
         direction TB
-        POL["policy"] ~~~ AUD["audit"] ~~~ MAN["mandant"] ~~~ SECU["security"] ~~~ SET["settings"] ~~~ SECR["secrets"] ~~~ LIC["license"]
+        POL["policy"] ~~~ AUD["audit"] ~~~ MAN["mandant"] ~~~ SECU["security"] ~~~ SET["settings"] ~~~ SECR["secrets"] ~~~ LIC["license"] ~~~ MCP["mcp"]
     end
     subgraph EXEC["Ausführung"]
         direction TB
-        RUN["run"] ~~~ EX["execution"] ~~~ CON["conductor"] ~~~ GT["git"] ~~~ VAL["validation"] ~~~ SK["skills"] ~~~ SD["sdlc"]
+        RUN["run"] ~~~ EX["execution"] ~~~ CON["conductor"] ~~~ GT["git"] ~~~ VAL["validation"] ~~~ SK["skills"] ~~~ SD["sdlc"] ~~~ MGW["mcpgateway"]
     end
     subgraph QUAL["Bewertung"]
         direction TB
@@ -17,11 +17,11 @@ flowchart LR
     end
     subgraph LEAF["Blatt-Slices<br/>(konsumieren nur)"]
         direction TB
-        PROV["provenance"] ~~~ EXP["export"] ~~~ GR["guardrails"] ~~~ OBS["observability"] ~~~ CTR["contract"] ~~~ KZ["kennzahlen"]
+        PROV["provenance"] ~~~ EXP["export"] ~~~ GR["guardrails"] ~~~ OBS["observability"] ~~~ KZ["kennzahlen"] ~~~ CAN["canary"]
     end
     subgraph WFL["Workflow-Ebene<br/>(neu, Feature-Flag aus)"]
         direction TB
-        WF["workflow"]
+        WF["workflow"] ~~~ CTR["contract"]
     end
     WFL --> EXEC
     SPEC --> EXEC

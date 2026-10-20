@@ -85,15 +85,18 @@ clean:
 	rm -rf $(BUILD)
 
 # Abbildungen: Mermaid-Quellen (abbildungen/*.mmd) -> PDF (abbildungen/out/)
-# Benötigt Node.js; mermaid-cli wird via npx geladen.
+# Benötigt Node.js; mermaid-cli wird via npx geladen (gepinnt auf 12.0.0:
+# 12.x passt PDFs ohne --pdfFit an; 11.x renderte in der aktuellen
+# Umgebung leere Beschriftungen). Seit v3.1 neu gerendert: abb21, abb23–25,
+# abb27, abb29, abb30; die übrigen stammen aus einem älteren 11.x-Lauf.
 abbildungen:
 	@mkdir -p abbildungen/out
 	@for f in abbildungen/*.mmd; do \
 		n=$$(basename "$$f" .mmd); \
 		echo "mmdc: $$f -> abbildungen/out/$$n.pdf"; \
-		npx -y @mermaid-js/mermaid-cli -q -p abbildungen/puppeteer.json \
+		npx -y @mermaid-js/mermaid-cli@12.0.0 -q -p abbildungen/puppeteer.json \
 			-c abbildungen/mermaid.json -i "$$f" \
-			-o "abbildungen/out/$$n.pdf" --pdfFit -b transparent; \
+			-o "abbildungen/out/$$n.pdf" -b transparent; \
 	done
 
 # LinkedIn-Karussells: eigenstaendige Dokumente, je 10 quadratische Folien

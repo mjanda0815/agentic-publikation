@@ -7,8 +7,8 @@
 > die *Agentic Software Factory* (Produktname: SoftwareFabrik), ein vom
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
-> sind aus dem Quellcode des Systems erhoben (Erhebungsstand 9. August 2026
-> auf dem Release-Stand 0.30.0), nicht
+> sind aus dem Quellcode des Systems erhoben (Erhebungsstand 20. Oktober
+> 2026 auf dem Release-Stand 0.38.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,7 +16,8 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert und in Betrieb, Stand 0.30.0) und
+> dort Beschriebene ist implementiert, Stand 0.38.0; als opt-in
+> gekennzeichnete Funktionen sind standardmäßig ausgeschaltet) und
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
 > je Stufe ausgewiesen: Die Stufen 0 bis 4 sowie die Kennzahlenmessung der
 > Stufe 6 sind hinter einem standardmäßig deaktivierten Feature-Flag
@@ -25,7 +26,10 @@
 > Welches Release welche Stufe brachte, zeigt die Release-Verlaufstabelle
 > in 19.10; zwei Ausnahmen wirken auch ohne Feature-Flag: der
 > Einzel-Run-Teil der Rollback-Erkennung und das Aufwandsfeld an der
-> Run-Freigabe). Der aktuelle Stand verwendet genau einen
+> Run-Freigabe). Abschnitt 19.11 beschreibt die seit 0.35.0 hinzugekommene
+> Anforderungsebene (Spec-Driven Development); sie ist implementiert, aber
+> ebenfalls opt-in hinter einem eigenen, standardmäßig deaktivierten
+> Feature-Flag. Der aktuelle Stand verwendet genau einen
 > schreibenden Agenten je Run und mehrere unabhängige Read-only-Reviewer.
 > Diese Entscheidung entstand aus der praktischen Erfahrung, dass mehrere
 > gleichzeitig schreibende Agenten Konfliktkosten, unklare Zurechnung und
@@ -65,9 +69,12 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
    Markdown-Artefakte (`PROJECT.md`, `INSTRUCTIONS.md`, `AGENTS.md`,
    `WORKFLOW.md`, `DEFINITION_OF_DONE.md`, `README.md`), die der Mensch vor
    dem Lauf editieren kann. Das ist der Punkt, an dem menschliche Absicht
-   maschinenlesbar wird.
+   maschinenlesbar wird. Seit 0.35.0 können zusätzlich versionierte,
+   freigegebene Produkt-Specs mit nummerierten Akzeptanzkriterien die
+   Anforderungen tragen (opt-in, 19.11).
 3. **Ausführen.** Ein *Run* durchläuft sieben Phasen. Der Coding-Agent läuft
-   in einer Sandbox auf einem projektpersistenten Workspace mit eigenem
+   als Host-Prozess mit frischem Home-Verzeichnis und ohne nicht
+   freigegebene Werkzeugserver (19.4) auf einem projektpersistenten Workspace mit eigenem
    Git-Repository, auf einem eigenen Branch.
 4. **Prüfen.** Read-only-Review-Adapter analysieren den Diff; ein Quality
    Gate aggregiert die Befunde zu PASS/WARN/FAIL (bzw. ERROR bei Prüferausfall). Bei Fehlschlag speist die
@@ -84,25 +91,31 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 421 |
-| Produktivcode | ~41.700 Zeilen |
-| Testklassen | 291 |
-| Fachliche Slices (Module) | 30 |
-| Datenbanktabellen | 58 |
-| Flyway-Migrationen | 52 |
+| Produktivklassen (Java) | 499 |
+| Produktivcode | ~54.000 Zeilen |
+| Testklassen | 353 |
+| Fachliche Slices (Module) | 34 |
+| Datenbanktabellen | 63 |
+| Flyway-Migrationen | 61 |
 | Execution-Adapter | 10 |
-| Review-Adapter | 6 |
+| Review-Adapter | 7 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 38 (0.1.0 bis 0.30.0, April–August 2026) |
+| Releases | 46 (0.1.0 bis 0.38.0, April–Oktober 2026) |
 
-*Erhoben auf dem Release-Stand 0.30.0 (9. August 2026). Der Zuwachs der
-Releases 0.21.0 bis 0.30.0 geht fast vollständig auf die Workflow-Ebene
-zurück — welches Release welche Roadmap-Stufe brachte (einschließlich der
-Migrationen V40–V54), dokumentiert die Release-Verlaufstabelle in 19.10.
-Die 30. Fachlichkeit ist die Kennzahlenmessung (19.10).*
+*Erhoben auf dem Release-Tag 0.38.0 (20. Oktober 2026), Anwendungsmodul;
+die eigenständigen Module Offline-Verifier (~1.000 Zeilen) und MCP-Gateway
+(~2.400 Zeilen) sind nicht mitgezählt. Der Zuwachs der Releases 0.21.0 bis
+0.30.0 geht fast vollständig auf die Workflow-Ebene zurück, der von 0.31.0
+bis 0.38.0 auf die Absicherung der Agentenläufe gegen fremde
+Werkzeugkonfiguration, den unabhängig prüfbaren Nachweis und
+Spec-Driven Development — welches Release was brachte (einschließlich der
+Migrationen V40–V65; die Nummern V55 und V57 sind nicht vergeben),
+dokumentiert die Release-Verlaufstabelle in 19.10. Die vier seit 0.30.0
+hinzugekommenen Fachlichkeiten sind `canary`, `mcp` und `mcpgateway`
+(19.4) sowie `spec` (19.11).*
 
-Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.0,
+Der Technologiestack ist bewusst konservativ: Java 25, Spring Boot 4.1,
 server-gerendertes UI (Thymeleaf + HTMX, Server-Sent Events für Live-Logs,
 kein SPA), PostgreSQL 18 mit Flyway, Docker Compose. Ein Maven-Modul, ein
 Prozess, eine Datenbank — kein Cluster, kein Message-Broker, kein
@@ -151,12 +164,12 @@ verlangt, braucht eine Rolle, die sie liest.
 
 Die Fabrik ist ein **modularer Monolith**: ein Maven-Modul, ein
 Deployment-Artefakt, je ein sauber geschnittenes Paket (*Slice*) pro
-Bounded Context — insgesamt 30. Jeder Slice trägt seine eigenen Schichten (`domain`,
+Bounded Context — insgesamt 34. Jeder Slice trägt seine eigenen Schichten (`domain`,
 `application`, `web`, teils `infrastructure`); externe Systeme —
 Coding-CLIs, Git, Maven, Scanner, GitHub-API — sitzen ausschließlich hinter
 Ports.
 
-![Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails, observability, contract, kennzahlen) konsumieren nur; die technischen Querschnittspakete common und web sind nicht dargestellt](abbildungen/out/abb23.pdf){width=100%}
+![Fachliche Slices der Fabrik, gruppiert nach Aufgabe. Blatt-Slices (provenance, export, guardrails, observability, kennzahlen, canary) werden von keinem Kern-Slice konsumiert; die technischen Querschnittspakete common und web sind nicht dargestellt](abbildungen/out/abb23.pdf){width=100%}
 
 Die Größenverteilung der Slices ist selbst eine Aussage: `run` und
 `execution` machen zusammen ein Viertel der Codebasis aus — die Steuerung
@@ -186,7 +199,10 @@ Systems.]
   aus der Baseline. Die Schuld ist gezählt und sichtbar statt implizit.
 
 Der Ratchet hat einen lehrreichen Fallstrick: Der Freeze speichert nur eine
-begrenzte Zahl elementarer Modulzyklen (Kappungsgrenze, Standard 100).
+begrenzte Zahl elementarer Modulzyklen (Kappungsgrenze, in ArchUnit
+standardmäßig 100; die Fabrik hat sie auf 400 angehoben — wirksam erst
+seit 0.29.0, weil der Name der Einstellung vorher falsch geschrieben war
+und nichts bewirkte; die eingefrorene Baseline enthält genau 100 Zyklen).
 Solange die tatsächliche Zyklenzahl darunter liegt, ist die Enumeration
 vollständig und deterministisch. Überschreitet eine neue Cross-Slice-Kante
 die Grenze, wird die Enumeration abgeschnitten und *reihenfolgeabhängig* —
@@ -199,8 +215,8 @@ Ein wiederkehrendes Entwurfsmuster verdient Erwähnung, weil es aus dem
 Ratchet folgt: Neue Querschnittsfähigkeiten werden konsequent als
 **Blatt-Slice** angelegt — ein Paket, das nur konsumiert und von niemandem
 konsumiert wird. Der Warum-Trace (`provenance`) korreliert Run-, Metrik-,
-Plan-, Freigabe- und Audit-Daten, ohne dass irgendein anderer Slice davon
-abhängt; der Audit-Export (`export`) aggregiert dasselbe zum Bundle. Eine
+Plan-, Freigabe- und Audit-Daten, ohne dass ein Slice außer dem
+Audit-Export davon abhängt; der Audit-Export (`export`) aggregiert dasselbe zum Bundle. Eine
 Fähigkeit, die naturgemäß überall hinschaut, würde als zentraler Service
 sofort Modulzyklen erzeugen — als Blatt-Slice erzeugt sie keinen einzigen.
 
@@ -219,7 +235,7 @@ statt sie stillschweigend zu brechen. Für die reine DDD-Lehre ist das ein
 Verstoß; für ein System, dessen Komplexität woanders liegt, ist es eine
 bewusste Abwägung zugunsten der Umsetzungsgeschwindigkeit.
 
-![Kernaggregate der Run-Ebene; vollständig umfasst das Schema 58 Tabellen in 52 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
+![Kernaggregate der Run-Ebene; vollständig umfasst das Schema 63 Tabellen in 61 Flyway-Migrationen](abbildungen/out/abb26.pdf){width=100%}
 
 Der Migrationsverlauf liest sich als Reifungskurve des Systems: V1–V9
 Grundschema (Werkzeug), V12–V18 Wizard und Projektgedächtnis (Prozess),
@@ -230,7 +246,11 @@ Workflow-Ebene und damit die Parallelität, V46–V51 Vertragsregistrierung,
 versionierte Planänderungen, Konfliktklassifikation und Worker-Ansprüche,
 V52 die Abdeckungswerte am Build-Ergebnis, V53 die Rollback-Anker an
 Merge-Queue und Run, V54 das freiwillige Aufwandsfeld an der
-Freigabeentscheidung.
+Freigabeentscheidung, V56 das signierte Register der Isolationsnachweise,
+V58–V60 die Kennzeichnung geschätzter Kosten, das Aufwandsfeld an der
+Planfreigabe und zusätzliche Kostenfelder, V61–V65 die Anforderungsebene
+(Specs, Fassungen, Freigaben, Spec-Bezug von Backlog und Workflow-Tasks,
+Veraltet-Markierung, Rückfragen).
 Auf diese Kurve kommt Abschnitt 19.8 zurück.
 
 ## 19.3 Das Ausführungsmodell: der Run
@@ -240,13 +260,13 @@ Execution Model aus Kapitel 7, jedoch nicht als Task-Graph, sondern als
 **zustandsbehaftete Pipeline mit Regelkreis**. Die gesamte Orchestrierung
 hat genau eine Stelle, an der Run-Statuswechsel stattfinden; die erlaubten
 Übergänge liegen zentral, unerlaubte Übergänge werfen eine Ausnahme statt
-still zu passieren.^[`RunOrchestrationService` (~1.580 Zeilen),
+still zu passieren.^[`RunOrchestrationService` (~2.600 Zeilen),
 `RunStatusTransitions`; unerlaubte Übergänge werfen
 `InvalidRunStateTransitionException`.]
 
-### Zwei Run-Arten, sieben Phasen, 13 Zustände
+### Drei Run-Arten, sieben Phasen, 14 Zustände
 
-Es gibt zwei Run-Arten: Ein **Plan-Run** analysiert den Ist-Stand und
+Ursprünglich gab es zwei Run-Arten: Ein **Plan-Run** analysiert den Ist-Stand und
 schlägt die nächsten Arbeitsschritte vor; nur Dateien unter `plans/` werden
 committet, alles andere wird verworfen, und die Vorschläge landen als
 Backlog-Elemente (`plan_item`, mit Abhängigkeiten) in der Datenbank. Ein
@@ -255,11 +275,15 @@ isolierten Branch, validiert, gemergt oder als Pull Request übergeben. Die
 Asymmetrie ist Absicht — ein Plan-Run darf keinen Code ändern und
 durchläuft kein Build-Gate. Damit ist Planung ohne Schreibrisiko am Code automatisierbar,
 die Grundlage für zeitgesteuerte Routinen und automatische Folgevorschläge.
+Seit 0.38.0 gibt es als dritte Art den **Spec-Run**, von dem nach
+demselben Muster nur Ergebnisse unter `specs/` übernommen werden und der
+Anforderungen statt Code erarbeitet (19.11).
 
 Jeder Run durchläuft sieben Phasen (Intake, Prompt-Assembly,
 Workspace-Preparation, Execution, Validation, Correction, Completion) und
-bewegt sich durch 13 Zustände. Drei davon tragen die Argumentation dieses
-Whitepapers weiter:
+bewegt sich durch 14 Zustände; der vierzehnte, `WAITING_FOR_INPUT`, kam
+mit dem Spec-Run hinzu und ist ihm vorbehalten (19.11). Drei Zustände
+tragen die Argumentation dieses Whitepapers weiter:
 
 - **`WAITING_FOR_APPROVAL`** — der Mensch ist ein *Zustand im System*, kein
   Nebenprozess. Human Authority (Prinzip AP-6) ist damit nicht Appell,
@@ -360,7 +384,12 @@ Drei Entwurfsentscheidungen im Port selbst:
 
 1. **Streaming statt Rückgabewert.** Ein Event-Consumer liefert Logzeilen,
    Token-Verbrauch und Phasensignale *während* des Laufs — ohne das wäre
-   Live-Beobachtbarkeit unmöglich und ein Abbruch bliebe folgenlos.
+   Live-Beobachtbarkeit unmöglich. Der Port erlaubt das; der
+   Claude-Code-Adapter nutzt es derzeit nicht zeilenweise, sondern sammelt
+   die JSON-Ausgabe der CLI bis zum Prozessende. Und dass ein Abbruch
+   tatsächlich wirkt, war nicht selbstverständlich: Vor 0.33.0 setzte er
+   nur den Status, die CLI lief bis zum Ende oder Timeout weiter; seither
+   beendet eine Prozessregistrierung den Agentenprozess samt Nachkommen.
 2. **Verfügbarkeit ist Teil des Vertrags.** Adapter, deren CLI fehlt,
    verschwinden geordnet aus der Auswahl, statt zur Laufzeit zu scheitern.
 3. **Timeout ist ein eigener Ergebniszustand**, nicht ein Sonderfall von
@@ -384,6 +413,13 @@ Fehler, der erst auf der Rechnung sichtbar wird. Die Konsequenz für das
 Kostenmodell aus Kapitel 15 ist grundlegend: Bei Flatrate-Abos entstehen
 keine Token-Kosten je Lauf; ein reines Token-ROI-Modell bildet die
 Wirtschaftlichkeit agentischer Entwicklung nicht mehr vollständig ab.
+Seit 0.33.0 ist der Abo-Modus ausdrücklich als *persönliche* Nutzung
+gefasst — der Abo-Inhaber auf seinem eigenen Rechner; der Teambetrieb
+sperrt den Abo-Login und erzwingt den API-Key-Modus. Eine zuvor
+angekündigte Variante, bei der mehrere Nutzer ihr jeweils eigenes Abo auf
+einem gemeinsamen Server einbringen, wurde gestrichen, weil der Anbieter
+Drittanwendungen das Sammeln, Speichern oder Vermitteln seiner
+Zugangsdaten untersagt (Stand Oktober 2026).
 
 Flankiert wird das von einem vollständigen Kostenmodell in der Plattform:
 eine Preistabelle je Modell mit getrennten Preisen für Input, Output und
@@ -393,10 +429,21 @@ Wochenlimits mit Soft-Schwelle. Für Modelle ohne hinterlegte Preisdaten weist d
 Das ist eine bewusste Entscheidung gegen geratene Preise — aber, wie ein
 Review zu Recht angemerkt hat, keine konservative Budgetbewertung: Ein mit
 0 € bewerteter Lauf kann Budgetgrenzen unterlaufen und Kosten zu niedrig
-ausweisen. Sauberer wäre ein expliziter Kostenstatus `UNKNOWN`, der die
-Budgetprüfung nicht bestehen kann, ein konfigurierbarer
-Sicherheitsersatzwert — und im Abo-Modus ein eigener Status `FLAT_RATE`
-statt der Zahl null. Ein Punkt für die Weiterentwicklung (19.10).
+ausweisen. Dass das kein theoretisches Risiko ist, zeigte sich vor 0.34.0:
+Läufe mit Claude Code wurden durchgehend mit 0 € bewertet, weil der
+Verbrauchsparser ein Feld auswertete, das die CLI gar nicht liefert — ohne
+Modell keine Preiszeile, ohne Preiszeile null, und keine Anzeige meldete
+einen Fehler. Behoben ist der Parser (seither werden auch die gesondert
+berechneten Cache-Schreib-Tokens erfasst und die Kostenschätzung der CLI
+als Gegenprobe im Warum-Trace geführt), nicht die Regel: Unbekannte
+Modelle ergeben weiterhin 0 €. Sauberer wäre ein expliziter Kostenstatus
+`UNKNOWN`, der die Budgetprüfung nicht bestehen kann, ein konfigurierbarer
+Sicherheitsersatzwert — und im Abo-Modus ein eigener Status statt einer
+Zahl. Den letzten Teil hat 0.33.0 in abgeschwächter Form umgesetzt:
+Abo-Läufe tragen in Warum-Trace, Kostenansichten und Exporten die
+Kennzeichnung „Schätzung (API-Tarif), nicht abgerechnet“ und zählen
+bewusst weiter gegen die Budgets, weil sie die erzeugte Last abbilden.
+Der Rest bleibt ein Punkt für die Weiterentwicklung (19.9).
 
 ### Capability-Routing statt Modellnamen
 
@@ -405,24 +452,46 @@ Die Modellwahl-Strategie aus Kapitel 5 ist umgesetzt — aber über
 Routing-Rolle (Planung vs. Umsetzung) verlangt eine Fähigkeitsstufe, die
 zur Laufzeit auf ein konkretes Modell aufgelöst wird. Planung darf ein
 stärkeres, teureres Modell bekommen als mechanische Umsetzung, ohne dass
-irgendwo ein Modellname im Code steht — wichtig in einem Markt, in dem
-Modellnamen eine Halbwertszeit von Monaten haben. Eine je Projekt gesetzte
+die Orchestrierung einen Modellnamen kennt — wichtig in einem Markt, in dem
+Modellnamen eine Halbwertszeit von Monaten haben. Die Namen stehen an
+genau einer Stelle, einem Modellkatalog samt Preistabelle und
+Rollen-Defaults, den eine feste Release-Checkliste gegen die
+Herstellerübersicht prüft. Eine je Projekt gesetzte
 Modell-Policy wird beim Anlegen eines Runs erzwungen und attestiert; im
-Nachhinein ist belegbar, welches Modell wirklich gearbeitet hat.
+Nachhinein ist belegbar, welches Modell wirklich gearbeitet hat — seit
+0.33.0 auch, woher die Wahl kam (Override, Team, Rollen-Default oder
+Adapter-Default).
 
-### Sandbox
+### Sandbox — eine Korrektur
 
-Eine Sandbox-Factory wählt zwischen zwei Varianten. Der Default ist die
-**Prozessisolation**: ein eigener Prozess je Run mit sauber gesetzter
-Umgebung und einer Allowlist der Variablen, die den Agenten überhaupt
-erreichen. Alternativ, per Einstellung aktivierbar, die
-**Container-Sandbox**: ein ephemerer Container je Agentenlauf mit CPU-,
-Speicher- und Prozesslimits, read-only-Dateisystem, Bindmount
-ausschließlich auf den Workspace und `--network=none` als Voreinstellung
-dieser Variante. Die Netzwerksperre ist eine starke Aussage:
-Ein Coding-Agent braucht im Normalfall keinen ausgehenden Netzzugriff —
-Abhängigkeiten kommen aus dem vorbereiteten Workspace beziehungsweise dem
-Cache. Wer das Netz öffnet, tut es bewusst.
+Die Fabrik kennt zwei Isolationsvarianten, und die Fassungen dieses
+Whitepapers bis 3.0 haben ihre Reichweite falsch beschrieben. Richtig ist
+(Stand 0.38.0): Die Coding-Agenten selbst laufen in **keiner** Variante in
+einem Container, sondern immer als Prozess auf dem Host — mit einer
+Allowlist der Umgebungsvariablen, die den Agenten überhaupt erreichen, und
+seit 0.31.0 mit einem frischen Home-Verzeichnis je CLI-Aufruf (siehe
+unten). Die per Einstellung aktivierbare **Container-Sandbox** kapselt nur
+die Schritte, die die Fabrik am erzeugten Projekt ausführt: Build und
+Tests, SBOM-Erzeugung und Abhängigkeits-Scan — dort mit CPU-, Speicher-
+und Prozesslimits, read-only-Dateisystem und einem Bindmount
+ausschließlich auf den Workspace, aber **mit** Netzzugang, weil Build und
+Scanner Abhängigkeiten beziehungsweise die Schwachstellendatenbank laden.
+Die Containervorlage steht zwar auf `--network=none`, bei keinem dieser
+Schritte kommt diese Voreinstellung aber zum Tragen. Die netzlose
+*Agent*-Sandbox, die frühere Fassungen beschrieben, gibt es also nicht.
+Agent-CLIs im Container — mit projizierten Zugangsdaten und einem
+Netz, das nur die Modell-Schnittstellen erreicht — sind ein eigenes,
+offenes Arbeitspaket (19.9).
+
+Aufgedeckt hat das die Fabrik selbst: Bei der Vorbereitung der
+MCP-Absicherung (unten) fiel auf, dass ein Starthinweis im Container-Modus
+eine Isolation der Agenten nahelegte, die der Code nie hergestellt hatte;
+der Hinweis nennt seither in beiden Varianten, was gekapselt ist und was
+nicht.^[`SandboxScopeAdvisory` und `ContainerProcessSandbox` im
+`execution`-Slice; die Korrektur ist in einer Architekturentscheidung der
+SoftwareFabrik festgehalten.] Die Lehre gleicht der übersprungenen Prüfung
+in 19.9 (4): Eine Einstellung, die Schutz verspricht, muss belegen, wovor
+sie schützt — sonst erzeugt sie Vertrauen, das sie nicht deckt.
 
 Zur Absicherung der Außenkontakte gehört eine **Host-Allowlist für
 Git-Remotes**:^[`RemoteUrlPolicy` im `common`-Slice.] Nur für erlaubte
@@ -434,6 +503,75 @@ stammen aus einem adversarialen Re-Review — Kapitel 14 hatte die
 Bedrohungsklassen richtig benannt, die konkreten Angriffsflächen zeigten
 sich erst im gebauten System.
 
+### Werkzeuge nur auf Freigabe: MCP-Nullzustand, Isolationsnachweis, Gateway
+
+Kapitel 18 beschreibt MCP-Server und Hooks als Erweiterungspunkte von
+Agenten. Für eine Steuerschicht sind sie zunächst Angriffsfläche: Coding-CLIs
+laden Werkzeugserver und Hooks aus mehreren Quellen — aus der
+Konfiguration des Betriebsnutzers, aus Plugins und aus Dateien im
+Repository selbst. Bei der Analyse fiel auf, dass Claude Code im
+nicht-interaktiven Modus eine `.mcp.json` im Workspace ohne
+Vertrauensrückfrage startete (beobachtet an einer CLI-Version vom
+September 2026); ein importiertes Repository hätte damit beim ersten Lauf
+Kommandos auf dem Host ausführen können. Dasselbe galt für Hooks aus den
+Projekt-Einstellungen eines Repositorys.
+
+Seit 0.31.0 gilt deshalb ein **Nullzustand**: Kein Agentenlauf erreicht
+einen Werkzeugserver, den die Fabrik nicht ausdrücklich bereitstellt. Jeder
+CLI-Aufruf — Ausführung wie Review — bekommt ein frisches Home-Verzeichnis,
+in das nur die Anmeldedateien des jeweiligen Adapters kopiert werden;
+Claude Code läuft zusätzlich mit strikter, leerer MCP-Konfiguration und
+seit 0.34.0 ohne Projekt-Einstellungen und mit abgeschalteten
+Hooks.^[`AgentHome` im `execution`-Slice; Workspace-Prüfung
+`McpWorkspacePruefung` im `mcp`-Slice.] Vor der ersten Ausführung wird der
+Konfigurationsbestand des Workspace in die Audit-Kette geschrieben,
+vorgefundene Server und ausführbare Konfiguration ebenso; schreibt der
+Agent selbst Werkzeugkonfiguration, wird das attestiert und ist unter dem
+weiter unten beschriebenen MCP-Standardverbot ein blockierender
+Security-Befund im Gate, der in die Korrekturschleife läuft. Plugins sind seither
+standardmäßig gesperrt und werden nur per Policy freigegeben. Die
+Nebenwirkung ist gewollt: Agentenläufe sehen die Host-Konfiguration nicht
+mehr, und Commits, die ein Agent selbst anlegt, tragen eine neutrale
+Identität.
+
+Ob eine CLI diese Einstellungen tatsächlich beachtet, ist eine Annahme,
+die sich mit jeder CLI-Version ändern kann. Der **Canary-Harness**
+(0.31.0) prüft sie je Adapter und *installierter* CLI-Version in zwei
+Läufen gegen eine nachgestellte Host-Umgebung mit Marker-Servern: Ein
+Kontroll-Lauf mit dem Produktivaufruf ohne Isolation *muss* die Marker
+zeigen — sonst hätte der Test nichts bewiesen und gilt als ungültig —,
+der Lauf über den echten Adapter-Pfad darf keinen zeigen.^[`CanaryService`
+im Blatt-Slice `canary`; Register `IsolationsnachweisRegister` im
+`mcp`-Slice.] Das Ergebnis wird signiert in einem Register abgelegt und
+attestiert; anerkannt wird nur der jüngste gültig signierte Eintrag je
+Adapter und Version. Die Profile BAIT/MaRisk/DORA und BSI/VS-NfD setzen
+ein Policy-Feld *MCP-Standardverbot*: Dort starten Agent-CLIs nur mit
+bestandenem Nachweis für die installierte Version, geprüft bei der Anlage
+und erneut unmittelbar vor der Ausführung; die LLM-Reviewer werden ohne
+Nachweis als gesperrt übersprungen, die Sperre wird attestiert. Nach dem
+Update auf 0.31.0 war in diesen Profilen deshalb zunächst nur der
+Mock-Adapter nutzbar — gewollt, *fail closed*. Was sich nicht markieren
+lässt, bleibt benannt ungeprüft: systemweite Konfiguration (findet sich
+dort ein Server-Eintrag, scheitert der Nachweis) und kontogebundene
+Connectoren des Anbieters. Auch die Wirkung der Hook-Abschaltung ist bisher
+aus der Herstellerdokumentation abgeleitet, nicht durch den Canary belegt.
+
+Erst auf diesem Nullzustand öffnet der **MCP-Gateway** (0.34.0, opt-in,
+Standard aus) gezielt: ein eigener Prozess ohne Signaturschlüssel, der
+Agenten ausschließlich als lesend gekennzeichnete Werkzeuge freigegebener
+Server bereitstellt — zunächst nur für die Ausführung mit Claude Code,
+Reviewer und andere Adapter bleiben im Nullzustand. Freigegeben wird über
+Policy-as-Code; jeder Server ist mit Hashwerten über Startbefehl
+beziehungsweise Adresse und über seine Werkzeugliste gepinnt, eine
+Abweichung sperrt den Server und bricht den Lauf ab. Jeder Werkzeugaufruf
+landet als signiertes Ereignis in der Audit-Kette — mit Hashwerten von
+Argumenten und Ergebnis statt der Inhalte —, und kann der Gateway ein
+Ereignis nicht zustellen, führt er für diesen Lauf keinen weiteren Aufruf
+aus. *Einschränkung:* Ohne Agent-Container kann ein Agent unter demselben
+Betriebskonto grundsätzlich auf dessen Prozesse zugreifen; die Übergabe
+von Geheimnissen über die Standardeingabe und Tokens je Lauf verengen
+diesen Weg, schließen ihn aber erst mit dem Container.
+
 ## 19.5 Guardrails in der Praxis
 
 Die Guardrails-Pipeline aus Kapitel 12 und ADR-3 ist umgesetzt — mit einer
@@ -443,13 +581,17 @@ Review-Adapter sind *read-only* und dürfen ihn nicht verändern. Ein System,
 in dem dieselbe Instanz erzeugt und freigibt, hat kein Gate, sondern eine
 Selbsteinschätzung.
 
-Sechs Review-Adapter laufen parallel auf dem Diff: zwei LLM-Reviewer
+Sieben Review-Adapter prüfen denselben Diff unabhängig voneinander —
+technisch nacheinander, nicht gleichzeitig: zwei LLM-Reviewer
 (Diff-Review durch Claude Code bzw. Aider im Read-only-Modus), drei
 statische Prüfer (Security-Muster wie API-Key-Präfixe, Path-Traversal,
 SQL-Konkatenation; Architektur-Verstöße inklusive Änderungen an
 bestehenden Datenbankmigrationen; Halluzinationsindikatoren) und ein
 werkzeuggestützter Dependency-Scan (CVEs und Lizenzverstöße; CVE-Befunde
-der Kategorie Security blockieren).
+der Kategorie Security blockieren), seit 0.38.0 dazu ein regelbasierter
+Spec-Conformance-Reviewer, der nur bei Läufen mit Spec-Bezug anspringt
+und prüft, ob die gebundenen Akzeptanzkriterien in Tests referenziert
+werden (19.11).
 Die Mischung ist Absicht: LLM-Reviewer finden Kontextfehler, die keine
 Regel beschreibt; statische Reviewer finden deterministisch, kostenlos und
 auditierbar genau das, was ein nichtdeterministisches Modell nicht
@@ -463,7 +605,11 @@ Akzeptanzkriterien, Importe nicht existierender Klassen. Das ist die
 direkte Umsetzung der Halluzinationserkennung aus Kapitel 12 — treffender
 als **Claim Verification** bezeichnet —, verschoben vom Code auf die
 Selbstauskunft des Agenten — dort sitzt der klassische
-Selbstbetrug agentischer Systeme.
+Selbstbetrug agentischer Systeme. *Einschränkung:* Die Prüfung auf
+unberührte Akzeptanzkriterien lief bis einschließlich 0.34.0 ins Leere, weil die
+Orchestrierung den Reviewern gar keine Kriterien übergab — das Feld war
+fest leer. Erst die Anforderungsebene aus 19.11 füllt es, und auch nur für
+Läufe mit Spec-Bezug.
 
 ### Die Gate-Policy
 
@@ -484,6 +630,26 @@ Vertrauen erzeugt, das es nicht deckt. Dieselbe Logik findet sich an
 weiteren Stellen wieder (das Lizenz-Lease ist *fail closed*, Attestierung
 ohne Schlüssel ist ein Startfehler — und als Projektregel: ein CI-Job, der
 sich ohne Secret selbst überspringt, gilt nicht als bestanden).
+
+Wie leicht diese Regel trotzdem unterlaufen wird, zeigte eine Prüfung der
+Claude-Anbindung vor Release 0.33.0. Sie fand vier Stellen, an denen die
+Fabrik Erfolg meldete, ohne ihn belegt zu haben. Die LLM-Reviewer werteten
+einen Fehler-Exit ohne Startfehler (Authentifizierung, Rate-Limit,
+Verweigerung) oder Freitext ohne Befundzeile als „Review ohne Befunde“,
+also als bestanden. Das Gate las den Diff des Arbeitsverzeichnisses,
+obwohl Build-Runs ihre Arbeit vorher auf den Run-Branch committen — es
+prüfte einen leeren Diff. Ein Abbruch beendete den Agentenprozess nicht
+(19.4). Und Build-Runs liefen ohne Schreibberechtigung, sodass der Agent
+im Text um Erlaubnis bat, statt zu arbeiten. Seither gilt ein Review nur
+als bestanden, wenn der Prozess erfolgreich endet *und* ein nachweisbares
+Ergebnis liefert (mindestens eine Befundzeile oder die nun verpflichtende
+Zusammenfassungszeile), sonst wird es zu `ERROR`; das Gate prüft den
+kumulierten Branch-Diff ab der Abzweigung; Build-Runs erhalten eine eng
+begrenzte Werkzeugfreigabe ohne Commit, Push und Download-Werkzeuge, und
+Reviews laufen technisch schreibgeschützt.^[Changelog 0.33.0 der
+SoftwareFabrik; Prozessbeendigung über den Port `ProzessRegistry`.] Die
+Sonderregel stand also im Code — ihre Voraussetzung, dass ein Ausfall
+überhaupt als Ausfall erkannt wird, nicht.
 
 Das Confidence Scoring aus Kapitel 12 ist umgesetzt — allerdings ohne den
 dort skizzierten AOP-Aspekt: Die Vertrauenswerte der Reviewer werden im
@@ -528,7 +694,15 @@ für Daten mandantengescopt; isolationsfrei sind nur Kontenverwaltung und
 Projektzuweisung. Eine Administrationsrolle kann Betrieb führen, ohne
 Einblick in fremde Projektinhalte zu haben. *Einschränkung:* Die Isolation
 ist an den interaktiven Pfaden verankert; die asynchrone Ausführungsschicht
-löst den Mandanten über einen eigenen Resolver auf.
+löst den Mandanten über einen eigenen Resolver auf. Wie wichtig es ist, die
+Isolation für jede *neue* Ebene erneut nachzuweisen, zeigte Release 0.34.0:
+Die Workflow-Ebene ließ bis dahin jede angemeldete Rolle jede Aktion
+ausführen — auch auf Workflows und Verträgen fremder Mandanten, die ID
+genügte —, und neue Workflows blieben ohne Mandanten. Der festgeschriebene
+Test deckte die Projekt-Grenze ab, die später hinzugekommene Ebene lag
+daneben. Betroffen war nur der Betrieb mit eingeschaltetem
+Workflow-Feature-Flag; seither erben Workflows und Verträge den Mandanten
+ihres Projekts, und ändernde Aktionen verlangen die passende Rolle.
 
 Das fünfstufige Rollenmodell (Viewer < Developer < Maintainer < Owner <
 Admin) entspricht dem Least-Privilege-Modell aus Kapitel 14; freigeben darf
@@ -542,7 +716,10 @@ ein SSO-Anschluss darf Zugriff nie versehentlich erweitern.
 Regeln sind kein Konfigurationszustand, sondern ein **versioniertes,
 signiertes Dokument**. Der kanonische Inhalt ist bewusst minimal und
 dadurch prüfbar: erlaubte Adapter, Gate-Modus, Pflicht-Freigabephasen,
-Attestierungspflicht.^[`PolicyInhalt` mit kanonischer Serialisierung
+Attestierungspflicht; seit 0.31.0 und 0.34.0 dazu das MCP-Standardverbot,
+die erlaubten Plugins und die erlaubten MCP-Server (19.4). Neue Felder
+erscheinen in der kanonischen Form nur, wenn sie vom Standard abweichen —
+bestehende Policy-Signaturen bleiben dadurch gültig.^[`PolicyInhalt` mit kanonischer Serialisierung
 (`kanonisch()`/`parse()`); Ed25519-Signatur über den kanonischen Text.]
 Je Mandant existiert **genau eine aktive Version** — erzwungen über einen
 partiellen Unique-Index in der Datenbank plus Service-Logik. Ohne diese
@@ -564,7 +741,10 @@ Policy-Vorlagen, die Brücke von der Norm zum Code:
 | BSI-Grundschutz / VS-NfD | blocking | Execution, Validation | ja | BSI IT-Grundschutz; für Verschlusssachen („Verschlusssache — Nur für den Dienstgebrauch“, VS-NfD) sind die erlaubten Adapter zusätzlich projektspezifisch auf lokale Backends zu beschränken |
 
 Das Anwenden eines Profils veröffentlicht eine neue signierte
-Policy-Version und erzeugt ein attestiertes Ereignis. **Ehrliche
+Policy-Version und erzeugt ein attestiertes Ereignis. Die Profile
+BAIT/MaRisk/DORA und BSI/VS-NfD setzen seit 0.31.0 zusätzlich das
+MCP-Standardverbot: Agent-CLIs laufen dort nur mit bestandenem
+Isolationsnachweis (19.4). **Ehrliche
 Einordnung:** Die Profile setzen die *technisch erzwingbaren* Anteile der
 jeweiligen Regelwerke durch — Aufzeichnung, menschliche Aufsicht,
 Nachweisführung, Vendor-Beschränkung. Sie ersetzen keine Rechtsberatung
@@ -588,7 +768,10 @@ nachvollziehbar für Migrationen, aber das Ergebnis darf dann nicht wie eine
 vollständig verifizierte Kette aussehen. Konsequent im Sinne von AP-7 wären
 getrennte Ergebnisse (`VERIFIED`, `VERIFIED_WITH_UNSIGNED_LEGACY_PREFIX`,
 `UNVERIFIED_LEGACY`, `BROKEN`), von denen strikte Kontrollprofile nur
-`VERIFIED` akzeptieren.
+`VERIFIED` akzeptieren. Innerhalb der Plattform ist das unverändert offen
+(19.9); der seit 0.32.0 verfügbare Offline-Verifier (unten) trennt für
+Exporte bereits zwischen „bewiesen“, „Verletzung“ und „nicht vollständig
+beweisbar“.
 
 Attestiert wird nicht jeder Tastendruck, sondern **jede Entscheidung, die
 den Handlungsspielraum des Agenten festgelegt hat**: Run-Lebenszyklus,
@@ -623,6 +806,34 @@ Bundle enthält ausschließlich Strings, Primitive und UUIDs (Zeitstempel als
 ISO-8601-Text). Die Serialisierung ist damit deterministisch und unabhängig
 von Bibliotheksversionen — ein Nachweis, der je nach Jackson-Version anders
 aussieht, taugt nicht als Nachweis.
+
+Bis einschließlich 0.31.0 hatte dieser Export eine grundsätzliche Schwäche: Er enthielt
+das Urteil der Fabrik über sich selbst. Je Ereignis standen nur Kurzhash,
+Aktion und die Markierung „intakt“; zum Nachrechnen fehlten Felder,
+exportiert wurde die *aktuell* aktive statt der im Lauf angewandten
+Policy-Version, und wer Einträge fälschen kann, kann auch den
+mitgelieferten öffentlichen Schlüssel austauschen. Release 0.32.0 macht
+den Export deshalb **ohne Zugriff auf die Fabrik prüfbar**. Ein
+eigenständiger **Offline-Verifier** — ein Programm von rund 1.000 Zeilen,
+nur auf dem JDK aufgebaut, ohne Bibliotheken und ohne Code der Fabrik,
+reproduzierbar gebaut und getrennt von der Installation verteilt, damit
+ein Prüfer das Werkzeug nicht von der geprüften Partei bezieht —
+rechnet Hash und Signatur jedes Eintrags nach, prüft die lückenlose
+Verkettung bis zu einem signierten Ketten-Kopf, die im Lauf angewandten
+Policy-Versionen und je Run ein signiertes Manifest der zugehörigen
+Ereignisse.^[Modul `verifier/` der SoftwareFabrik; Export-Schema 2.0 in
+`AuditExportService`.] Die Frage, die eine Prüfung zuerst stellt — wurde
+etwas weggelassen? —, löst der Export über **Hash-Stellvertreter**: Alle
+Einträge außerhalb der exportierten Runs bis zum Ketten-Kopf — darunter
+die anderer Mandanten — erscheinen nur als Hashwerte ohne Inhalt; die Verkettung bleibt prüfbar, ohne fremde Daten
+offenzulegen. Den Vertrauensanker bringt der Prüfer selbst mit: den
+Fingerabdruck des Signaturschlüssels, den der Betreiber auf einem zweiten
+Weg veröffentlicht. Ohne ihn endet die Prüfung nie mit „bewiesen“, sondern
+mit „intern konsistent, Vertrauen nicht verankert“. Die Grenze ist
+dokumentiert: Wer vor dem Export Datenbankzugriff hat, kann die jüngsten
+Einträge löschen und den Kopf auf einen älteren, gültig signierten Stand
+zurücksetzen; dagegen hilft nur der Abgleich mit einem früher bekannten
+Kettenstand, den der Verifier entgegennimmt.
 
 ### Lieferkette und Wissensbestand
 
@@ -667,10 +878,12 @@ Kapitel 13 zeichnete eine Kubernetes-Deployment-Architektur. Die reale
 Zielgruppe — Behörden, Finanzdienstleister, Mittelstand — fragt zuerst
 etwas anderes: *Läuft es bei uns, ohne Cloud, ohne Rückkanal?* Die Antwort
 der Fabrik ist bewusst schlicht: **ein Anwendungscontainer, eine
-Datenbank**, dazu die Projekt-Workspaces auf dem Dateisystem und optional
-ephemere Agent-Container je Run. Der Lizenz-Stack (OIDC-Provider plus
-Lizenzdienst) ist getrennt und optional; er kann außerhalb der
-Unternehmensgrenze stehen oder ganz entfallen.
+Datenbank**, dazu die Projekt-Workspaces auf dem Dateisystem, optional
+ephemere Container für Build und Scans je Schritt und optional der
+MCP-Gateway als eigener Prozess (19.4). Der Lizenzdienst (mit eigener
+Datenbank) ist getrennt und optional; er kann außerhalb der
+Unternehmensgrenze stehen oder ganz entfallen — standardmäßig ist das
+Lizenzsystem ausgeschaltet.
 
 ![Deployment-Sicht: ein Anwendungscontainer, eine Datenbank, optional getrennter Lizenz-Stack. Air-Gap-fähig](abbildungen/out/abb29.pdf){width=100%}
 
@@ -681,16 +894,26 @@ Demo-Werte und zu kurze Master-Keys hart ab; ohne gesetztes Admin-Passwort
 wird kein Admin angelegt; die Datenbank ist an die lokale
 Loopback-Adresse gebunden.
 
-**Lizenz ohne Rückkanal.** Die Lizenzschicht stellt signierte Lease-Token
-mit sieben Tagen Gültigkeit aus, die offline verifiziert werden.
-Kurzzeitige Nichterreichbarkeit des Lizenzservers ist unkritisch;
-abgelaufenes Lease *und* nicht erreichbarer Server führen zu *fail closed*.
-Für die Air-Gap-Frage ist das die entscheidende Eigenschaft: Ein System,
-das für Verschlusssachen taugen soll, darf keine Online-Aktivierung als
-Betriebsvoraussetzung haben.
+**Lizenz ohne Rückkanal.** Die Lizenz ist ein mit Ed25519 signiertes
+Token, das offline gegen einen mit der Software ausgelieferten
+öffentlichen Schlüssel geprüft wird; seine Laufzeit hängt von Stufe und
+Betriebsform ab (30 Tage bis zu einem Jahr für Air-Gap-Installationen).
+Kurzzeitige Nichterreichbarkeit des Lizenzservers überbrückt ein
+Kulanzzeitraum; ist alles abgelaufen, startet kein neuer Lauf mehr —
+*fail closed* für die Ausführung, nicht für den Zugriff auf vorhandene
+Daten. Für Air-Gap-Installationen schaltet ein Feld im signierten Token
+die Erneuerung ganz ab; dann zählt nur das Ablaufdatum, und es gibt
+keinen zweiten Codepfad. Für die Air-Gap-Frage ist das die entscheidende
+Eigenschaft: Ein System, das für Verschlusssachen taugen soll, darf keine
+Online-Aktivierung als Betriebsvoraussetzung haben. (Die Fassungen bis
+3.0 nannten hier noch einen OIDC-Provider und Lease-Token mit sieben
+Tagen Gültigkeit — ein Stand, den die Fabrik schon im April 2026, vor
+Release 0.2.0, durch das heutige Format abgelöst hatte.)^[`LicenseManager` und
+`Ed25519JwsVerifier` im `license`-Slice; Laufzeiten im Lizenzdienst.]
 
 Damit sind alle Bausteine für den vollständig getrennten Betrieb vorhanden:
-lokales Modell als Adapter, netzlose Agent-Sandbox, Lizenz ohne Rückkanal,
+lokales Modell als Adapter, Agenten ohne Zugriff auf nicht freigegebene
+Werkzeugserver (19.4), Lizenz ohne Rückkanal,
 PR-Poller standardmäßig deaktiviert (unbeaufsichtigte periodische
 Remote-Kontakte sind eine bewusste Betriebsentscheidung), Host-Allowlist
 für Remotes.
@@ -746,7 +969,11 @@ Die Begründung: Der Nutzen mehrerer Agenten liegt in
 Erzeugen. Mehrere gleichzeitig schreibende Agenten auf einem Repository
 erzeugen Konfliktkosten, Zurechnungsprobleme („wer hat das geschrieben?“)
 und einen nicht attestierbaren Zustand. Die Fabrik verschiebt die
-Parallelität deshalb von der Erzeugung auf die Bewertung. Aus demselben
+Vielstimmigkeit deshalb von der Erzeugung auf die Bewertung — gemeint ist
+die Zahl unabhängiger Prüfer auf demselben Stand, nicht deren
+gleichzeitige Ausführung: Technisch laufen die Reviewer nacheinander, was
+frühere Fassungen dieses Whitepapers ungenau als „parallel“ beschrieben
+haben. Aus demselben
 Grund wurde die Workspace-Isolation über Git-Worktrees (ADR-2) zur
 **Branch-Isolation auf einem projektpersistenten Workspace**: Iteration
 über Läufe hinweg schlägt parallele Isolation. Der Preis ist benannt —
@@ -792,8 +1019,8 @@ wer sie früher entwirft, spart die Nacharbeit.
 Das Konzept zeichnet eine Kubernetes-Deployment-Architektur (Kapitel 13).
 Die reale Zielgruppe fragt zuerst nach Betreibbarkeit im eigenen Haus:
 on-prem, notfalls air-gapped, ohne Online-Aktivierung. Die Antwort der
-Fabrik — ein Prozess, eine Datenbank, optionaler Lizenz-Stack, lokales
-Modell, netzlose Sandbox — verschiebt die Komplexität dorthin, wo sie
+Fabrik — ein Prozess, eine Datenbank, optionaler Lizenzdienst ohne
+Rückkanal, lokales Modell, keine Werkzeugserver ohne Freigabe — verschiebt die Komplexität dorthin, wo sie
 hingehört: in die Steuerung des Nichtdeterminismus, nicht in die
 Betriebsinfrastruktur.
 
@@ -816,23 +1043,31 @@ welches Modell, wessen Freigabe.
 Ein System, das seine offenen Punkte benennt und seine Architekturschuld
 zählt, ist der glaubwürdigere Beleg für die Thesen dieses Whitepapers als
 eines, das angeblich keine hat. Die wesentlichen offenen Punkte,
-Erhebungsstand 9. August 2026:
+Erhebungsstand 20. Oktober 2026:
 
 | Punkt | Art |
 |---|---|
 | Verteilter Betrieb über mehrere Hosts (Netz-Transport, Orchestrierung); die Stufen 0 bis 4 und 6 sind umgesetzt, von Stufe 5 die Koordinationsschicht auf einem Host (Feature-Flag, Standard aus) | bewusst zurückgestellt — die Roadmap-Voraussetzung *gemessener Bedarf* ist nicht erfüllt (19.10) |
 | Budget-Obergrenze je auslösendem Nutzer (*Seat*) — die Kostenauswertung je Seat existiert, der harte Cap wirkt je Mandant | offen |
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
-| Container-Sandbox existiert, ist aber nicht der Default; ohne Container-Runtime Rückfall auf Prozessisolation | Einschränkung |
-| Test-Isolationsdefekt: ein Integrationstest committet unter bestimmten Bedingungen in das reale Repository | Defekt |
+| Coding-Agenten laufen in keiner Variante im Container, sondern als Host-Prozess (frisches Home je Aufruf, Umgebungs-Allowlist, MCP-Nullzustand); die Container-Sandbox kapselt nur Build und Scans und ist nicht der Default (19.4) | Einschränkung — Agent-Container als eigenes Arbeitspaket offen |
+| MCP-Gateway nur mit lesenden Werkzeugen und nur für die Ausführung mit Claude Code; der Nachweisfall „Gateway projiziert“ und die Wirkung der Hook-Abschaltung sind noch nicht durch den Canary belegt | Verifikationslücke |
+| Test-Isolationsdefekt: ein Integrationstest committet unter bestimmten Bedingungen in das reale Repository (erhoben auf dem Stand 0.19.0, für 0.38.0 weder als behoben noch als fortbestehend belegt) | Defekt, Status ungeklärt |
 | Architektur-Altschuld: eingefrorene Modulzyklen und 13 direkte Repository-Zugriffe der Web-Schicht | dokumentierte, gezählte Schuld |
-| Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert/`FLAT_RATE`) | Budget- und Abrechnungslücke |
-| Verifikationsstatus unsignierter Legacy-Auditdaten (undifferenziertes Ergebnis) | Nachweislücke |
+| Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert); Abo-Läufe sind seit 0.33.0 als Schätzung gekennzeichnet | Budget- und Abrechnungslücke |
+| Verifikationsstatus unsignierter Legacy-Auditdaten in der Plattform (undifferenziertes Ergebnis; der Offline-Verifier unterscheidet für Exporte bereits) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Eine Schwachstelle in einer Laufzeitabhängigkeit ohne verfügbaren Fix (seit 0.20.0, in 0.30.0 unverändert offen); das Zurückgehen auf eine ältere Version würde zwei schwerer bewertete Schwachstellen wieder öffnen | bewusst akzeptiert nach dokumentierter Risikoabwägung; betroffene Angriffsfläche, Kompensationsmaßnahmen und Ablaufdatum sind hinterlegt |
+| Spec-Driven Development: Governance-Stufe (Spec-Freigabe als Policy-Pflicht, signierte Spec-Fassungen im Export, Spec-Kennzahlen) nicht Teil des Stands 0.38.0; die Abdeckungsprüfung ist eine Heuristik über Test-Referenzen (19.11) | geplant bzw. Einschränkung |
 
-Dazu vier Beobachtungen aus dem Entwicklungsverlauf (38 Releases in rund
-vier Monaten), die sich verallgemeinern lassen:
+Eine Zeile der Fassung 3.0 ist entfallen: Die seit 0.20.0 befristet
+akzeptierte Schwachstelle in einer Laufzeitabhängigkeit verschwand mit
+0.31.0 durch ein Update der Abhängigkeit; der Abhängigkeits-Scan läuft
+seither ohne Ausnahmeeintrag. Der Image-Scan führt weiterhin begründete
+Ausnahmen für Hilfsprogramme des Basis-Images, die die Anwendung nie
+ausführt (17 Einträge, drei davon mit 0.33.0 neu).
+
+Dazu vier Beobachtungen aus dem Entwicklungsverlauf (46 Releases in rund
+sechs Monaten), die sich verallgemeinern lassen:
 
 1. **Governance kam spät, wurde aber strukturbildend** — siehe 19.8 (3).
 2. **Die härtesten Befunde lagen an den Übergängen**, nicht in den
@@ -859,7 +1094,13 @@ vier Monaten), die sich verallgemeinern lassen:
    Die Konsequenz ist inzwischen Konvention: Ein mit 0.30.0 ergänzter
    Schemaprüfungs-Test, der ohne Container-Runtime nicht laufen kann,
    überspringt sich mit einer Meldung, die ausdrücklich sagt, dass
-   Überspringen kein Bestehen ist.
+   Überspringen kein Bestehen ist. Dass die Fehlerklasse damit nicht
+   erledigt war, zeigten die Releases 0.33.0 und 0.34.0: LLM-Reviewer,
+   die einen Fehler als bestandenes Review werteten, ein Gate auf leerem
+   Diff (19.5), Läufe, die mit 0 € bewertet wurden (19.4), und eine
+   Containervariante, deren Startmeldung eine Agenten-Isolation nahelegte,
+   die es nicht gab (19.4). Alle vier Fälle sahen in der Oberfläche
+   unauffällig aus.
 
 Ausdrücklich **nicht** behauptet werden quantifizierte Produktivitäts- oder
 ROI-Zahlen aus dem Betrieb der Fabrik selbst — dafür existiert keine
@@ -897,15 +1138,19 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 > der SoftwareFabrik; Versions- und Phasenangaben sind Vorschläge, keine
 > Zusagen.
 
-### Der Release-Verlauf 0.21.0 bis 0.30.0
+### Der Release-Verlauf 0.21.0 bis 0.38.0
 
 Diese Tabelle ist die autoritative Zuordnung von Releases zu
-Roadmap-Stufen; alle anderen Stellen des Whitepapers — Management
-Summary, Praxis-Checks, Kennzahlen-Erhebungsvermerk (19.1) und die
-ADR-Statuszeilen — verweisen hierher, statt den Verlauf zu wiederholen.
+Roadmap-Stufen und Entwicklungslinien; alle anderen Stellen des
+Whitepapers — Management Summary, Praxis-Checks,
+Kennzahlen-Erhebungsvermerk (19.1) und die ADR-Statuszeilen — verweisen
+hierher, statt den Verlauf zu wiederholen. Ab 0.31.0 gehören die Releases
+nicht mehr zur Workflow-Roadmap dieses Abschnitts, sondern zu zwei neuen
+Linien: der Absicherung und dem unabhängigen Nachweis der Agentenläufe
+(19.4, 19.6) und Spec-Driven Development (19.11).
 
-| Release | Stufe | Inhalt | Migrationen |
-|--------|------|------------------------------------------------------|--------------|
+| Release | Stufe / Linie | Inhalt | Migrationen |
+|-------|------------|---------------------------------------------------|------------|
 | 0.21.0 | 0 + 1 | Workflow-Aggregat, Task-Graph, parallele *nicht-schreibende* Analyse mit Synthese-Task und menschlicher Planfreigabe | V40–V43 |
 | 0.22.0 | 2 | Parallel *schreibende* Child Runs: Pfad-Besitzmodell, Workspace Leases, Merge Queue, Integration Gate | V44–V45 |
 | 0.23.0 | 3 | Contract Registry (eigener `contract`-Slice): versionierte, gehashte Verträge mit Stale-Erkennung | V46–V48 |
@@ -916,9 +1161,18 @@ ADR-Statuszeilen — verweisen hierher, statt den Verlauf zu wiederholen.
 | 0.28.0 | 6 | Testabdeckungsänderung (am Build-Ergebnis, in Prozentpunkten) | V52 |
 | 0.29.0 | 6 | Rollback-Erkennung als ausgewiesene Untergrenze; der Einzel-Run-Teil wirkt ohne Feature-Flag | V53 |
 | 0.30.0 | 6 | Eingriffs- und Aufwandserfassung an der Freigabeentscheidung; das Aufwandsfeld wirkt ohne Feature-Flag | V54 |
+| 0.31.0 | Absicherung | MCP-Nullzustand für alle Agentenläufe, Canary-Isolationsnachweis je CLI-Version, Plugins standardmäßig gesperrt; Spring Boot 4.1 | V56 |
+| 0.32.0 | Nachweis | Offline-Verifier und Audit-Export 2.0: Prüfung ohne Zugriff auf die Fabrik, Vertrauensanker beim Prüfer | keine |
+| 0.33.0 | Absicherung | Claude-Anbindung: vier Stellen „Erfolg ohne Beleg“ behoben; Abo-Modus als persönliche Nutzung, Abo-Kosten als Schätzung gekennzeichnet (0.33.1: Wartung) | V58 |
+| 0.34.0 | Absicherung | MCP-Gateway (opt-in, nur lesende Werkzeuge, jeder Aufruf attestiert); Hooks importierter Repositories laufen bei Claude Code nicht mehr mit; Rollen- und Mandantenprüfung der Workflow-Ebene; korrekte Kosten der Claude-Läufe; Aufwandsfeld an der Planfreigabe | V59–V60 |
+| 0.35.0 | SDD | Produkt-Spec mit Fassungen, Freigabe und Akzeptanzkriterien-IDs; Kriterien erreichen Backlog und Quality Gate | V61–V62 |
+| 0.36.0 | SDD | Traceability bis zur Kriteriums-ID: Commit-Trailer, attestierte Spec-Bindung, Workflow-Tasks gegen dieselbe Fassung | V63 |
+| 0.38.0 | SDD | Conformance-Reviewer, Spec-Drift, Spec-Run mit Rückfragen, Reverse-Spec; bündelt die Roadmap-Stufen 0.37 und 0.38 (eine Version 0.37.0 gibt es nicht) | V64–V65 |
 
-*Stand: 9. August 2026, erhoben auf den Release-Tags. Die Details je
-Stufe nennt der Kasten zum Umsetzungsstand weiter unten.*
+*Stand: 20. Oktober 2026, erhoben auf den Release-Tags. Die Details der
+Workflow-Stufen nennt der Kasten zum Umsetzungsstand weiter unten, die der
+Linien Absicherung und Nachweis die Abschnitte 19.4 bis 19.6, die der
+SDD-Linie Abschnitt 19.11.*
 
 ### Das Zielbild
 
@@ -980,7 +1234,7 @@ validiert den Gesamtstand. Die Leitregel:
 | 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** |
 
 > **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.30.0,
-> Stand 9. August 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
+> mit Nachträgen bis 0.38.0, Stand 20. Oktober 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
 > umgesetzt, von Stufe 5 die Koordinationsschicht; das Feature-Flag steht
 > standardmäßig auf **aus**, ohne es verhält sich die Workflow-Ebene
 > unverändert. Zwei Ausnahmen wirken auch ohne Flag, weil sie am
@@ -1051,7 +1305,7 @@ validiert den Gesamtstand. Die Leitregel:
 >
 > *Stufe 3* (Release 0.23.0) gibt den Verträgen einen Ort. Bis dahin
 > konnten zwei Tasks gegen dieselbe Schnittstelle arbeiten, ohne dass
-> festgehalten war, gegen **welchen** Stand. Ein eigener Blatt-Slice
+> festgehalten war, gegen **welchen** Stand. Ein eigener Slice
 > `contract` verwaltet unveränderliche Fassungen mit Nummer und
 > Content-Hash über den normalisierten Inhalt; sechs Vertragsarten sind
 > vorgesehen, von OpenAPI und AsyncAPI über JSON-Schema und Java-Interfaces
@@ -1235,7 +1489,8 @@ validiert den Gesamtstand. Die Leitregel:
 > wird strikt getrennt ausgewiesen und nie mit abgeleiteten Werten
 > verrechnet. Das Feld steht an jeder Freigabeentscheidung eines Laufs —
 > auch der des Einzel-Runs, es wirkt also wie der Einzel-Run-Teil der
-> Rollback-Erkennung ohne Workflow-Flag. Der Ehrlichkeitsanker ist die **Aufwandsabdeckung**: Neben
+> Rollback-Erkennung ohne Workflow-Flag — und seit 0.34.0 auch an der
+> Planfreigabe des Workflows (Migration V59). Der Ehrlichkeitsanker ist die **Aufwandsabdeckung**: Neben
 > der Summe steht immer, aus wie vielen Entscheidungen sie stammt —
 > „45 min (aus 3/12)“ macht sichtbar, dass neun Entscheidungen keine
 > Angabe tragen; ohne diese Quote würde die Summe als Gesamtaufwand
@@ -1244,6 +1499,18 @@ validiert den Gesamtstand. Die Leitregel:
 > Leerlauf-Erkennung — das ergäbe eine Zahl, aber um den Preis, Menschen
 > zu vermessen, und sie wäre trotzdem geraten. Die Arbeitszeit selbst
 > bleibt damit ausgewiesene Messlücke.
+>
+> Ein Nachtrag aus 0.34.0 bestätigt die Vorsicht dieser Stufe: Die
+> Kennzahl *Eingriffe* zählte bis dahin nur Freigaben zu Child Runs, nicht
+> die Planfreigabe — sie untertrieb also systematisch um mindestens eins je
+> Workflow, und zwar ausgerechnet um die Entscheidung, ohne die kein Agent
+> startet. Seither zählen Plan- und Run-Freigaben gemeinsam, ohne
+> Doppelzählung. Die Zahl bleibt eine ausgewiesene Untergrenze, weil der
+> Workflow nur die jeweils letzte Planfreigabe festhält. Im selben Release
+> erhielt die Workflow-Ebene ihre Rollen- und Mandantenprüfung (19.6);
+> seit 0.36.0 und 0.38.0 binden Workflow-Tasks zudem eine freigegebene
+> Spec-Fassung und werden bei einer Spec-Änderung wie bei einer
+> Vertragsänderung auf Neuplanung gesetzt (19.11).
 
 Die begleitende **Produktivitäts- und Qualitätsmessung** ist mit 0.27.0
 eingebaut und mit 0.28.0 bis 0.30.0 um Testabdeckungsänderung,
@@ -1279,3 +1546,252 @@ zusammenfassen:
 > erst, wenn der Bedarf gemessen ist. Von einem kontrollierten Agentenlauf
 > zu parallelen Agenten-Workflows — ohne das Single-Writer-, Governance-
 > und Nachweisprinzip aufzugeben.
+
+Die Anforderungsebene aus 19.11 setzt diese Linie fort: Parallele Child
+Runs arbeiten seit 0.36.0 nicht nur gegen dieselben Verträge, sondern
+gegen dieselbe freigegebene Anforderungsfassung.
+
+## 19.11 Spec-Driven Development: die Anforderungsebene *(seit 0.35.0)*
+
+Dieser Abschnitt beschreibt die jüngste Entwicklungslinie der Fabrik,
+**Spec-Driven Development (SDD)**: Anforderungen werden zu versionierten,
+freigegebenen Artefakten, gegen die Läufe gebunden und geprüft werden.
+
+> **Status:** Implementiert in den Releases 0.35.0, 0.36.0 und 0.38.0
+> (Tabelle in 19.10) — opt-in über ein eigenes
+> Feature-Flag (Standard aus) und, bei aktivem Lizenzsystem, nur in den
+> Lizenzstufen Professional und Enterprise. Je Projekt gilt zusätzlich ein
+> **Spec-Modus**: `AUS` (Standard), `LEICHT` oder `STRENG`. Ohne Flag
+> verhält sich die Fabrik wie vorher; im Modus `AUS` laufen Build- und
+> Plan-Runs unverändert, nur ein ausdrücklich gestarteter Spec-Run ist
+> auch dort möglich. Die zugrunde liegende
+> Architekturentscheidung führt die Fabrik noch als *vorgeschlagen*, nicht
+> als angenommen. Die für Release 0.39.0 geplante Governance-Stufe
+> (Spec-Freigabe als Policy-Pflicht, signierte Spec-Fassungen im
+> Audit-Export, Spec-Kennzahlen) ist **nicht** Teil dieses Stands.
+> Erfahrungen aus dem Betrieb oder Messungen zur Wirkung liegen noch nicht
+> vor.
+
+### Die Lücke: gut ist nicht dasselbe wie richtig
+
+Vor 0.38.0 prüfte das Quality Gate, ob Code *gut* ist — Sicherheit,
+Architektur, Abhängigkeiten, Behauptungen des Agenten (19.5) —, aber nicht,
+ob er das *Richtige* tut. Die Fabrik hatte viele Bausteine, die
+spezifikationsgetriebener Entwicklung ähneln: Projekt-Artefakte aus dem
+Wizard, Plan-Runs mit Backlog, versionierte Verträge, Freigaben,
+Warum-Trace. Es fehlte eine explizite, versionierte und abnehmbare
+Anforderungsebene. Akzeptanzkriterien existierten nur als Freitext in
+Plänen und erreichten das Gate nie (19.5); Freigaben hingen an Lauf und
+Phase, nicht an Anforderungen; und parallele Child Runs bekamen nur ihren
+Task-Auftrag, keinen gemeinsamen Anforderungsstand. Das Leitbild der
+Fabrik — *beschreiben, bauen lassen, genehmigen* — hatte damit für den
+ersten Schritt kein prüfbares Artefakt.
+
+### Die Produkt-Spec
+
+Die Antwort ist die **Produkt-Spec** als einzige Quelle für
+Anforderungen: Markdown mit einem kurzen Kopf (ID, Version, Status,
+Verantwortlicher, verknüpfte Verträge) und drei Pflichtabschnitten — Ziel,
+Nicht-Ziele, Akzeptanzkriterien; Randfälle und offene Fragen sind
+optional. Jedes Akzeptanzkriterium (englisch *acceptance criterion*,
+daher das Kürzel AC) trägt eine Pflicht-ID nach dem Schema
+`AC-<nnn>-<nn>`, eindeutig innerhalb der Spec und stabil über Fassungen;
+eine entfernte ID wird nicht wiederverwendet. Empfohlen ist die
+Formulierung in **EARS** (*Easy Approach to Requirements Syntax*), einer
+kleinen Menge von fünf Satzschablonen — allgemein gültig,
+ereignisgesteuert, zustandsgesteuert, unerwünschtes Verhalten, optionale
+Funktion [@mavin2009ears]; Given/When/Then ist
+erlaubt. Ein Kriterium aus der ersten Spec der Fabrik lautet etwa:
+
+> **AC-001-08** — Wenn ein Agent im Workspace eine Datei unter `specs/`
+> ändert, dann soll das System die Änderung als neue DRAFT-Version
+> übernehmen und niemals eine Version dadurch freigeben.
+
+Der Parser prüft ID-Schema, Eindeutigkeit und Pflichtabschnitte, bewusst
+nicht die Satzform — präzise Anforderungen ohne Formalismus-Hürde.^[Slice
+`spec` mit `SpecParser`, `SpecVersion`, `SpecService`; Vorlage
+`specs/_vorlage/spec.md` im Repository der Fabrik.]
+
+Die **Datenbank ist führend**, die Datei im Workspace
+(`specs/SPEC-<nnn>-<slug>/spec.md`) ist Projektion der freigegebenen
+Fassung; ein neuerer Entwurf liegt daneben. Jede Fassung ist unveränderlich
+und trägt einen SHA-256-Hash. Ändert ein Agent eine Datei unter `specs/`,
+übernimmt die Fabrik das als neue Entwurfsfassung — nie als Freigabe. Die
+Aufteilung folgt demselben Muster wie bei den Verträgen der Workflow-Ebene
+und aus demselben Grund: Unveränderlichkeit, Mandantentrennung und die
+für 0.39.0 geplante Signierbarkeit sichert die Datenbank, der gewohnte Arbeitsfluss von
+Menschen und Agenten findet in Dateien statt.
+
+Architektonisch ist `spec` ein eigener Slice, der nur das
+Querschnittspaket `common` und die Audit-Kette kennt. Ein reiner Blatt-Slice
+(19.2) schied aus, weil Orchestrierung und Gate die Spec
+konsumieren müssen; der schmale Importrand erlaubt das, ohne einen neuen
+Modulzyklus zu erzeugen.
+
+### Freigabe als eigenes Gate
+
+Eine Spec durchläuft `DRAFT → APPROVED → SUPERSEDED`. Freigeben darf ab
+der Rolle Maintainer; die Freigabe validiert die Pflichtabschnitte und
+IDs, löst die
+vorher freigegebene Fassung ab, hält die Historie fest und schreibt
+`SPEC_APPROVED` mit Spec-ID, Version und Hash in die Audit-Kette. Seit
+0.36.0 ist sie gegen Gleichzeitigkeit gesichert: Zwei parallele Freigaben
+hinterlassen genau eine freigegebene Fassung. Damit gibt es neben der
+Freigabe eines Laufs (19.3) erstmals die Freigabe einer **Anforderung** —
+eine Entscheidung mit Hebelwirkung, weil alle späteren Läufe mit
+Spec-Bezug gegen sie gebunden und geprüft werden (Human Authority,
+Prinzip AP-6 aus Kapitel 2).
+
+Der Spec-Modus steuert, wie viel davon verbindlich ist. In `LEICHT` sind
+Specs optional und alle Conformance-Befunde beratend. In `STRENG` lehnt
+die Fabrik die Aktivierung eines Backlog-Elements ab, dessen Spec keine
+freigegebene Fassung hat oder das unbekannte Kriteriums-IDs nennt;
+die Planfreigabe eines Workflows scheitert, wenn ein schreibender Task
+keinen Bezug auf eine freigegebene Fassung hat; und der
+Conformance-Reviewer (unten) wird zum blockierenden Pflicht-Reviewer.
+Der Weg in die Verbindlichkeit folgt damit derselben Regel wie beim Gate
+selbst (19.5): erst messen, dann durchsetzen.
+
+### Traceability über IDs, nicht über Texte
+
+Die Kriteriums-IDs ziehen sich durch den ganzen Ablauf (0.35.0 und
+0.36.0). Im Spec-Modus verlangt die Plan-Direktive je Plan die Zeilen
+`Spec:` und `AC:`; die Fabrik liest beide beim Indexieren und speichert
+sie am Backlog-Element. Ein Build-Run, der ein solches
+Element umsetzt, übergibt allen Reviewern die Kriterien mit ID und Text —
+das bis dahin fest leere Feld aus 19.5. Beim Start attestiert
+`RUN_SPEC_GEBUNDEN` Spec, Fassung, Hash und Kriterien in der Audit-Kette;
+der Warum-Trace zeigt sie an. Fabrik-Commit und Pull Request tragen die
+Trailer `Spec:` und `Implements:`, auch wenn der Agent selbst keine gesetzt
+hat. Den Agenten erreicht der Kontext werkzeugneutral: als Kopf des
+Arbeitsauftrags mit den gebundenen Kriterien, direkt hinter den
+Guardrails (deren Inhalt und Hash bleiben unverändert), und als
+Spec-Index in der projizierten `AGENTS.md` (19.6) — in Tests mit
+nachgebildeten CLIs für Claude, Codex und Gemini geprüft (belegt ist die
+Übergabe, nicht die Befolgung durch das Modell).
+
+Auf der Workflow-Ebene deklariert ein Task Spec und Kriterien; gebunden
+wird beim Start des Child Runs, nicht bei der Planung — dieselbe Regel wie
+bei den Verträgen (19.10, Stufe 3). Alle Child Runs eines Workflows
+arbeiten gegen dieselbe Fassung, auch wenn die Spec zwischenzeitlich neu
+freigegeben wurde. Und um kein zweites Modell zu erzeugen, veröffentlicht
+die Freigabe den Kriterienblock einer Spec zusätzlich als Vertrag in der
+Contract Registry; Bindung und Veraltet-Markierung der Workflow-Ebene
+folgen demselben Muster wie bei den Verträgen (eigene Bindung am Task,
+Migration V63). Die Spec bleibt die einzige Stelle, an
+der Kriterien bearbeitet werden.
+
+### Conformance: prüfen gegen die Spec
+
+Mit 0.38.0 prüft das Gate erstmals regelbasiert gegen die Anforderungen.
+Der dafür neue Reviewer arbeitet ohne Agenten-CLI und springt nur bei
+Läufen mit Spec-Bezug an (Name: `spec-conformance`).^[`SpecConformanceReviewerAdapter`
+im `review`-Slice; der Spec-Kontext erreicht ihn als Metadatum der
+Prüfanfrage, sodass `review` den `spec`-Slice nicht importiert.] Er prüft
+dreierlei: ob jedes gebundene Kriterium in mindestens einer Testdatei des
+Repositorys referenziert wird (Testname, Dateiname, Annotation oder
+Kommentar mit der ID) — fehlt die Referenz, entsteht ein Befund mit der
+Kriteriums-ID; ob Tests IDs nennen, die es in der gebundenen Fassung nicht
+gibt (Hinweis); und ob geänderte Produktivdateien keinem Kriterium
+zugeordnet sind, weder über einen `Implements:`-Trailer noch über einen
+Pfad-Hinweis der Spec (Hinweis „ungedecktes Verhalten“ mit begrenzter
+Pfadliste). Die Erkennungsmuster sind konfigurierbar, der Scan ist
+begrenzt. In `LEICHT` sind alle Befunde beratend; in `STRENG` ist
+eine fehlende Abdeckung `CRITICAL`, und das Pipeline-Gate läuft für diesen
+Lauf blockierend — auch wenn der globale Gate-Modus milder eingestellt ist,
+mit einem Hinweis im Lauf-Protokoll.
+
+**Ehrliche Einordnung:** Die Abdeckungsprüfung ist eine Heuristik. Eine
+Kriteriums-ID im Namen eines Tests belegt eine *Referenz*, nicht, dass der
+Test das Kriterium tatsächlich prüft — dieselbe Konstruktvaliditätsgrenze,
+die 19.9 für Testabdeckung und bestandene Gates benennt. Die Fabrik selbst
+führt Falsch-Positive als Restrisiko; beratend ist der Reviewer deshalb
+im Modus `LEICHT`, blockierend nur, wenn ein Projekt ausdrücklich
+`STRENG` wählt. Was die Prüfung leistet, ist Sichtbarkeit: Ein Kriterium ohne jeden Testbezug fällt auf, und Verhalten
+ohne Anforderung auch. Der Zuschnitt ist derselbe wie beim
+Halluzinations-Reviewer (19.5) — verglichen werden Behauptung und Beleg,
+hier die Anforderung und ihr Testbezug.
+
+### Spec-Drift: was eine Änderung veralten lässt
+
+Als **Spec-Drift** bezeichnet die Fabrik die Abweichung zwischen einer
+neu freigegebenen Spec-Fassung und der Arbeit, die gegen die vorherige
+geplant wurde. Ändert sich eine freigegebene Spec, ist die Frage, welche geplante oder
+laufende Arbeit dadurch auf einer überholten Grundlage steht. Die
+Freigabe einer neuen Fassung vergleicht sie deshalb auf Kriteriumsebene
+mit der vorher freigegebenen — neu, entfernt, geändert — und schreibt das
+Ergebnis als `SPEC_DRIFT` in die Audit-Kette. Offene Backlog-Elemente, die
+an ein entferntes oder geändertes Kriterium gebunden sind, erhalten eine
+Begründung und erscheinen als *veraltet*; ein Element ohne Kriteriums-IDs
+gilt dabei für alle Kriterien der Spec — im Zweifel lieber eine Prüfung zu
+viel als ein stiller Bruch, dieselbe Abwägung wie bei der minimalen
+Normalisierung der Verträge (19.10, Stufe 3). Gebundene Workflow-Tasks
+gehen wie bei einer Vertragsänderung in die Neuplanung — eine geänderte
+Anforderung fällt damit unter den Grund *Vertragsänderung*, also unter
+die neuen Eingaben, die das Rücksetzen eines Tasks nach Stufe 4a
+erlauben. Die Kriterienverträge sind dafür
+strukturell vergleichbar geworden: Ein entferntes Kriterium gilt als
+Bruch, ein geänderter Text als Hinweis. Nennt eine Spec einen verknüpften
+Vertrag, dessen aktuelle Fassung einen Bruch trägt, zeigt die
+Spec-Übersicht sie als *prüfbedürftig* — abgeleitet beim Lesen, nicht
+gespeichert.
+
+### Spec-Run: Anforderungen erarbeiten statt nur verwalten
+
+Vor 0.38.0 entstanden Specs nur von Hand. Der **Spec-Run** — die dritte
+Run-Art (19.3) — erarbeitet sie mit: aus einer Idee in Freitext oder zum
+Schärfen einer bestehenden Spec. Seine Direktive verlangt Ziel,
+Nicht-Ziele, Kriterien mit IDs nach der Vorlage, je Kriterium Negativ- und
+Grenzfälle und einen Abschnitt „Offene Fragen“. Übernommen wird
+ausschließlich, was unter `specs/` liegt — das Gegenstück zur Übernahme
+nur der Pläne beim Plan-Run; alles andere wird verworfen und im Protokoll
+genannt. Jede geänderte Spec-Datei wird eine neue Entwurfsfassung, auch
+wenn der Parser sie beanstandet; die Befunde stehen an der Fassung. Kein
+Build, kein Branch, kein Merge. Für die Modellwahl gibt es eine eigene
+Routing-Rolle, die wie die Planung ein starkes Modell anfordert.
+
+Eine Entscheidung mit Verallgemeinerungswert betrifft **Rückfragen**. Allen anderen
+Läufen untersagen die generierten Anweisungen, Rückfragen zu stellen — ein
+Agent ohne Dialogpartner soll nicht warten. Für Spec-Runs, und nur für
+sie, wird diese Regel ersetzt: Fragen gehören in den Abschnitt „Offene
+Fragen“. Die Fabrik liest sie beim Abschluss aus, legt sie einzeln ab und
+versetzt den Lauf in den neuen, nicht-terminalen Zustand `WAITING_FOR_INPUT` — der bewusst keinen
+Kapazitäts- und keinen Workspace-Platz belegt, denn es läuft kein Prozess,
+und ein Mensch kann Tage brauchen. Jede Frage wird in der Oberfläche
+beantwortet oder als nicht relevant markiert, beides endgültig und mit
+Akteur und Zeitpunkt attestiert. Fortgesetzt wird erst, wenn keine Frage
+mehr offen ist — und zwar als *neuer*, verknüpfter Spec-Run mit den
+Antworten als Eingabe, der wieder eine neue Entwurfsfassung erzeugt. Der
+Dialog wird so zu einer Folge nachvollziehbarer Läufe statt zu einem
+Gesprächsverlauf, den niemand zitieren kann — dieselbe Begründung wie beim
+Verzicht auf einen Vektorspeicher (19.6).
+
+Für importierte Repositories gibt es die **Reverse-Spec**: Ein Spec-Run
+mit eigener Direktive leitet aus Code und Tests einen Entwurf ab, nennt je
+Kriterium die Quelle, führt Annahmen, Nicht-Ziele und offene Fragen
+ausdrücklich auf und soll nichts erfinden. Das adressiert den Fall, in dem die Fabrik nicht auf der grünen Wiese, sondern auf einem
+bestehenden System beginnt. Das Restrisiko benennt die Fabrik selbst:
+Generierte Specs können plausibel und falsch sein. Sie werden deshalb nie
+automatisch freigegeben; die Freigabe bleibt eine menschliche
+Entscheidung. Die Direktiven laufen werkzeugneutral über Auftrag und
+Anweisungsdatei — in Tests mit nachgebildeten Claude- und Codex-CLIs
+geprüft —,
+und der Mock-Adapter macht den Pfad ohne Vendor-CLI vorführbar.
+
+### Einordnung
+
+Kennzeichnend ist weniger die einzelne Funktion als der Zuschnitt:
+Spec-Driven Development erfindet in der Fabrik kaum neue Mechanik, sondern
+verbindet vorhandene — Freigabe, Bindung beim Start, Veraltet-Markierung,
+Audit-Kette, Warum-Trace — über eine Anforderungsebene mit stabilen IDs.
+IDs statt Texte machen Traceability prüfbar und Drift berechenbar. Die
+Fabrik beschreibt ihre eigenen SDD-Stufen in diesem Format (fünf Specs im
+eigenen Repository, alle im Status Entwurf; die letzte beschreibt die
+noch offene Governance-Stufe).
+
+Offen ist neben der Governance-Stufe die wichtigste Frage: ob die
+Anforderungsebene die Ergebnisse agentischer Läufe messbar verbessert.
+Die Mechanik ist implementiert; belegt ist damit, dass Anforderungen
+versioniert, freigegeben, gebunden und gegen Tests referenziert werden
+können — nicht, dass dadurch weniger falsche Software entsteht. Das wäre
+eine Aufgabe für die Messung aus Kapitel 15.6.

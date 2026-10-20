@@ -28,7 +28,7 @@ Diese Prinzipien stehen nicht isoliert, sondern bedingen sich gegenseitig: Contr
 | AP-5: Policy as Executable Structure | Kap. 4 (Repo-Konfiguration), 19.6 | Signierte Policy-Dokumente, Hooks, Gate-Policies |
 | AP-6: Human Authority | Kap. 9 (Failure Handling), 19.3 | Pflichtfreigaben als Prozesszustand, Segregation of Duties |
 | AP-7: Fail Closed | Kap. 12, 19.5/19.7 | Reviewer-Ausfall führt zu ERROR, Lizenz fail closed, Attestierung ohne Schlüssel führt zu Startfehler |
-| AP-8: Sovereign by Default | Kap. 13 (Deployment), 19.7 | Ein-Prozess-Betrieb, lokale Modelle, netzlose Sandbox, Lizenz ohne Rückkanal |
+| AP-8: Sovereign by Default | Kap. 13 (Deployment), 19.7 | Ein-Prozess-Betrieb, lokale Modelle, MCP-Nullzustand, Lizenz ohne Rückkanal |
 
 *Die Prinzipien und Referenzen wurden gegenüber v1.3 überarbeitet; die
 damaligen sechs Prinzipien (u. a. „Deterministic Execution“, das die

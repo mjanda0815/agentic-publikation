@@ -12,10 +12,10 @@ ist). Erhebungsbasis:
 
 | | |
 |---|---|
-| Repository | `/mnt/c/dev/SoftwareFabrik`, Branch `main` |
-| Commit | `526d718` (2026-07-26) |
-| Produktversion | 0.19.0 (`app/pom.xml`), Buildnummer-Anzeige „Build #63" |
-| Erhebungsdatum | 2026-08-06 |
+| Repository | `/mnt/c/dev/SoftwareFabrik` |
+| Ersterhebung | Branch `main`, Commit `526d718` (2026-07-26), Version 0.19.0, erhoben 2026-08-06 |
+| Kennzahlen-Nachzüge | jeweils auf dem Release-Tag (0.21.0 … 0.30.0, siehe `12-kennzahlen-historie.md`) |
+| **Aktueller Stand** | **Tag `v0.38.0` (= `1fb8aac`, 2026-10-20)**, erhoben 2026-10-20 per Worktree auf dem Tag; Dokumente 01–13 auf diesen Stand gebracht (geänderte Stellen tragen „Stand v0.38.0") |
 
 ---
 
@@ -24,17 +24,18 @@ ist). Erhebungsbasis:
 | Datei | Inhalt | Nutzbar für |
 |---|---|---|
 | `01-systemueberblick.md` | Was das System ist, Zahlen, Fähigkeiten, bewusste Nicht-Ziele | Kapiteleinstieg, Management-Summary-Ergänzung |
-| `02-architektur.md` | Leitprinzipien, modularer Monolith, 27 Slices, Schichtenmodell, maschinelle Architektur-Durchsetzung (ArchUnit + Debt-Ratchet) | Architekturkapitel |
+| `02-architektur.md` | Leitprinzipien, modularer Monolith, 34 Slices (Stand v0.38.0), Schichtenmodell, maschinelle Architektur-Durchsetzung (ArchUnit + Debt-Ratchet) | Architekturkapitel |
 | `03-systemdiagramme.md` | 9 Diagramme als Mermaid-Quelle (Kontext, Container, Komponenten, Run-Sequenz, Zustandsautomat, ER, Deployment, Governance, Adapter) | Abbildungen |
-| `04-domaenenmodell.md` | Aggregate, 39 Tabellen, 37 Flyway-Migrationen, Aggregatgrenzen | DDD-Kapitel |
-| `05-run-pipeline.md` | Der Run als Ausführungsmodell: 7 Phasen, 13 Zustände, Korrekturschleife, Branch/PR-Kopplung, Approval-Punkte | Execution-Model-Kapitel |
-| `06-adapter-und-modellschicht.md` | Port `ExecutionAdapter`, 10 Adapter, Abo-vs-API-Key-Auth, Capability-Routing, Sandbox-Modell, Secrets, Kostenmodell | Vendor-Neutralität, Kostenkapitel |
-| `07-review-qualitygate.md` | Read-only-Review-Schicht, 6 Reviewer, Gate-Policies, Halluzinationserkennung | Guardrails-Kapitel |
+| `04-domaenenmodell.md` | Aggregate, 63 Tabellen, 61 Flyway-Migrationen (Stand v0.38.0), Aggregatgrenzen | DDD-Kapitel |
+| `05-run-pipeline.md` | Der Run als Ausführungsmodell: 3 Run-Arten, 7 Phasen, 14 Zustände, Korrekturschleife, Branch/PR-Kopplung, Approval-Punkte | Execution-Model-Kapitel |
+| `06-adapter-und-modellschicht.md` | Port `ExecutionAdapter`, 10 Adapter, Abo-vs-API-Key-Auth, Capability-Routing, Sandbox-Modell (korrigiert: Agenten als Host-Prozess), Secrets, Kostenmodell | Vendor-Neutralität, Kostenkapitel |
+| `07-review-qualitygate.md` | Read-only-Review-Schicht, 7 Reviewer, Gate-Policies, Halluzinationserkennung | Guardrails-Kapitel |
 | `08-governance-compliance.md` | Mandantenisolation, RBAC, Policy-as-Code, Compliance-Profile, signierte Audit-Hashkette, Warum-Trace, Audit-Export, SBOM | Regulatorik-Kapitel |
 | `09-entwicklerhandbuch.md` | Setup, Build, Test, Coverage-Gate, Konventionen, Erweiterungsrezepte, Fallstricke, CI-Pipeline | Anhang / Praxisteil |
 | `10-betrieb-deployment.md` | Profile, Compose-Stack, Env-Variablen, Demo-Betrieb, Lizenzstack | Deployment-Kapitel |
 | `11-mapping-whitepaper-v13.md` | Kapitel-für-Kapitel-Abgleich v1.3 ↔ Implementierung, inkl. der Stellen, wo die Praxis vom Konzept abweicht | **Zentrales Dokument für die Kapitelplanung** |
-| `12-kennzahlen-historie.md` | Versionshistorie 0.1.0–0.19.0, Metriken, Migrationsverlauf, offene Punkte | Evidenzteil, Anhang |
+| `12-kennzahlen-historie.md` | Versionshistorie 0.1.0–0.38.0, Metriken (v0.38.0 neben v0.30.0), Migrationsverlauf, offene Punkte | Evidenzteil, Anhang |
+| `13-spec-driven-development.md` | Anforderungsebene seit 0.35.0: Produkt-Spec, AC-IDs, Freigabe, Traceability, Conformance-Reviewer, Spec-Drift, Spec-Run, Reverse-Spec; 0.39-Governance als geplant | Abschnitt 19.11 |
 
 ---
 

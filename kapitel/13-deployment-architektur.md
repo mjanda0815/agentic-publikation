@@ -31,6 +31,9 @@ der richtige Weg, wo elastische Skalierung vieler paralleler Agenten
 gebraucht wird — es ist aber nicht die Eintrittskarte.
 
 > **Praxis-Check SoftwareFabrik (abweichend):** Ein Anwendungscontainer,
-> eine Datenbank, Docker Compose; ephemere Agent-Container optional.
+> eine Datenbank, Docker Compose; ephemere Container für Build und Scans
+> optional — die Coding-Agenten selbst laufen als Host-Prozess mit frischem
+> Home-Verzeichnis und Umgebungs-Allowlist
+> (19.4).
 > Air-Gap-fähig bis hin zur Lizenz ohne Online-Aktivierung — Souveränität
 > war das Entscheidungskriterium, nicht Skalierung (19.7).

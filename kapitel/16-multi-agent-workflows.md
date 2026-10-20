@@ -52,9 +52,10 @@ SendMessage(to="agent_abc123", message="Korrigiere die Fehler.")
 ```
 
 > **Praxis-Check SoftwareFabrik (abweichend):** Sequenzielle,
-> wiederaufnehmbare Abläufe sind umgesetzt; die parallele
-> Multi-Branch-Ausführung mehrerer Läufe je Projekt ist bewusst
-> zurückgestellt — ein Workspace je Projekt, damit Folgeläufe auf dem
-> Ergebnis der vorherigen aufbauen. Parallelität findet stattdessen in der
-> Bewertung statt: mehrere Reviewer gleichzeitig auf demselben Diff (19.3,
-> 19.5, 19.9).
+> wiederaufnehmbare Abläufe sind der Normalfall — ein Workspace je
+> Projekt, damit Folgeläufe auf dem Ergebnis der vorherigen aufbauen. Im
+> Einzel-Run liegt die Mehrstimmigkeit in der Bewertung: mehrere
+> unabhängige Reviewer auf demselben Diff, technisch nacheinander (19.3,
+> 19.5). Parallele Läufe je Projekt gibt es seit 0.21.0 (lesend) und
+> 0.22.0 (schreibend) auf der Workflow-Ebene, in getrennten Worktrees und
+> hinter einem standardmäßig deaktivierten Feature-Flag (19.10).

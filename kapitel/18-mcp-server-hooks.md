@@ -78,9 +78,18 @@ public class DomainComplianceHook {
 }
 ```
 
-> **Praxis-Check SoftwareFabrik (bewusst offen):** MCP ist dort nicht
-> umgesetzt. Das funktionale Äquivalent ist die versionierte,
-> mandantengescopte Skill-/Plugin-Bibliothek plus die Materialisierung von
-> Agenten-Definitionen und Skills je Run in den Workspace — mit dem
-> Governance-Vorteil, dass nachweisbar bleibt, welche Erweiterung in welcher
-> Version im Kontext des Agenten war (19.6).
+> **Praxis-Check SoftwareFabrik (abweichend, Stand 0.38.0):** Die Fabrik
+> behandelt MCP-Server und Hooks zuerst als Angriffsfläche, erst danach
+> als Erweiterung. Seit 0.31.0 gilt ein **Nullzustand**: Kein Agentenlauf
+> erreicht einen Werkzeugserver, den die Fabrik nicht ausdrücklich
+> bereitstellt; Hooks und Projekt-Einstellungen importierter Repositories
+> laufen bei Claude Code seit 0.34.0 nicht mehr mit — beides war vorher
+> ohne Vertrauensrückfrage möglich. Ein Canary-Harness weist die Wirkung je
+> CLI-Version nach; die Profile BAIT/MaRisk/DORA und BSI/VS-NfD verlangen
+> diesen Nachweis. Seit
+> 0.34.0 öffnet ein optionaler MCP-Gateway gezielt: nur lesende Werkzeuge
+> freigegebener, per Hash gepinnter Server, jeder Aufruf signiert in der
+> Audit-Kette (19.4). Für Skills und Plugins bleibt die versionierte,
+> mandantengescopte Bibliothek mit Materialisierung je Run das Mittel der
+> Wahl — Plugins sind seit 0.31.0 standardmäßig gesperrt und werden per
+> Policy freigegeben (19.6).

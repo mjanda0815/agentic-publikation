@@ -23,7 +23,8 @@
   },
   "flowchart": {
     "htmlLabels": true,
-    "curve": "linear"
+    "curve": "linear",
+    "wrappingWidth": 600
   },
   "sequence": {
     "actorFontSize": 19,
@@ -34,5 +35,6 @@
   },
   "er": {
     "fontSize": 16
-  }
+  },
+  "markdownAutoWrap": false
 }

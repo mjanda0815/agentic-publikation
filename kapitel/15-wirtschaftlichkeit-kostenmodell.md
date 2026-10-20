@@ -155,7 +155,11 @@ aktivem Entfernen des API-Keys aus der Prozessumgebung) steht in 19.4.
 > Input-, Output- und Cached-Input-Preisen, Kostenaggregation nach Projekt,
 > Run, Provider, Mandant und Seat, harte Budget-Caps je Mandant — und der
 > Abo-Modus als eigener Authentifizierungsweg, der den API-Key aktiv aus der
-> Subprozess-Umgebung entfernt (19.4). Die ROI-Modellrechnung aus 15.4
+> Subprozess-Umgebung entfernt (19.4). Abo-Läufe sind seit 0.33.0 als
+> „Schätzung (API-Tarif), nicht abgerechnet“ gekennzeichnet; dass ein mit
+> 0 € bewerteter Lauf Budgets unterläuft, war vor 0.34.0 real der Fall —
+> Läufe mit Claude Code wurden wegen eines Parserfehlers durchgehend mit
+> 0 € bewertet (19.4). Die ROI-Modellrechnung aus 15.4
 > bleibt dagegen unbelegt: Für das Realsystem existiert keine kontrollierte
 > Produktivitätsmessung, und eine Budget-Obergrenze je Nutzer ist offen
 > (19.9).
@@ -177,7 +181,7 @@ folgenden Messgrößen:
 - entkommene Defekte und Rollbacks
 - Reviewzeit und Testabdeckungsänderung
 
-> **Praxis-Check SoftwareFabrik (Stand 0.30.0):** Ein Teil dieses
+> **Praxis-Check SoftwareFabrik (Stand 0.38.0):** Ein Teil dieses
 > Messplans ist seit Release 0.27.0 implementiert (19.10, Stufe 6):
 > Time to Accepted Merge, Erstdurchlauf-Quote, Korrekturschleifen,
 > Planänderungen, Kosten je Workflow und Child Run, Merge-Konfliktquote
@@ -187,7 +191,10 @@ folgenden Messgrößen:
 > Git-Historie (als Untergrenze ausgewiesen), seit 0.30.0 die Eingriffe
 > und die Entscheiderzahl aus der Freigabeentscheidung — dazu ein
 > erfragter, freiwilliger Aufwand, der nur zusammen mit seiner
-> Abdeckungsquote ausgewiesen und nie mit Gemessenem verrechnet wird.
+> Abdeckungsquote ausgewiesen und nie mit Gemessenem verrechnet wird;
+> seit 0.34.0 zählen Eingriffe und Aufwandsfeld auch die Planfreigabe des
+> Workflows (vorher untertrieb die Kennzahl um mindestens eins je
+> Workflow).
 > Drei Messgrößen weist die
 > Plattform bewusst als Lücke aus, statt sie zu
 > schätzen: die menschliche aktive Arbeitszeit (Wartezeit ist

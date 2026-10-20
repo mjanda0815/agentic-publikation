@@ -3,7 +3,7 @@ flowchart TB
     REG["ExecutionAdapterRegistry<br/>Run &gt; Projekt &gt; User &gt; Global &gt; YAML"]
     ROUT["ModelRoutingService<br/>Capability-Profil je Rolle"]
     PORT["<b>ExecutionAdapter</b> (Port)<br/>name() · execute(request, handler)"]
-    SB["ExecutionSandboxFactory<br/>lokal | Container (--network=none)"]
+    SB["Agent-Prozess auf dem Host<br/>ephemeres HOME · Env-Allowlist<br/>MCP-Nullzustand"]
     SEC["SecretsResolver<br/>AES-GCM · Abo-Modus strippt API-Key"]
     CLIA["<b>CLI-Adapter</b><br/>mock · claude · codex · gemini<br/>aider · kimi · local-llm"]
     GWA["<b>Gateway-Adapter</b><br/>bedrock · vertex · azure-openai"]
