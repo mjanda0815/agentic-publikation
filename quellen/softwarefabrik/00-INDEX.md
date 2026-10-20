@@ -14,8 +14,8 @@ ist). Erhebungsbasis:
 |---|---|
 | Repository | `/mnt/c/dev/SoftwareFabrik` |
 | Ersterhebung | Branch `main`, Commit `526d718` (2026-07-26), Version 0.19.0, erhoben 2026-08-06 |
-| Kennzahlen-Nachzüge | jeweils auf dem Release-Tag (0.21.0 … 0.30.0, siehe `12-kennzahlen-historie.md`) |
-| **Aktueller Stand** | **Tag `v0.38.0` (= `1fb8aac`, 2026-10-20)**, erhoben 2026-10-20 per Worktree auf dem Tag; Dokumente 01–13 auf diesen Stand gebracht (geänderte Stellen tragen „Stand v0.38.0") |
+| Kennzahlen-Nachzüge | jeweils auf dem Release-Tag (0.21.0 … 0.39.0, siehe `12-kennzahlen-historie.md`) |
+| **Aktueller Stand** | **Tag `v0.39.0` (= `4acd5c1`, 2026-10-20)** für Kennzahlen (12), SDD-Governance (13.11), Policy/Export (08) und den geklärten Test-Isolationsdefekt (01, 09); übrige Dokumente unverändert auf Tag `v0.38.0` (= `1fb8aac`), dort geänderte Stellen tragen „Stand v0.38.0" (0.39.0 änderte daran nichts: kein neuer Slice, keine Migration, keine neuen Routen) |
 
 ---
 
@@ -34,8 +34,8 @@ ist). Erhebungsbasis:
 | `09-entwicklerhandbuch.md` | Setup, Build, Test, Coverage-Gate, Konventionen, Erweiterungsrezepte, Fallstricke, CI-Pipeline | Anhang / Praxisteil |
 | `10-betrieb-deployment.md` | Profile, Compose-Stack, Env-Variablen, Demo-Betrieb, Lizenzstack | Deployment-Kapitel |
 | `11-mapping-whitepaper-v13.md` | Kapitel-für-Kapitel-Abgleich v1.3 ↔ Implementierung, inkl. der Stellen, wo die Praxis vom Konzept abweicht | **Zentrales Dokument für die Kapitelplanung** |
-| `12-kennzahlen-historie.md` | Versionshistorie 0.1.0–0.38.0, Metriken (v0.38.0 neben v0.30.0), Migrationsverlauf, offene Punkte | Evidenzteil, Anhang |
-| `13-spec-driven-development.md` | Anforderungsebene seit 0.35.0: Produkt-Spec, AC-IDs, Freigabe, Traceability, Conformance-Reviewer, Spec-Drift, Spec-Run, Reverse-Spec; 0.39-Governance als geplant | Abschnitt 19.11 |
+| `12-kennzahlen-historie.md` | Versionshistorie 0.1.0–0.39.0, Metriken (v0.39.0 neben v0.38.0 und v0.30.0), Migrationsverlauf, offene Punkte | Evidenzteil, Anhang |
+| `13-spec-driven-development.md` | Anforderungsebene seit 0.35.0: Produkt-Spec, AC-IDs, Freigabe, Traceability, Conformance-Reviewer, Spec-Drift, Spec-Run, Reverse-Spec; Governance 0.39.0 (13.11) | Abschnitt 19.11 |
 
 ---
 

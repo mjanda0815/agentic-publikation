@@ -46,7 +46,7 @@ inhaltsgleichen Darstellungen in Kapitel 16 und Kapitel 20 konsolidiert.)*
 
 ## 22.3 Teil A — der implementierte Single-Run-Prozess
 
-> **Status: implementiert** (Referenzimplementierung, Stand 0.38.0; vgl.
+> **Status: implementiert** (Referenzimplementierung, Stand 0.39.0; vgl.
 > Kapitel 19.1–19.5; die optionale Anforderungsebene in 19.11).
 
 So läuft der Auftrag heute. Ein Lauf, ein schreibender Agent, mehrere

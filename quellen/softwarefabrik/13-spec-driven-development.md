@@ -1,10 +1,14 @@
 # 13. Spec-Driven Development
 
-*Stand v0.38.0* — erhoben auf dem Tag `v0.38.0` (= `1fb8aac`, 2026-10-20).
-Umgesetzt in den Releases 0.35.0, 0.36.0 und 0.38.0; eine Version 0.37.0 gibt
-es nicht, 0.38.0 bündelt die Roadmap-Stufen 0.37 (SPEC-003) und 0.38
-(SPEC-004). Grundlagen im Repository: ADR-0027 (Status **Proposed**,
-2026-10-19), `docs/roadmap/spec-driven-development.md` (Status *Entwurf*),
+*Stand v0.39.0* — erhoben auf dem Tag `v0.39.0` (= `4acd5c1`, 2026-10-20);
+13.1–13.10 auf `v0.38.0` (= `1fb8aac`) erhoben und für 0.39.0 nur dort
+ergänzt, wo sich etwas geändert hat (13.11).
+Umgesetzt in den Releases 0.35.0, 0.36.0, 0.38.0 und 0.39.0; eine Version
+0.37.0 gibt es nicht, 0.38.0 bündelt die Roadmap-Stufen 0.37 (SPEC-003) und
+0.38 (SPEC-004), 0.39.0 setzt SPEC-005 um. Grundlagen im Repository:
+ADR-0027 (Status **Proposed**, 2026-10-19, am Tag v0.39.0 unverändert),
+`docs/roadmap/spec-driven-development.md` (am Tag v0.39.0 Status
+*Umgesetzt*; am Tag v0.38.0 *Entwurf*),
 `specs/SPEC-001` bis `SPEC-005`, Migrationen V61–V65, `CHANGELOG.md`.
 
 Dieses Kapitel beschreibt, wie die Fabrik eine Lücke schließt, die sie selbst
@@ -258,10 +262,12 @@ nicht-terminal und belegt **keinen** Kapazitäts- und Workspace-Slot
   Frontmatter-Status `DRAFT` (Dogfooding-Dateien; der Freigabestand in einer
   Fabrik-Datenbank ist daraus nicht ablesbar).
 
-## 13.11 Geplant: Governance-Stufe 0.39 (SPEC-005, nicht umgesetzt)
+## 13.11 Governance-Stufe 0.39.0 (SPEC-005, umgesetzt)
 
-`specs/SPEC-005-sdd-governance/spec.md` (Status `DRAFT`) beschreibt, was die
-Roadmap-Stufe 0.39.0 bringen soll — **am Tag v0.38.0 nicht umgesetzt**:
+`specs/SPEC-005-sdd-governance/spec.md` (Frontmatter-Status weiterhin
+`DRAFT`, AC-005-01 … AC-005-09) — **mit Release 0.39.0 umgesetzt** (PR #168
+Teil 1, PR #169 Teil 2; `CHANGELOG.md` `[0.39.0]`). Ursprünglicher
+Planumfang, so umgesetzt:
 
 - `PolicyInhalt.pflichtSpecFreigabe` und `minAcAbdeckung` (kanonisch nur bei
   Abweichung vom Default, alte Signaturen bleiben gültig); Durchsetzung bei
@@ -276,6 +282,56 @@ Roadmap-Stufe 0.39.0 bringen soll — **am Tag v0.38.0 nicht umgesetzt**:
   mit freigegebener Spec, Spec-Änderungen je Release) — auch für Einzel-Runs.
 - Diese Governance-Funktionen nur für Tier `ENTERPRISE` (bzw. ohne aktives
   Lizenzsystem).
+
+Am Tag v0.39.0 nachgeprüft (Code und CHANGELOG):
+
+- `PolicyInhalt` trägt `pflichtSpecFreigabe` (Boolean) und `minAcAbdeckung`
+  (Anteil 0–1, `null` = keine Vorgabe); Pflege auf `/policy-as-code`.
+  Wirksam ist global ODER Mandant (Governance-Floor). Die Policy schlägt den
+  Spec-Modus: auch im Modus `AUS` Ablehnung, Gründe `Spec-Modus AUS`,
+  `kein Spec-Bezug`, `keine freigegebene Fassung`, `SDD nicht
+  freigeschaltet`. Betroffen: BUILD-Start und Workflow-Planfreigabe (jeder
+  schreibende Task); PLAN-, SPEC- und Child Runs nicht.
+- Audit: `RUN_POLICY_DENIED` (`policy-as-code;pflichtSpecFreigabe=true;
+  grund=…;zeitpunkt=start` bzw. `zeitpunkt=quality-gate`) und
+  `WORKFLOW_PLAN_DENIED`. `QUALITY_GATE_EVALUATED` trägt
+  `acAbgedeckt=…;acGebunden=…`, sobald `spec-conformance` lief.
+- `minAcAbdeckung`: Gate blockiert auch im Modus advisory (bei Gate-Modus `off` ohne MCP-Befund wird nicht geprüft — CHANGELOG sagt zu weit „unabhängig vom Gate-Modus")
+  (Korrekturschleife); ohne Spec-Bezug greift die Regel nicht; kein
+  Reviewer-Ergebnis = nichts belegt (fail-closed).
+- **Sicherheitsfix im selben Release:** Policy-Ablehnungen bei der
+  Run-Anlage (Modell-Policy, Policy-as-Code, MCP-Verbot, Attestierungspflicht;
+  `RunOrchestrationService` @v0.38.0 Z. 439/457/474/514) wurden bis 0.38.0
+  in derselben Transaktion wie die Ablehnung geschrieben und mit ihr
+  zurückgerollt — die Kette zeigte sie nie. Ablehnungen während des Laufs
+  (`zeitpunkt=vor-ausfuehrung`, MCP-Gateway, gesperrte Reviewer) standen
+  schon vorher drin. `WORKFLOW_PLAN_DENIED` ist neu (vorher wurde eine
+  Planfreigabe-Ablehnung gar nicht protokolliert). Neu
+  `AuditService.erfasseUnabhaengig`: nach Abschluss der umgebenden
+  Transaktion in eigener Transaktion (bewusst nicht verschachtelt, wegen
+  `UNIQUE(seq)`); scheitert das Nachschreiben, wird nur geloggt.
+- `ComplianceProfil`: `EU_AI_ACT` und `BAIT_MARISK_DORA` setzen
+  `pflichtSpecFreigabe=true`, kein Profil setzt `minAcAbdeckung`; Profilseite
+  mit Spalte „Spec-Freigabe Pflicht".
+- `Feature.SPEC_GOVERNANCE`, Mindest-Tier Enterprise, dasselbe Flag
+  `softwarefabrik.spec.enabled`; Port `common.SpecGovernance` (implementiert
+  vom `PolicyEnforcementService`) — `run`/`workflow` ohne neue Slice-Kante.
+- Export 2.1: `nachweis.specVersionen` (`specId`, `version`, `content`,
+  `contentHash`, `signature`, `keyId`, `freigegebenVon`/`freigegebenAm`);
+  Signatur beim Export mit dem Attestierungsschlüssel über `contentHash`;
+  Auflösung nur im Projekt-/Mandantenbereich (`SpecService.fassungFuer`);
+  ohne `SPEC_GOVERNANCE` bleibt es bei Schema 2.0 (ADR-0023, Nachtrag E7–E9).
+- Verifier 1.1.0: Schritt 6b (Hash + Signatur je Fassung), Schritt 7
+  gleicht `RUN_SPEC_GEBUNDEN` ab; 2.0-Exporte bestehen (Bindungen INFO
+  „nicht prüfbar"), Verifier 1.0.0 akzeptiert 2.1. Test
+  `OfflineVerifierKompatibilitaetTest`; der alte Verifier wird in CI aus dem
+  Tag `v0.38.0` gebaut.
+- SDD-Kennzahlen (`SddKennzahlenService`, `/kennzahlen?projectId=…`,
+  unabhängig vom Workflow-Flag, nur mit `SPEC_GOVERNANCE`): Anteil Starts
+  mit freigegebener Spec, AC-Abdeckung (Endstand), Anzahl `SPEC_DRIFT`,
+  Spec-Änderungen je freigegebenem Meilenstein und seit dem letzten Release;
+  keine Tabelle, keine Migration; Messlücken: Abdeckung vor 0.39.0,
+  Releases außerhalb der Fabrik.
 
 ## 13.12 Einordnung für das Whitepaper
 

@@ -3,7 +3,7 @@
 Von kontrollierten Einzel-Runs zur parallelen Agentic Software Factory.
 Praxisbeispiele mit Java, Spring Boot und Domain-Driven Design.
 
-**Martin Janda** · Version 3.1 (Oktober 2026) · Lizenz: [CC BY 4.0](LICENSE)
+**Martin Janda** · Version 3.2 (Oktober 2026) · Lizenz: [CC BY 4.0](LICENSE)
 
 <!-- DOI-BADGE -->
 
@@ -39,8 +39,8 @@ Messplan steht in Abschnitt 15.6.
 
 | Dokument | Umfang | Inhalt |
 |---|---|---|
-| **Whitepaper** (`main.tex`) | 178 Seiten | Vollständige Fassung, Teile I–VII |
-| **Sonderdruck „Die SoftwareFabrik“** (`main-fabrik.tex`) | 49 Seiten | Kapitel 19 als eigenständiges PDF — dieselbe Quelle, eigene Titelei |
+| **Whitepaper** (`main.tex`) | 180 Seiten | Vollständige Fassung, Teile I–VII |
+| **Sonderdruck „Die SoftwareFabrik“** (`main-fabrik.tex`) | 51 Seiten | Kapitel 19 als eigenständiges PDF — dieselbe Quelle, eigene Titelei |
 | **Karussell zum Whitepaper** (`carousel/carousel.tex`) | 10 Folien | Prinzipiengetriebener Kurzeinstieg |
 | **Karussell zum Sonderdruck** (`carousel/carousel-fabrik.tex`) | 10 Folien | Praxisgetrieben: was die Praxis am Konzept korrigiert hat |
 

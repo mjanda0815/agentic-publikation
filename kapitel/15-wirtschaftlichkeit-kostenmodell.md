@@ -181,7 +181,7 @@ folgenden Messgrößen:
 - entkommene Defekte und Rollbacks
 - Reviewzeit und Testabdeckungsänderung
 
-> **Praxis-Check SoftwareFabrik (Stand 0.38.0):** Ein Teil dieses
+> **Praxis-Check SoftwareFabrik (Stand 0.39.0):** Ein Teil dieses
 > Messplans ist seit Release 0.27.0 implementiert (19.10, Stufe 6):
 > Time to Accepted Merge, Erstdurchlauf-Quote, Korrekturschleifen,
 > Planänderungen, Kosten je Workflow und Child Run, Merge-Konfliktquote
@@ -194,7 +194,11 @@ folgenden Messgrößen:
 > Abdeckungsquote ausgewiesen und nie mit Gemessenem verrechnet wird;
 > seit 0.34.0 zählen Eingriffe und Aufwandsfeld auch die Planfreigabe des
 > Workflows (vorher untertrieb die Kennzahl um mindestens eins je
-> Workflow).
+> Workflow); seit 0.39.0 kommen SDD-Kennzahlen hinzu — Anteil der
+> Build-Starts mit freigegebener Spec, Kriterienabdeckung, Spec-Drifts
+> und Spec-Änderungen je Meilenstein (19.11; bei aktivem
+> Lizenzsystem nur Enterprise). Sie zeigen, wie die Anforderungsebene genutzt wird, nicht,
+> ob sie die Ergebnisse verbessert.
 > Drei Messgrößen weist die
 > Plattform bewusst als Lücke aus, statt sie zu
 > schätzen: die menschliche aktive Arbeitszeit (Wartezeit ist
@@ -206,8 +210,9 @@ folgenden Messgrößen:
 > Vergleich zur manuellen Umsetzung, dessen
 > Referenzgruppe im System nicht existiert. Gemessen wird überwiegend auf
 > der Workflow-Ebene, die weiterhin hinter dem standardmäßig deaktivierten
-> Feature-Flag steht; allein der Einzel-Run-Teil der Rollback-Erkennung
-> und das Aufwandsfeld an der Run-Freigabe wirken auch ohne Flag. Der
+> Feature-Flag steht; allein der Einzel-Run-Teil der Rollback-Erkennung,
+> das Aufwandsfeld an der Run-Freigabe und die SDD-Kennzahlen (hinter dem
+> eigenen SDD-Flag) wirken auch ohne Workflow-Flag. Der
 > dreiarmige Vergleich dieses Messplans steht damit weiter aus.
 
 Bis diese Messungen vorliegen, sind alle Produktivitäts- und ROI-Aussagen

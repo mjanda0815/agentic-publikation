@@ -8,7 +8,7 @@
 > Autor gebautes und betriebenes System, das die Referenzarchitektur
 > produktisiert. Es ist ein Erfahrungsbericht aus erster Hand — alle Angaben
 > sind aus dem Quellcode des Systems erhoben (Erhebungsstand 20. Oktober
-> 2026 auf dem Release-Stand 0.38.0), nicht
+> 2026 auf dem Release-Stand 0.39.0), nicht
 > aus Projektdokumentation oder Erinnerung. Wo eine Aussage im Code
 > verankert ist, nennt eine Fußnote die konkrete Klasse; die Klassennamen
 > dienen der präzisen Verortung — das Repository des Systems ist derzeit
@@ -16,7 +16,7 @@
 
 > **Stand und Zielbild:** Dieses Kapitel unterscheidet zwischen dem
 > implementierten Stand der SoftwareFabrik (Abschnitte 19.1–19.9 — alles
-> dort Beschriebene ist implementiert, Stand 0.38.0; als opt-in
+> dort Beschriebene ist implementiert, Stand 0.39.0; als opt-in
 > gekennzeichnete Funktionen sind standardmäßig ausgeschaltet) und
 > ihrer Weiterentwicklung (Abschnitt 19.10 — dort ist der Umsetzungsstand
 > je Stufe ausgewiesen: Die Stufen 0 bis 4 sowie die Kennzahlenmessung der
@@ -91,9 +91,9 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 
 | Kennzahl | Wert |
 |---|---|
-| Produktivklassen (Java) | 499 |
-| Produktivcode | ~54.000 Zeilen |
-| Testklassen | 353 |
+| Produktivklassen (Java) | 502 |
+| Produktivcode | ~54.900 Zeilen |
+| Testklassen | 360 |
 | Fachliche Slices (Module) | 34 |
 | Datenbanktabellen | 63 |
 | Flyway-Migrationen | 61 |
@@ -101,16 +101,17 @@ Ein Vorhaben durchläuft die Fabrik in sechs Schritten:
 | Review-Adapter | 7 |
 | Wizard-Templates | 18 |
 | Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % (JaCoCo, buildbrechend) |
-| Releases | 46 (0.1.0 bis 0.38.0, April–Oktober 2026) |
+| Releases | 47 (0.1.0 bis 0.39.0, April–Oktober 2026) |
 
-*Erhoben auf dem Release-Tag 0.38.0 (20. Oktober 2026), Anwendungsmodul;
-die eigenständigen Module Offline-Verifier (~1.000 Zeilen) und MCP-Gateway
+*Erhoben auf dem Release-Tag 0.39.0 (20. Oktober 2026), Anwendungsmodul;
+die eigenständigen Module Offline-Verifier (~1.100 Zeilen) und MCP-Gateway
 (~2.400 Zeilen) sind nicht mitgezählt. Der Zuwachs der Releases 0.21.0 bis
 0.30.0 geht fast vollständig auf die Workflow-Ebene zurück, der von 0.31.0
-bis 0.38.0 auf die Absicherung der Agentenläufe gegen fremde
+bis 0.39.0 auf die Absicherung der Agentenläufe gegen fremde
 Werkzeugkonfiguration, den unabhängig prüfbaren Nachweis und
 Spec-Driven Development — welches Release was brachte (einschließlich der
-Migrationen V40–V65; die Nummern V55 und V57 sind nicht vergeben),
+Migrationen V40–V65; die Nummern V55 und V57 sind nicht vergeben, 0.39.0
+kam ohne Migration aus),
 dokumentiert die Release-Verlaufstabelle in 19.10. Die vier seit 0.30.0
 hinzugekommenen Fachlichkeiten sind `canary`, `mcp` und `mcpgateway`
 (19.4) sowie `spec` (19.11).*
@@ -304,8 +305,23 @@ Vier Stationen des Ablaufs sind konzeptionell bemerkenswert:
 
 **Policy-Prüfung zweimal.** Vor der Anlage prüft der Orchestrator
 Modell-Policy, aktive Policy-as-Code (ist der Adapter erlaubt?),
-Attestierungspflicht und Lizenzgrenzen — abgelehnte Läufe erzeugen ein
-attestiertes Ereignis `RUN_POLICY_DENIED`, auch die Ablehnung ist Nachweis.
+Attestierungspflicht und Lizenzgrenzen — abgelehnte Policy-Prüfungen
+erzeugen ein attestiertes Ereignis `RUN_POLICY_DENIED`, auch die Ablehnung
+ist Nachweis (Lizenzgrenzen lehnen ohne Audit-Eintrag ab).
+*Korrektur:* Für die Prüfungen vor der Anlage gilt das erst seit 0.39.0.
+Bis dahin schrieb die Fabrik das Ereignis in derselben
+Datenbanktransaktion wie die Ablehnung — und rollte es mit ihr zurück; die
+Audit-Kette zeigte diese Ablehnungen (Modell-Policy, Policy-as-Code,
+MCP-Standardverbot, Attestierungspflicht) nie. Ablehnungen *während* des
+Laufs — unmittelbar vor der Ausführung, bei der Gateway-Anbindung, für
+gesperrte Prüfer im Gate — standen schon vorher in der Kette, weil der Lauf
+dort regulär als gescheitert endet. Frühere Fassungen dieses Whitepapers
+beschrieben die Anlageprüfung im Soll-, nicht im Ist-Zustand. Seit 0.39.0
+wird der Eintrag nach Abschluss der umgebenden Transaktion in einer eigenen
+geschrieben, bewusst nicht verschachtelt, damit beide nicht gegenseitig auf
+die lückenlose Sequenznummer der Kette warten; scheitert dieses
+Nachschreiben, wird das protokolliert, nicht wiederholt.^[`AuditService.erfasseUnabhaengig`;
+genutzt von `RunOrchestrationService` und `WorkflowService`.]
 Beim tatsächlichen Start werden Attestierungspflicht und geltende
 Policy-Version *erneut* ausgewertet und gestempelt. Der Grund: Ein vor der
 Policy-Aktivierung angelegter Run würde sie sonst umgehen — und Warum-Trace
@@ -717,7 +733,9 @@ Regeln sind kein Konfigurationszustand, sondern ein **versioniertes,
 signiertes Dokument**. Der kanonische Inhalt ist bewusst minimal und
 dadurch prüfbar: erlaubte Adapter, Gate-Modus, Pflicht-Freigabephasen,
 Attestierungspflicht; seit 0.31.0 und 0.34.0 dazu das MCP-Standardverbot,
-die erlaubten Plugins und die erlaubten MCP-Server (19.4). Neue Felder
+die erlaubten Plugins und die erlaubten MCP-Server (19.4), seit 0.39.0 die
+Spec-Freigabe als Startbedingung und eine Mindestabdeckung der
+Akzeptanzkriterien (19.11). Neue Felder
 erscheinen in der kanonischen Form nur, wenn sie vom Standard abweichen —
 bestehende Policy-Signaturen bleiben dadurch gültig.^[`PolicyInhalt` mit kanonischer Serialisierung
 (`kanonisch()`/`parse()`); Ed25519-Signatur über den kanonischen Text.]
@@ -744,7 +762,12 @@ Das Anwenden eines Profils veröffentlicht eine neue signierte
 Policy-Version und erzeugt ein attestiertes Ereignis. Die Profile
 BAIT/MaRisk/DORA und BSI/VS-NfD setzen seit 0.31.0 zusätzlich das
 MCP-Standardverbot: Agent-CLIs laufen dort nur mit bestandenem
-Isolationsnachweis (19.4). **Ehrliche
+Isolationsnachweis (19.4). Seit 0.39.0 verlangen die Profile EU AI Act und
+BAIT/MaRisk/DORA außerdem die Spec-Freigabe: Ein Build startet dort nur
+gegen eine freigegebene Anforderungsfassung (19.11; wirksam nur, wo
+Spec-Driven Development freigeschaltet ist). Baseline und BSI/VS-NfD
+bleiben unverändert — für Verschlusssachen ist die Spec-Pflicht
+projektspezifisch über die Policy zu setzen. **Ehrliche
 Einordnung:** Die Profile setzen die *technisch erzwingbaren* Anteile der
 jeweiligen Regelwerke durch — Aufzeichnung, menschliche Aufsicht,
 Nachweisführung, Vendor-Beschränkung. Sie ersetzen keine Rechtsberatung
@@ -775,7 +798,8 @@ beweisbar“.
 
 Attestiert wird nicht jeder Tastendruck, sondern **jede Entscheidung, die
 den Handlungsspielraum des Agenten festgelegt hat**: Run-Lebenszyklus,
-Modellauflösung, angewendete und verweigerte Policies, angewendete
+Modellauflösung, angewendete und verweigerte Policies (die Ablehnungen vor
+der Anlage eines Laufs erst seit 0.39.0, siehe 19.3), angewendete
 Guardrails-Version, Gate-Ergebnis, Freigaben, erzeugte und signierte
 Artefakte. Diese Liste ist die praktische Antwort auf die Frage, was in
 einem agentischen System nachweispflichtig ist.
@@ -814,15 +838,15 @@ exportiert wurde die *aktuell* aktive statt der im Lauf angewandten
 Policy-Version, und wer Einträge fälschen kann, kann auch den
 mitgelieferten öffentlichen Schlüssel austauschen. Release 0.32.0 macht
 den Export deshalb **ohne Zugriff auf die Fabrik prüfbar**. Ein
-eigenständiger **Offline-Verifier** — ein Programm von rund 1.000 Zeilen,
+eigenständiger **Offline-Verifier** — ein Programm von heute rund 1.100 Zeilen,
 nur auf dem JDK aufgebaut, ohne Bibliotheken und ohne Code der Fabrik,
 reproduzierbar gebaut und getrennt von der Installation verteilt, damit
 ein Prüfer das Werkzeug nicht von der geprüften Partei bezieht —
 rechnet Hash und Signatur jedes Eintrags nach, prüft die lückenlose
 Verkettung bis zu einem signierten Ketten-Kopf, die im Lauf angewandten
 Policy-Versionen und je Run ein signiertes Manifest der zugehörigen
-Ereignisse.^[Modul `verifier/` der SoftwareFabrik; Export-Schema 2.0 in
-`AuditExportService`.] Die Frage, die eine Prüfung zuerst stellt — wurde
+Ereignisse.^[Modul `verifier/` der SoftwareFabrik; Export-Schema 2.0
+(seit 0.39.0: 2.1) in `AuditExportService`.] Die Frage, die eine Prüfung zuerst stellt — wurde
 etwas weggelassen? —, löst der Export über **Hash-Stellvertreter**: Alle
 Einträge außerhalb der exportierten Runs bis zum Ketten-Kopf — darunter
 die anderer Mandanten — erscheinen nur als Hashwerte ohne Inhalt; die Verkettung bleibt prüfbar, ohne fremde Daten
@@ -834,6 +858,26 @@ dokumentiert: Wer vor dem Export Datenbankzugriff hat, kann die jüngsten
 Einträge löschen und den Kopf auf einen älteren, gültig signierten Stand
 zurücksetzen; dagegen hilft nur der Abgleich mit einem früher bekannten
 Kettenstand, den der Verifier entgegennimmt.
+
+Release 0.39.0 erweitert den Export um die Anforderungsebene (19.11).
+Schema 2.1 enthält je gebundener Spec-Fassung Inhalt, Hash und Freigabe
+(wer, wann); den Hash signiert die Fabrik beim Export mit dem
+Attestierungsschlüssel — dieselbe Vorschrift wie bei den
+Policy-Versionen. Der Verifier 1.1.0 rechnet Hash und Signatur jeder
+Fassung nach und gleicht jede in der Kette attestierte Spec-Bindung eines
+Runs gegen die gelieferten Fassungen ab; eine fehlende, manipulierte oder im
+Hash abweichende Fassung ist eine Verletzung. Fassungen anderer Mandanten
+liefert der Export nicht — eine Bindung ohne lieferbare Fassung fällt im
+Verifier auf. Die Erweiterung ist additiv und in beide Richtungen getestet:
+Der neue Verifier besteht Exporte 2.0 weiter (Spec-Bindungen dort als
+„nicht prüfbar“ ausgewiesen), der bisherige akzeptiert Exporte 2.1, weil er
+unbekannte Felder ignoriert; die CI baut ihn dafür eigens aus dem
+Vorgänger-Release.^[Nachtrag zu ADR-0023 (Schema 2.1); Test
+`OfflineVerifierKompatibilitaetTest`.] Belegt ist damit, dass gegen genau
+diese Fassung gebaut wurde und dass sie unverändert vorliegt — nicht, dass
+sie fachlich richtig war. Ohne Freischaltung der Governance-Stufe (bei
+aktivem Lizenzsystem: unterhalb von Enterprise) bleibt der Export bei
+Schema 2.0.
 
 ### Lieferkette und Wissensbestand
 
@@ -1052,21 +1096,40 @@ Erhebungsstand 20. Oktober 2026:
 | Cloud-Gateways (Bedrock/Vertex/Azure) nicht end-to-end gegen echte Credentials verifiziert | Verifikationslücke |
 | Coding-Agenten laufen in keiner Variante im Container, sondern als Host-Prozess (frisches Home je Aufruf, Umgebungs-Allowlist, MCP-Nullzustand); die Container-Sandbox kapselt nur Build und Scans und ist nicht der Default (19.4) | Einschränkung — Agent-Container als eigenes Arbeitspaket offen |
 | MCP-Gateway nur mit lesenden Werkzeugen und nur für die Ausführung mit Claude Code; der Nachweisfall „Gateway projiziert“ und die Wirkung der Hook-Abschaltung sind noch nicht durch den Canary belegt | Verifikationslücke |
-| Test-Isolationsdefekt: ein Integrationstest committet unter bestimmten Bedingungen in das reale Repository (erhoben auf dem Stand 0.19.0, für 0.38.0 weder als behoben noch als fortbestehend belegt) | Defekt, Status ungeklärt |
 | Architektur-Altschuld: eingefrorene Modulzyklen und 13 direkte Repository-Zugriffe der Web-Schicht | dokumentierte, gezählte Schuld |
 | Preisstatus unbekannter Modelle (heute 0 €, nötig wären `UNKNOWN`/Sicherheitsersatzwert); Abo-Läufe sind seit 0.33.0 als Schätzung gekennzeichnet | Budget- und Abrechnungslücke |
 | Verifikationsstatus unsignierter Legacy-Auditdaten in der Plattform (undifferenziertes Ergebnis; der Offline-Verifier unterscheidet für Exporte bereits) | Nachweislücke |
 | Policyabhängiges Verhalten bei fehlendem SBOM-Scanner (heute stets übersprungen) | Fail-Closed-Lücke |
-| Spec-Driven Development: Governance-Stufe (Spec-Freigabe als Policy-Pflicht, signierte Spec-Fassungen im Export, Spec-Kennzahlen) nicht Teil des Stands 0.38.0; die Abdeckungsprüfung ist eine Heuristik über Test-Referenzen (19.11) | geplant bzw. Einschränkung |
+| Spec-Driven Development: Die Abdeckungsprüfung ist eine Heuristik über Test-Referenzen — das gilt auch für die seit 0.39.0 per Policy erzwingbare Mindestabdeckung; Wirkung auf die Ergebnisqualität nicht gemessen (19.11) | Einschränkung |
 
-Eine Zeile der Fassung 3.0 ist entfallen: Die seit 0.20.0 befristet
+Gegenüber der Fassung 3.1 sind zwei Zeilen entfallen. Die
+SDD-Governance-Stufe ist mit 0.39.0 umgesetzt (19.11). Und der dort als
+„Status ungeklärt“ geführte Test-Isolationsdefekt — ein Test, der unter
+bestimmten Bedingungen in das reale Repository committete — ist geklärt:
+Er war bereits im Release 0.19.0 behoben, auf dessen Stand er als offen
+erhoben worden war. Ursache war ein Produktfehler, den die Tests sichtbar
+machten: Das Meilenstein-Release prüfte nur, ob der Projekt-Workspace
+existiert, nicht, ob er ein eigenes Git-Repository ist. Ohne eigenes liefen
+Commit und Tag gegen das nächste übergeordnete Repository — lag der
+Test-Workspace im Build-Verzeichnis der Fabrik, traf es das Repository der
+Fabrik selbst. Seither verlangt das Release ein eigenes Repository im
+Workspace, ein Regressionstest hält das fest (am Release-Tag 0.39.0
+unverändert vorhanden).^[`MilestoneReleaseService.gibFrei`;
+Test `MilestoneReleaseServiceTest`.] Die Fallstudie hatte den Defekt aus
+einer Arbeitsnotiz übernommen, die nach der Behebung nicht nachgezogen
+wurde — auch das ein Befund über Nachweise. Nicht zu verwechseln mit zwei
+späteren, ebenfalls behobenen Kopplungen der Testsuite über die gemeinsame
+Testdatenbank (0.24.0: Kapazitätsgrenze; 0.36.0: unterschiedliche
+Signaturschlüssel je Testkontext, behoben durch einen Schlüssel je JVM).
+
+Bereits mit Fassung 3.1 entfallen: Die seit 0.20.0 befristet
 akzeptierte Schwachstelle in einer Laufzeitabhängigkeit verschwand mit
 0.31.0 durch ein Update der Abhängigkeit; der Abhängigkeits-Scan läuft
 seither ohne Ausnahmeeintrag. Der Image-Scan führt weiterhin begründete
 Ausnahmen für Hilfsprogramme des Basis-Images, die die Anwendung nie
 ausführt (17 Einträge, drei davon mit 0.33.0 neu).
 
-Dazu vier Beobachtungen aus dem Entwicklungsverlauf (46 Releases in rund
+Dazu vier Beobachtungen aus dem Entwicklungsverlauf (47 Releases in rund
 sechs Monaten), die sich verallgemeinern lassen:
 
 1. **Governance kam spät, wurde aber strukturbildend** — siehe 19.8 (3).
@@ -1100,7 +1163,11 @@ sechs Monaten), die sich verallgemeinern lassen:
    Diff (19.5), Läufe, die mit 0 € bewertet wurden (19.4), und eine
    Containervariante, deren Startmeldung eine Agenten-Isolation nahelegte,
    die es nicht gab (19.4). Alle vier Fälle sahen in der Oberfläche
-   unauffällig aus.
+   unauffällig aus. Ein weiterer Fall derselben Familie fiel erst mit
+   0.39.0 auf: Policy-Ablehnungen vor der Anlage eines Laufs, die der Code
+   attestierte, die aber nie in der Kette ankamen, weil sie mit der
+   Ablehnung zurückgerollt wurden (19.3). Eine leere Liste von Ablehnungen ist von „nichts abgelehnt“
+   nicht zu unterscheiden.
 
 Ausdrücklich **nicht** behauptet werden quantifizierte Produktivitäts- oder
 ROI-Zahlen aus dem Betrieb der Fabrik selbst — dafür existiert keine
@@ -1138,7 +1205,7 @@ und bestandene Gates beweisen keine Fehlerfreiheit (Konstruktvalidität).
 > der SoftwareFabrik; Versions- und Phasenangaben sind Vorschläge, keine
 > Zusagen.
 
-### Der Release-Verlauf 0.21.0 bis 0.38.0
+### Der Release-Verlauf 0.21.0 bis 0.39.0
 
 Diese Tabelle ist die autoritative Zuordnung von Releases zu
 Roadmap-Stufen und Entwicklungslinien; alle anderen Stellen des
@@ -1168,6 +1235,7 @@ Linien: der Absicherung und dem unabhängigen Nachweis der Agentenläufe
 | 0.35.0 | SDD | Produkt-Spec mit Fassungen, Freigabe und Akzeptanzkriterien-IDs; Kriterien erreichen Backlog und Quality Gate | V61–V62 |
 | 0.36.0 | SDD | Traceability bis zur Kriteriums-ID: Commit-Trailer, attestierte Spec-Bindung, Workflow-Tasks gegen dieselbe Fassung | V63 |
 | 0.38.0 | SDD | Conformance-Reviewer, Spec-Drift, Spec-Run mit Rückfragen, Reverse-Spec; bündelt die Roadmap-Stufen 0.37 und 0.38 (eine Version 0.37.0 gibt es nicht) | V64–V65 |
+| 0.39.0 | SDD | Governance (bei aktivem Lizenzsystem nur Enterprise): Spec-Freigabe und Mindest-Kriterienabdeckung als Policy-Pflicht, in zwei Compliance-Profilen gesetzt; Audit-Export 2.1 mit signierten Spec-Fassungen, Offline-Verifier 1.1.0; SDD-Kennzahlen; Policy-Ablehnungen vor der Run-Anlage erstmals dauerhaft in der Audit-Kette | keine |
 
 *Stand: 20. Oktober 2026, erhoben auf den Release-Tags. Die Details der
 Workflow-Stufen nennt der Kasten zum Umsetzungsstand weiter unten, die der
@@ -1234,7 +1302,7 @@ validiert den Gesamtstand. Die Leitregel:
 | 6 | Produktivitäts- und Qualitätsmessung: Durchlauf-, Kosten- und Konfliktkennzahlen, abgeleitet aus ohnehin entstehenden Daten; nicht Messbares wird als Lücke ausgewiesen statt geschätzt | niedrig — **umgesetzt** |
 
 > **Umsetzungsstand der Stufen 0 bis 6 (Releases 0.21.0 bis 0.30.0,
-> mit Nachträgen bis 0.38.0, Stand 20. Oktober 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
+> mit Nachträgen bis 0.39.0, Stand 20. Oktober 2026):** Die Stufen 0 bis 4 und 6 sind vollständig
 > umgesetzt, von Stufe 5 die Koordinationsschicht; das Feature-Flag steht
 > standardmäßig auf **aus**, ohne es verhält sich die Workflow-Ebene
 > unverändert. Zwei Ausnahmen wirken auch ohne Flag, weil sie am
@@ -1510,7 +1578,9 @@ validiert den Gesamtstand. Die Leitregel:
 > erhielt die Workflow-Ebene ihre Rollen- und Mandantenprüfung (19.6);
 > seit 0.36.0 und 0.38.0 binden Workflow-Tasks zudem eine freigegebene
 > Spec-Fassung und werden bei einer Spec-Änderung wie bei einer
-> Vertragsänderung auf Neuplanung gesetzt (19.11).
+> Vertragsänderung auf Neuplanung gesetzt (19.11); seit 0.39.0 kann eine
+> Policy diese Bindung für jeden schreibenden Task zur Bedingung der
+> Planfreigabe machen.
 
 Die begleitende **Produktivitäts- und Qualitätsmessung** ist mit 0.27.0
 eingebaut und mit 0.28.0 bis 0.30.0 um Testabdeckungsänderung,
@@ -1557,20 +1627,20 @@ Dieser Abschnitt beschreibt die jüngste Entwicklungslinie der Fabrik,
 **Spec-Driven Development (SDD)**: Anforderungen werden zu versionierten,
 freigegebenen Artefakten, gegen die Läufe gebunden und geprüft werden.
 
-> **Status:** Implementiert in den Releases 0.35.0, 0.36.0 und 0.38.0
-> (Tabelle in 19.10) — opt-in über ein eigenes
+> **Status:** Implementiert in den Releases 0.35.0, 0.36.0, 0.38.0 und
+> 0.39.0 (Tabelle in 19.10) — opt-in über ein eigenes
 > Feature-Flag (Standard aus) und, bei aktivem Lizenzsystem, nur in den
-> Lizenzstufen Professional und Enterprise. Je Projekt gilt zusätzlich ein
+> Lizenzstufen Professional und Enterprise; die Governance-Stufe aus
+> 0.39.0 (Spec-Pflicht per Policy, Spec-Fassungen im Audit-Export,
+> SDD-Kennzahlen) nur in Enterprise. Je Projekt gilt zusätzlich ein
 > **Spec-Modus**: `AUS` (Standard), `LEICHT` oder `STRENG`. Ohne Flag
 > verhält sich die Fabrik wie vorher; im Modus `AUS` laufen Build- und
 > Plan-Runs unverändert, nur ein ausdrücklich gestarteter Spec-Run ist
 > auch dort möglich. Die zugrunde liegende
 > Architekturentscheidung führt die Fabrik noch als *vorgeschlagen*, nicht
-> als angenommen. Die für Release 0.39.0 geplante Governance-Stufe
-> (Spec-Freigabe als Policy-Pflicht, signierte Spec-Fassungen im
-> Audit-Export, Spec-Kennzahlen) ist **nicht** Teil dieses Stands.
-> Erfahrungen aus dem Betrieb oder Messungen zur Wirkung liegen noch nicht
-> vor.
+> als angenommen. Mit 0.39.0 ist die Roadmap dieser Linie vollständig
+> umgesetzt. Erfahrungen aus dem Betrieb oder Messungen zur Wirkung liegen
+> noch nicht vor.
 
 ### Die Lücke: gut ist nicht dasselbe wie richtig
 
@@ -1619,7 +1689,7 @@ und trägt einen SHA-256-Hash. Ändert ein Agent eine Datei unter `specs/`,
 übernimmt die Fabrik das als neue Entwurfsfassung — nie als Freigabe. Die
 Aufteilung folgt demselben Muster wie bei den Verträgen der Workflow-Ebene
 und aus demselben Grund: Unveränderlichkeit, Mandantentrennung und die
-für 0.39.0 geplante Signierbarkeit sichert die Datenbank, der gewohnte Arbeitsfluss von
+Signierbarkeit (seit 0.39.0 im Audit-Export) sichert die Datenbank, der gewohnte Arbeitsfluss von
 Menschen und Agenten findet in Dateien statt.
 
 Architektonisch ist `spec` ein eigener Slice, der nur das
@@ -1778,6 +1848,68 @@ Anweisungsdatei — in Tests mit nachgebildeten Claude- und Codex-CLIs
 geprüft —,
 und der Mock-Adapter macht den Pfad ohne Vendor-CLI vorführbar.
 
+### Governance: Spec-Pflicht, Nachweis, Kennzahlen *(0.39.0)*
+
+Die bisherigen Stufen machten die Anforderungsebene verfügbar; ob sie
+genutzt wird, entschied das Projekt über seinen Spec-Modus. Release 0.39.0
+gibt diese Entscheidung für regulierte Umgebungen an die Policy-as-Code
+(19.6) — dorthin, wo auch die übrigen Durchsetzungsregeln liegen. Zwei
+neue Felder, beide in der kanonischen Form nur bei Abweichung vom Standard
+und deshalb ohne Bruch bestehender Policy-Signaturen:
+
+- **Spec-Freigabe als Pflicht.** Verlangt eine wirksame Policy — global
+  oder die eines Mandanten, wie bei den übrigen Regeln gilt die strengere —
+  die Spec-Freigabe, startet ein Build-Run nur mit Bezug auf eine
+  *freigegebene* Fassung, und die Planfreigabe eines Workflows verlangt
+  diesen Bezug für jeden schreibenden Task. Die Policy schlägt dabei den
+  Spec-Modus des Projekts: Auch im Modus `AUS` wird abgelehnt, mit einem
+  lesbaren Grund (Spec-Modus aus, kein Spec-Bezug, keine freigegebene
+  Fassung, SDD nicht freigeschaltet). Plan- und Spec-Runs sind nicht
+  betroffen, Child Runs prüft bereits die Planfreigabe.
+- **Mindestabdeckung der Kriterien.** Liegt der Anteil der gebundenen
+  Kriterien, die der Conformance-Reviewer in Tests referenziert findet,
+  unter dem Policy-Wert, blockiert das Gate — auch im beratenden Modus,
+  nicht aber bei abgeschaltetem Gate — und die Korrekturschleife (19.3)
+  beginnt. Ohne Spec-Bezug
+  greift die Regel nicht; dafür ist die Pflicht oben zuständig. Liefert der
+  Reviewer kein Ergebnis, gilt nichts als belegt (fail-closed, AP-7).
+
+Die Ablehnungen stehen mit Grund in der Audit-Kette: beim Run-Start und
+im Gate als `RUN_POLICY_DENIED` (mit Zeitpunkt `start` beziehungsweise
+`quality-gate`), bei der Planfreigabe als neues Ereignis
+`WORKFLOW_PLAN_DENIED` — vorher wurde eine abgelehnte Planfreigabe gar
+nicht protokolliert. Dauerhaft sind die Start-Ablehnungen erst mit diesem
+Release (19.3). Das Gate-Ergebnis trägt die Zahl abgedeckter und
+gebundener Kriterien. Die Compliance-Profile EU AI Act und
+BAIT/MaRisk/DORA setzen die Spec-Pflicht; eine Mindestabdeckung setzt
+keines der Profile (19.6).
+
+Für den Nachweis nach außen enthält der Audit-Export ab Schema 2.1 die
+gebundenen Spec-Fassungen mit signiertem Hash, und der Offline-Verifier
+prüft sie unabhängig von der Fabrik (19.6). Damit lässt sich gegenüber
+einer Revision belegen, gegen welche abgenommene Anforderung gebaut
+wurde.
+
+Hinzu kommen **SDD-Kennzahlen** je Projekt, für Einzel-Runs und je
+Workflow: der Anteil der Build-Starts mit freigegebener Spec, die
+Kriterienabdeckung am Ende eines Laufs, die Zahl der Spec-Drifts und die
+Spec-Änderungen je freigegebenem Meilenstein. Wie die übrige
+Kennzahlenmessung (19.10, Stufe 6) sind sie vollständig aus Audit-Kette
+und Meilensteinen abgeleitet, ohne eigene Tabelle und ohne Migration;
+leere Stichproben bleiben leer statt null, und als Messlücken stehen
+daneben die Abdeckung vor 0.39.0 (das Gate-Ergebnis trug sie noch nicht)
+und Releases außerhalb der Fabrik.
+
+Die Governance-Stufe ist bei aktivem Lizenzsystem der Lizenzstufe
+Enterprise vorbehalten (ohne Lizenzsystem genügt das SDD-Flag); in
+Professional bleiben die Funktionen aus 0.35.0 bis 0.38.0 verfügbar,
+Spec-Pflicht und Mindestabdeckung sind dort wirkungslos, und die
+Oberfläche nennt den Grund. Architektonisch lesen `run` und `workflow` die
+neuen Regeln über einen schmalen Port im Querschnittspaket, ohne eine neue
+Kante zwischen den Slices.^[Port `common.SpecGovernance`, implementiert vom
+`PolicyEnforcementService`; Felder `pflichtSpecFreigabe` und
+`minAcAbdeckung` in `PolicyInhalt`.]
+
 ### Einordnung
 
 Kennzeichnend ist weniger die einzelne Funktion als der Zuschnitt:
@@ -1786,12 +1918,17 @@ verbindet vorhandene — Freigabe, Bindung beim Start, Veraltet-Markierung,
 Audit-Kette, Warum-Trace — über eine Anforderungsebene mit stabilen IDs.
 IDs statt Texte machen Traceability prüfbar und Drift berechenbar. Die
 Fabrik beschreibt ihre eigenen SDD-Stufen in diesem Format (fünf Specs im
-eigenen Repository, alle im Status Entwurf; die letzte beschreibt die
-noch offene Governance-Stufe).
+eigenen Repository, alle — auch nach ihrer Umsetzung — im Status Entwurf).
+Auch die Governance-Stufe folgt dem Muster: Spec-Pflicht und
+Mindestabdeckung sind zwei Felder der bestehenden Policy, der Nachweis ist
+ein additives Feld im bestehenden Export, die Kennzahlen sind aus der
+bestehenden Kette abgeleitet.
 
-Offen ist neben der Governance-Stufe die wichtigste Frage: ob die
+Offen bleibt die wichtigste Frage: ob die
 Anforderungsebene die Ergebnisse agentischer Läufe messbar verbessert.
 Die Mechanik ist implementiert; belegt ist damit, dass Anforderungen
-versioniert, freigegeben, gebunden und gegen Tests referenziert werden
-können — nicht, dass dadurch weniger falsche Software entsteht. Das wäre
-eine Aufgabe für die Messung aus Kapitel 15.6.
+versioniert, freigegeben, gebunden, gegen Tests referenziert und — wo eine
+Policy es verlangt — erzwungen werden können, nicht, dass dadurch weniger
+falsche Software entsteht. Die SDD-Kennzahlen machen die Nutzung
+sichtbar, nicht die Wirkung; das wäre eine Aufgabe für die Messung aus
+Kapitel 15.6.
