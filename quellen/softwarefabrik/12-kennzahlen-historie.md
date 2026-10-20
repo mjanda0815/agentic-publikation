@@ -2,32 +2,38 @@
 
 ## 12.1 Kennzahlen
 
-| Kennzahl | v0.38.0 | v0.30.0 | Erhebung |
-|---|---|---|---|
-| Produktivklassen | 499 | 421 | `git ls-tree -r <tag> app/src/main/java`, `*.java` |
-| Produktivcode | ~53.967 Zeilen | ~41.737 Zeilen | Zeilen aller dieser Dateien (`git show <tag>:<datei> \| wc -l`) |
-| Testklassen | 353 | 291 | `app/src/test/java`, `*.java` |
-| Test-zu-Produktiv-Verhältnis | ~0,71 Klassen | ~0,69 Klassen | |
-| Fachliche Slices | 34 | 30 | Pakete unter `io.softwarefabrik.app` (bisherige Zählweise); neu: `canary`, `mcp`, `mcpgateway`, `spec` |
-| Datenbanktabellen | 63 | 58 | `CREATE TABLE` in Migrationen |
-| Flyway-Migrationen | 61 (V1–V65) | 52 (V1–V54) | Dateien in `db/migration`; nicht vergeben: V10, V11, V55, V57 |
-| HTTP-Routen | 184 in 39 Controllern | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit ohne Tests); Controller = Dateien mit Mapping-Annotation |
-| Execution-Adapter | 10 | 10 | `implements ExecutionAdapter` |
-| Review-Adapter | 7 | 6 | neu: `SpecConformanceReviewerAdapter` |
-| Wizard-Templates | 18 | 18 | `TemplateRegistry.builtin()` |
-| Run-Zustände / Phasen | 14 / 7 | 13 / 7 | neu: `WAITING_FOR_INPUT` |
-| Run-Arten | 3 (BUILD, PLAN, SPEC) | 2 | `RunKind` |
-| Workflow-Zustände / Task-Zustände | 11 / 12 | 11 / 12 | |
-| Rollen | 5 | 5 | `Rolle` |
-| Compliance-Profile | 4 | 4 | `ComplianceProfil` |
-| Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | dto. | JaCoCo, buildbrechend (`app/pom.xml`) |
-| Releases | 46 (0.1.0 – 0.38.0) | 38 (0.1.0 – 0.30.0) | `## [x.y.z]` in `CHANGELOG.md`; 2026-04-17 bis 2026-10-20; eine Version 0.37.0 gibt es nicht |
-| CI-Jobs je Push | 7 | 5 | Jobs in `.github/workflows/ci.yml`; neu `verifier`, `gateway` |
-| Eigenständige Module neben `app/` | `license-service/`, `verifier/` (~1.000 Zeilen), `gateway/` (~2.400 Zeilen) | `license-service/` | nicht in den Klassen-/Zeilenzahlen enthalten |
+| Kennzahl | v0.39.0 | v0.38.0 | v0.30.0 | Erhebung |
+|---|---|---|---|---|
+| Produktivklassen | 502 | 499 | 421 | `git ls-tree -r <tag> app/src/main/java`, `*.java` |
+| Produktivcode | ~54.938 Zeilen | ~53.967 Zeilen | ~41.737 Zeilen | Zeilen aller dieser Dateien (`git show <tag>:<datei> \| wc -l`) |
+| Testklassen | 360 | 353 | 291 | `app/src/test/java`, `*.java` |
+| Test-zu-Produktiv-Verhältnis | ~0,72 Klassen | ~0,71 Klassen | ~0,69 Klassen | |
+| Fachliche Slices | 34 | 34 | 30 | Pakete unter `io.softwarefabrik.app` (bisherige Zählweise); neu: `canary`, `mcp`, `mcpgateway`, `spec` |
+| Datenbanktabellen | 63 | 63 | 58 | `CREATE TABLE` in Migrationen |
+| Flyway-Migrationen | 61 (V1–V65) | 61 (V1–V65) | 52 (V1–V54) | Dateien in `db/migration`; nicht vergeben: V10, V11, V55, V57 |
+| HTTP-Routen | 184 in 39 Controllern | 184 in 39 Controllern | 161 in 34 Controllern | Mapping-Annotationen (methodenweise, repo-weit ohne Tests); Controller = Dateien mit Mapping-Annotation |
+| Execution-Adapter | 10 | 10 | 10 | `implements ExecutionAdapter` |
+| Review-Adapter | 7 | 7 | 6 | neu: `SpecConformanceReviewerAdapter` |
+| Wizard-Templates | 18 | 18 | 18 | `TemplateRegistry.builtin()` |
+| Run-Zustände / Phasen | 14 / 7 | 14 / 7 | 13 / 7 | neu: `WAITING_FOR_INPUT` |
+| Run-Arten | 3 (BUILD, PLAN, SPEC) | 3 | 2 | `RunKind` |
+| Workflow-Zustände / Task-Zustände | 11 / 12 | 11 / 12 | 11 / 12 | |
+| Rollen | 5 | 5 | 5 | `Rolle` |
+| Compliance-Profile | 4 | 4 | 4 | `ComplianceProfil` |
+| Coverage-Gate | Line ≥ 85 %, Branch ≥ 81 % | dto. | dto. | JaCoCo, buildbrechend (`app/pom.xml`) |
+| Releases | 47 (0.1.0 – 0.39.0) | 46 (0.1.0 – 0.38.0) | 38 (0.1.0 – 0.30.0) | `## [x.y.z]` in `CHANGELOG.md`; 2026-04-17 bis 2026-10-20; eine Version 0.37.0 gibt es nicht |
+| CI-Jobs je Push | 7 | 7 | 5 | Jobs in `.github/workflows/ci.yml`; neu `verifier`, `gateway` |
+| Eigenständige Module neben `app/` | `license-service/`, `verifier/` (~1.130 Zeilen, Version 1.1.0), `gateway/` (~2.370 Zeilen) | `license-service/`, `verifier/` (~1.010 Zeilen), `gateway/` (~2.370 Zeilen) | `license-service/` | nicht in den Klassen-/Zeilenzahlen enthalten |
 
-*Stand: Tag `v0.38.0` (= `1fb8aac`), 2026-10-20; erhoben auf dem Tag (am
-2026-10-20, per Worktree bzw. `git show v0.38.0:…`), nicht im
-Arbeitsverzeichnis. Die Vergleichsspalte v0.30.0 wurde mit demselben
+*Stand: Tag `v0.39.0` (= `4acd5c1`), 2026-10-20; erhoben auf dem Tag (am
+2026-10-20 per `git ls-tree`/`git show v0.39.0:…`/`git grep v0.39.0`),
+nicht im Arbeitsverzeichnis. Dasselbe Skript reproduziert die Spalte
+v0.38.0 (= `1fb8aac`) exakt. 0.39.0 brachte weder Slice noch Tabelle,
+Migration, Route oder Zustand; der Zuwachs (+3 Klassen, ~+970 Zeilen,
++7 Testklassen) liegt in Policy, Audit, Export, Kennzahlen, Orchestrierung
+und Workflow (SDD-Governance). Die CI-Jobzahl bleibt 7; der Job `verifier`
+baut zusätzlich den alten Verifier aus dem Tag `v0.38.0`. Die
+Vergleichsspalte v0.30.0 wurde mit demselben
 Verfahren neu erhoben und reproduziert die Werte der Fassung 3.0 exakt —
 mit einer Ausnahme: Die Fassung 3.0 nannte 6 CI-Jobs, `ci.yml` am Tag
 `v0.30.0` enthält 5.*
@@ -332,7 +338,7 @@ Claude-Läufe wurden mit 0 € bewertet (Parser las nicht geliefertes Feld)
 — behoben, dazu Cache-Schreib-Tokens und CLI-Kostenschätzung; Aufwandsfeld
 an der Planfreigabe; Kennzahl „Eingriffe" zählt die Planfreigabe.
 
-### Phase 13 — Spec-Driven Development (0.35.0–0.38.0, Oktober 2026)
+### Phase 13 — Spec-Driven Development (0.35.0–0.39.0, Oktober 2026)
 
 Grundlage: ADR-0027 (Status *Proposed*), `docs/roadmap/spec-driven-development.md`,
 `specs/SPEC-001…005`; Details in `13-spec-driven-development.md`.
@@ -354,11 +360,20 @@ Version 0.37.0): Conformance-Reviewer `spec-conformance`, Spec-Drift
 (`SPEC_DRIFT`, Veraltet-Markierung), Spec-Run (`RunKind.SPEC`,
 `WAITING_FOR_INPUT`, `spec_frage`), Reverse-Spec.
 
-**Nicht Teil des Stands:** Roadmap-Stufe 0.39.0 (SPEC-005 — Policy-Pflicht
-`pflichtSpecFreigabe`, Mindest-AC-Abdeckung, Export 2.1 mit signierten
-Spec-Fassungen, Spec-Kennzahlen); zum Erhebungszeitpunkt in Umsetzung.
+**0.39.0** (keine Migration; SPEC-005, PR #168/#169, Release-PR #170):
+SDD-Governance, nur Tier Enterprise (`Feature.SPEC_GOVERNANCE`) —
+Policy-Felder `pflichtSpecFreigabe` und `minAcAbdeckung`, Durchsetzung bei
+BUILD-Start, Workflow-Planfreigabe und im Quality Gate; Compliance-Profile
+EU_AI_ACT und BAIT_MARISK_DORA mit Spec-Pflicht; Audit-Export 2.1 mit
+signierten Spec-Fassungen, Offline-Verifier 1.1.0 (kompatibel in beide
+Richtungen); SDD-Kennzahlen ohne neue Tabelle. Sicherheitsfix:
+`RUN_POLICY_DENIED` bei der Run-Anlage wurde bis 0.38.0 mit der Ablehnung
+zurückgerollt und stand nie in der Kette (Ablehnungen während des Laufs
+schon); seit 0.39.0 `AuditService.erfasseUnabhaengig`, dazu neu
+`WORKFLOW_PLAN_DENIED`. Details
+`13-spec-driven-development.md`, 13.11.
 
-## 12.4 Offene Punkte (Stand 2026-10-20, nach 0.38.0)
+## 12.4 Offene Punkte (Stand 2026-10-20, nach 0.39.0)
 
 | Punkt | Art |
 |---|---|
@@ -370,13 +385,17 @@ Spec-Fassungen, Spec-Kennzahlen); zum Erhebungszeitpunkt in Umsetzung.
 | Preisstatus unbekannter Modelle weiterhin 0 € (`ModelPricingProperties`) | Budgetlücke |
 | Legacy-Verifikationsstatus in der Plattform undifferenziert (Verifier unterscheidet für Exporte) | Nachweislücke |
 | SBOM ohne Scanner wird übersprungen (`SbomService`, `SKIPPED`) | Fail-Closed-Lücke |
-| Test-Isolationsdefekt (Integrationstest committet ins reale Repository) — Stand 0.19.0, für 0.38.0 nicht belegt | Status ungeklärt |
 | Architektur-Altschuld: eingefrorene Modulzyklen (Baseline genau 100 Zyklen; wirksame Kappung seit 0.29.0: 400) + 13 `web → JpaRepository` | dokumentierte Schuld |
-| SDD-Governance (0.39.0, SPEC-005) | geplant |
+| SDD-Abdeckungsprüfung (auch `minAcAbdeckung`) ist eine Heuristik über Test-Referenzen; Wirkung von SDD nicht gemessen | Einschränkung |
 | Playwright-E2E-Suite als Standard nach jedem Deploy | geplant |
 
 Entfallen gegenüber 0.30.0: die befristet akzeptierte Laufzeit-CVE
-(seit 0.31.0 ohne Suppression grün).
+(seit 0.31.0 ohne Suppression grün). Entfallen gegenüber 0.38.0:
+SDD-Governance (umgesetzt mit 0.39.0) und der Test-Isolationsdefekt — er
+war bereits in 0.19.0 behoben (Commit `8dc06d5`, PR #51, Guard in
+`MilestoneReleaseService.gibFrei` + Regressionstest; siehe
+`01-systemueberblick.md`); die Quelle hatte eine nicht nachgezogene
+Arbeitsnotiz übernommen.
 
 Diese Liste gehört bewusst in die Publikation. Ein System, das seine offenen
 Punkte benennt und seine Architekturschuld *zählt*, ist der glaubwürdigere

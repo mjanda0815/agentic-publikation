@@ -587,7 +587,8 @@ Der Knowledge Store ist primär Textdokumente: ADRs, API-Specs, Konventionen, Gl
 > Workflow-Ebene, weil der `run`-Slice nichts von der Workflow-Ebene
 > wissen darf (19.10). Nachträge: Die Rollen- und Mandantenprüfung der
 > Workflow-Ebene fehlte vor 0.34.0 (19.6); seit 0.36.0 binden die Child
-> Runs eines Workflows dieselbe freigegebene Spec-Fassung (19.11).
+> Runs eines Workflows dieselbe freigegebene Spec-Fassung (19.11), seit
+> 0.39.0 kann eine Policy das für die Planfreigabe verlangen.
 
 ### Motivation / Kontext
 
@@ -690,7 +691,8 @@ Gesamtlaufzeit — der Preis für einen belastbaren Integrationsnachweis.
 > nicht in einer eigenen Kennzahlentabelle. Die Anforderungsebene aus
 > 0.35.0 folgt demselben Schnitt: Spec-Fassungen und Freigaben liegen
 > unveränderlich und autoritativ in der Datenbank, die Datei im Repository
-> ist Projektion (19.11).
+> ist Projektion (19.11); auch die SDD-Kennzahlen aus 0.39.0 werden aus
+> der Audit-Kette abgeleitet, ohne eigene Tabelle.
 
 ### Entscheidung
 

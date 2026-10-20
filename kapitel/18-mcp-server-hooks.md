@@ -78,7 +78,7 @@ public class DomainComplianceHook {
 }
 ```
 
-> **Praxis-Check SoftwareFabrik (abweichend, Stand 0.38.0):** Die Fabrik
+> **Praxis-Check SoftwareFabrik (abweichend, Stand 0.39.0):** Die Fabrik
 > behandelt MCP-Server und Hooks zuerst als Angriffsfläche, erst danach
 > als Erweiterung. Seit 0.31.0 gilt ein **Nullzustand**: Kein Agentenlauf
 > erreicht einen Werkzeugserver, den die Fabrik nicht ausdrücklich

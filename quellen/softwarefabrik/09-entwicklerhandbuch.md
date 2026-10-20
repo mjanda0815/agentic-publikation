@@ -178,9 +178,11 @@ Architekturzeichnung stehen:
 6. **Ein CI-Job, der sich ohne Secret selbst überspringt, zeigt ein grünes
    Häkchen ohne echten Scan.** Beim Aufsetzen neuer Repositories prüfen, dass
    die Secrets gesetzt sind.
-7. **Offener Defekt:** Ein Integrationstest committet unter bestimmten
-   Bedingungen in das reale Repository statt in ein temporäres
-   (Test-Isolationsdefekt). TODO(verify): Status am Tag v0.38.0 nicht belegt.
+7. **Git-Operationen nur im eigenen Repository (Defekt in 0.19.0 behoben).**
+   Ein Workspace ohne eigenes `.git` unter einem anderen Repository lässt
+   `git add -A`/commit/tag gegen das Eltern-Repo laufen — in Tests traf das
+   Meilenstein-Release so das Fabrik-Repo (`8dc06d5`, PR #51; Guard in
+   `MilestoneReleaseService.gibFrei`, Stand v0.39.0 unverändert).
 8. **Ein Fehler, der wie Erfolg aussieht, fällt keinem Erfolgstest auf.** Die
    vier in 0.33.0 behobenen Stellen (stiller Review-PASS, Gate auf leerem
    Diff, Abbruch ohne Prozessende, Build-Runs ohne Schreibrechte) und die

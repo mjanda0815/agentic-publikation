@@ -193,10 +193,18 @@ Aussagen begrenzen:
 - **Budget-Caps** wirken je Mandant. Eine Kostenauswertung je Seat (auslösender
   Nutzer) existiert seit v0.17 (`/mandanten/seat-kosten`), eine seat-scharfe
   Obergrenze gibt es nicht.
-- Ein bekannter **Test-Isolationsdefekt** ist offen: ein Integrationstest
-  committet unter bestimmten Bedingungen in das reale Repository statt in ein
-  temporäres. TODO(verify): Status am Tag v0.38.0 nicht im Code/CHANGELOG
-  belegt.
+- *Geklärt (Stand v0.39.0):* Der früher hier als offen geführte
+  **Test-Isolationsdefekt** (ein Test committete unter bestimmten Bedingungen
+  in das reale Repository) war bereits in 0.19.0 behoben: Commit `8dc06d5`
+  (PR #51, im Tag `v0.19.0` enthalten) — `MilestoneReleaseService.gibFrei`
+  verlangt ein eigenes `.git` im Workspace, sonst liefen `git add -A`/commit/
+  tag gegen das übergeordnete Repo (Test-Workspace unter
+  `build/test-workspaces` → Fabrik-Repo). Regressionstest
+  `MilestoneReleaseServiceTest.gibFreiOhneEigenesGitWorkspaceWirftUndCommittetNicht`,
+  am Tag v0.39.0 vorhanden. Nicht im CHANGELOG, nur in der Commit-Nachricht.
+  Davon zu unterscheiden: 0.24.0 (`RunCapacityGuard`, `max-parallel` im
+  Testprofil) und 0.36.0 (`ephemer-je-jvm=true`, BAD_SIGNATURE zwischen
+  Testkontexten mit gemeinsamer H2-DB) — beide ebenfalls behoben.
 - Der **MCP-Gateway** ist der einzige *MCP*-Weg, nicht der einzige *Netz*weg:
   Ohne Agent-Container kann ein Agentenprozess weiterhin direkt ins Netz
   (ADR-0018, Konsequenzen). Er bedient zunächst nur die Ausführung mit Claude

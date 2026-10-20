@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "Wenn Sie dieses Whitepaper zitieren, verwenden Sie bitte die folgenden Angaben."
 title: "Agentic Software Development — Enterprise Architecture with AI Agents"
 subtitle: "Von kontrollierten Einzel-Runs zur parallelen Agentic Software Factory. Praxisbeispiele mit Java, Spring Boot und Domain-Driven Design"
-version: "3.1"
+version: "3.2"
 date-released: "2026-10-20"
 license: CC-BY-4.0
 type: dataset
@@ -41,8 +41,8 @@ abstract: >-
   benennt offene Punkte, Architekturschuld und die Grenzen der Aussagekraft
   der Fallstudie.
 
-  Version 3.1 ist die überarbeitete und erweiterte Fassung der Version 1.3
+  Version 3.2 ist die überarbeitete und erweiterte Fassung der Version 1.3
   (März 2026); der neue Teil VI beschreibt die Referenzimplementierung auf dem
-  Stand ihres Releases 0.38.0, einschließlich der Absicherung der
+  Stand ihres Releases 0.39.0, einschließlich der Absicherung der
   Agentenläufe, des unabhängig prüfbaren Audit-Exports und der
-  Anforderungsebene (Spec-Driven Development).
+  Anforderungsebene (Spec-Driven Development) samt ihrer Governance.

@@ -708,7 +708,7 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       Reverse-Spec ergänzt. EARS-Quelle extern bestätigt.
 - [ ] Klontest für v3.1 (frischer Clone, `make pdf fabrik karussell`,
       Seitenzahlen 178/49 bestätigen).
-- [ ] Nach SoftwareFabrik **v0.39.0** (SDD-Governance, SPEC-005) nachziehen:
+- [x] Nach SoftwareFabrik **v0.39.0** (SDD-Governance, SPEC-005) nachziehen:
       eine Zeile in der Release-Verlaufstabelle (19.10), Kennzahlen +
       Erhebungsvermerk auf Tag v0.39.0, 19.11 (Status-Kasten und
       „Einordnung": Policy-Pflicht `pflichtSpecFreigabe`,
@@ -719,10 +719,51 @@ CLAUDE.md, Public-Ready-Regel): keine sensiblen Details in diese Datei.
       15.6-Praxis-Check (Spec-Kennzahlen), beide Karussells (Folie 2/8
       Kennzahlen, Folie 9), Version 3.2 (Titel, CITATION.cff,
       .zenodo.json, README, CLAUDE.md).
-- [ ] (Martin) Test-Isolationsdefekt aus 19.9 („Integrationstest
-      committet ins reale Repository", Stand 0.19.0) im Fabrik-Repo
-      klären: behoben oder offen? Bis dahin als „Status ungeklärt"
-      ausgewiesen.
+- [x] Test-Isolationsdefekt aus 19.9 („Integrationstest committet ins
+      reale Repository", Stand 0.19.0) im Fabrik-Repo geklärt (20.10.2026):
+      **bereits in 0.19.0 behoben** — Commit `8dc06d5` (PR #51, im Tag
+      v0.19.0 enthalten): `MilestoneReleaseService.gibFrei` verlangt ein
+      eigenes `.git` im Workspace; ohne lief commit/tag gegen das
+      Eltern-Repo (Test-Workspace unter `build/test-workspaces` → Fabrik-
+      Repo). Regressionstest am Tag v0.39.0 vorhanden. Nur in der
+      Commit-Nachricht dokumentiert, nicht im CHANGELOG — deshalb blieb die
+      Arbeitsnotiz „offen" stehen und gelangte so ins Quellen-Set. Nicht
+      identisch mit den Testsuite-Kopplungen 0.24.0 (`RunCapacityGuard`)
+      und 0.36.0 (`ephemer-je-jvm`, BAD_SIGNATURE über gemeinsame H2-DB);
+      auch die sind behoben. Zeile in 19.9 entfernt, Klärung im Text
+      danach.
+- [x] **Version 3.2: Abgleich auf SoftwareFabrik 0.39.0** (20.10.2026,
+      in der Fabrik-Session beauftragt): Kennzahlen auf Tag v0.39.0
+      (= `4acd5c1`) mit dem 3.1-Verfahren erhoben (reproduziert v0.38.0
+      exakt): 502 Klassen (499), ~54.900 Zeilen (~54.000), 360
+      Testklassen (353), 47 Releases (46); unverändert 34 Slices,
+      63 Tabellen, 61 Migrationen (0.39.0 ohne Migration), 184 Routen in
+      39 Controllern, 10/7 Adapter, 7 CI-Jobs; Verifier ~1.130 Zeilen.
+      Release-Tabelle 19.10 um 0.39.0 ergänzt. Neu in 19.11 der Abschnitt
+      „Governance: Spec-Pflicht, Nachweis, Kennzahlen (0.39.0)"; 19.11
+      Status/Einordnung, 19.6 (Policy-Felder, Profile, Export 2.1/Verifier
+      1.1.0), 19.9 (SDD-Zeile, Testdefekt-Zeile entfallen, fünfter Fall
+      „Erfolg ohne Beleg"), 19.10-Kasten, 15.6, Management Summary, 22.3,
+      ADR-5/ADR-8-Status, beide Karussells (Folien 2/8/9/10) samt
+      Folientexten, CITATION.cff/.zenodo.json/README (180/51 Seiten),
+      CLAUDE.md-Status, quellen/softwarefabrik (00, 01, 08, 09, 12, 13).
+      **Ein weiterer Altfehler korrigiert:** 19.3/19.6 behaupteten seit
+      2.0, abgelehnte Läufe erzeugten ein attestiertes `RUN_POLICY_DENIED`
+      — für die Prüfungen vor der Run-Anlage wurde es bis 0.38.0 mit der
+      Ablehnung zurückgerollt (CHANGELOG 0.39.0, „Sicherheit"; Ablehnungen
+      während des Laufs standen schon in der Kette — der CHANGELOG sagt
+      pauschal „nie", das ist zu weit); im Text offen als Korrektur
+      ausgewiesen. Faktencheck-Befunde (2 blockierend, 7 klein)
+      eingearbeitet, u. a. Mindestabdeckung greift nicht bei Gate-Modus
+      `off`, Export 2.1 auch ohne aktives Lizenzsystem.
+      Hinweis: Der in der Aufgabe genannte Skill `faktencheck` existiert
+      im Repo nicht (`.claude/skills/` fehlt) — Faktencheck per Subagent
+      gegen den Tag v0.39.0.
+- [ ] Klontest für v3.2 (frischer Clone, `make pdf fabrik karussell`,
+      Seitenzahlen 180/51 bestätigen).
+- [ ] Skills `faktencheck`/`kapitel-review` fehlen im Repo, obwohl
+      Abschnitt A sie als übernommen führt — wiederherstellen oder
+      Eintrag korrigieren.
 - [ ] Übrige Abbildungen (abb01–18, abb22, abb26, abb28, abb31) bei
       Gelegenheit mit mermaid-cli 12.0.0 neu rendern, damit alle
       Abbildungen aus demselben Renderer stammen (Layout ändert sich

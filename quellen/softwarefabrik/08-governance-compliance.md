@@ -73,9 +73,11 @@ erscheinen in der kanonischen, signierten Form nur, wenn sie vom Default
 abweichen — **bestehende Policy-Signaturen bleiben gültig**. Über mehrere
 wirksame Policies (global und Mandant) gilt für `erlaubtePlugins` und
 `erlaubteMcpServer` die Schnittmenge, für `mcpStandardverbot` das Strengere
-(eine Mandanten-Policy kann es ein-, nicht ausschalten). Ein Feld
-`pflichtSpecFreigabe` ist für 0.39 geplant (SPEC-005), am Tag v0.38.0 nicht
-vorhanden.
+(eine Mandanten-Policy kann es ein-, nicht ausschalten). *Nachtrag
+(Stand v0.39.0):* hinzugekommen sind `pflichtSpecFreigabe` und
+`minAcAbdeckung` (ebenfalls nur bei Abweichung vom Default kanonisch);
+EU_AI_ACT und BAIT_MARISK_DORA setzen `pflichtSpecFreigabe=true`. Details
+`13-spec-driven-development.md`, 13.11.
 
 Eigenschaften:
 
@@ -259,9 +261,13 @@ gezielt manipulierte Exporte aufruft (eigene CI-Stufe).
 Eintrag bis zum Kopf zum Exportzeitpunkt. Wer vor dem Export
 Datenbankzugriff hat, kann die neuesten Einträge löschen und den Kopf auf
 einen älteren gültig signierten Eintrag zurücksetzen — das zeigt nur ein
-Abgleich mit bekannten Kettenständen. Export-Schema 2.1 mit
-Spec-Versionen ist für 0.39 geplant (SPEC-005), am Tag v0.38.0 nicht
-umgesetzt.
+Abgleich mit bekannten Kettenständen. *Nachtrag (Stand v0.39.0):*
+Export-Schema 2.1 mit signierten Spec-Fassungen (`nachweis.specVersionen`)
+und Verifier 1.1.0 sind umgesetzt, kompatibel in beide Richtungen
+(ADR-0023, Nachtrag Schema 2.1; `13-spec-driven-development.md`, 13.11).
+Ebenfalls seit 0.39.0: `RUN_POLICY_DENIED` bei der Run-Anlage steht
+dauerhaft in der Kette (vorher mit der Ablehnung zurückgerollt), neu
+`WORKFLOW_PLAN_DENIED`.
 
 ## 8.8 Supply-Chain-Nachweis
 
